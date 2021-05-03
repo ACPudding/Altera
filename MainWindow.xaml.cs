@@ -2727,7 +2727,7 @@ namespace Altera
             {
                 GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
                     Application.Current.MainWindow,
-                    "下载完成.下载目录为: \r\n" + path + "\\FGOSBIAReloaded(Update " +
+                    "下载完成.下载目录为: \r\n" + path + "\\Altera(Update " +
                     GlobalPathsAndDatas.NewerVersion +
                     ").exe\r\n\r\n请自行替换文件.\r\n\r\n您是否要关闭当前版本的程序?", "检查更新", MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
