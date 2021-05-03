@@ -1,21 +1,21 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Altera.Properties;
 using HandyControl.Controls;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading;
- using System.Windows.Media.Imaging;
- using Altera.Properties;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,7 +26,7 @@ using TextBox = System.Windows.Controls.TextBox;
 namespace Altera
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    ///     MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow
     {
@@ -68,12 +68,13 @@ namespace Altera
                 ClearTexts();
                 ES.Start();
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
+                FocusBasicInfo.IsSelected = true;
                 return;
             }
 
             if (!Regex.IsMatch(textbox1.Text, "^\\d+$"))
             {
-                MessageBox.Error( "从者ID输入错误,请检查.", "温馨提示:");
+                MessageBox.Error("从者ID输入错误,请检查.", "温馨提示:");
                 ClearTexts();
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 return;
@@ -81,6 +82,7 @@ namespace Altera
 
             var SA = new Task(StartAnalyze);
             SA.Start();
+            FocusBasicInfo.IsSelected = true;
         }
 
         private void StartAnalyze()
@@ -140,6 +142,7 @@ namespace Altera
                     MessageBox.Error("从者ID不存在或未实装,请重试.", "温馨提示:");
                     ClearTexts();
                     Button1.IsEnabled = true;
+                    StarterItemTab.IsSelected = true;
                     return;
                 }
 
@@ -235,7 +238,7 @@ namespace Altera
             {
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Warning( "您太心急了,稍等一下再解析吧!\r\n" + e, "温馨提示:");
+                    MessageBox.Warning("您太心急了,稍等一下再解析吧!\r\n" + e, "温馨提示:");
                     Button1.IsEnabled = true;
                 });
                 return result;
@@ -336,6 +339,10 @@ namespace Altera
                             .Replace("\t", "").Replace("\r", "").Replace(" ", "");
                         svtNPCardType = mstsvtTDobjtmp2["cardId"].ToString().Replace("2", "Buster")
                             .Replace("1", "Arts").Replace("3", "Quick");
+                        var svtNPCardAdditional = mstsvtTDobjtmp2["cardId"].ToString().Replace("2", "B")
+                            .Replace("1", "A").Replace("3", "Q");
+                        var CCAI = new Task(() => { ChangeCardArrangeImage(6, svtNPCardAdditional); });
+                        CCAI.Start();
                         break;
                     }
 
@@ -651,6 +658,8 @@ namespace Altera
                     {
                         var mstsvtLimitobjtmp = JObject.Parse(svtLimittmp.ToString());
                         svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
+                        var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
+                        DSR.Start();
                         rarity.Text = svtrarity + " ☆";
                         svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
                         basichp.Text = svthpBase;
@@ -799,11 +808,49 @@ namespace Altera
                             ExcelFileOutput();
                         break;
                     case 1001:
-                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处."); 
+                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
                         break;
                     default:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
+                        break;
+                }
+            });
+        }
+
+        private void DisplaySvtRarity(int Rarity)
+        {
+            var C = "images\\C.png";
+            var UC = "images\\UC.png";
+            var R = "images\\R.png";
+            var SR = "images\\SR.png";
+            var SSR = "images\\SSR.png";
+            Dispatcher.Invoke(() =>
+            {
+                switch (Rarity)
+                {
+                    case 1:
+                        raritystars.Source = new BitmapImage(new Uri(C, UriKind.Relative));
+                        raritystars.Visibility = Visibility.Visible;
+                        break;
+                    case 2:
+                        raritystars.Source = new BitmapImage(new Uri(UC, UriKind.Relative));
+                        raritystars.Visibility = Visibility.Visible;
+                        break;
+                    case 3:
+                        raritystars.Source = new BitmapImage(new Uri(R, UriKind.Relative));
+                        raritystars.Visibility = Visibility.Visible;
+                        break;
+                    case 4:
+                        raritystars.Source = new BitmapImage(new Uri(SR, UriKind.Relative));
+                        raritystars.Visibility = Visibility.Visible;
+                        break;
+                    case 5:
+                        raritystars.Source = new BitmapImage(new Uri(SSR, UriKind.Relative));
+                        raritystars.Visibility = Visibility.Visible;
+                        break;
+                    case 0:
+                        raritystars.Visibility = Visibility.Hidden;
                         break;
                 }
             });
@@ -1714,10 +1761,7 @@ namespace Altera
                         (current, svtIDtmp) => current + "ID: " + ((JObject) svtIDtmp)["id"] + "    " + "名称: " +
                                                ((JObject) svtIDtmp)["name"] + "\r\n");
                     File.WriteAllText(GlobalPathsAndDatas.path + "/SearchIDList.txt", output);
-                    Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Success( "导出成功, 文件名为 SearchIDList.txt","完成");
-                    });
+                    Dispatcher.Invoke(() => { MessageBox.Success("导出成功, 文件名为 SearchIDList.txt", "完成"); });
                     Process.Start(GlobalPathsAndDatas.path + "/SearchIDList.txt");
                 }
                 catch (Exception)
@@ -1733,6 +1777,10 @@ namespace Altera
             {
                 var g = Content as Grid;
                 GlobalPathsAndDatas.TranslationListArray = null;
+                var childrensX = Starter.Children;
+                foreach (UIElement ui in childrensX)
+                    if (ui is TextBox box)
+                        box.Text = "";
                 var childrens = g.Children;
                 foreach (UIElement ui in childrens)
                     if (ui is TextBox box)
@@ -1767,6 +1815,12 @@ namespace Altera
                         box.Text = "";
                 atkbalance1.Text = "( x 1.0 -)";
                 atkbalance2.Text = "( x 1.0 -)";
+                npcardtype.Text = "";
+                nptype.Text = "";
+                nprank.Text = "";
+                npruby.Text = "";
+                npname.Text = "";
+                npdetail.Text = "";
                 JBOutput.IsEnabled = false;
                 sixwei.Text = "";
                 Skill1FuncList.Items.Clear();
@@ -1787,6 +1841,8 @@ namespace Altera
                 card3.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
                 card4.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
                 card5.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                cardTD.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                raritystars.Visibility = Visibility.Hidden;
             });
             IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "×"; });
             IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "×"; });
@@ -1808,107 +1864,114 @@ namespace Altera
                 SvtFilterList.Items.Clear();
             });
         }
-        private void ChangeCardArrangeImage(int ImgNo,string CardID)
+
+        private void ChangeCardArrangeImage(int ImgNo, string CardID)
         {
             var ArtsUri = "images\\Arts.png";
             var BusterUri = "images\\Buster.png";
             var QuickUri = "images\\Quick.png";
-            Dispatcher.Invoke(() => {
-                switch (ImgNo)
+            Dispatcher.Invoke(() =>
             {
-                case 1:
-                    switch (CardID)
-                    {
-                        case "A":
-                            card1.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
-                            break;
-                        case "B":
-                            card1.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
-                            break;
-                        case "Q":
-                            card1.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
-                            break;
-                        default:
+                switch (ImgNo)
+                {
+                    case 1:
+                        switch (CardID)
+                        {
+                            case "A":
+                                card1.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
                                 break;
-                    }
-                    break;
-                case 2:
-                    switch (CardID)
-                    {
-                        case "A":
-                            card2.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
-                            break;
-                        case "B":
-                            card2.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
-                            break;
-                        case "Q":
-                            card2.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (CardID)
-                    {
-                        case "A":
-                            card3.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
-                            break;
-                        case "B":
-                            card3.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
-                            break;
-                        case "Q":
-                            card3.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 4:
-                    switch (CardID)
-                    {
-                        case "A":
-                            card4.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
-                            break;
-                        case "B":
-                            card4.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
-                            break;
-                        case "Q":
-                            card4.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 5:
-                    switch (CardID)
-                    {
-                        case "A":
-                            card5.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
-                            break;
-                        case "B":
-                            card5.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
-                            break;
-                        case "Q":
-                            card5.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
+                            case "B":
+                                card1.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                card1.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                    case 2:
+                        switch (CardID)
+                        {
+                            case "A":
+                                card2.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
+                                break;
+                            case "B":
+                                card2.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                card2.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                    case 3:
+                        switch (CardID)
+                        {
+                            case "A":
+                                card3.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
+                                break;
+                            case "B":
+                                card3.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                card3.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                    case 4:
+                        switch (CardID)
+                        {
+                            case "A":
+                                card4.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
+                                break;
+                            case "B":
+                                card4.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                card4.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                    case 5:
+                        switch (CardID)
+                        {
+                            case "A":
+                                card5.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
+                                break;
+                            case "B":
+                                card5.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                card5.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                    case 6:
+                        switch (CardID)
+                        {
+                            case "A":
+                                cardTD.Source = new BitmapImage(new Uri(ArtsUri, UriKind.Relative));
+                                break;
+                            case "B":
+                                cardTD.Source = new BitmapImage(new Uri(BusterUri, UriKind.Relative));
+                                break;
+                            case "Q":
+                                cardTD.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
+                                break;
+                        }
+
+                        break;
+                }
             });
         }
 
         private void SetCardImgs(string CardArrange)
         {
             var CardArrangementArray = CardArrange.Replace("[", "").Replace("]", "").Split(',');
-            for (var i = 1; i <= 5; i++)
-            {
-                ChangeCardArrangeImage(i, CardArrangementArray[i-1]);
-            }
+            for (var i = 1; i <= 5; i++) ChangeCardArrangeImage(i, CardArrangementArray[i - 1]);
         }
 
         private void SkillSvalsCheck(string SkillID, int SkillNum)
@@ -2119,7 +2182,6 @@ namespace Altera
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
             var folder = new DirectoryInfo(path + @"\Android\");
-            var LoadData = new Task(LoadorRenewCommonDatas.ReloadData);
             string result;
             JObject res;
             var Check = true;
@@ -2138,6 +2200,13 @@ namespace Altera
                 progressbar.Visibility = Visibility.Visible;
             });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 250; });
+            progressring.Dispatcher.Invoke(() =>
+            {
+                progressring.Value = 0;
+                progressring.Visibility = Visibility.Visible;
+            });
+            progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
+            progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Visible; });
             if (!Directory.Exists(folder.FullName))
             {
                 updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "正在创建Android目录..."; });
@@ -2148,7 +2217,7 @@ namespace Altera
                 Directory.CreateDirectory(gamedata.FullName);
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "开始下载/更新游戏数据......"; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 250; });
-
+            progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
                 result = HttpRequest.PhttpReq("https://game.fate-go.jp/gamedata/top", "appVer=2.17.0");
@@ -2197,6 +2266,11 @@ namespace Altera
                                 progressbar.Visibility = Visibility.Hidden;
                                 updatedatabutton.IsEnabled = true;
                             });
+                            progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                            progressloading.Dispatcher.Invoke(() =>
+                            {
+                                progressloading.Visibility = Visibility.Hidden;
+                            });
                             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
                             return;
@@ -2217,6 +2291,8 @@ namespace Altera
                     progressbar.Visibility = Visibility.Hidden;
                     updatedatabutton.IsEnabled = true;
                 });
+                progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
                 return;
@@ -2247,6 +2323,8 @@ namespace Altera
                             progressbar.Visibility = Visibility.Hidden;
                             updatedatabutton.IsEnabled = true;
                         });
+                        progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                        progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
                         Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                         OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
                         return;
@@ -2257,10 +2335,7 @@ namespace Altera
             File.WriteAllText(gamedata.FullName + "raw", result);
             File.WriteAllText(gamedata.FullName + "assetbundle",
                 res["response"][0]["success"]["assetbundle"].ToString());
-            updatestatus.Dispatcher.Invoke(() =>
-            {
-                updatestatus.Text = "写入: " + gamedata.FullName + "assetbundle";
-            });
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "assetbundle"; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
             File.WriteAllText(gamedata.FullName + "master",
                 res["response"][0]["success"]["master"].ToString());
@@ -2312,6 +2387,7 @@ namespace Altera
                 }
 
                 progressbar.Dispatcher.Invoke(() => { progressbar.Value += ProgressValue; });
+                progressring.Dispatcher.Invoke(() => { progressring.Value += ProgressValue; });
             }
 
             var data2 = File.ReadAllText(gamedata.FullName + "assetbundle");
@@ -2321,11 +2397,9 @@ namespace Altera
             var str = dictionary.Aggregate<KeyValuePair<string, object>, string>(null,
                 (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "assetbundle.txt", str);
-            updatestatus.Dispatcher.Invoke(() =>
-            {
-                updatestatus.Text = "folder name: " + dictionary["folderName"];
-            });
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "folder name: " + dictionary["folderName"]; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var data3 = File.ReadAllText(gamedata.FullName + "webview");
             var dictionary2 =
                 (Dictionary<string, object>) MasterDataUnpacker.MouseGame2MsgPack(
@@ -2334,28 +2408,32 @@ namespace Altera
                        dictionary2["contactURL"] + "\r\n";
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = str2; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var filePassInfo = (Dictionary<string, object>) dictionary2["filePass"];
             str = filePassInfo.Aggregate(str, (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "webview.txt", str2);
-            updatestatus.Dispatcher.Invoke(() =>
-            {
-                updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt";
-            });
-
-            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "下载完成，可以开始解析."; });
-
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt"; });
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "正在更新数据..."; });
+            await LoadorRenewCommonDatas.ReloadData();
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "下载/更新完成，可以开始解析."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value = progressbar.Maximum; });
-             Dispatcher.Invoke( () => {MessageBox.Success( "下载完成，可以开始解析.","完成"); });
+            progressring.Dispatcher.Invoke(() => { progressring.Value = progressring.Maximum; });
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Success("下载/更新完成，可以开始解析.", "完成");
+                StarterItemTab.IsSelected = true;
+            });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
             updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
-            progressbar.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 progressbar.Visibility = Visibility.Hidden;
                 updatedatabutton.IsEnabled = true;
             });
+            progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+            progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
-            LoadData.Start();
             GC.Collect();
         }
 
@@ -2380,11 +2458,11 @@ namespace Altera
                 Directory.CreateDirectory(GlobalPathsAndDatas.outputdir.FullName);
             File.WriteAllText(GlobalPathsAndDatas.outputdir.FullName + "羁绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt",
                 output);
-             Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 MessageBox.Success("导出完成.\n\r文件名为: " + GlobalPathsAndDatas.outputdir.FullName +
-                                         "羁绊文本_" + JB.svtid + "_" + JB.svtnme +
-                                         ".txt", "完成");
+                                   "羁绊文本_" + JB.svtid + "_" + JB.svtnme +
+                                   ".txt", "完成");
             });
 
             Process.Start(GlobalPathsAndDatas.outputdir.FullName + "/" + "羁绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt");
@@ -2401,36 +2479,48 @@ namespace Altera
             if (sender is Hyperlink source) Process.Start(source.NavigateUri.ToString());
         }
 
-        private void Form_Load(object sender, RoutedEventArgs e)
+        private async void LoadingProgress()
         {
+            Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
-            var LoadData = new Task(() => { LoadorRenewCommonDatas.ReloadData(); });
-            VersionLabel.Text = CommonStrings.Version;
-            DrawScale();
+            var DS = new Task(() => { DrawScale(); });
+            VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
+            DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
-                 Dispatcher.Invoke( () =>
+                Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Info("没有游戏数据,请先下载游戏数据(位于\"数据更新\"选项卡).","温馨提示:");
+                    MessageBox.Info("没有游戏数据,请先下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
+                    DataUpdate.IsSelected = true;
                 });
-                Button1.IsEnabled = false;
+                Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
             }
             else
             {
                 try
                 {
-                    LoadData.Start();
+                    Dispatcher.Invoke(() => { Growl.Info("正在读取数据..."); });
+                    await LoadorRenewCommonDatas.ReloadData();
+                    Dispatcher.Invoke(() => { Growl.Info("读取完毕."); });
+                    Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 }
                 catch (Exception)
                 {
-                     Dispatcher.Invoke( () =>
+                    Dispatcher.Invoke(() =>
                     {
                         MessageBox.Info("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
+                        DataUpdate.IsSelected = true;
                     });
-                     Button1.IsEnabled = false;
+                    Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
                 }
             }
+        }
+
+        private void Form_Load(object sender, EventArgs eventArgs)
+        {
+            var Loading = new Task(() => { LoadingProgress(); });
+            Loading.Start();
         }
 
         private void ExcelFileOutput()
@@ -2539,11 +2629,8 @@ namespace Altera
                 VerChk = JObject.Parse(VerChkRaw);
             }
             catch (Exception e)
-            { 
-                Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Error( "网络连接异常,请检查网络连接并重试.\r\n" + e, "网络连接异常");
-                });
+            {
+                Dispatcher.Invoke(() => { MessageBox.Error("网络连接异常,请检查网络连接并重试.\r\n" + e, "网络连接异常"); });
                 CheckUpdate.Dispatcher.Invoke(() => { CheckUpdate.IsEnabled = true; });
                 return;
             }
@@ -2574,7 +2661,7 @@ namespace Altera
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
                         });
-                        MessageBox.Error( "确认到新版本更新,但是获取下载Url失败.\r\n", "获取Url失败");
+                        MessageBox.Error("确认到新版本更新,但是获取下载Url失败.\r\n", "获取Url失败");
                         CheckUpdate.Dispatcher.Invoke(() => { CheckUpdate.IsEnabled = true; });
                         return;
                     }
@@ -2591,7 +2678,7 @@ namespace Altera
             {
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Info("当前版本为:  " + CommonStrings.VersionTag + "\r\n\r\n无需更新.","检查更新");
+                    MessageBox.Info("当前版本为:  " + CommonStrings.VersionTag + "\r\n\r\n无需更新.", "检查更新");
                 });
                 CheckUpdate.Dispatcher.Invoke(() => { CheckUpdate.IsEnabled = true; });
             }
@@ -2713,13 +2800,11 @@ namespace Altera
                 }
 
                 ButtonQuest.Dispatcher.Invoke(() => { ButtonQuest.IsEnabled = true; });
+                Dispatcher.Invoke(() => { Growl.Info("显示完毕."); });
             }
             else
             {
-                Dispatcher.Invoke( () =>
-                {
-                    MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
-                });
+                Dispatcher.Invoke(() => { MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:"); });
                 ButtonQuest.Dispatcher.Invoke(() => { ButtonQuest.IsEnabled = true; });
             }
 
@@ -2851,10 +2936,7 @@ namespace Altera
             }
             else
             {
-                 Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
-                });
+                Dispatcher.Invoke(() => { MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:"); });
                 ButtonClass.Dispatcher.Invoke(() => { ButtonClass.IsEnabled = true; });
             }
         }
@@ -2919,10 +3001,7 @@ namespace Altera
             }
             else
             {
-                 Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
-                });
+                Dispatcher.Invoke(() => { MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:"); });
                 ButtonEvent.Dispatcher.Invoke(() => { ButtonEvent.IsEnabled = true; });
             }
 
@@ -2983,10 +3062,7 @@ namespace Altera
             }
             else
             {
-                Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
-                });
+                Dispatcher.Invoke(() => { MessageBox.Warning("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:"); });
                 ButtonGacha.Dispatcher.Invoke(() => { ButtonGacha.IsEnabled = true; });
             }
 
@@ -3512,7 +3588,9 @@ namespace Altera
             {
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Error("AssetStorage.txt文件不存在\r\n请检查输入文件夹内是否存在\"cfb1d36393fd67385e046b084b7cf7ed\"\r\n或者\"AssetStorage.txt\"文件.", "错误");
+                    MessageBox.Error(
+                        "AssetStorage.txt文件不存在\r\n请检查输入文件夹内是否存在\"cfb1d36393fd67385e046b084b7cf7ed\"\r\n或者\"AssetStorage.txt\"文件.",
+                        "错误");
                 });
                 return;
             }
@@ -3561,10 +3639,7 @@ namespace Altera
                 }
                 catch (Exception)
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Error( "解密时遇到错误.\r\n", "错误");
-                    });
+                    Dispatcher.Invoke(() => { MessageBox.Error("解密时遇到错误.\r\n", "错误"); });
                 }
             });
             Dispatcher.Invoke(() =>
@@ -3678,11 +3753,7 @@ namespace Altera
                 }
                 catch (Exception ex)
                 {
-
-                     Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Show("解密时遇到错误.\r\n" + ex, "错误");
-                    });
+                    Dispatcher.Invoke(() => { MessageBox.Show("解密时遇到错误.\r\n" + ex, "错误"); });
                 }
 
             Dispatcher.Invoke(() =>
@@ -3701,7 +3772,7 @@ namespace Altera
             LSF.Start();
         }
 
-        private async void LoadSvtFilter()
+        private void LoadSvtFilter()
         {
             Dispatcher.Invoke(() => { SvtFilterList.Items.Clear(); });
             var svtIDlist = "";
@@ -3735,10 +3806,7 @@ namespace Altera
             if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
             {
                 File.WriteAllText(GlobalPathsAndDatas.path + "/次回イベント対象" + ".txt", SvtOutputStr);
-                Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Success( "导出完成.\n\r文件名为: " + "次回イベント対象.txt", "完成");
-                });
+                Dispatcher.Invoke(() => { MessageBox.Success("导出完成.\n\r文件名为: " + "次回イベント対象.txt", "完成"); });
                 Process.Start(GlobalPathsAndDatas.path + "/次回イベント対象" + ".txt");
             }
 

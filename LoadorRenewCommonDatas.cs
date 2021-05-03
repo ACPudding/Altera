@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Altera.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,7 +9,7 @@ namespace Altera
 {
     internal class LoadorRenewCommonDatas
     {
-        public static void ReloadData()
+        public static async Task ReloadData()
         {
             var mstSvt =
                 File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" + "mstSvt");
@@ -70,7 +71,7 @@ namespace Altera
             var mstSvtFilter =
                 File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" + "mstSvtFilter");
             GlobalPathsAndDatas.mstSvtFilterArray =
-                (JArray)JsonConvert.DeserializeObject(mstSvtFilter);
+                (JArray) JsonConvert.DeserializeObject(mstSvtFilter);
             GlobalPathsAndDatas.mstSvtExpArray =
                 (JArray) JsonConvert.DeserializeObject(mstSvtExp);
             GlobalPathsAndDatas.mstGachaArray =
