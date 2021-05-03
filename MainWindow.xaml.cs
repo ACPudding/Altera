@@ -2689,7 +2689,7 @@ namespace Altera
             var path = Directory.GetCurrentDirectory();
             try
             {
-                DownloadFile(GlobalPathsAndDatas.ExeUpdateUrl, path + "/FGOSBIAReloaded(Update " + VerChk + ").exe");
+                DownloadFile(GlobalPathsAndDatas.ExeUpdateUrl, path + "/Altera(Update " + VerChk + ").exe");
                 GlobalPathsAndDatas.NewerVersion = VerChk.ToString();
             }
             catch (Exception e)
