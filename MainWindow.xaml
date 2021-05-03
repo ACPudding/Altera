@@ -1,0 +1,1472 @@
+﻿<hc:Window x:Class="Altera.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:local="clr-namespace:Altera"
+        mc:Ignorable="d"
+        Title="Altera" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="icon.ico" Loaded="Form_Load">
+    <Grid>
+        <TabControl Margin="0,0,0,0" TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image x:Name="img" Height="64" Width="64" Source="icon.ico" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="0">
+                    <TextBox x:Name="textbox1" HorizontalAlignment="Left" Height="14" Margin="260,214,0,0" TextWrapping="Wrap"
+                             VerticalAlignment="Top" Width="295" MaxLength="7" MaxLines="1"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <TextBlock Text="请输入从者ID:" HorizontalAlignment="Left" Height="33" Margin="80,211,0,0" VerticalAlignment="Top"
+                           Width="214" FontSize="24" Foreground="#FF333333" FontWeight="Bold" />
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="Button1" Content="解析" HorizontalAlignment="Left" Height="30" Margin="362,260,0,0"
+                            VerticalAlignment="Top" Width="81"  Click="Button_Click" 
+                            Foreground="#FFFFFFFF" >
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <Button hc:BorderElement.CornerRadius="15" x:Name="OutputIDs" Content="导出ID列表" HorizontalAlignment="Left" Height="30" Margin="362,295,0,0"
+                            VerticalAlignment="Top" Click="Button_Click_1"
+                            Width="81"  Foreground="#FF333333" />
+                    <Button hc:BorderElement.CornerRadius="15" Content="清空" HorizontalAlignment="Left" Height="30" Margin="362,330,0,0" VerticalAlignment="Top"
+                            Width="81"  Foreground="#FF333333" Click="Button_Click_2"/>
+                    <ToggleButton Style="{StaticResource ToggleButtonSwitch}" Content="显示高级选项" Margin="0,360,9.8,161.4" IsChecked="False" x:Name="ButtonVisibilitySwitch"/>
+                    <Grid Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=ButtonVisibilitySwitch}" Margin="250,350,0,0">
+                        <CheckBox x:Name="ToggleMsgboxOutputCheck" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,56,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,每次解析从者后都会询问是否导出相应的xlsx文件." />
+                        <TextBlock Text="询问是否导出xlsx文件" HorizontalAlignment="Left" Height="25" Margin="47,58,0,0"
+                               VerticalAlignment="Top" Width="165" Foreground="#FF333333"
+                                FontSize="10" />
+                        <CheckBox x:Name="ToggleDeleteLastData" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,80,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,每次下载或者更新MasterData游戏数据时&#xA;均会删除上次的内容而不会提示已是最新版本." />
+                        <TextBlock Text="更新MasterData时删除上次内容而不提醒" HorizontalAlignment="Left" Height="25"
+                               Margin="47,81,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                FontSize="10" />
+                        <CheckBox x:Name="ToggleDispIndi" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,104,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,&quot;基础信息&quot;界面的&quot;特性&quot;文本框&#xA;会显示解析过后的特性名称(有可能会有翻译错误)&#xA;不勾选则直接显示特性ID"
+                                  IsChecked="True" />
+                        <TextBlock Text="特性显示解析结果(Beta)" HorizontalAlignment="Left" Height="26"
+                               Margin="47,106,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                FontSize="10" />
+                        <CheckBox x:Name="ToggleDetailbr" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,128,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,宝具/技能界面的&quot;描述&quot;文本框&#xA;会按照每个Buff进行换行显示&#xA;不勾选则直接不换行显示." />
+                        <TextBlock Text="宝具/技能描述按照Buff换行" HorizontalAlignment="Left" Height="26"
+                               Margin="47,129,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                FontSize="10" />
+                        <CheckBox x:Name="ToggleBuffFuncTranslate" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,152,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,技能与宝具的具体数值的效果名称会进行翻译,不勾选则直接显示原文." IsChecked="True" />
+                        <TextBlock Text="翻译部分Buff名称" HorizontalAlignment="Left" Height="27"
+                               Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                FontSize="10" />
+                        <CheckBox x:Name="ToggleFuncDiffer" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,176,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                   FontSize="9"
+                                  ToolTip="勾选此项时,技能与宝具的具体数值的效果数值会进行分析显示&#xA;如1000,3,-1,200的BusterUP会写成20%(100%) - 3回合·无限次&#xA;不勾选则原样显示.&#xA;注:目前实现方式比较杂乱可能会带来误解析的可能性."
+                                  IsChecked="True" />
+                        <TextBlock Text="对效果进行分析显示(Beta)" HorizontalAlignment="Left" Height="25"
+                               Margin="47,178,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                FontSize="10" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem IsEnabled="False" IsHitTestVisible="False">
+                <TabItem.Header>
+                    <TextBlock Text="------------" />
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Header="基本信息">
+                <Grid Margin="0">
+                    <GroupBox HorizontalAlignment="Left" Height="570" Margin="0,0,0,0" VerticalAlignment="Top" Width="810">
+                        <GroupBox.Background>
+                            <SolidColorBrush Color="#FFFFFFFF" Opacity="0"/>
+                        </GroupBox.Background>
+                        <GroupBox.Header>
+                            <TextBlock Text="基本信息" FontWeight="Bold" />
+                        </GroupBox.Header>
+                        <Grid x:Name="svtdetail" Margin="0,0,0,0">
+                            <TextBlock Text="从者名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333" Margin="0,10,0,0"
+                               />
+                            <TextBlock
+                                Text="   -------------------------------------------------------------------------------------------------------------------------------" Height="27" Margin="0,350,0,0" VerticalAlignment="Top"
+                                Width="800"
+                                FontSize="14" Foreground="LightGray" />
+                            <TextBox x:Name="Svtname" HorizontalAlignment="Left" Height="17" Margin="67,1,0,0"
+                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="415"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333" >
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="战斗名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,47,0,0" />
+                            <TextBox x:Name="SvtBattlename" HorizontalAlignment="Left" Height="17" Margin="67,38,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="特性:" HorizontalAlignment="Left" Height="43" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,90,0,0" />
+                            <TextBox x:Name="svtIndividuality" x:FieldModifier="public" HorizontalAlignment="Left"
+                                 Height="48" Margin="37,79,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="753"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333" FontSize="10">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="职介:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="654,10,0,0" />
+                            <TextBox x:Name="svtclass" HorizontalAlignment="Left" Height="17" Margin="691,1,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="稀有度:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="501,10,0,0" />
+                            <TextBox x:Name="rarity" HorizontalAlignment="Left" Height="17" Margin="551,1,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="性别:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="512.5,47,0,0" />
+                            <TextBox x:Name="gendle" HorizontalAlignment="Left" Height="17" Margin="551,38,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="隐藏属性:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="630,47,0,0" />
+                            <TextBox x:Name="hiddenattri" HorizontalAlignment="Left" Height="17" Margin="691,38,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="CV:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="98"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="520,140,0,0" />
+                            <TextBox x:Name="cv" HorizontalAlignment="Left" Height="17" Margin="551,133,0,0"
+                                 TextWrapping="Wrap"
+                                 Text="" VerticalAlignment="Top" Width="239" IsReadOnly="True"
+                                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo"
+                                 Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="Illust:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="508,172,0,0" />
+                            <TextBox x:Name="illust" HorizontalAlignment="Left" Height="17" Margin="551,168,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="239"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="出星率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,140,0,0" />
+                            <TextBox x:Name="ssvtstarrate" HorizontalAlignment="Left" Height="17" Margin="53,136,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="被即死率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="120,140,0,0" />
+                            <TextBox x:Name="ssvtdeathrate" HorizontalAlignment="Left" Height="17" Margin="179,136,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="集星权重:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="245,140,0,0" />
+                            <TextBox x:Name="jixing" HorizontalAlignment="Left" Height="17" Margin="305,136,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="40"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="理论NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="350,140,0,0"
+                               Cursor="Help" ToolTip="公式:NP率=职阶基础值*蓝卡数补正*魔力补正/蓝卡Hit数" />
+                            <TextBox x:Name="notrealnprate" HorizontalAlignment="Left" Height="17" Margin="409,136,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="74"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="实际NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,214,0,0"
+                               Cursor="Help" ToolTip="实际文件中的NP率,有时与理论计算结果有出入." />
+                            <TextBox x:Name="nprate" HorizontalAlignment="Left" Height="46" Margin="68,204,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="职介技能:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,264,0,0" />
+                            <TextBox x:Name="classskill" HorizontalAlignment="Left" Height="46" Margin="68,255,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333" FontSize="10">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="基础HP:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="0,315,0,0" />
+                            <TextBox x:Name="basichp" HorizontalAlignment="Left" Height="17" Margin="55,308,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="基础ATK:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="123,315,0,0"
+                               ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
+                            <TextBox x:Name="basicatk" HorizontalAlignment="Left" Height="17" Margin="180,308,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="最大HP:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="96"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="250,315,0,0" />
+                            <TextBox x:Name="maxhp" HorizontalAlignment="Left" Height="17" Margin="304,308,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="最大ATK:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="98"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="372,315,0,0"
+                               ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
+                            <TextBox x:Name="maxatk" HorizontalAlignment="Left" Height="17" Margin="430,308,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock x:Name="atkbalance1" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
+                               VerticalAlignment="Top" Width="70" FontSize="12"
+                               Foreground="#FF333333" Margin="122,330,0,-5.4" FontWeight="Bold" />
+                            <TextBlock x:Name="atkbalance2" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
+                               VerticalAlignment="Top" Width="70" FontSize="12"
+                               Foreground="#FF333333" Margin="372,332,0,-5.4" FontWeight="Bold" />
+                            <TextBlock x:Name="sixwei" Text="" HorizontalAlignment="Left" Height="27"
+                               VerticalAlignment="Top"
+                               Width="442" FontSize="12" Foreground="#FF333333"
+                               Margin="20,172,0,0" FontWeight="Bold" />
+                            <TextBlock x:Name="hpatkbalance" Text="( 攻防倾向: 均衡 )" HorizontalAlignment="Left" Height="27"
+                               VerticalAlignment="Top" Width="173" FontSize="14"
+                               Foreground="#FF333333" Margin="495,315,0,0" FontWeight="Bold"/>
+                            <TextBox x:Name="collection" HorizontalAlignment="Left" Height="17" Margin="691,312,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
+                                     IsReadOnly="True" HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontFamily="Meiryo" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="图鉴编号:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                                Margin="630,317,0,0" />
+                        </Grid>
+                    </GroupBox>
+                    <Grid Name="svtcards"  Margin="5,425,0,0">
+                        <TextBlock Text="配卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="36"
+                                        FontSize="12" Foreground="#FF333333"
+                                       Margin="0,20,0,0" FontWeight="Bold" />
+                        <Image x:Name="card1" HorizontalAlignment="Left" Height="50" Margin="50,0,0,0" VerticalAlignment="Top" Width="50" Source="images/Quick.png"/>
+                        <Image x:Name="card2" HorizontalAlignment="Left" Height="50" Margin="120,0,0,0" VerticalAlignment="Top" Width="50" Source="images/Quick.png"/>
+                        <Image x:Name="card3" HorizontalAlignment="Left" Height="50" Margin="190,0,0,0" VerticalAlignment="Top" Width="50" Source="images/Quick.png"/>
+                        <Image x:Name="card4" HorizontalAlignment="Left" Height="50" Margin="260,0,0,0" VerticalAlignment="Top" Width="50" Source="images/Quick.png"/>
+                        <Image x:Name="card5" HorizontalAlignment="Left" Height="50" Margin="330,0,0,0" VerticalAlignment="Top" Width="50" Source="images/Quick.png"/>
+                        <TextBox x:Name="cards" HorizontalAlignment="Left" Height="17" Margin="36,58,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                         IsReadOnly="True" HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                        <TextBlock Text="B卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                        FontSize="12" Foreground="#FF333333"
+                                       Margin="403,10,0,0" FontWeight="Bold" />
+                        <TextBox x:Name="bustercard" HorizontalAlignment="Left" Height="17" Margin="439,1,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                        <TextBlock Text="A卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="403,39,0,0" FontWeight="Bold" />
+                        <TextBox x:Name="artscard" HorizontalAlignment="Left" Height="17" Margin="439,33,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                        <TextBlock Text="Q卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="402,68,0,0" FontWeight="Bold" />
+                        <TextBox x:Name="quickcard" HorizontalAlignment="Left" Height="17" Margin="439,65,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                        <TextBlock Text="EX卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="402,97,0,0" FontWeight="Bold" />
+                        <TextBox x:Name="extracard" HorizontalAlignment="Left" Height="17" Margin="439,97,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                        <TextBlock Text="宝具:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="0,97,0,0" FontWeight="Bold" />
+                        <TextBox x:Name="treasuredevicescard" HorizontalAlignment="Left" Height="17"
+                                 Margin="36,97,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                            <TextBox.Background>
+                                <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                            </TextBox.Background>
+                        </TextBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="成长曲线">
+                <Grid Margin="0,0,0,0">
+                    <TextBlock Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线,目前仅能实现显示功能."
+                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
+                               Width="515"  FontSize="11.5" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="10,23,0,0" />
+                    <Canvas x:Name="chartCanvas" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top"
+                                Width="472" Margin="10,190,0,0">
+                        <Line x:Name="x_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="472" Y2="352"
+                                  StrokeStartLineCap="Round" />
+                        <Line x:Name="y_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="0" Y2="60"
+                                  StrokeStartLineCap="Round" />
+                        <Path x:Name="x_axisArrow" Fill="Black" Data="M472,347 L472,356 L482,352 z"/>
+                        <Path x:Name="y_axisArrow" Fill="Black" Data="M-4,60 L4,60 L0,50 z"/>
+                        <TextBlock x:Name="x_label" Text="lv" Canvas.Left="455" Canvas.Top="325"
+                                       FontFamily="Microsoft JhengHei" FontSize="14" />
+
+                        <TextBlock x:Name="y_label" Text="max" Canvas.Left="-10" Canvas.Top="30"
+                                       FontFamily="Microsoft JhengHei" FontSize="14" />
+
+                        <TextBlock x:Name="o_label" Text="0" Canvas.Left="-10" Canvas.Top="350"
+                                        FontSize="14" />
+                    </Canvas>
+                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="10.5">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="等级" Width="46"
+                                                    DisplayMemberBinding="{Binding SvtLevel}" />
+                                <GridViewColumn Header="HP" Width="80"
+                                                    DisplayMemberBinding="{Binding SvtHp}" />
+                                <GridViewColumn Header="ATK" Width="80"
+                                                    DisplayMemberBinding="{Binding SvtAtk}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="宝具信息">
+                <Grid x:Name="svtTDs" Margin="0,0,0,0">
+                    <GroupBox Margin="0,175,0,0" Background="{x:Null}">
+                        <GroupBox.Header>
+                            <TextBlock Text="具体数值" FontWeight="Bold" />
+                        </GroupBox.Header>
+                        <Grid>
+                            <ListView x:Name="TDFuncList" Margin="10,10,10,10" Foreground="#FF737373" FontSize="11">
+                                <ListView.Background>
+                                    <SolidColorBrush Color="White" Opacity="0.4" />
+                                </ListView.Background>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="效果" Width="100"
+                                                        DisplayMemberBinding="{Binding TDFuncName}" />
+                                        <GridViewColumn Header="lv.1/OC1" Width="138"
+                                                        DisplayMemberBinding="{Binding TDSvalOC1lv1}" />
+                                        <GridViewColumn Header="lv.2/OC2" Width="138"
+                                                        DisplayMemberBinding="{Binding TDSvalOC2lv2}" />
+                                        <GridViewColumn Header="lv.3/OC3" Width="138"
+                                                        DisplayMemberBinding="{Binding TDSvalOC3lv3}" />
+                                        <GridViewColumn Header="lv.4/OC4" Width="138"
+                                                        DisplayMemberBinding="{Binding TDSvalOC4lv4}" />
+                                        <GridViewColumn Header="lv.5/OC5" Width="138"
+                                                        DisplayMemberBinding="{Binding TDSvalOC5lv5}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="0,0,0,400" Background="{x:Null}">
+                        <GroupBox.Header>
+                            <TextBlock Text="宝具基本信息" FontWeight="Bold" />
+                        </GroupBox.Header>
+                        <Grid>
+                            <TextBlock Text="宝具卡色:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,2,0,0" FontWeight="Bold" />
+                            <TextBox x:Name="npcardtype" HorizontalAlignment="Left" Height="17" Margin="66,-1,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="宝具类型:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,44,0,0" FontWeight="Bold" />
+                            <TextBox x:Name="nptype" HorizontalAlignment="Left" Height="17" Margin="66,41,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="Rank:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="631,29,0,0" FontWeight="Bold" />
+                            <TextBox x:Name="nprank" HorizontalAlignment="Left" Height="17" Margin="666,24,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="宝具名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="157,2,0,0" FontWeight="Bold" />
+                            <TextBox x:Name="npruby" HorizontalAlignment="Left" Height="17" Margin="211,2,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBox x:Name="npname" HorizontalAlignment="Left" Height="17" Margin="211,41,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="宝具描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,87,0,0" FontWeight="Bold" />
+                            <TextBox x:Name="npdetail" HorizontalAlignment="Left" Height="48" Margin="66,76,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="560"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" FontSize="10">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock x:Name="IsNPStrengthened" HorizontalAlignment="Center" Height="18"
+                                       Margin="743,85,21.2,15" TextWrapping="Wrap" Text="×" Block.TextAlignment="Center"
+                                       VerticalAlignment="Center" Width="35" 
+                                       FontSize="16" Foreground="#FF333333" />
+                            <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                       Width="97"
+                                       FontSize="12" Foreground="#FF333333"
+                                       Margin="657,91,0,0" FontWeight="Bold" />
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="技能信息">
+                <Grid Margin="0">
+                    <TabControl Style="{StaticResource TabControlCapsule}" Margin="0,10,0,0">
+                        <TabItem Header="技能1">
+                            <Grid x:Name="svtskill1" Margin="0,0,0,0">
+                                <Label Content="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333" Margin="2,2,0,0"
+                               FontWeight="Bold" />
+                                <TextBox x:Name="skill1name" HorizontalAlignment="Left" Height="26" Margin="66,2,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,45,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1details" HorizontalAlignment="Left" Height="59" Margin="66,32,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2" FontSize="10">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1cdlv1" HorizontalAlignment="Left" Height="26" Margin="66,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="119,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1cdlv6" HorizontalAlignment="Left" Height="26" Margin="142,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="196,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1cdlv10" HorizontalAlignment="Left" Height="26" Margin="219,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label
+                            Content="---------------------------------------------------------------------------------------------"
+                            HorizontalAlignment="Left" Height="27" Margin="2,112,0,0" VerticalAlignment="Top"
+                            Width="480"
+                             FontSize="14" Foreground="LightGray" />
+                                <Label Content="具体数值:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,128,0,0" FontWeight="Bold" />
+                                <TextBlock x:Name="IsSk1Strengthened" HorizontalAlignment="Center" Height="18"
+                                   Margin="436,129,21,259" TextWrapping="Wrap" Text="×" Block.TextAlignment="Center"
+                                   VerticalAlignment="Center" Width="35" 
+                                   FontSize="16" Foreground="#FF333333" />
+                                <Label Content="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,128,0,0" FontWeight="Bold" />
+                                <ListView x:Name="Skill1FuncList" Margin="5,152,5,2" Foreground="#FF737373" FontSize="10.5">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="效果" Width="100"
+                                                    DisplayMemberBinding="{Binding SkillName}" />
+                                            <GridViewColumn Header="lv.1数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
+                                            <GridViewColumn Header="lv.6数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
+                                            <GridViewColumn Header="lv.10数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <Label Content="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1ID" HorizontalAlignment="Left" Height="26" Margin="409,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="技能2">
+                            <Grid x:Name="svtskill2" Margin="0,0,0,0">
+                                <Label Content="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333" Margin="2,2,0,0"
+                               FontWeight="Bold" />
+                                <TextBox x:Name="skill2name" HorizontalAlignment="Left" Height="17" Margin="66,2,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,45,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2details" HorizontalAlignment="Left" Height="59" Margin="66,32,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2" FontSize="10">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2cdlv1" HorizontalAlignment="Left" Height="26" Margin="66,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="119,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2cdlv6" HorizontalAlignment="Left" Height="26" Margin="142,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="196,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2cdlv10" HorizontalAlignment="Left" Height="26" Margin="219,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label
+                            Content="---------------------------------------------------------------------------------------------"
+                            HorizontalAlignment="Left" Height="27" Margin="2,112,0,0" VerticalAlignment="Top"
+                            Width="480"
+                             FontSize="14" Foreground="LightGray" />
+                                <Label Content="具体数值:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,128,0,0" FontWeight="Bold" />
+                                <TextBlock x:Name="IsSk2Strengthened" HorizontalAlignment="Center" Height="18"
+                                   Margin="436,129,21,259" TextWrapping="Wrap" Text="×" Block.TextAlignment="Center"
+                                   VerticalAlignment="Center" Width="35" 
+                                   FontSize="16" Foreground="#FF333333" />
+                                <Label Content="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,128,0,0" FontWeight="Bold" />
+                                <ListView x:Name="Skill2FuncList" Margin="5,152,5,2" Foreground="#FF737373" FontSize="10.5">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="效果" Width="100"
+                                                    DisplayMemberBinding="{Binding SkillName}" />
+                                            <GridViewColumn Header="lv.1数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
+                                            <GridViewColumn Header="lv.6数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
+                                            <GridViewColumn Header="lv.10数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <Label Content="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2ID" HorizontalAlignment="Left" Height="26" Margin="409,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="技能3">
+                            <Grid x:Name="svtskill3" Margin="0,0,0,0">
+                                <Label Content="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333" Margin="2,2,0,0"
+                               FontWeight="Bold" />
+                                <TextBox x:Name="skill3name" HorizontalAlignment="Left" Height="17" Margin="66,2,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,45,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3details" HorizontalAlignment="Left" Height="59" Margin="66,32,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="416"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo" Grid.ColumnSpan="2" FontSize="10">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3cdlv1" HorizontalAlignment="Left" Height="26" Margin="66,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="119,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3cdlv6" HorizontalAlignment="Left" Height="26" Margin="142,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label Content="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="196,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3cdlv10" HorizontalAlignment="Left" Height="26" Margin="219,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                                <Label
+                            Content="---------------------------------------------------------------------------------------------"
+                            HorizontalAlignment="Left" Height="27" Margin="2,112,0,0" VerticalAlignment="Top"
+                            Width="480"
+                             FontSize="14" Foreground="LightGray" />
+                                <Label Content="具体数值:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="2,128,0,0" FontWeight="Bold" />
+                                <TextBlock x:Name="IsSk3Strengthened" HorizontalAlignment="Center" Height="18"
+                                   Margin="436,129,21,259" TextWrapping="Wrap" Text="×" Block.TextAlignment="Center"
+                                   VerticalAlignment="Center" Width="35" 
+                                   FontSize="16" Foreground="#FF333333" />
+                                <Label Content="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,128,0,0" FontWeight="Bold" />
+                                <ListView x:Name="Skill3FuncList" Margin="5,152,5,2" Foreground="#FF737373" FontSize="10.5">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="效果" Width="100"
+                                                    DisplayMemberBinding="{Binding SkillName}" />
+                                            <GridViewColumn Header="lv.1数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
+                                            <GridViewColumn Header="lv.6数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
+                                            <GridViewColumn Header="lv.10数值" Width="127"
+                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <Label Content="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                               Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="355,96,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3ID" HorizontalAlignment="Left" Height="26" Margin="409,96,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
+                                 IsReadOnly="True" HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="#FF333333" FontFamily="Meiryo">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="职介技能">
+                            <Grid Margin="0,0,0,0">
+                                <TextBlock Text="注:&#13;此处显示职介技能的详细数值,按照技能进行分类,如果一个技能有多个效果则会换行显示." HorizontalAlignment="Left"
+                               Height="52" VerticalAlignment="Top"
+                               Width="485"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="5,7,0,0" FontWeight="Bold" />
+                                <ListView x:Name="ClassPassiveFuncList" Margin="5,59,5,2" Foreground="#FF737373" FontSize="9.5">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="职介技能" Width="100"
+                                                    DisplayMemberBinding="{Binding ClassPassiveName}" />
+                                            <GridViewColumn Header="ID" Width="60"
+                                                    DisplayMemberBinding="{Binding ClassPassiveID}" />
+                                            <GridViewColumn Header="效果名称" Width="160"
+                                                    DisplayMemberBinding="{Binding ClassPassiveFuncName}" />
+                                            <GridViewColumn Header="数值" Width="160"
+                                                    DisplayMemberBinding="{Binding ClassPassiveFuncSval}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="培养素材">
+                <Grid Margin="0,0,0,0">
+                    <TextBlock Text="灵基再临材料"
+                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
+                               Width="515"  FontSize="20" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="10,10,0,0" />
+                    <ListView x:Name="LimitCombineItems" Margin="5,40,5,345" Foreground="#FF737373" FontSize="11">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="再临阶段" Width="60"
+                                                    DisplayMemberBinding="{Binding Status}" />
+                                <GridViewColumn Header="材料名称与数量" Width="340"
+                                                    DisplayMemberBinding="{Binding Items}" />
+                                <GridViewColumn Header="QP消耗" Width="81"
+                                                    DisplayMemberBinding="{Binding QP}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <TextBlock Text="技能升级材料"
+                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
+                               Width="515"  FontSize="20" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="10,235,0,0" />
+                    <ListView x:Name="SkillCombineItems" Margin="5,268,4.8,2.4" Foreground="#FF737373" FontSize="11">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="技能等级" Width="60"
+                                                    DisplayMemberBinding="{Binding Status}" />
+                                <GridViewColumn Header="材料名称与数量" Width="340"
+                                                    DisplayMemberBinding="{Binding Items}" />
+                                <GridViewColumn Header="QP消耗" Width="81"
+                                                    DisplayMemberBinding="{Binding QP}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="羁绊文本">
+                <Grid x:Name="svttexts" Margin="0,0,0,0">
+                    <TextBlock Text="文本1:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="1,14,0,0" />
+                    <TextBox x:Name="jibantext1" HorizontalAlignment="Left" Height="100" Margin="44,14,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本2:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                                FontSize="12" Foreground="#FF333333"
+                                Margin="354,14,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext2" HorizontalAlignment="Left" Height="100" Margin="397,14,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本3:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="1,120,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext3" HorizontalAlignment="Left" Height="100" Margin="44,120,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本4:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="354,120,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext4" HorizontalAlignment="Left" Height="100" Margin="397,120,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本5:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="1,226,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext5" HorizontalAlignment="Left" Height="100" Margin="44,226,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本6:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="354,226,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext6" HorizontalAlignment="Left" Height="100" Margin="397,226,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBlock Text="文本7:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
+                               FontSize="12" Foreground="#FF333333"
+                               Margin="1,332,0,0" FontWeight="Bold" />
+                    <TextBox x:Name="jibantext7" HorizontalAlignment="Left" Height="100" Margin="44,332,0,0"
+                                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                 IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                 FontFamily="Meiryo">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="JBOutput" Content="导出文本" HorizontalAlignment="Left"
+                            Margin="365,484,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="JBOutput_Click"
+                            Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="注:若文本7为空,则该从者的羁绊文本暂未实装（游戏内提示的为&quot;???&quot;）"
+                               HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="429"
+                                FontSize="12" Foreground="#FF333333"
+                               Margin="0,505,0,0" FontWeight="Bold" BorderBrush="{x:Null}" Background="{x:Null}" />
+                </Grid>
+            </TabItem>
+            <TabItem IsEnabled="False" IsHitTestVisible="False">
+                <TabItem.Header>
+                    <TextBlock Text="------------" />
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Header="活动列表">
+                <Grid Margin="0,0,0,0">
+                    <Label Content="正在进行的活动(永久活动除外):"
+                               HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
+                               Width="248" FontFamily="Microsoft JhengHei UI" FontSize="16" Foreground="#FF333333"
+                               FontWeight="Bold" />
+                    <ListView x:Name="PickupEventList" Margin="5,31,5,259" Foreground="#FF737373" FontSize="11">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="活动编号" Width="55"
+                                                    DisplayMemberBinding="{Binding EventNumber}" />
+                                <GridViewColumn Header="活动名称" Width="289"
+                                                    DisplayMemberBinding="{Binding EventName}" />
+                                <GridViewColumn Header="结束时间(非兑换截止时间)" Width="137"
+                                                    DisplayMemberBinding="{Binding EventEndTime}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="ButtonEvent" Content="显示" HorizontalAlignment="Left" Height="26"
+                                Margin="399,152,0,0"
+                                VerticalAlignment="Top" Width="81" Click="Button_Click_Event"
+                                FontFamily="Microsoft JhengHei UI"
+                                FontWeight="Bold" Foreground="#FF333333" />
+                    <Label Content="已经结束的活动:"
+                               HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
+                               Width="154" FontFamily="Microsoft JhengHei UI" FontSize="16" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="0,152,0,0" />
+                    <ListView x:Name="PickupEndedEventList" Margin="5,183,5,5" Foreground="#FF737373" FontSize="11">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="活动编号" Width="55"
+                                                    DisplayMemberBinding="{Binding EventNumber}" />
+                                <GridViewColumn Header="活动名称" Width="289"
+                                                    DisplayMemberBinding="{Binding EventName}" />
+                                <GridViewColumn Header="结束时间(非兑换截止时间)" Width="137"
+                                                    DisplayMemberBinding="{Binding EventEndTime}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Margin="0,0,0,0">
+                        <Label Content="正在PickUp的限时卡池:"
+                               HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
+                               Width="248" FontFamily="Microsoft JhengHei UI" FontSize="16" Foreground="#FF333333"
+                               FontWeight="Bold" />
+                        <ListView x:Name="PickupGachaList" Margin="5,31,5,259" Foreground="#FF737373" FontSize="11">
+                            <ListView.Background>
+                                <SolidColorBrush Color="White" Opacity="0.4" />
+                            </ListView.Background>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="卡池编号" Width="55"
+                                                    DisplayMemberBinding="{Binding EventNumber}" />
+                                    <GridViewColumn Header="卡池名称" Width="289"
+                                                    DisplayMemberBinding="{Binding EventName}" />
+                                    <GridViewColumn Header="结束时间" Width="137"
+                                                    DisplayMemberBinding="{Binding EventEndTime}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Button x:Name="ButtonGacha" Content="显示" HorizontalAlignment="Left" Height="26"
+                                Margin="399,152,0,0"
+                                VerticalAlignment="Top" Width="81" Click="Button_Click_Gacha"
+                                FontFamily="Microsoft JhengHei UI"
+                                FontWeight="Bold" Foreground="#FF333333" />
+                        <Label Content="已经结束的限时卡池:"
+                               HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
+                               Width="248" FontFamily="Microsoft JhengHei UI" FontSize="16" Foreground="#FF333333"
+                               FontWeight="Bold" Margin="0,152,0,0" />
+                        <ListView x:Name="PickupEndedGachaList" Margin="5,183,5,5" Foreground="#FF737373" FontSize="11">
+                            <ListView.Background>
+                                <SolidColorBrush Color="White" Opacity="0.4" />
+                            </ListView.Background>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="卡池编号" Width="55"
+                                                    DisplayMemberBinding="{Binding EventNumber}" />
+                                    <GridViewColumn Header="卡池名称" Width="289"
+                                                    DisplayMemberBinding="{Binding EventName}" />
+                                    <GridViewColumn Header="结束时间" Width="137"
+                                                    DisplayMemberBinding="{Binding EventEndTime}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="关卡列表">
+                <Grid Margin="0,0,0,0">
+                    <Label Content="注:&#13;本页暂时只作为在新发布的强化任务时查询PickUP关卡以便快速定位强化本对象."
+                               HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
+                               Width="471" FontFamily="Microsoft JhengHei UI" FontSize="11.5" Foreground="#FF333333"
+                               FontWeight="Bold" />
+                    <ListView x:Name="PickupQuestList" Margin="5,68,5,5" Foreground="#FF737373" FontSize="11">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="关卡编号" Width="70"
+                                                    DisplayMemberBinding="{Binding QuestNumber}" />
+                                <GridViewColumn Header="关卡名称" Width="170"
+                                                    DisplayMemberBinding="{Binding QuestName}" />
+                                <GridViewColumn Header="Start PickUP Time" Width="120"
+                                                    DisplayMemberBinding="{Binding QuestStartTime}" />
+                                <GridViewColumn Header="End PickUP Time" Width="120"
+                                                    DisplayMemberBinding="{Binding QuestEndTime}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="ButtonQuest" Content="显示" HorizontalAlignment="Left" Height="26"
+                                Margin="5,37,0,0"
+                                VerticalAlignment="Top" Width="81" Click="Button_Click_Quest"
+                                FontFamily="Microsoft JhengHei UI"
+                                FontWeight="Bold" Foreground="#FF333333" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="职介一览">
+                <Grid Margin="0,0,0,0">
+                    <TextBlock Text="攻击侧职介克制关系显示"
+                               HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
+                               Width="247" FontSize="20" Foreground="#FF333333" 
+                               Margin="10,10,0,0" FontWeight="Bold" />
+                    <TextBlock Text="注:职介栏中括号内显示的为克制/逆克制伤害倍率.(全部为攻击侧数据)"
+                               HorizontalAlignment="Left" Height="21" VerticalAlignment="Top"
+                               Width="352" FontSize="11" Foreground="#FF333333" Margin="447,124,0,0"/>
+                    <ListView x:Name="ClassList" Margin="5,150,5,5" Foreground="#FF737373" FontSize="10">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="职介名称(ID)" Width="140"
+                                                DisplayMemberBinding="{Binding ClassName}" />
+                                <GridViewColumn Header="Weak职介(红字)" Width="170"
+                                                DisplayMemberBinding="{Binding WeakClass}" />
+                                <GridViewColumn Header="Resist职介(蓝字)" Width="170"
+                                                DisplayMemberBinding="{Binding ResistClass}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="ButtonClass" Content="显示" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" 
+                            Margin="351,115,0,0"
+                            VerticalAlignment="Top" Width="81" Click="Button_Click_Class"
+                            Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="加成从者">
+                <Grid>
+                    <TextBlock Text="下次活动预告加成从者列表"
+                               HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
+                               Width="446" FontSize="20" Foreground="#FF333333" 
+                               Margin="10,10,0,0" FontWeight="Bold" />
+                    <TextBlock Text="注:本页仅解析下一活动(即游戏内显示 次回イベント対象)的加成从者."
+                               HorizontalAlignment="Left" Height="26" VerticalAlignment="Top"
+                               Width="362" FontSize="11.5" Foreground="#FF333333"
+                               Margin="447,124,0,0" />
+                    <ListView x:Name="SvtFilterList" Margin="5,150,5,5" Foreground="#FF737373" FontSize="10">
+                        <ListView.Background>
+                            <SolidColorBrush Color="White" Opacity="0.4" />
+                        </ListView.Background>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="筛选器ID" Width="80"
+                                                DisplayMemberBinding="{Binding FilterID}" />
+                                <GridViewColumn Header="筛选器Tag" Width="120"
+                                                DisplayMemberBinding="{Binding FilterTag}" />
+                                <GridViewColumn Header="从者名称" Width="280"
+                                                DisplayMemberBinding="{Binding SvtName}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button  Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="ButtonSvtFilter" Content="显示" HorizontalAlignment="Left"
+                              Margin="351,115,0,0"
+                              VerticalAlignment="Top" Width="81" Click="Button_Click_SvtFilter"  Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem IsEnabled="False" IsHitTestVisible="False">
+                <TabItem.Header>
+                    <TextBlock Text="------------" />
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Header="数据更新">
+                <Grid>
+                    <Label Content="游戏数据更新/下载" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0"
+                           VerticalAlignment="Top" Width="789" FontSize="20" 
+                           Foreground="#FF333333" FontWeight="Bold" />
+                    <ProgressBar Style="{DynamicResource ProgressBarInfo}" x:Name="progressbar" HorizontalAlignment="Left" Height="27" Margin="10,258,0,0"
+                                 VerticalAlignment="Top" Width="789" Maximum="10000"
+                                 Background="#FFB9B9B9" Visibility="Hidden" />
+                    <TextBlock x:Name="updatestatus" Text="" HorizontalAlignment="Left" Height="30"
+                               Margin="10,305,0,0"
+                               VerticalAlignment="Top" Width="789" FontSize="9"
+                               Foreground="#FF333333"/>
+                    <TextBlock x:Name="updatesign" Text="" HorizontalAlignment="Left" Height="27" Margin="350,519,0,0"
+                               VerticalAlignment="Top" Width="178" FontSize="11"
+                               Foreground="#FF333333" />
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="updatedatabutton" Content="下载/更新游戏数据" HorizontalAlignment="Left"
+                            Margin="335,484,0,0" VerticalAlignment="Top" Width="157" Click="Button_Click_3"
+                            Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="资源解包">
+                <Grid>
+                    <TextBlock Text="资源文件解密/重命名(JP Version Only)" HorizontalAlignment="Left" Height="40"
+                               VerticalAlignment="Top"
+                               Width="383" 
+                               FontSize="16" Foreground="#FF333333" FontWeight="Bold" Margin="10,16,0,0" />
+                    <Button x:Name="ButtonBinSelectFolder" hc:BorderElement.CornerRadius="15" Content="选择文件夹" HorizontalAlignment="Left"
+                                Margin="360,175,0,0"
+                                VerticalAlignment="Top" Width="81" Click="Button_DecryptBinFolder" Foreground="#FF333333" />
+                    <ProgressBar Style="{DynamicResource ProgressBarInfo}" x:Name="decryptprogress" HorizontalAlignment="Left" Height="29"
+                                 Margin="10,225,0,0"
+                                 VerticalAlignment="Top" Width="789" Maximum="100000" 
+                                 Background="#FFB9B9B9" Visibility="Hidden" />
+                    <Label x:Name="decryptstatus" Content="" Height="31"
+                               Margin="10,259,9.8,0"
+                               VerticalAlignment="Top" FontFamily="Microsoft JhengHei UI" FontSize="12"
+                               Foreground="#FF333333" Width="789" />
+                    <TextBlock
+                            Text="使用说明:&#13;点击按钮后选择完源文件夹后程序会自动进行资源的解密与改名操作.需保证源文件夹有cfb1d36393fd67385e046b084b7cf7ed文件即&#13;AssetStorage.txt,无需对该文件进行改名.输出文件夹为同目录下的DecryptedResources文件夹.解密完成后输出文件夹中会生成Assets,Audio,Movie&#13;三个文件夹分别存储不同类型的资源.&#13;如果解包中有音频资源会在重命名过后提示是否继续音频解包.(本项功能使用CriPakTools以及DeleTore中的部分代码与类库实现cpk2wav的一步到位)&#13;解包后的音频输出文件夹为/Audio/DecodedWavs.(视频资源本程序不会进行任何解密操作,仅进行重命名便于分辨和另行解包)"
+                            Height="109"
+                            Margin="5,61,4.8,0"
+                            VerticalAlignment="Top"  FontSize="12"
+                            Foreground="#FF333333"/>
+                    <TextBlock
+                            Text="------------------------------------------------------------------------------------------------------------------------------------------"
+                            HorizontalAlignment="Left" Height="27" Margin="0,325,0,0" VerticalAlignment="Top"
+                            Width="799" FontSize="14" Foreground="LightGray" />
+                    <TextBlock Text="单音频文件转wav(cpk2wav)" HorizontalAlignment="Left" Height="40"
+                               VerticalAlignment="Top"
+                               Width="217" 
+                               FontSize="16" Foreground="#FF333333" FontWeight="Bold" Margin="304,350,0,0" />
+                    <Button x:Name="ButtonCpkSelect" hc:BorderElement.CornerRadius="15" Content="选择文件" HorizontalAlignment="Left" 
+                                Margin="360,450,0,0"
+                                VerticalAlignment="Top" Width="81" Click="Button_DecryptBinFile"
+                                Foreground="#FF333333" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="关于">
+                <Grid Margin="0,0,0,0">
+                    <TextBlock Text="Altera" HorizontalAlignment="Left" Height="40"
+                               Margin="10,10,0,0" VerticalAlignment="Top" Width="383" 
+                               FontSize="18" Foreground="#FF333333" FontWeight="Bold" />
+                    <TextBlock Text="-----------------------------------------------------------------------------------------------------------------------------------------"
+                            HorizontalAlignment="Left" Height="27" Margin="10,262,0,0" VerticalAlignment="Top"
+                            Width="789"
+                             FontSize="14" Foreground="LightGray" />
+                    <TextBlock x:Name="VersionLabel" Text="版本号:" HorizontalAlignment="Left" Height="27"
+                               Margin="644,17,0,0" VerticalAlignment="Top" Width="140"
+                               FontSize="11.5" Foreground="#FF333333" />
+                    <TextBlock Text="作者: ACPudding" HorizontalAlignment="Left" Height="27" Margin="10,54,0,0"
+                               VerticalAlignment="Top" Width="259"  FontSize="11.5"
+                               Foreground="#FF333333" />
+                    <TextBlock Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera(即阿蒂拉)。&#13;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsTools的代码。感谢他的付出。本程序为练手之作，代码和UI写的都很差。&#13;因此不会长期更新，望见谅。"
+                               HorizontalAlignment="Left" Height="62" Margin="9,167,0,0" VerticalAlignment="Top"
+                               Width="789" Foreground="#FF333333" FontWeight="Bold" />
+                    <TextBlock Text="b站ID: ACPudding      Github: ACPudding" HorizontalAlignment="Left" Height="27"
+                               Margin="10,81,0,0" VerticalAlignment="Top" Width="472"
+                               
+                               FontSize="11.5" Foreground="#FF333333"/>
+                    <Image HorizontalAlignment="Left" Height="124" Margin="660,54,0,0" VerticalAlignment="Top"
+                               Width="124" Source="icon.ico" />
+                    <TextBlock Text="Github 地址: " HorizontalAlignment="Left" Height="27" Margin="10,108,0,0"
+                               VerticalAlignment="Top" Width="259"  FontSize="11.5"
+                               Foreground="#FF333333"/>
+                    <TextBlock HorizontalAlignment="Left" Height="16" Margin="94,108,0,0" TextWrapping="Wrap"
+                                   Text=""
+                                   VerticalAlignment="Top" Width="248" Foreground="#FF333333"><Hyperlink NavigateUri="https://github.com/ACPudding"><Run Text="https://github.com/ACPudding"/></Hyperlink></TextBlock>
+                    <TextBlock Text="FGO日服官网: " HorizontalAlignment="Left" Height="27" Margin="10,135,0,0"
+                               VerticalAlignment="Top" Width="259"  FontSize="11.5"
+                               Foreground="#FF333333"/>
+                    <TextBlock HorizontalAlignment="Left" Height="16" Margin="94,135,0,0" TextWrapping="Wrap"
+                                   Text=""
+                                   VerticalAlignment="Top" Width="248" Foreground="#FF333333"><Hyperlink  NavigateUri="https://www.fate-go.jp"><Run Text="https://www.fate-go.jp"/></Hyperlink></TextBlock>
+                    <TextBlock Text="检查软件更新:" HorizontalAlignment="Left" Height="27" Margin="10,294,0,0"
+                               VerticalAlignment="Top" Width="259"  FontSize="14"
+                               Foreground="#FF333333" FontWeight="Bold" />
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="CheckUpdate" Content="检查更新" HorizontalAlignment="Left" Margin="365,484,0,0"
+                            VerticalAlignment="Top" Width="75"  Click="Button_Click_5"
+                            Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0"/>
+                                <GradientStop Color="#FF7BA2FF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <ProgressBar Style="{DynamicResource ProgressBarInfo}" x:Name="progressbar1" HorizontalAlignment="Left" Height="31" Margin="10,359,0,0"
+                                 VerticalAlignment="Top" Width="789" Maximum="100" Visibility="Hidden"/>
+                    <TextBlock x:Name="updatestatus2" Text="" Height="30"
+                               Margin="10,431,9.8,0"
+                               VerticalAlignment="Top"  FontSize="12"
+                               Foreground="#FF333333" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right" Margin="0,0,0,400" Width="350">
+            <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10"/>
+        </ScrollViewer>
+    </Grid>
+</hc:Window>
