@@ -2650,7 +2650,7 @@ namespace Altera
                 {
                     VerAssetsJArray = (JArray) JsonConvert.DeserializeObject(VerChk["assets"].ToString());
                     for (var i = 0; i <= VerAssetsJArray.Count - 1; i++)
-                        if (VerAssetsJArray[i]["name"].ToString() == "FGOSBIAReloaded.exe")
+                        if (VerAssetsJArray[i]["name"].ToString() == "Altera.exe")
                             GlobalPathsAndDatas.ExeUpdateUrl = VerAssetsJArray[i]["browser_download_url"].ToString();
                     if (GlobalPathsAndDatas.ExeUpdateUrl == "")
                     {
