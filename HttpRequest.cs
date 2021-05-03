@@ -108,7 +108,7 @@ namespace Altera
 
         public static string GetApplicationUpdateJson()
         {
-            var api = "https://api.github.com/repos/ACPudding/TestProjectReloaded/releases/latest";
+            var api = "https://api.github.com/repos/ACPudding/Altera/releases/latest";
             ServicePointManager.SecurityProtocol = (SecurityProtocolType) 3072; //TLS1.2=3702
             var result = "";
             var req = WebRequest.Create(api) as HttpWebRequest;
