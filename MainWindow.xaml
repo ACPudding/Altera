@@ -511,7 +511,7 @@
                         <TextBlock x:Name="o_label" Text="0" Canvas.Left="-10" Canvas.Top="350"
                                    FontSize="14" />
                     </Canvas>
-                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="10.5">
+                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="11.5">
                         <ListView.Background>
                             <SolidColorBrush Color="White" Opacity="0.4" />
                         </ListView.Background>
@@ -538,7 +538,7 @@
                             <TextBlock Text="具体数值" FontWeight="Bold" />
                         </GroupBox.Header>
                         <Grid>
-                            <ListView x:Name="TDFuncList" Margin="5,5,5,5" Foreground="#FF737373" FontSize="9.5">
+                            <ListView x:Name="TDFuncList" Margin="5,5,5,5" Foreground="#FF737373" FontSize="10">
                                 <ListView.Background>
                                     <SolidColorBrush Color="White" Opacity="0.4" />
                                 </ListView.Background>
@@ -597,7 +597,7 @@
                             <TextBlock Text="Rank:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="2,137,0,0" />
+                                       Margin="2,140,0,0" />
                             <TextBox x:Name="nprank" HorizontalAlignment="Left" Height="32" Margin="37,132,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="169"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -663,8 +663,8 @@
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
-                                <TextBox x:Name="skill1name" HorizontalAlignment="Left" Height="26" Margin="60,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                <TextBox x:Name="skill1name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
                                          Foreground="#FF333333" FontFamily="Meiryo">
@@ -675,13 +675,13 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="365,10,0,0" />
-                                <TextBox x:Name="skill1details" HorizontalAlignment="Left" Height="160"
-                                         Margin="434,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
+                                           Margin="2,66,0,0" />
+                                <TextBox x:Name="skill1details" HorizontalAlignment="Left" Height="88"
+                                         Margin="60,42,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
-                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11.5">
+                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -689,8 +689,8 @@
                                 <TextBlock Text="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,71,0,0" />
-                                <TextBox x:Name="skill1cdlv1" HorizontalAlignment="Left" Height="26" Margin="60,63,0,0"
+                                           Margin="502,10,0,0" />
+                                <TextBox x:Name="skill1cdlv1" HorizontalAlignment="Left" Height="27" Margin="560,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -702,9 +702,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="23"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="117,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill1cdlv6" HorizontalAlignment="Left" Height="26"
-                                         Margin="137,63,0,0"
+                                           Margin="617,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1cdlv6" HorizontalAlignment="Left" Height="27"
+                                         Margin="637,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -716,9 +716,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="31"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill1cdlv10" HorizontalAlignment="Left" Height="26"
-                                         Margin="214,63,0,0"
+                                           Margin="696,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill1cdlv10" HorizontalAlignment="Left" Height="27"
+                                         Margin="714,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -728,7 +728,7 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk1Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="273,129,499.2,375.4" TextWrapping="Wrap" Text="×"
+                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
                                            FontSize="16" Foreground="#FF333333" />
@@ -736,12 +736,12 @@
                                            VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,132,0,0" FontWeight="Bold" />
+                                           Margin="630,108,0,0" FontWeight="Bold" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,132,0,0" />
-                                <TextBox x:Name="skill1ID" HorizontalAlignment="Left" Height="26" Margin="60,125,0,0"
+                                           Margin="596,66,0,0" />
+                                <TextBox x:Name="skill1ID" HorizontalAlignment="Left" Height="26" Margin="654,58,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -750,7 +750,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,175,5,5">
+                                <GroupBox Margin="5,135,5,5">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>
@@ -759,7 +759,7 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill1FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="11.5">
+                                                  FontSize="10.5">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
@@ -767,11 +767,11 @@
                                                 <GridView>
                                                     <GridViewColumn Header="效果" Width="100"
                                                                     DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1数值" Width="230"
+                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6数值" Width="230"
+                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10数值" Width="230"
+                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
                                                 </GridView>
                                             </ListView.View>
@@ -785,8 +785,8 @@
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
-                                <TextBox x:Name="skill2name" HorizontalAlignment="Left" Height="26" Margin="60,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                <TextBox x:Name="skill2name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
                                          Foreground="#FF333333" FontFamily="Meiryo">
@@ -797,13 +797,13 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="365,10,0,0" />
-                                <TextBox x:Name="skill2details" HorizontalAlignment="Left" Height="160"
-                                         Margin="434,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
+                                           Margin="2,66,0,0" />
+                                <TextBox x:Name="skill2details" HorizontalAlignment="Left" Height="88"
+                                         Margin="60,42,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
-                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11.5">
+                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -811,8 +811,8 @@
                                 <TextBlock Text="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,71,0,0" />
-                                <TextBox x:Name="skill2cdlv1" HorizontalAlignment="Left" Height="26" Margin="60,63,0,0"
+                                           Margin="502,10,0,0" />
+                                <TextBox x:Name="skill2cdlv1" HorizontalAlignment="Left" Height="27" Margin="560,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -824,9 +824,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="23"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="117,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill2cdlv6" HorizontalAlignment="Left" Height="26"
-                                         Margin="137,63,0,0"
+                                           Margin="617,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2cdlv6" HorizontalAlignment="Left" Height="27"
+                                         Margin="637,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -838,9 +838,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="31"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill2cdlv10" HorizontalAlignment="Left" Height="26"
-                                         Margin="214,63,0,0"
+                                           Margin="696,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill2cdlv10" HorizontalAlignment="Left" Height="27"
+                                         Margin="714,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -850,7 +850,7 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk2Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="273,129,499.2,375.4" TextWrapping="Wrap" Text="×"
+                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
                                            FontSize="16" Foreground="#FF333333" />
@@ -858,12 +858,12 @@
                                            VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,132,0,0" FontWeight="Bold" />
+                                           Margin="630,108,0,0" FontWeight="Bold" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,132,0,0" />
-                                <TextBox x:Name="skill2ID" HorizontalAlignment="Left" Height="26" Margin="60,125,0,0"
+                                           Margin="596,66,0,0" />
+                                <TextBox x:Name="skill2ID" HorizontalAlignment="Left" Height="26" Margin="654,58,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -872,7 +872,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,175,5,5">
+                                <GroupBox Margin="5,135,5,5">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>
@@ -881,7 +881,7 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill2FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="11.5">
+                                                  FontSize="10.5">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
@@ -889,11 +889,11 @@
                                                 <GridView>
                                                     <GridViewColumn Header="效果" Width="100"
                                                                     DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1数值" Width="230"
+                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6数值" Width="230"
+                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10数值" Width="230"
+                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
                                                 </GridView>
                                             </ListView.View>
@@ -907,8 +907,8 @@
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
-                                <TextBox x:Name="skill3name" HorizontalAlignment="Left" Height="26" Margin="60,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
+                                <TextBox x:Name="skill3name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
                                          Foreground="#FF333333" FontFamily="Meiryo">
@@ -919,13 +919,13 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="365,10,0,0" />
-                                <TextBox x:Name="skill3details" HorizontalAlignment="Left" Height="160"
-                                         Margin="434,5,0,0"
-                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
+                                           Margin="2,66,0,0" />
+                                <TextBox x:Name="skill3details" HorizontalAlignment="Left" Height="88"
+                                         Margin="60,42,0,0"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
-                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11.5">
+                                         Foreground="#FF333333" FontFamily="Meiryo" FontSize="11">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -933,8 +933,8 @@
                                 <TextBlock Text="冷却时间:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,71,0,0" />
-                                <TextBox x:Name="skill3cdlv1" HorizontalAlignment="Left" Height="26" Margin="60,63,0,0"
+                                           Margin="502,10,0,0" />
+                                <TextBox x:Name="skill3cdlv1" HorizontalAlignment="Left" Height="27" Margin="560,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -946,9 +946,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="23"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="117,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill3cdlv6" HorizontalAlignment="Left" Height="26"
-                                         Margin="137,63,0,0"
+                                           Margin="617,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3cdlv6" HorizontalAlignment="Left" Height="27"
+                                         Margin="637,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -960,9 +960,9 @@
                                 <TextBlock Text="→" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="31"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,71,0,0" FontWeight="Bold" />
-                                <TextBox x:Name="skill3cdlv10" HorizontalAlignment="Left" Height="26"
-                                         Margin="214,63,0,0"
+                                           Margin="696,10,0,0" FontWeight="Bold" />
+                                <TextBox x:Name="skill3cdlv10" HorizontalAlignment="Left" Height="27"
+                                         Margin="714,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -972,7 +972,7 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk3Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="273,129,499.2,375.4" TextWrapping="Wrap" Text="×"
+                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
                                            FontSize="16" Foreground="#FF333333" />
@@ -980,12 +980,12 @@
                                            VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="196,132,0,0" FontWeight="Bold" />
+                                           Margin="630,108,0,0" FontWeight="Bold" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,132,0,0" />
-                                <TextBox x:Name="skill3ID" HorizontalAlignment="Left" Height="26" Margin="60,125,0,0"
+                                           Margin="596,66,0,0" />
+                                <TextBox x:Name="skill3ID" HorizontalAlignment="Left" Height="26" Margin="654,58,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
                                          VerticalContentAlignment="Center"
@@ -994,7 +994,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,175,5,5">
+                                <GroupBox Margin="5,135,5,5">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>
@@ -1003,7 +1003,7 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill3FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="11.5">
+                                                  FontSize="10.5">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
@@ -1011,11 +1011,11 @@
                                                 <GridView>
                                                     <GridViewColumn Header="效果" Width="100"
                                                                     DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1数值" Width="230"
+                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6数值" Width="230"
+                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10数值" Width="230"
+                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
                                                 </GridView>
                                             </ListView.View>
@@ -1039,13 +1039,13 @@
                                     </ListView.Background>
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="职介技能" Width="100"
+                                            <GridViewColumn Header="职介技能" Width="200"
                                                             DisplayMemberBinding="{Binding ClassPassiveName}" />
-                                            <GridViewColumn Header="ID" Width="60"
+                                            <GridViewColumn Header="ID" Width="90"
                                                             DisplayMemberBinding="{Binding ClassPassiveID}" />
-                                            <GridViewColumn Header="效果名称" Width="230"
+                                            <GridViewColumn Header="效果名称" Width="300"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncName}" />
-                                            <GridViewColumn Header="数值" Width="400"
+                                            <GridViewColumn Header="数值" Width="200"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncSval}" />
                                         </GridView>
                                     </ListView.View>
@@ -1496,7 +1496,7 @@
                                  Background="#FFB9B9B9" Visibility="Hidden" />
                     <Label x:Name="decryptstatus" Content="" Height="31"
                            Margin="10,259,9.8,0"
-                           VerticalAlignment="Top" FontFamily="Microsoft JhengHei UI" FontSize="12"
+                           VerticalAlignment="Top" FontSize="12"
                            Foreground="#FF333333" Width="789" />
                     <TextBlock
                         Text="使用说明:&#xA;点击按钮后选择完源文件夹后程序会自动进行资源的解密与改名操作.需保证源文件夹有cfb1d36393fd67385e046b084b7cf7ed文件即&#xA;AssetStorage.txt,无需对该文件进行改名.输出文件夹为同目录下的DecryptedResources文件夹.解密完成后输出文件夹中会生成Assets,Audio,Movie&#xA;三个文件夹分别存储不同类型的资源.&#xA;如果解包中有音频资源会在重命名过后提示是否继续音频解包.(本项功能使用CriPakTools以及DeleTore中的部分代码与类库实现cpk2wav的一步到位)&#xA;解包后的音频输出文件夹为/Audio/DecodedWavs.(视频资源本程序不会进行任何解密操作,仅进行重命名便于分辨和另行解包)"
@@ -1536,7 +1536,7 @@
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
                                Foreground="#FF333333" />
                     <TextBlock
-                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera(即阿蒂拉)。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsTools的代码。感谢他的付出。本程序为练手之作，代码和UI写的都很差。&#xA;因此不会长期更新，望见谅。"
+                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera(即阿蒂拉)。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。本程序为练手之作，代码和UI写的都很&#xA;差。因此不会长期更新，望见谅。"
                         HorizontalAlignment="Left" Height="62" Margin="9,167,0,0" VerticalAlignment="Top"
                         Width="789" Foreground="#FF333333" FontWeight="Bold" />
                     <TextBlock Text="b站ID: ACPudding      Github: ACPudding" HorizontalAlignment="Left" Height="27"

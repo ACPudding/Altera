@@ -3233,31 +3233,34 @@ namespace Altera
 
         private void DrawScale()
         {
-            for (var i = 0; i < 101; i++)
+            Dispatcher.Invoke(() =>
             {
-                var x_scale = new Line
+                for (var i = 0; i < 101; i++)
                 {
-                    StrokeEndLineCap = PenLineCap.Triangle,
-                    StrokeThickness = 1,
-                    Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
-                    X1 = 0 + i * 4.5
-                };
+                    var x_scale = new Line
+                    {
+                        StrokeEndLineCap = PenLineCap.Triangle,
+                        StrokeThickness = 1,
+                        Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                        X1 = 0 + i * 4.5
+                    };
 
-                x_scale.X2 = x_scale.X1;
+                    x_scale.X2 = x_scale.X1;
 
-                x_scale.Y1 = 352;
-                if (i % 5 == 0 && i != 0)
-                {
-                    x_scale.StrokeThickness = 2;
-                    x_scale.Y2 = x_scale.Y1 - 8;
+                    x_scale.Y1 = 352;
+                    if (i % 5 == 0 && i != 0)
+                    {
+                        x_scale.StrokeThickness = 2;
+                        x_scale.Y2 = x_scale.Y1 - 8;
+                    }
+                    else
+                    {
+                        x_scale.Y2 = x_scale.Y1 - 4;
+                    }
+
+                    chartCanvas.Children.Add(x_scale);
                 }
-                else
-                {
-                    x_scale.Y2 = x_scale.Y1 - 4;
-                }
-
-                Dispatcher.Invoke(() => { chartCanvas.Children.Add(x_scale); });
-            }
+            });
         }
 
         private static int[] GetSvtCurveData(object TypeID)
@@ -3355,6 +3358,8 @@ namespace Altera
                               "    宝具: " +
                               "C";
                 cards.Text = "[Q,Q,A,A,B]";
+                SetCardImgs("[Q,Q,A,A,B]");
+                DisplaySvtRarity(5);
                 bustercard.Text = "4 hit [10,20,30,40]";
                 artscard.Text = "3 hit [16,33,51]";
                 quickcard.Text = "5 hit [6,13,20,26,35]";
