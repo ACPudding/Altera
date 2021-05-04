@@ -1234,6 +1234,9 @@ namespace Altera
                         TDlv1OC1strArray[i].Count(c => c == ',') > 0)
                         TDFuncstrArray[i] = TranslateTDAttackName(svtTreasureDeviceFuncIDArray[i]);
 
+                    if (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "7011")
+                        TDFuncstrArray[i] = "从者位置变更";
+
                     if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
                         !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
                     ToggleFuncDiffer.Dispatcher.Invoke(() =>
@@ -2194,12 +2197,13 @@ namespace Altera
             updatedatabutton.Dispatcher.Invoke(() => { updatedatabutton.IsEnabled = false; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
             updatestatus.Dispatcher.Invoke(() => { updatesign.Text = "数据下载进行中,请勿退出!"; });
+            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Visible; });
             progressbar.Dispatcher.Invoke(() =>
             {
                 progressbar.Value = 0;
                 progressbar.Visibility = Visibility.Visible;
             });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 250; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1500; });
             progressring.Dispatcher.Invoke(() =>
             {
                 progressring.Value = 0;
@@ -2216,7 +2220,7 @@ namespace Altera
             if (!Directory.Exists(gamedata.FullName))
                 Directory.CreateDirectory(gamedata.FullName);
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "开始下载/更新游戏数据......"; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 250; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
@@ -2261,6 +2265,7 @@ namespace Altera
 
                             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
                             updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
+                            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
                             progressbar.Dispatcher.Invoke(() =>
                             {
                                 progressbar.Visibility = Visibility.Hidden;
@@ -2292,6 +2297,7 @@ namespace Altera
                     updatedatabutton.IsEnabled = true;
                 });
                 progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
                 progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
@@ -2324,6 +2330,7 @@ namespace Altera
                             updatedatabutton.IsEnabled = true;
                         });
                         progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                        AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
                         progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
                         Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                         OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
@@ -2332,19 +2339,20 @@ namespace Altera
                 }
             }
 
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
             File.WriteAllText(gamedata.FullName + "raw", result);
             File.WriteAllText(gamedata.FullName + "assetbundle",
                 res["response"][0]["success"]["assetbundle"].ToString());
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "assetbundle"; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 300; });
             File.WriteAllText(gamedata.FullName + "master",
                 res["response"][0]["success"]["master"].ToString());
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "master"; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 300; });
             File.WriteAllText(gamedata.FullName + "webview",
                 res["response"][0]["success"]["webview"].ToString());
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview"; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 300; });
             var data = File.ReadAllText(gamedata.FullName + "master");
             if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
                 Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
@@ -2386,10 +2394,10 @@ namespace Altera
                     });
                 }
 
-                progressbar.Dispatcher.Invoke(() => { progressbar.Value += ProgressValue; });
                 progressring.Dispatcher.Invoke(() => { progressring.Value += ProgressValue; });
             }
 
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1500; });
             var data2 = File.ReadAllText(gamedata.FullName + "assetbundle");
             var dictionary =
                 (Dictionary<string, object>) MasterDataUnpacker.MouseInfoMsgPack(
@@ -2398,7 +2406,7 @@ namespace Altera
                 (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "assetbundle.txt", str);
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "folder name: " + dictionary["folderName"]; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 150; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var data3 = File.ReadAllText(gamedata.FullName + "webview");
             var dictionary2 =
@@ -2407,14 +2415,16 @@ namespace Altera
             var str2 = "baseURL: " + dictionary2["baseURL"] + "\r\n contactURL: " +
                        dictionary2["contactURL"] + "\r\n";
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = str2; });
-            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 40; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 150; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var filePassInfo = (Dictionary<string, object>) dictionary2["filePass"];
             str = filePassInfo.Aggregate(str, (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "webview.txt", str2);
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt"; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "正在更新数据..."; });
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
             await LoadorRenewCommonDatas.ReloadData();
+            progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "下载/更新完成，可以开始解析."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value = progressbar.Maximum; });
             progressring.Dispatcher.Invoke(() => { progressring.Value = progressring.Maximum; });
@@ -2431,6 +2441,7 @@ namespace Altera
                 updatedatabutton.IsEnabled = true;
             });
             progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
             progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
@@ -2486,6 +2497,7 @@ namespace Altera
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
             var DS = new Task(() => { DrawScale(); });
             VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
+            DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Visible; });
             DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
@@ -2495,6 +2507,7 @@ namespace Altera
                     DataUpdate.IsSelected = true;
                 });
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
+                DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
             }
             else
             {
@@ -2504,6 +2517,7 @@ namespace Altera
                     await LoadorRenewCommonDatas.ReloadData();
                     Dispatcher.Invoke(() => { Growl.Info("读取完毕."); });
                     Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
+                    DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
                 }
                 catch (Exception)
                 {
@@ -2513,6 +2527,7 @@ namespace Altera
                         DataUpdate.IsSelected = true;
                     });
                     Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
+                    DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
                 }
             }
         }
@@ -3816,6 +3831,15 @@ namespace Altera
             }
 
             Dispatcher.Invoke(() => { ButtonSvtFilter.IsEnabled = true; });
+        }
+
+        private void JumpToClassPassive(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SkillInfoTI.IsSelected = true;
+                ClassPassiveInfo.IsSelected = true;
+            });
         }
 
         private struct SkillListSval

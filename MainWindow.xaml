@@ -34,6 +34,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <hc:LoadingCircle x:Name="DataLoadingRing" Margin="381,255,387.8,275.4" Visibility="Collapsed" />
                     <Button hc:BorderElement.CornerRadius="15" x:Name="OutputIDs" Content="导出ID列表"
                             HorizontalAlignment="Left" Height="30" Margin="362,295,0,0"
                             VerticalAlignment="Top" Click="Button_Click_1"
@@ -95,7 +96,7 @@
             </TabItem>
             <TabItem IsEnabled="False" IsHitTestVisible="False">
                 <TabItem.Header>
-                    <TextBlock Text="------------" />
+                    <TextBlock Text="-从者信息-" />
                 </TabItem.Header>
             </TabItem>
             <TabItem Header="基本信息" x:Name="FocusBasicInfo">
@@ -111,7 +112,7 @@
                         <Grid x:Name="svtdetail" Margin="0,0,0,0">
                             <TextBlock Text="从者名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
-                                       FontSize="12" Foreground="#FF333333" Margin="0,10,0,0" />
+                                       FontSize="12" Foreground="#FF333333" Margin="5,10,0,0" />
                             <TextBlock
                                 Text="   -------------------------------------------------------------------------------------------------------------------------------"
                                 Height="27" Margin="0,350,0,0" VerticalAlignment="Top"
@@ -129,7 +130,7 @@
                             <TextBlock Text="战斗名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,47,0,0" />
+                                       Margin="5,47,0,0" />
                             <TextBox x:Name="SvtBattlename" HorizontalAlignment="Left" Height="17" Margin="67,38,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -142,7 +143,7 @@
                             <TextBlock Text="特性:" HorizontalAlignment="Left" Height="43" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,90,0,0" />
+                                       Margin="5,90,0,0" />
                             <TextBox x:Name="svtIndividuality" x:FieldModifier="public" HorizontalAlignment="Left"
                                      Height="48" Margin="37,79,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="753"
@@ -237,7 +238,7 @@
                             <TextBlock Text="出星率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,140,0,0" />
+                                       Margin="5,140,0,0" />
                             <TextBox x:Name="ssvtstarrate" HorizontalAlignment="Left" Height="17" Margin="53,133,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -290,7 +291,7 @@
                             <TextBlock Text="实际NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,214,0,0"
+                                       Margin="5,214,0,0"
                                        Cursor="Help" ToolTip="实际文件中的NP率,有时与理论计算结果有出入." />
                             <TextBox x:Name="nprate" HorizontalAlignment="Left" Height="46" Margin="68,204,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
@@ -304,7 +305,15 @@
                             <TextBlock Text="职介技能:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,264,0,0" />
+                                       Margin="5,264,0,0" />
+                            <TextBlock HorizontalAlignment="Left" Height="16" Margin="8,285,0,0" TextWrapping="Wrap"
+                                       Text=""
+                                       VerticalAlignment="Top" Width="63" Foreground="#FF333333"
+                                       ToolTip="点击此处跳转职介技能详细数据." FontSize="10">
+                                <Hyperlink NavigateUri="" Click="JumpToClassPassive">
+                                    <Run Text="详细数据..." />
+                                </Hyperlink>
+                            </TextBlock>
                             <TextBox x:Name="classskill" HorizontalAlignment="Left" Height="46" Margin="68,255,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -317,7 +326,7 @@
                             <TextBlock Text="基础HP:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="0,315,0,0" />
+                                       Margin="5,315,0,0" />
                             <TextBox x:Name="basichp" HorizontalAlignment="Left" Height="17" Margin="55,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -376,8 +385,8 @@
                                        Foreground="#FF333333" Margin="372,332,0,-5.4" FontWeight="Bold" />
                             <TextBlock x:Name="sixwei" Text="" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top"
-                                       Width="442" FontSize="12" Foreground="#FF333333"
-                                       Margin="40,172,0,0" FontWeight="Bold" />
+                                       Width="414" FontSize="12" Foreground="#FF333333"
+                                       Margin="68,172,0,0" FontWeight="Bold" />
                             <TextBlock x:Name="hpatkbalance" Text="( 攻防倾向: 均衡 )" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="173" FontSize="14"
                                        Foreground="#FF333333" Margin="495,315,0,0" FontWeight="Bold" />
@@ -399,7 +408,7 @@
                     <Grid x:Name="svtcards" Margin="5,425,0,0">
                         <TextBlock Text="配卡:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="36"
                                    FontSize="12" Foreground="#FF333333"
-                                   Margin="0,20,0,0" FontWeight="Bold" />
+                                   Margin="5,20,0,0" FontWeight="Bold" />
                         <Image x:Name="card1" HorizontalAlignment="Left" Height="50" Margin="50,0,0,0"
                                VerticalAlignment="Top" Width="50" Source="images/Quick.png" />
                         <Image x:Name="card2" HorizontalAlignment="Left" Height="50" Margin="120,0,0,0"
@@ -470,7 +479,7 @@
                         </TextBox>
                         <TextBlock Text="宝具:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
                                    FontSize="12" Foreground="#FF333333"
-                                   Margin="0,97,0,0" FontWeight="Bold" />
+                                   Margin="5,97,0,0" FontWeight="Bold" />
                         <TextBox x:Name="treasuredevicescard" HorizontalAlignment="Left" Height="17"
                                  Margin="36,97,0,0"
                                  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="350"
@@ -569,7 +578,7 @@
                             <TextBlock Text="宝具卡色:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="2,28,0,0" />
+                                       Margin="5,28,0,0" />
                             <Image x:Name="cardTD" HorizontalAlignment="Left" Height="40" Margin="90,0,0,0"
                                    VerticalAlignment="Top" Width="40" Source="images/Quick.png" />
                             <TextBox x:Name="npcardtype" HorizontalAlignment="Left" Height="17" Margin="66,45,0,0"
@@ -584,7 +593,7 @@
                             <TextBlock Text="宝具类型:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="2,87,0,0" />
+                                       Margin="5,87,0,0" />
                             <TextBox x:Name="nptype" HorizontalAlignment="Left" Height="17" Margin="66,80,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="86"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -597,7 +606,7 @@
                             <TextBlock Text="Rank:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="2,140,0,0" />
+                                       Margin="5,140,0,0" />
                             <TextBox x:Name="nprank" HorizontalAlignment="Left" Height="32" Margin="37,132,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="169"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -655,14 +664,14 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="技能信息">
+            <TabItem Header="技能信息" x:Name="SkillInfoTI">
                 <Grid Margin="0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="0,10,0,0">
                         <TabItem Header="技能1">
                             <Grid x:Name="svtskill1" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
-                                           FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
+                                           FontSize="12" Foreground="#FF333333" Margin="5,10,0,0" />
                                 <TextBox x:Name="skill1name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -675,7 +684,7 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,66,0,0" />
+                                           Margin="5,66,0,0" />
                                 <TextBox x:Name="skill1details" HorizontalAlignment="Left" Height="88"
                                          Margin="60,42,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
@@ -784,7 +793,7 @@
                             <Grid x:Name="svtskill2" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
-                                           FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
+                                           FontSize="12" Foreground="#FF333333" Margin="5,10,0,0" />
                                 <TextBox x:Name="skill2name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -797,7 +806,7 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,66,0,0" />
+                                           Margin="5,66,0,0" />
                                 <TextBox x:Name="skill2details" HorizontalAlignment="Left" Height="88"
                                          Margin="60,42,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
@@ -906,7 +915,7 @@
                             <Grid x:Name="svtskill3" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
-                                           FontSize="12" Foreground="#FF333333" Margin="2,10,0,0" />
+                                           FontSize="12" Foreground="#FF333333" Margin="5,10,0,0" />
                                 <TextBox x:Name="skill3name" HorizontalAlignment="Left" Height="27" Margin="60,5,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="363"
                                          IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -919,7 +928,7 @@
                                 <TextBlock Text="技能描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="2,66,0,0" />
+                                           Margin="5,66,0,0" />
                                 <TextBox x:Name="skill3details" HorizontalAlignment="Left" Height="88"
                                          Margin="60,42,0,0"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500"
@@ -1024,7 +1033,7 @@
                                 </GroupBox>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="职介技能">
+                        <TabItem Header="职介技能" x:Name="ClassPassiveInfo">
                             <Grid Margin="0,0,0,0">
                                 <TextBlock Text="注:&#xA;此处显示职介技能的详细数值,按照技能进行分类,如果一个技能有多个效果则会换行显示."
                                            HorizontalAlignment="Left"
@@ -1201,7 +1210,7 @@
             </TabItem>
             <TabItem IsEnabled="False" IsHitTestVisible="False">
                 <TabItem.Header>
-                    <TextBlock Text="------------" />
+                    <TextBlock Text="-其他功能-" />
                 </TabItem.Header>
             </TabItem>
             <TabItem Header="活动列表">
@@ -1441,14 +1450,14 @@
             </TabItem>
             <TabItem IsEnabled="False" IsHitTestVisible="False">
                 <TabItem.Header>
-                    <TextBlock Text="------------" />
+                    <TextBlock Text="-数据解析-" />
                 </TabItem.Header>
             </TabItem>
             <TabItem Header="数据更新" x:Name="DataUpdate">
                 <Grid>
                     <Label Content="游戏数据更新/下载" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0"
                            VerticalAlignment="Top" Width="789" FontSize="20"
-                           Foreground="#FF333333" FontWeight="Bold" />
+                           Foreground="#FF333333" FontWeight="Bold" Background="#FFF6F6F6" />
                     <hc:LoadingLine x:Name="progressloading" Margin="-10,60,9.8,500.4" Foreground="BlueViolet"
                                     Style="{StaticResource LoadingLineLarge}" Visibility="Hidden" />
                     <hc:CircleProgressBar x:Name="progressring" Value="0" Margin="16,0,0,0" Width="200"
@@ -1477,6 +1486,8 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <hc:GifImage x:Name="AlteraGif" Height="100" Width="100" Margin="362,235,346.8,235.4"
+                                 Visibility="Hidden" Uri="images/AlteraDancing.gif" />
                 </Grid>
             </TabItem>
             <TabItem Header="资源解包">
@@ -1530,7 +1541,7 @@
                         Width="789"
                         FontSize="14" Foreground="LightGray" />
                     <TextBlock x:Name="VersionLabel" Text="版本号:" HorizontalAlignment="Left" Height="27"
-                               Margin="644,17,0,0" VerticalAlignment="Top" Width="140"
+                               Margin="685,39,-0.2,0" VerticalAlignment="Top" Width="124"
                                FontSize="11.5" Foreground="#FF333333" />
                     <TextBlock Text="作者: ACPudding" HorizontalAlignment="Left" Height="27" Margin="10,54,0,0"
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
@@ -1551,7 +1562,7 @@
                     <TextBlock HorizontalAlignment="Left" Height="16" Margin="94,108,0,0" TextWrapping="Wrap"
                                Text=""
                                VerticalAlignment="Top" Width="248" Foreground="#FF333333">
-                        <Hyperlink NavigateUri="https://github.com/ACPudding">
+                        <Hyperlink NavigateUri="https://github.com/ACPudding" Click="Hyperlink_Click">
                             <Run Text="https://github.com/ACPudding" />
                         </Hyperlink>
                     </TextBlock>
@@ -1561,7 +1572,7 @@
                     <TextBlock HorizontalAlignment="Left" Height="16" Margin="94,135,0,0" TextWrapping="Wrap"
                                Text=""
                                VerticalAlignment="Top" Width="248" Foreground="#FF333333">
-                        <Hyperlink NavigateUri="https://www.fate-go.jp">
+                        <Hyperlink NavigateUri="https://www.fate-go.jp" Click="Hyperlink_Click_1">
                             <Run Text="https://www.fate-go.jp" />
                         </Hyperlink>
                     </TextBlock>
@@ -1590,7 +1601,7 @@
             </TabItem>
         </TabControl>
         <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
-                      Margin="0,50,0,360" Width="350">
+                      Margin="0,50,0,360" Width="350" Visibility="Collapsed">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
     </Grid>
