@@ -1601,7 +1601,7 @@
             </TabItem>
         </TabControl>
         <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
-                      Margin="0,50,0,360" Width="350" Visibility="Collapsed">
+                      Margin="0,50,0,360" Width="350">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
     </Grid>
