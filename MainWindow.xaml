@@ -652,14 +652,27 @@
                                 </TextBox.Background>
                             </TextBox>
                             <TextBlock x:Name="IsNPStrengthened" HorizontalAlignment="Center" Height="18"
-                                       Margin="754,25,10.2,130.6" TextWrapping="Wrap" Text="×"
+                                       Margin="754,3,10.2,152.6" TextWrapping="Wrap" Text="×"
                                        Block.TextAlignment="Center"
                                        VerticalAlignment="Center" Width="35"
                                        FontSize="16" Foreground="#FF333333" />
                             <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="668,28,0,0" FontWeight="Bold" />
+                                       Margin="668,5,0,0" FontWeight="Bold" />
+                            <TextBlock Text="宝具ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                       Width="63"
+                                       FontSize="12" Foreground="#FF333333"
+                                       Margin="658,45,0,0" />
+                            <TextBox x:Name="TreasureDeviceID" HorizontalAlignment="Left" Height="26" Margin="707,37,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="82"
+                                     IsReadOnly="True" HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Foreground="#FF333333" FontFamily="Meiryo">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
                         </Grid>
                     </GroupBox>
                 </Grid>
