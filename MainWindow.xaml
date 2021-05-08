@@ -208,6 +208,9 @@
                                     <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                 </TextBox.Background>
                             </TextBox>
+                            <Image x:Name="ClassPng" HorizontalAlignment="Left" Height="24" Margin="625,5,0,0"
+                                   VerticalAlignment="Top" Width="24" Visibility="Collapsed"
+                                   Source="images/ClassShielder3.png" ToolTip="若某职介或者某稀有度图标缺失时会显示当前职介最高稀有度的图标或者直接不显示。" />
                             <TextBlock Text="CV:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="98"
                                        FontSize="12" Foreground="#FF333333"
@@ -354,8 +357,8 @@
                                        Width="96"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="250,315,0,0" />
-                            <TextBox x:Name="maxhp" HorizontalAlignment="Left" Height="17" Margin="304,308,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
+                            <TextBox x:Name="maxhp" HorizontalAlignment="Left" Height="17" Margin="300,308,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="65"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontFamily="Meiryo" Foreground="#FF333333">
@@ -664,7 +667,8 @@
                                        Width="63"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="658,45,0,0" />
-                            <TextBox x:Name="TreasureDeviceID" HorizontalAlignment="Left" Height="26" Margin="707,37,0,0"
+                            <TextBox x:Name="TreasureDeviceID" HorizontalAlignment="Left" Height="26"
+                                     Margin="707,37,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="82"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"

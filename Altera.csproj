@@ -220,5 +220,48 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassBeastI3.png" />
+    <Resource Include="images\ClassBeastII3.png" />
+    <Resource Include="images\ClassBeastIII3.png" />
+    <Resource Include="images\ClassBeast？3.png" />
+    <Resource Include="images\ClassAlterego3.png" />
+    <Resource Include="images\ClassArcher3.png" />
+    <Resource Include="images\ClassAssassin3.png" />
+    <Resource Include="images\ClassAvenger3.png" />
+    <Resource Include="images\ClassBerserker3.png" />
+    <Resource Include="images\ClassCaster3.png" />
+    <Resource Include="images\ClassForeigner3.png" />
+    <Resource Include="images\ClassLancer3.png" />
+    <Resource Include="images\ClassRider3.png" />
+    <Resource Include="images\ClassRuler3.png" />
+    <Resource Include="images\ClassSaber3.png" />
+    <Resource Include="images\ClassShielder3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassArcher1.png" />
+    <Resource Include="images\ClassAssassin1.png" />
+    <Resource Include="images\ClassBerserker1.png" />
+    <Resource Include="images\ClassCaster1.png" />
+    <Resource Include="images\ClassLancer1.png" />
+    <Resource Include="images\ClassRider1.png" />
+    <Resource Include="images\ClassSaber1.png" />
+    <Resource Include="images\ClassArcher2.png" />
+    <Resource Include="images\ClassAssassin2.png" />
+    <Resource Include="images\ClassAvenger2.png" />
+    <Resource Include="images\ClassBerserker2.png" />
+    <Resource Include="images\ClassCaster2.png" />
+    <Resource Include="images\ClassLancer2.png" />
+    <Resource Include="images\ClassRider2.png" />
+    <Resource Include="images\ClassSaber2.png" />
+    <Resource Include="images\ClassAvenger0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassRuler1.png" />
+    <Resource Include="images\ClassRuler2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassMoonCancer3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

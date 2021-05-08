@@ -333,12 +333,6 @@ namespace Altera
                 svtNPDamageType = mstTDobjtmp["effectFlag"].ToString().Replace("0", "辅助宝具")
                     .Replace("1", "全体宝具").Replace("2", "单体宝具");
                 nptype.Dispatcher.Invoke(() => { nptype.Text = svtNPDamageType; });
-                cards.Dispatcher.Invoke(() =>
-                {
-                    if (svtNPDamageType != "辅助宝具" || cards.Text == "[Q,Q,Q,Q,Q]") return;
-                    svtNPCardhit = 0;
-                    svtNPCardhitDamage = "[ - ]";
-                });
                 foreach (var svtTreasureDevicestmp in GlobalPathsAndDatas.mstSvtTreasureDevicedArray)
                     if (((JObject) svtTreasureDevicestmp)["treasureDeviceId"].ToString() ==
                         ((JObject) TreasureDevicestmp)["id"].ToString())
@@ -355,6 +349,13 @@ namespace Altera
                         break;
                     }
 
+                cards.Dispatcher.Invoke(() =>
+                {
+                    if (svtNPDamageType != "辅助宝具" || cards.Text == "[Q,Q,Q,Q,Q]" ||
+                        svtTDID.ToString() == "9935511") return;
+                    svtNPCardhit = 0;
+                    svtNPCardhitDamage = "[ - ]";
+                });
                 break;
             }
 
@@ -673,6 +674,8 @@ namespace Altera
                         svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
                         var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
                         DSR.Start();
+                        var DSC = new Task(() => { DisplaySvtClassPng(classData, Convert.ToInt32(svtrarity)); });
+                        DSC.Start();
                         rarity.Text = svtrarity + " ☆";
                         svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
                         basichp.Text = svthpBase;
@@ -827,6 +830,74 @@ namespace Altera
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         break;
+                }
+            });
+        }
+
+        private void DisplaySvtClassPng(int classid, int rarity)
+        {
+            var ClassName = new string[30];
+            ClassName[1] = "Saber";
+            ClassName[2] = "Archer";
+            ClassName[3] = "Lancer";
+            ClassName[4] = "Rider";
+            ClassName[5] = "Caster";
+            ClassName[6] = "Assassin";
+            ClassName[7] = "Berserker";
+            ClassName[8] = "Shielder";
+            ClassName[9] = "Ruler";
+            ClassName[10] = "Alterego";
+            ClassName[11] = "Avenger";
+            ClassName[17] = "Caster";
+            ClassName[23] = "MoonCancer";
+            ClassName[25] = "Foreigner";
+            ClassName[20] = "BeastII";
+            ClassName[22] = "BeastI";
+            ClassName[24] = "BeastIII";
+            ClassName[26] = "BeastIII";
+            ClassName[27] = "Beast？";
+            var pngArr = 0;
+            switch (rarity)
+            {
+                case 0:
+                    pngArr = 0;
+                    break;
+                case 1:
+                case 2:
+                    pngArr = 1;
+                    break;
+                case 3:
+                    pngArr = 2;
+                    break;
+                case 4:
+                case 5:
+                    pngArr = 3;
+                    break;
+                default:
+                    pngArr = 3;
+                    break;
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                ClassPng.Visibility = Visibility.Visible;
+                try
+                {
+                    try
+                    {
+                        ClassPng.Source =
+                            new BitmapImage(new Uri("images\\Class" + ClassName[classid] + pngArr + ".png",
+                                UriKind.Relative));
+                    }
+                    catch (Exception)
+                    {
+                        ClassPng.Source = new BitmapImage(new Uri("images\\Class" + ClassName[classid] + "3" + ".png",
+                            UriKind.Relative));
+                    }
+                }
+                catch (Exception e)
+                {
+                    ClassPng.Visibility = Visibility.Collapsed;
                 }
             });
         }
@@ -1859,6 +1930,7 @@ namespace Altera
                 card5.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
                 cardTD.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
                 raritystars.Visibility = Visibility.Hidden;
+                ClassPng.Visibility = Visibility.Collapsed;
             });
             IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "×"; });
             IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "×"; });
