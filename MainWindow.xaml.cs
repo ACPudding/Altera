@@ -60,6 +60,8 @@ namespace Altera
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var Font1 = new FontFamily("FOT-Matisse Pro B");
+            var Font2 = new FontFamily("FOT-Skip Std B");
             Button1.IsEnabled = false;
             textbox1.Text = Regex.Replace(textbox1.Text, @"\s", "");
             var ES = new Task(() => { EasternEggSvt(); });
@@ -78,6 +80,17 @@ namespace Altera
                 ClearTexts();
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 return;
+            }
+
+            if (ToggleTDSpecialFont.IsChecked == true)
+            {
+                npruby.FontFamily = Font1;
+                npname.FontFamily = Font1;
+            }
+            else
+            {
+                npruby.FontFamily = Font2;
+                npname.FontFamily = Font2;
             }
 
             var SA = new Task(StartAnalyze);
@@ -623,7 +636,7 @@ namespace Altera
                         JB.svtnme = svtName;
                         svtNameDisplay = mstSvtobjtmp["battleName"].ToString();
                         SvtBattlename.Text = svtNameDisplay;
-                        Title += " - " + svtNameDisplay;
+                        Title += " - " + svtName;
                         svtClass = mstSvtobjtmp["classId"].ToString();
                         svtgender = mstSvtobjtmp["genderType"].ToString();
                         svtstarrate = mstSvtobjtmp["starRate"].ToString();
