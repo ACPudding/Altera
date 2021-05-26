@@ -8,7 +8,7 @@
            Title="Altera" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
            Icon="icon.ico" ContentRendered="Form_Load">
     <Grid>
-        <TabControl Margin="0,0,0,0" TabStripPlacement="Left">
+        <TabControl Margin="0,0,0,0" TabStripPlacement="Left" FontFamily="Source Han Sans SC">
             <TabItem x:Name="StarterItemTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -26,7 +26,7 @@
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="Button1"
                             Content="解析" HorizontalAlignment="Left" Height="30" Margin="362,260,0,0"
                             VerticalAlignment="Top" Width="81" Click="Button_Click"
-                            Foreground="#FFFFFFFF">
+                            Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                                 <GradientStop Color="#FF326CF3" Offset="0" />
@@ -38,12 +38,12 @@
                     <Button hc:BorderElement.CornerRadius="15" x:Name="OutputIDs" Content="导出ID列表"
                             HorizontalAlignment="Left" Height="30" Margin="362,295,0,0"
                             VerticalAlignment="Top" Click="Button_Click_1"
-                            Width="81" Foreground="#FF333333" />
+                            Width="81" Foreground="#FF333333" FontFamily="Source Han Sans SC" />
                     <Button hc:BorderElement.CornerRadius="15" Content="清空" HorizontalAlignment="Left" Height="30"
                             Margin="362,330,0,0" VerticalAlignment="Top"
-                            Width="81" Foreground="#FF333333" Click="Button_Click_2" />
+                            Width="81" Foreground="#FF333333" Click="Button_Click_2" FontFamily="Source Han Sans SC" />
                     <ToggleButton Style="{StaticResource ToggleButtonSwitch}" Content="显示高级选项" Margin="0,360,9.8,161.4"
-                                  IsChecked="False" x:Name="ButtonVisibilitySwitch" />
+                                  IsChecked="False" x:Name="ButtonVisibilitySwitch" FontFamily="Source Han Sans SC" />
                     <Grid
                         Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=ButtonVisibilitySwitch}"
                         Margin="250,350,0,0">
@@ -53,14 +53,14 @@
                                   ToolTip="勾选此项时,每次解析从者后都会询问是否导出相应的xlsx文件." />
                         <TextBlock Text="询问是否导出xlsx文件" HorizontalAlignment="Left" Height="25" Margin="47,58,0,0"
                                    VerticalAlignment="Top" Width="165" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDeleteLastData" Content="" HorizontalAlignment="Left" Height="20"
                                   Margin="17,80,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,每次下载或者更新MasterData游戏数据时&#xA;均会删除上次的内容而不会提示已是最新版本." />
                         <TextBlock Text="更新MasterData时删除上次内容而不提醒" HorizontalAlignment="Left" Height="25"
                                    Margin="47,81,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDispIndi" Content="" HorizontalAlignment="Left" Height="20"
                                   Margin="17,104,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
@@ -68,21 +68,21 @@
                                   IsChecked="True" />
                         <TextBlock Text="特性显示解析结果(Beta)" HorizontalAlignment="Left" Height="26"
                                    Margin="47,106,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDetailbr" Content="" HorizontalAlignment="Left" Height="20"
                                   Margin="17,128,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,宝具/技能界面的&quot;描述&quot;文本框&#xA;会按照每个Buff进行换行显示&#xA;不勾选则直接不换行显示." />
                         <TextBlock Text="宝具/技能描述按照Buff换行" HorizontalAlignment="Left" Height="26"
                                    Margin="47,129,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleBuffFuncTranslate" Content="" HorizontalAlignment="Left" Height="20"
                                   Margin="17,152,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的具体数值的效果名称会进行翻译,不勾选则直接显示原文." IsChecked="True" />
                         <TextBlock Text="翻译部分Buff名称" HorizontalAlignment="Left" Height="27"
                                    Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleFuncDiffer" Content="" HorizontalAlignment="Left" Height="20"
                                   Margin="17,176,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
@@ -90,7 +90,7 @@
                                   IsChecked="True" />
                         <TextBlock Text="对效果进行分析显示(Beta)" HorizontalAlignment="Left" Height="25"
                                    Margin="47,178,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" />
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                     </Grid>
                 </Grid>
             </TabItem>
@@ -112,9 +112,9 @@
                         <Grid x:Name="svtdetail" Margin="0,0,0,0">
                             <TextBlock Text="从者名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
-                                       FontSize="12" Foreground="#FF333333" Margin="5,10,0,0" />
+                                       FontSize="12" Foreground="#FF333333" Margin="5,6,0,0" />
                             <TextBlock
-                                Text="   -------------------------------------------------------------------------------------------------------------------------------"
+                                Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
                                 Height="27" Margin="0,350,0,0" VerticalAlignment="Top"
                                 Width="800"
                                 FontSize="14" Foreground="LightGray" />
@@ -130,7 +130,7 @@
                             <TextBlock Text="战斗名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,47,0,0" />
+                                       Margin="5,43,0,0" />
                             <TextBox x:Name="SvtBattlename" HorizontalAlignment="Left" Height="17" Margin="67,38,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -157,7 +157,7 @@
                             <TextBlock Text="职介:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="654,10,0,0" />
+                                       Margin="654,6,0,0" />
                             <TextBox x:Name="svtclass" HorizontalAlignment="Left" Height="17" Margin="691,1,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -170,7 +170,7 @@
                             <TextBlock Text="稀有度:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="501,10,0,0" />
+                                       Margin="501,6,0,0" />
                             <Image x:Name="raritystars" HorizontalAlignment="Left" Height="9" Margin="501,28,0,0"
                                    VerticalAlignment="Top" Width="35" Source="images/SSR.png" Visibility="Hidden" />
                             <TextBox x:Name="rarity" HorizontalAlignment="Left" Height="17" Margin="551,1,0,0"
@@ -185,7 +185,7 @@
                             <TextBlock Text="性别:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="512.5,47,0,0" />
+                                       Margin="512.5,43,0,0" />
                             <TextBox x:Name="gendle" HorizontalAlignment="Left" Height="17" Margin="551,38,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -198,7 +198,7 @@
                             <TextBlock Text="隐藏属性:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="630,47,0,0" />
+                                       Margin="630,43,0,0" />
                             <TextBox x:Name="hiddenattri" HorizontalAlignment="Left" Height="17" Margin="691,38,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -214,7 +214,7 @@
                             <TextBlock Text="CV:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="98"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="520,140,0,0" />
+                                       Margin="520,138,0,0" />
                             <TextBox x:Name="cv" HorizontalAlignment="Left" Height="17" Margin="551,133,0,0"
                                      TextWrapping="Wrap"
                                      Text="" VerticalAlignment="Top" Width="239" IsReadOnly="True"
@@ -241,7 +241,7 @@
                             <TextBlock Text="出星率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,140,0,0" />
+                                       Margin="5,138,0,0" />
                             <TextBox x:Name="ssvtstarrate" HorizontalAlignment="Left" Height="17" Margin="53,133,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -254,7 +254,7 @@
                             <TextBlock Text="被即死率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="120,140,0,0" />
+                                       Margin="120,138,0,0" />
                             <TextBox x:Name="ssvtdeathrate" HorizontalAlignment="Left" Height="17" Margin="179,133,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -267,7 +267,7 @@
                             <TextBlock Text="集星权重:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="245,140,0,0" />
+                                       Margin="245,138,0,0" />
                             <TextBox x:Name="jixing" HorizontalAlignment="Left" Height="17" Margin="305,133,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="40"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -280,7 +280,7 @@
                             <TextBlock Text="理论NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="350,140,0,0"
+                                       Margin="350,138,0,0"
                                        Cursor="Help" ToolTip="公式:NP率=职阶基础值*蓝卡数补正*魔力补正/蓝卡Hit数" />
                             <TextBox x:Name="notrealnprate" HorizontalAlignment="Left" Height="17" Margin="409,133,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="74"
@@ -329,7 +329,7 @@
                             <TextBlock Text="基础HP:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,315,0,0" />
+                                       Margin="5,312,0,0" />
                             <TextBox x:Name="basichp" HorizontalAlignment="Left" Height="17" Margin="55,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -342,7 +342,7 @@
                             <TextBlock Text="基础ATK:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="123,315,0,0"
+                                       Margin="123,312,0,0"
                                        ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
                             <TextBox x:Name="basicatk" HorizontalAlignment="Left" Height="17" Margin="180,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
@@ -356,7 +356,7 @@
                             <TextBlock Text="最大HP:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="96"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="250,315,0,0" />
+                                       Margin="250,312,0,0" />
                             <TextBox x:Name="maxhp" HorizontalAlignment="Left" Height="17" Margin="300,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="65"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -369,7 +369,7 @@
                             <TextBlock Text="最大ATK:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="98"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="372,315,0,0"
+                                       Margin="372,312,0,0"
                                        ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
                             <TextBox x:Name="maxatk" HorizontalAlignment="Left" Height="17" Margin="430,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
@@ -405,7 +405,7 @@
                             <TextBlock Text="图鉴编号:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="630,315,0,0" />
+                                       Margin="630,312,0,0" />
                         </Grid>
                     </GroupBox>
                     <Grid x:Name="svtcards" Margin="5,425,0,0">
@@ -505,9 +505,9 @@
                     <TextBlock Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线,目前仅能实现显示功能."
                                HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
                                Width="515" FontSize="11.5" Foreground="#FF333333"
-                               FontWeight="Bold" Margin="10,508,0,0" />
+                               FontWeight="Bold" Margin="10,461,0,0" />
                     <Canvas x:Name="chartCanvas" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top"
-                            Width="472" Margin="10,112,0,0">
+                            Width="472" Margin="15,70,0,0">
                         <Line x:Name="x_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="472" Y2="352"
                               StrokeStartLineCap="Round" />
                         <Line x:Name="y_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="0" Y2="60"
@@ -515,10 +515,10 @@
                         <Path x:Name="x_axisArrow" Fill="Black" Data="M472,347 L472,356 L482,352 z" />
                         <Path x:Name="y_axisArrow" Fill="Black" Data="M-4,60 L4,60 L0,50 z" />
                         <TextBlock x:Name="x_label" Text="lv" Canvas.Left="455" Canvas.Top="325"
-                                   FontFamily="Microsoft JhengHei" FontSize="14" />
+                                   FontFamily="Source Han Sans SC" FontSize="14" />
 
                         <TextBlock x:Name="y_label" Text="max" Canvas.Left="-10" Canvas.Top="30"
-                                   FontFamily="Microsoft JhengHei" FontSize="14" />
+                                   FontFamily="Source Han Sans SC" FontSize="14" />
 
                         <TextBlock x:Name="o_label" Text="0" Canvas.Left="-10" Canvas.Top="350"
                                    FontSize="14" />
@@ -623,24 +623,30 @@
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="157,28,0,0" />
-                            <TextBox x:Name="npruby" HorizontalAlignment="Left" Height="17" Margin="211,2,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
-                                     IsReadOnly="True" HorizontalContentAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     Foreground="#FF333333" FontFamily="Meiryo">
-                                <TextBox.Background>
-                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                                </TextBox.Background>
-                            </TextBox>
-                            <TextBox x:Name="npname" HorizontalAlignment="Left" Height="17" Margin="211,41,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
-                                     IsReadOnly="True" HorizontalContentAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     Foreground="#FF333333" FontFamily="Meiryo">
-                                <TextBox.Background>
-                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                                </TextBox.Background>
-                            </TextBox>
+                            <Border BorderBrush="White" BorderThickness="2" Margin="211,0,145,95">
+                                <StackPanel>
+                                    <hc:OutlineText x:Name="npruby" Margin="0,2,0,0" Width="440"
+                                                    StrokePosition="Outside" FontSize="14" FontWeight="Bold"
+                                                    StrokeThickness="2" Fill="#FFF3F3F3"
+                                                    Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
+                                                    Text="" HorizontalAlignment="Center" FontFamily="FOT-Skip Std B"
+                                                    TextAlignment="Center" />
+                                    <hc:OutlineText x:Name="npname" Margin="0,0,0,0" Width="440"
+                                                    StrokePosition="Outside" FontSize="22" FontWeight="Bold"
+                                                    StrokeThickness="2"
+                                                    Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
+                                                    Text="" HorizontalAlignment="Center" FontFamily="FOT-Skip Std B"
+                                                    TextAlignment="Center">
+                                        <hc:OutlineText.Fill>
+                                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                                <GradientStop Color="#FFEACD76" Offset="1" />
+                                                <GradientStop Color="#FFEACD76" />
+                                                <GradientStop Color="#FFFFFBDC" Offset="0.5" />
+                                            </LinearGradientBrush>
+                                        </hc:OutlineText.Fill>
+                                    </hc:OutlineText>
+                                </StackPanel>
+                            </Border>
                             <TextBlock Text="宝具描述:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
@@ -655,14 +661,16 @@
                                 </TextBox.Background>
                             </TextBox>
                             <TextBlock x:Name="IsNPStrengthened" HorizontalAlignment="Center" Height="18"
-                                       Margin="754,3,10.2,152.6" TextWrapping="Wrap" Text="×"
+                                       Margin="680,5,10.2,152.6" TextWrapping="Wrap" Text="×"
                                        Block.TextAlignment="Center"
                                        VerticalAlignment="Center" Width="35"
-                                       FontSize="16" Foreground="#FF333333" />
-                            <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
-                                       Width="97"
+                                       FontSize="14" Foreground="#FF333333" />
+                            <TextBlock Text=":" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                       Width="27"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="668,5,0,0" FontWeight="Bold" />
+                                       Margin="700,5,0,0" FontWeight="Bold" />
+                            <Image HorizontalAlignment="Left" Height="27" Margin="668,2,0,0"
+                                   VerticalAlignment="Top" Width="27" Source="images/TDStrengthen.png" />
                             <TextBlock Text="宝具ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="63"
                                        FontSize="12" Foreground="#FF333333"
@@ -754,15 +762,17 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk1Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
+                                           Margin="640,108,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
-                                           FontSize="16" Foreground="#FF333333" />
-                                <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27"
+                                           FontSize="14" Foreground="#FF333333" />
+                                <TextBlock Text=":" HorizontalAlignment="Left" Height="27"
                                            VerticalAlignment="Top"
-                                           Width="97"
+                                           Width="27"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="630,108,0,0" FontWeight="Bold" />
+                                           Margin="660,108,0,0" FontWeight="Bold" />
+                                <Image HorizontalAlignment="Left" Height="27" Margin="630,105,0,0"
+                                       VerticalAlignment="Top" Width="27" Source="images/SkillStrengthen.png" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
@@ -876,15 +886,17 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk2Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
+                                           Margin="640,108,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
-                                           FontSize="16" Foreground="#FF333333" />
-                                <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27"
+                                           FontSize="14" Foreground="#FF333333" />
+                                <TextBlock Text=":" HorizontalAlignment="Left" Height="27"
                                            VerticalAlignment="Top"
-                                           Width="97"
+                                           Width="27"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="630,108,0,0" FontWeight="Bold" />
+                                           Margin="660,108,0,0" FontWeight="Bold" />
+                                <Image HorizontalAlignment="Left" Height="27" Margin="630,105,0,0"
+                                       VerticalAlignment="Top" Width="27" Source="images/SkillStrengthen.png" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
@@ -998,15 +1010,17 @@
                                     </TextBox.Background>
                                 </TextBox>
                                 <TextBlock x:Name="IsSk3Strengthened" HorizontalAlignment="Center" Height="18"
-                                           Margin="707,106,65.2,398.4" TextWrapping="Wrap" Text="×"
+                                           Margin="640,108,65.2,398.4" TextWrapping="Wrap" Text="×"
                                            Block.TextAlignment="Center"
                                            VerticalAlignment="Center" Width="35"
-                                           FontSize="16" Foreground="#FF333333" />
-                                <TextBlock Text="是否有强化本:" HorizontalAlignment="Left" Height="27"
+                                           FontSize="14" Foreground="#FF333333" />
+                                <TextBlock Text=":" HorizontalAlignment="Left" Height="27"
                                            VerticalAlignment="Top"
-                                           Width="97"
+                                           Width="27"
                                            FontSize="12" Foreground="#FF333333"
-                                           Margin="630,108,0,0" FontWeight="Bold" />
+                                           Margin="660,108,0,0" FontWeight="Bold" />
+                                <Image HorizontalAlignment="Left" Height="27" Margin="630,105,0,0"
+                                       VerticalAlignment="Top" Width="27" Source="images/SkillStrengthen.png" />
                                 <TextBlock Text="技能ID:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="63"
                                            FontSize="12" Foreground="#FF333333"
@@ -1270,7 +1284,7 @@
                                 <TextBlock Text="已经结束的限时卡池:"
                                            HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
                                            Width="154" FontSize="16" Foreground="#FF333333"
-                                           FontWeight="Bold" Margin="2,213,0,0" />
+                                           FontWeight="Bold" Margin="5,213,0,0" />
                                 <ListView x:Name="PickupEndedGachaList" Margin="5,249,5,5" Foreground="#FF737373"
                                           FontSize="11">
                                     <ListView.Background>
@@ -1326,7 +1340,7 @@
                                 <TextBlock Text="已经结束的活动:"
                                            HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
                                            Width="154" FontSize="16" Foreground="#FF333333"
-                                           FontWeight="Bold" Margin="2,213,0,0" />
+                                           FontWeight="Bold" Margin="5,213,0,0" />
                                 <ListView x:Name="PickupEndedEventList" Margin="5,249,5,5" Foreground="#FF737373"
                                           FontSize="11">
                                     <ListView.Background>
@@ -1533,7 +1547,7 @@
                         VerticalAlignment="Top" FontSize="12"
                         Foreground="#FF333333" />
                     <TextBlock
-                        Text="------------------------------------------------------------------------------------------------------------------------------------------"
+                        Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
                         HorizontalAlignment="Left" Height="27" Margin="0,325,0,0" VerticalAlignment="Top"
                         Width="799" FontSize="14" Foreground="LightGray" />
                     <TextBlock Text="单音频文件转wav(cpk2wav)" HorizontalAlignment="Left" Height="40"
@@ -1553,26 +1567,25 @@
                                Margin="10,10,0,0" VerticalAlignment="Top" Width="383"
                                FontSize="18" Foreground="#FF333333" FontWeight="Bold" />
                     <TextBlock
-                        Text="-----------------------------------------------------------------------------------------------------------------------------------------"
+                        Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
                         HorizontalAlignment="Left" Height="27" Margin="10,262,0,0" VerticalAlignment="Top"
                         Width="789"
                         FontSize="14" Foreground="LightGray" />
                     <TextBlock x:Name="VersionLabel" Text="版本号:" HorizontalAlignment="Left" Height="27"
-                               Margin="685,39,-0.2,0" VerticalAlignment="Top" Width="124"
+                               Margin="650,203,0,0" VerticalAlignment="Top" Width="124"
                                FontSize="11.5" Foreground="#FF333333" />
                     <TextBlock Text="作者: ACPudding" HorizontalAlignment="Left" Height="27" Margin="10,54,0,0"
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
                                Foreground="#FF333333" />
                     <TextBlock
-                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera(即阿蒂拉)。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。本程序为练手之作，代码和UI写的都很&#xA;差。因此不会长期更新，望见谅。"
-                        HorizontalAlignment="Left" Height="62" Margin="9,167,0,0" VerticalAlignment="Top"
+                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。&#xA;本程序为练手之作，代码和UI写的都很差。因此不会长期更新，望见谅。"
+                        HorizontalAlignment="Left" Height="90" Margin="9,167,0,0" VerticalAlignment="Top"
                         Width="789" Foreground="#FF333333" FontWeight="Bold" />
                     <TextBlock Text="b站ID: ACPudding      Github: ACPudding" HorizontalAlignment="Left" Height="27"
                                Margin="10,81,0,0" VerticalAlignment="Top" Width="472"
-
                                FontSize="11.5" Foreground="#FF333333" />
-                    <Image HorizontalAlignment="Left" Height="124" Margin="660,54,0,0" VerticalAlignment="Top"
-                           Width="124" Source="icon.ico" />
+                    <Image HorizontalAlignment="Left" Height="235" Margin="574,-40,0,0" VerticalAlignment="Top"
+                           Width="235" Source="/images/About_Altera.png" />
                     <TextBlock Text="Github 地址: " HorizontalAlignment="Left" Height="27" Margin="10,108,0,0"
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
                                Foreground="#FF333333" />
@@ -1618,7 +1631,7 @@
             </TabItem>
         </TabControl>
         <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
-                      Margin="0,50,0,360" Width="350">
+                      Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
     </Grid>

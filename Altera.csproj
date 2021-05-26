@@ -263,5 +263,12 @@
   <ItemGroup>
     <Resource Include="images\ClassMoonCancer3.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\TDStrengthen.png" />
+    <Resource Include="images\SkillStrengthen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\About_Altera.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

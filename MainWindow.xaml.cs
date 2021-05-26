@@ -112,7 +112,7 @@ namespace Altera
             JB.JB7 = "";
             ClearTexts();
             var TDStringBar = GetSvtTDID(svtID);
-            if (TDStringBar[1] == "true") IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "√"; });
+            if (TDStringBar[1] == "true") IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲"; });
             svtTDID = TDStringBar[0];
             textbox1.Dispatcher.Invoke(() => { textbox1.Text = svtID; });
 
@@ -1717,30 +1717,30 @@ namespace Altera
             switch (skillSquare[1])
             {
                 case "true":
-                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "√"; });
+                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "√(2)"; });
+                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲(2)"; });
                     break;
             }
 
             switch (skillSquare[3])
             {
                 case "true":
-                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "√"; });
+                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "√(2)"; });
+                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲(2)"; });
                     break;
             }
 
             switch (skillSquare[5])
             {
                 case "true":
-                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "√"; });
+                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "√(2)"; });
+                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲(2)"; });
                     break;
             }
 
