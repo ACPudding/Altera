@@ -555,7 +555,8 @@ namespace Altera
                 if (Tempsval.Length == 4)
                     try
                     {
-                        output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻:" + Tempsval[2] + " - " +
+                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象:" + Tempsval[2] +
+                                 "\r\n特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%";
                     }
                     catch (Exception)
@@ -572,8 +573,9 @@ namespace Altera
                 if (Tempsval.Length == 3)
                     try
                     {
-                        output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "倍率:" +
-                                 Convert.ToDouble(Tempsval[2]) / 10 + "%";
+                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率:" +
+                                 Convert.ToDouble(Tempsval[2]) / 10 + "%" +
+                                 "\r\n注:最终倍率=宝具倍率 + \r\n威力提升倍率 * \r\n(1-现在HP/最大HP)";
                     }
                     catch (Exception)
                     {
@@ -583,16 +585,35 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname.Contains("對稀有度") || Funcname.Contains("特殊特攻攻撃"))
+            if (Funcname.Contains("對稀有度"))
             {
                 Tempsval = Funcsval.Split(',');
-                if (Tempsval.Length > 4)
+                if (Tempsval.Length == 5)
                     try
                     {
-                        var tmpstr = "";
-                        for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
-                        tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                        output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻相关:[" + tmpstr + "]";
+                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
+                                 Convert.ToDouble(Tempsval[3]) / 10 + "%\r\n特攻稀有度: " +
+                                 Tempsval[4].Replace("TargetRarityList:", "").Replace("/", ",");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+                else
+                    output = Funcsval;
+            }
+
+            if (Funcname.Contains("特殊特攻攻撃"))
+            {
+                Tempsval = Funcsval.Split(',');
+                if (Tempsval.Length == 7)
+                    try
+                    {
+                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff: " +
+                                 Tempsval[4].Replace("TargetList:", "") + "\r\n最大特攻Buff层数: " +
+                                 Tempsval[5].Replace("ParamAddMaxCount:", "") + "\r\n基础特攻倍率: " +
+                                 Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10 + "%" +
+                                 "\r\n每层Buff追加特攻倍率: " + Convert.ToDouble(Tempsval[3]) / 10 + "%";
                     }
                     catch (Exception)
                     {
