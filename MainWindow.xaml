@@ -351,7 +351,7 @@
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="123,314,0,0"
-                                       ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
+                                       ToolTip="无芙芙的ATK,某些职介需要乘以文本框下面的系数才能得出游戏内实际ATK." Cursor="Help" />
                             <TextBox x:Name="basicatk" HorizontalAlignment="Left" Height="17" Margin="180,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -378,7 +378,7 @@
                                        Width="98"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="372,314,0,0"
-                                       ToolTip="无芙芙的ATK,某些职介需要乘以后面的系数." Cursor="Help" />
+                                       ToolTip="无芙芙的ATK,某些职介需要乘以文本框下面的系数才能得出游戏内实际ATK." Cursor="Help" />
                             <TextBox x:Name="maxatk" HorizontalAlignment="Left" Height="17" Margin="430,308,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -390,10 +390,10 @@
                             </TextBox>
                             <TextBlock x:Name="atkbalance1" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="70" FontSize="12"
-                                       Foreground="#FF333333" Margin="122,335,0,-5.4" FontWeight="Bold" />
+                                       Foreground="#FF333333" Margin="185,341,0,0" FontWeight="Bold" />
                             <TextBlock x:Name="atkbalance2" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="70" FontSize="12"
-                                       Foreground="#FF333333" Margin="372,335,0,-5.4" FontWeight="Bold" />
+                                       Foreground="#FF333333" Margin="435,341,0,0" FontWeight="Bold" />
                             <TextBlock x:Name="sixwei" Text="" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top"
                                        Width="414" FontSize="12" Foreground="#FF333333"

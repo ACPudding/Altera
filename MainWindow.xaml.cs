@@ -126,6 +126,8 @@ namespace Altera
             ClearTexts();
             var TDStringBar = GetSvtTDID(svtID);
             if (TDStringBar[1] == "true") IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲"; });
+            if (TDStringBar[1] == "truetrue")
+                IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲▲"; });
             svtTDID = TDStringBar[0];
             textbox1.Dispatcher.Invoke(() => { textbox1.Text = svtID; });
 
@@ -196,6 +198,7 @@ namespace Altera
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                        isNPStrengthen = "truetrue";
                         break;
                     }
 
@@ -1733,7 +1736,7 @@ namespace Altera
                     IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲(2)"; });
+                    IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲▲"; });
                     break;
             }
 
@@ -1743,7 +1746,7 @@ namespace Altera
                     IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲(2)"; });
+                    IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲▲"; });
                     break;
             }
 
@@ -1753,7 +1756,7 @@ namespace Altera
                     IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲"; });
                     break;
                 case "twice":
-                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲(2)"; });
+                    IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲▲"; });
                     break;
             }
 
@@ -1934,6 +1937,7 @@ namespace Altera
                 Title = "Altera";
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
+                TreasureDeviceID.Text = "";
                 hpatkbalance.Text = "( 攻防倾向: 均衡 )";
                 var QuickUri = "images\\Quick.png";
                 card1.Source = new BitmapImage(new Uri(QuickUri, UriKind.Relative));
