@@ -12,6 +12,14 @@ namespace Altera
         private static readonly string BuffTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
 
+        private static readonly string IndividualListLinkA =
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
+
+        private static readonly string IndividualListLinkB =
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/IndividualityList";
+
+        public static string[] IndividualListStringTemp;
+
         public static string ModifyFuncStr(string Funcname, string Funcsval)
         {
             var output = Funcsval;
@@ -435,8 +443,8 @@ namespace Altera
                     try
                     {
                         output = Tempsval[1] + (Tempsval[0] == "1000"
-                            ? ""
-                            : "(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
+                            ? "HP"
+                            : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
                     }
                     catch (Exception)
                     {
@@ -449,6 +457,7 @@ namespace Altera
                 case "灼傷":
                 case "呪い":
                 case "詛咒":
+                case "每回合回復HP":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
@@ -532,7 +541,7 @@ namespace Altera
 
             if (Funcname == "強化解除" || Funcname == "防御強化解除" || Funcname == "攻撃強化解除" || Funcname == "攻撃弱体解除" ||
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
-                Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更")
+                Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -555,8 +564,9 @@ namespace Altera
                 if (Tempsval.Length == 4)
                     try
                     {
-                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象: " + Tempsval[2] +
-                                 "\r\n特攻倍率: " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象(ID):\r\n〔 " +
+                                 SearchIndividualality(Tempsval[2]) +
+                                 "〕\r\n特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%";
                     }
                     catch (Exception)
@@ -573,9 +583,9 @@ namespace Altera
                 if (Tempsval.Length == 3)
                     try
                     {
-                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率: " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率: " +
                                  Convert.ToDouble(Tempsval[2]) / 10 + "%" +
-                                 "\r\n注:最终倍率=宝具倍率 + \r\n威力提升倍率 * \r\n(1-现在HP/最大HP)";
+                                 "\r\n注:最终倍率=基础倍率 + \r\n威力提升倍率 * \r\n(1-现在HP/最大HP)";
                     }
                     catch (Exception)
                     {
@@ -591,7 +601,7 @@ namespace Altera
                 if (Tempsval.Length == 5)
                     try
                     {
-                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%\r\n特攻稀有度: " +
                                  Tempsval[4].Replace("TargetRarityList:", "").Replace("/", ",");
                     }
@@ -609,11 +619,12 @@ namespace Altera
                 if (Tempsval.Length == 7)
                     try
                     {
-                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff: " +
-                                 Tempsval[4].Replace("TargetList:", "") + "\r\n最大特攻Buff层数: " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff(ID):\r\n〔 " +
+                                 SearchIndividualality(Tempsval[4].Replace("TargetList:", "")) +
+                                 "〕\r\n最大特攻Buff层数: " +
                                  Tempsval[5].Replace("ParamAddMaxCount:", "") + "\r\n基础特攻倍率: " +
                                  Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10 + "%" +
-                                 "\r\n每层Buff追加特攻倍率: " + Convert.ToDouble(Tempsval[3]) / 10 + "%";
+                                 "\r\n每层Buff追加倍率: " + Convert.ToDouble(Tempsval[3]) / 10 + "%";
                     }
                     catch (Exception)
                     {
@@ -626,6 +637,7 @@ namespace Altera
             if (Funcname == "人格交換" || Funcname.Contains("暫無翻譯")) output = Funcsval;
             if (Funcname != "即死") return output;
             output = Convert.ToDouble(Funcsval) / 10 + "%";
+            IndividualListStringTemp = null;
             return output;
         }
 
@@ -650,6 +662,37 @@ namespace Altera
                 if (str.Contains(TranslationListFullArray[j][0]) || str.Contains(TranslationListFullArray[j][1]))
                     return j + 1;
             return 0;
+        }
+
+        public static string SearchIndividualality(string Input)
+        {
+            if (IndividualListStringTemp == null)
+            {
+                var TempSplit1 = HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "")
+                    .Split('|');
+                IndividualListStringTemp = TempSplit1;
+            }
+
+            var IndividualityCommons = new string[IndividualListStringTemp.Length][];
+            for (var i = 0; i < IndividualListStringTemp.Length; i++)
+            {
+                var TempSplit2 = IndividualListStringTemp[i].Split('+');
+                IndividualityCommons[i] = new string[TempSplit2.Length];
+                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
+            }
+
+            if (Input.Length >= 6) return Input;
+            if (Input == "5010" || Input == "5000") return Input;
+            for (var k = 0; k < IndividualityCommons.Length; k++)
+            {
+                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1] + " ( " + Input + " ) ";
+
+                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
+                    return Input;
+            }
+
+
+            return Input;
         }
     }
 }

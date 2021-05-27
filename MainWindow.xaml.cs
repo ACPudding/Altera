@@ -1334,6 +1334,9 @@ namespace Altera
                         TDlv1OC1strArray[i].Count(c => c == ',') > 0)
                         TDFuncstrArray[i] = TranslateTDAttackName(svtTreasureDeviceFuncIDArray[i]);
 
+                    if (TDFuncstrArray[i] == "生贄" && svtTreasureDeviceFuncIDArray[i] == "3851")
+                        TDFuncstrArray[i] = "活祭";
+
                     if (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "7011")
                         TDFuncstrArray[i] = "从者位置变更";
 
