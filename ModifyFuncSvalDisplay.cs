@@ -555,7 +555,7 @@ namespace Altera
                 if (Tempsval.Length == 4)
                     try
                     {
-                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象:" + Tempsval[2] +
+                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象: " + Tempsval[2] +
                                  "\r\n特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%";
                     }
@@ -573,7 +573,7 @@ namespace Altera
                 if (Tempsval.Length == 3)
                     try
                     {
-                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率:" +
+                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率: " +
                                  Convert.ToDouble(Tempsval[2]) / 10 + "%" +
                                  "\r\n注:最终倍率=宝具倍率 + \r\n威力提升倍率 * \r\n(1-现在HP/最大HP)";
                     }
@@ -591,7 +591,7 @@ namespace Altera
                 if (Tempsval.Length == 5)
                     try
                     {
-                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
+                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%\r\n特攻稀有度: " +
                                  Tempsval[4].Replace("TargetRarityList:", "").Replace("/", ",");
                     }
@@ -609,7 +609,7 @@ namespace Altera
                 if (Tempsval.Length == 7)
                     try
                     {
-                        output = "伤害倍率:" + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff: " +
+                        output = "伤害倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff: " +
                                  Tempsval[4].Replace("TargetList:", "") + "\r\n最大特攻Buff层数: " +
                                  Tempsval[5].Replace("ParamAddMaxCount:", "") + "\r\n基础特攻倍率: " +
                                  Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10 + "%" +
