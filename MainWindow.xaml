@@ -9,6 +9,9 @@
            Icon="icon.ico" ContentRendered="Form_Load">
     <Grid>
         <TabControl Margin="0,0,0,0" TabStripPlacement="Left" FontFamily="Source Han Sans SC">
+            <TabControl.Background>
+                <SolidColorBrush Color="White" Opacity="1" />
+            </TabControl.Background>
             <TabItem x:Name="StarterItemTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -20,6 +23,22 @@
                              TextWrapping="Wrap"
                              VerticalAlignment="Top" Width="295" MaxLength="7" MaxLines="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" />
+                    <ToggleButton x:Name="GrowlVisibility" Margin="649,-350,129.8,174.4" BorderThickness="0"
+                                  IsChecked="True" Style="{StaticResource ToggleButtonFlip}">
+                        <hc:StatusSwitchElement.CheckedElement>
+                            <Border Background="{DynamicResource PrimaryBrush}">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="开"
+                                           Foreground="{DynamicResource TextIconBrush}" />
+                            </Border>
+                        </hc:StatusSwitchElement.CheckedElement>
+                        <Border Background="{DynamicResource DangerBrush}">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="关"
+                                       Foreground="{DynamicResource TextIconBrush}" />
+                        </Border>
+                    </ToggleButton>
+                    <TextBlock Text="Growl状态栏显示切换" HorizontalAlignment="Left" Height="26"
+                               Margin="684,14,0,0" VerticalAlignment="Top" Width="115"
+                               FontSize="11.5" Foreground="#FF333333" />
                     <TextBlock Text="请输入从者ID:" HorizontalAlignment="Left" Height="33" Margin="80,211,0,0"
                                VerticalAlignment="Top"
                                Width="214" FontSize="24" Foreground="#FF333333" FontWeight="Bold" />
@@ -34,6 +53,9 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <TextBlock x:Name="DataVersionLabel" Text="已读取游戏数据版本:" HorizontalAlignment="Left" Height="27"
+                               Margin="5,543,0,0" VerticalAlignment="Top" Width="360"
+                               FontSize="11.5" Foreground="#FF333333" />
                     <hc:LoadingCircle x:Name="DataLoadingRing" Margin="381,255,387.8,275.4" Visibility="Collapsed" />
                     <Button hc:BorderElement.CornerRadius="15" x:Name="OutputIDs" Content="导出ID列表"
                             HorizontalAlignment="Left" Height="30" Margin="362,295,0,0"
@@ -121,11 +143,8 @@
                             <TextBlock Text="从者名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333" Margin="5,6,0,0" />
-                            <TextBlock
-                                Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
-                                Height="27" Margin="0,350,0,0" VerticalAlignment="Top"
-                                Width="800"
-                                FontSize="14" Foreground="LightGray" />
+                            <hc:Divider LineStrokeThickness="1" Margin="10,365,10,0" LineStrokeDashArray="2,2"
+                                        LineStroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
                             <TextBox x:Name="Svtname" HorizontalAlignment="Left" Height="17" Margin="67,1,0,0"
                                      TextWrapping="Wrap" VerticalAlignment="Top" Width="415"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -638,13 +657,13 @@
                                                     StrokeThickness="2" Fill="#FFF3F3F3"
                                                     Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
                                                     Text="" HorizontalAlignment="Center" FontFamily="FOT-Matisse Pro B"
-                                                    TextAlignment="Center" />
+                                                    TextAlignment="Center" RenderTransformOrigin="0.5,0.5" />
                                     <hc:OutlineText x:Name="npname" Margin="0,0,0,0" Width="440"
                                                     StrokePosition="Outside" FontSize="22" FontWeight="Bold"
                                                     StrokeThickness="2"
                                                     Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
-                                                    Text="" HorizontalAlignment="Center" FontFamily="FOT-Matisse Pro B"
-                                                    TextAlignment="Center">
+                                                    HorizontalAlignment="Center" FontFamily="FOT-Matisse Pro B"
+                                                    TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
                                         <hc:OutlineText.Fill>
                                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                                 <GradientStop Color="#FFEACD76" Offset="1" />
@@ -1554,10 +1573,8 @@
                         Margin="5,61,4.8,0"
                         VerticalAlignment="Top" FontSize="12"
                         Foreground="#FF333333" />
-                    <TextBlock
-                        Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
-                        HorizontalAlignment="Left" Height="27" Margin="0,325,0,0" VerticalAlignment="Top"
-                        Width="799" FontSize="14" Foreground="LightGray" />
+                    <hc:Divider LineStrokeThickness="1" Margin="10,325,10,0" LineStrokeDashArray="2,2"
+                                LineStroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
                     <TextBlock Text="单音频文件转wav(cpk2wav)" HorizontalAlignment="Left" Height="40"
                                VerticalAlignment="Top"
                                Width="217"
@@ -1574,11 +1591,8 @@
                     <TextBlock Text="Altera" HorizontalAlignment="Left" Height="40"
                                Margin="10,10,0,0" VerticalAlignment="Top" Width="383"
                                FontSize="18" Foreground="#FF333333" FontWeight="Bold" />
-                    <TextBlock
-                        Text="   ----------------------------------------------------------------------------------------------------------------------------------------------------------------"
-                        HorizontalAlignment="Left" Height="27" Margin="10,262,0,0" VerticalAlignment="Top"
-                        Width="789"
-                        FontSize="14" Foreground="LightGray" />
+                    <hc:Divider LineStrokeThickness="1" Margin="10,260,10,0" LineStrokeDashArray="2,2"
+                                LineStroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
                     <TextBlock x:Name="VersionLabel" Text="版本号:" HorizontalAlignment="Left" Height="27"
                                Margin="650,203,0,0" VerticalAlignment="Top" Width="124"
                                FontSize="11.5" Foreground="#FF333333" />
@@ -1587,8 +1601,8 @@
                                Foreground="#FF333333" />
                     <TextBlock
                         Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。&#xA;本程序为练手之作，代码和UI写的都很差。因此不会长期更新，望见谅。"
-                        HorizontalAlignment="Left" Height="90" Margin="9,167,0,0" VerticalAlignment="Top"
-                        Width="789" Foreground="#FF333333" FontWeight="Bold" />
+                        HorizontalAlignment="Left" Height="76" Margin="10,165,0,0" VerticalAlignment="Top"
+                        Width="588" Foreground="#FF333333" FontWeight="Bold" />
                     <TextBlock Text="b站ID: ACPudding      Github: ACPudding" HorizontalAlignment="Left" Height="27"
                                Margin="10,81,0,0" VerticalAlignment="Top" Width="472"
                                FontSize="11.5" Foreground="#FF333333" />
@@ -1614,7 +1628,7 @@
                             <Run Text="https://www.fate-go.jp" />
                         </Hyperlink>
                     </TextBlock>
-                    <TextBlock Text="检查软件更新:" HorizontalAlignment="Left" Height="27" Margin="10,294,0,0"
+                    <TextBlock Text="检查软件更新:" HorizontalAlignment="Left" Height="27" Margin="10,270,0,0"
                                VerticalAlignment="Top" Width="259" FontSize="14"
                                Foreground="#FF333333" FontWeight="Bold" />
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
@@ -1639,8 +1653,16 @@
             </TabItem>
         </TabControl>
         <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
-                      Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC">
+                      Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC"
+                      Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
+        <TextBlock Text="@ACPudding @Altera" HorizontalAlignment="Left" Height="16"
+                   Margin="760,554,-0.4,0" VerticalAlignment="Top" Width="134"
+                   FontSize="11.5">
+            <TextBlock.Foreground>
+                <SolidColorBrush Color="#FF333333" Opacity="0.02" />
+            </TextBlock.Foreground>
+        </TextBlock>
     </Grid>
 </hc:Window>

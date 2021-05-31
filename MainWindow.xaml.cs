@@ -30,6 +30,8 @@ namespace Altera
     /// </summary>
     public partial class MainWindow
     {
+        private static string GameDataVersion;
+
         private readonly string BuffTranslationListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
 
@@ -2458,6 +2460,12 @@ namespace Altera
                 res["response"][0]["success"]["webview"].ToString());
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview"; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 300; });
+            File.WriteAllText(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json",
+                res["response"][0]["success"]["dateVer"].ToString());
+            updatestatus.Dispatcher.Invoke(() =>
+            {
+                updatestatus.Text = "当前游戏数据版本: " + res["response"][0]["success"]["dateVer"];
+            });
             var data = File.ReadAllText(gamedata.FullName + "master");
             if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
                 Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
@@ -2545,6 +2553,16 @@ namespace Altera
                 progressbar.Visibility = Visibility.Hidden;
                 updatedatabutton.IsEnabled = true;
             });
+            Dispatcher.Invoke(() =>
+            {
+                if (!File.Exists(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json")) return;
+                GameDataVersion =
+                    File.ReadAllText(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json");
+                var dateTimeStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+                var DataVersionTimer = new TimeSpan(long.Parse(GameDataVersion + "0000000"));
+                var DataVerTag = Convert.ToString(dateTimeStart + DataVersionTimer);
+                DataVersionLabel.Text = "已读取游戏数据版本:" + DataVerTag;
+            });
             progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
             AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
             progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
@@ -2621,6 +2639,16 @@ namespace Altera
                     Dispatcher.Invoke(() => { Growl.Info("正在读取数据..."); });
                     await LoadorRenewCommonDatas.ReloadData();
                     Dispatcher.Invoke(() => { Growl.Info("读取完毕."); });
+                    Dispatcher.Invoke(() =>
+                    {
+                        if (!File.Exists(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json")) return;
+                        GameDataVersion =
+                            File.ReadAllText(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json");
+                        var dateTimeStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+                        var DataVersionTimer = new TimeSpan(long.Parse(GameDataVersion + "0000000"));
+                        var DataVerTag = Convert.ToString(dateTimeStart + DataVersionTimer);
+                        DataVersionLabel.Text += DataVerTag;
+                    });
                     Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                     DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
                 }
