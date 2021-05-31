@@ -1594,16 +1594,17 @@
                     <hc:Divider LineStrokeThickness="1" Margin="10,260,10,0" LineStrokeDashArray="2,2"
                                 LineStroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
                     <TextBlock x:Name="VersionLabel" Text="版本号:" HorizontalAlignment="Left" Height="27"
-                               Margin="650,203,0,0" VerticalAlignment="Top" Width="124"
+                               Margin="650,200,0,0" VerticalAlignment="Top" Width="124"
                                FontSize="11.5" Foreground="#FF333333" />
-                    <TextBlock Text="作者: ACPudding" HorizontalAlignment="Left" Height="27" Margin="10,54,0,0"
+                    <TextBlock Text="作者: @TAKAGIMIWAKO" HorizontalAlignment="Left" Height="27" Margin="10,54,0,0"
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
                                Foreground="#FF333333" />
                     <TextBlock
                         Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。&#xA;本程序为练手之作，代码和UI写的都很差。因此不会长期更新，望见谅。"
                         HorizontalAlignment="Left" Height="76" Margin="10,165,0,0" VerticalAlignment="Top"
                         Width="588" Foreground="#FF333333" FontWeight="Bold" />
-                    <TextBlock Text="b站ID: ACPudding      Github: ACPudding" HorizontalAlignment="Left" Height="27"
+                    <TextBlock Text="b站ID: TAKAGIMIWAKO      Github: TAKAGIMIWAKO" HorizontalAlignment="Left"
+                               Height="27"
                                Margin="10,81,0,0" VerticalAlignment="Top" Width="472"
                                FontSize="11.5" Foreground="#FF333333" />
                     <Image HorizontalAlignment="Left" Height="235" Margin="574,-40,0,0" VerticalAlignment="Top"
@@ -1614,8 +1615,8 @@
                     <TextBlock HorizontalAlignment="Left" Height="16" Margin="94,108,0,0" TextWrapping="Wrap"
                                Text=""
                                VerticalAlignment="Top" Width="248" Foreground="#FF333333">
-                        <Hyperlink NavigateUri="https://github.com/ACPudding" Click="Hyperlink_Click">
-                            <Run Text="https://github.com/ACPudding" />
+                        <Hyperlink NavigateUri="https://github.com/TAKAGIMIWAKO" Click="Hyperlink_Click">
+                            <Run Text="https://github.com/TAKAGIMIWAKO" />
                         </Hyperlink>
                     </TextBlock>
                     <TextBlock Text="FGO日服官网: " HorizontalAlignment="Left" Height="27" Margin="10,135,0,0"
@@ -1649,6 +1650,22 @@
                                Margin="10,431,9.8,0"
                                VerticalAlignment="Top" FontSize="12"
                                Foreground="#FF333333" />
+                    <ToggleButton x:Name="WaterMarkToggle" Margin="615,228,163.8,312.4" BorderThickness="0"
+                                  IsChecked="True" Style="{StaticResource ToggleButtonFlip}">
+                        <hc:StatusSwitchElement.CheckedElement>
+                            <Border Background="{DynamicResource PrimaryBrush}">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="开"
+                                           Foreground="{DynamicResource TextIconBrush}" />
+                            </Border>
+                        </hc:StatusSwitchElement.CheckedElement>
+                        <Border Background="{DynamicResource DangerBrush}">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="关"
+                                       Foreground="{DynamicResource TextIconBrush}" />
+                        </Border>
+                    </ToggleButton>
+                    <TextBlock Text="右下角水印显示" HorizontalAlignment="Left" Height="26"
+                               Margin="650,234,0,0" VerticalAlignment="Top" Width="115"
+                               FontSize="11.5" Foreground="#FF333333" />
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1657,11 +1674,12 @@
                       Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
-        <TextBlock Text="@ACPudding @Altera" HorizontalAlignment="Left" Height="16"
-                   Margin="760,554,-0.4,0" VerticalAlignment="Top" Width="134"
-                   FontSize="11.5">
+        <TextBlock Text="@TAKAGIMIWAKO @Altera" HorizontalAlignment="Left" Height="16"
+                   Margin="734,554,-0.4,0" VerticalAlignment="Top" Width="160"
+                   FontSize="11.5"
+                   Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=WaterMarkToggle}">
             <TextBlock.Foreground>
-                <SolidColorBrush Color="#FF333333" Opacity="0.02" />
+                <SolidColorBrush Color="#FF333333" Opacity="0.08" />
             </TextBlock.Foreground>
         </TextBlock>
     </Grid>
