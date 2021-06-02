@@ -2411,9 +2411,7 @@ namespace Altera
                 return;
             }
 
-            if (File.Exists(gamedata.FullName + "webview") || File.Exists(gamedata.FullName + "raw") ||
-                File.Exists(gamedata.FullName + "assetbundle") || File.Exists(gamedata.FullName + "webview") ||
-                File.Exists(gamedata.FullName + "master"))
+            if (File.Exists(gamedata.FullName + "raw"))
             {
                 var oldRaw = File.ReadAllText(gamedata.FullName + "raw");
 
@@ -2447,6 +2445,8 @@ namespace Altera
             }
 
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
+            if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
+                Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
             File.WriteAllText(gamedata.FullName + "raw", result);
             File.WriteAllText(gamedata.FullName + "assetbundle",
                 res["response"][0]["success"]["assetbundle"].ToString());
@@ -2467,8 +2467,6 @@ namespace Altera
                 updatestatus.Text = "当前游戏数据版本: " + res["response"][0]["success"]["dateVer"];
             });
             var data = File.ReadAllText(gamedata.FullName + "master");
-            if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
-                Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
             var masterData =
                 (Dictionary<string, byte[]>) MasterDataUnpacker.MouseGame2Unpacker(
                     Convert.FromBase64String(data));
