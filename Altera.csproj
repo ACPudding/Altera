@@ -128,6 +128,9 @@
     <Compile Include="MiniMessagePacker.cs" />
     <Compile Include="ModifyFuncSvalDisplay.cs" />
     <Compile Include="Properties\SkillLvs.cs" />
+    <Compile Include="SvtIDExtraInputBox.xaml.cs">
+      <DependentUpon>SvtIDExtraInputBox.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -140,6 +143,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SvtIDExtraInputBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -269,6 +276,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\About_Altera.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Gilgamesh-Fools.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -23,6 +23,15 @@
                              TextWrapping="Wrap"
                              VerticalAlignment="Top" Width="295" MaxLength="7" MaxLines="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" />
+                    <TextBlock x:Name="SvtIDHelper" HorizontalAlignment="Left" Height="16" Margin="560,228,0,0"
+                               TextWrapping="Wrap"
+                               Text=""
+                               VerticalAlignment="Top" Width="119" Foreground="#FF333333"
+                               ToolTip="点击此处可打开从者ID辅助选择窗口.至于这个工具是谁的赠礼..." FontSize="10">
+                        <Hyperlink Click="EnterSvtIDExtraWindow">
+                            <Run Text="从者ID助选器..." />
+                        </Hyperlink>
+                    </TextBlock>
                     <ToggleButton x:Name="GrowlVisibility" Margin="649,-350,129.8,174.4" BorderThickness="0"
                                   IsChecked="True" Style="{StaticResource ToggleButtonFlip}">
                         <hc:StatusSwitchElement.CheckedElement>
@@ -132,7 +141,7 @@
             <TabItem Header="基本信息" x:Name="FocusBasicInfo">
                 <Grid Margin="0">
                     <GroupBox HorizontalAlignment="Left" Height="570" Margin="0,0,0,0" VerticalAlignment="Top"
-                              Width="810">
+                              Width="810" BorderThickness="0">
                         <GroupBox.Background>
                             <SolidColorBrush Color="#FFFFFFFF" Opacity="0" />
                         </GroupBox.Background>
@@ -159,7 +168,7 @@
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="5,43,0,0" />
                             <TextBox x:Name="SvtBattlename" HorizontalAlignment="Left" Height="17" Margin="67,38,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="415"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontFamily="Source Han Sans SC" Foreground="#FF333333">
@@ -170,13 +179,13 @@
                             <TextBlock Text="特性:" HorizontalAlignment="Left" Height="43" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,90,0,0" />
+                                       Margin="5,212,0,0" />
                             <TextBox x:Name="svtIndividuality" x:FieldModifier="public" HorizontalAlignment="Left"
-                                     Height="48" Margin="37,79,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="753"
+                                     Height="48" Margin="68,201,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
-                                     FontFamily="Source Han Sans SC" Foreground="#FF333333" FontSize="11.5">
+                                     FontFamily="Source Han Sans SC" Foreground="#FF333333">
                                 <TextBox.Background>
                                     <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                 </TextBox.Background>
@@ -222,10 +231,10 @@
                                     <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                 </TextBox.Background>
                             </TextBox>
-                            <TextBlock Text="隐藏属性:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                            <TextBlock Text="阵营:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="630,43,0,0" />
+                                       Margin="654,43,0,0" />
                             <TextBox x:Name="hiddenattri" HorizontalAlignment="Left" Height="17" Margin="691,38,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
@@ -241,8 +250,8 @@
                             <TextBlock Text="CV:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="98"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="520,139,0,0" />
-                            <TextBox x:Name="cv" HorizontalAlignment="Left" Height="17" Margin="551,133,0,0"
+                                       Margin="520,81,0,0" />
+                            <TextBox x:Name="cv" HorizontalAlignment="Left" Height="17" Margin="551,75,0,0"
                                      TextWrapping="Wrap"
                                      Text="" VerticalAlignment="Top" Width="239" IsReadOnly="True"
                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
@@ -253,10 +262,10 @@
                                 </TextBox.Background>
                             </TextBox>
                             <TextBlock Text="Illust:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
-                                       Width="97"
+                                       Width="98"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="508,172,0,0" />
-                            <TextBox x:Name="illust" HorizontalAlignment="Left" Height="17" Margin="551,168,0,0"
+                                       Margin="512,116,0,0" />
+                            <TextBox x:Name="illust" HorizontalAlignment="Left" Height="17" Margin="551,113,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="239"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -268,8 +277,8 @@
                             <TextBlock Text="出星率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,139,0,0" />
-                            <TextBox x:Name="ssvtstarrate" HorizontalAlignment="Left" Height="17" Margin="53,133,0,0"
+                                       Margin="5,81,0,0" />
+                            <TextBox x:Name="ssvtstarrate" HorizontalAlignment="Left" Height="17" Margin="53,75,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -281,8 +290,8 @@
                             <TextBlock Text="被即死率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="120,139,0,0" />
-                            <TextBox x:Name="ssvtdeathrate" HorizontalAlignment="Left" Height="17" Margin="179,133,0,0"
+                                       Margin="120,81,0,0" />
+                            <TextBox x:Name="ssvtdeathrate" HorizontalAlignment="Left" Height="17" Margin="179,75,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -294,8 +303,8 @@
                             <TextBlock Text="集星权重:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="245,139,0,0" />
-                            <TextBox x:Name="jixing" HorizontalAlignment="Left" Height="17" Margin="305,133,0,0"
+                                       Margin="245,81,0,0" />
+                            <TextBox x:Name="jixing" HorizontalAlignment="Left" Height="17" Margin="305,75,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="40"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -307,9 +316,9 @@
                             <TextBlock Text="理论NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="350,139,0,0"
+                                       Margin="350,81,0,0"
                                        Cursor="Help" ToolTip="公式:NP率=职阶基础值*蓝卡数补正*魔力补正/蓝卡Hit数" />
-                            <TextBox x:Name="notrealnprate" HorizontalAlignment="Left" Height="17" Margin="409,133,0,0"
+                            <TextBox x:Name="notrealnprate" HorizontalAlignment="Left" Height="17" Margin="408,75,0,0"
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="74"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
@@ -321,10 +330,10 @@
                             <TextBlock Text="实际NP率:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
-                                       Margin="5,214,0,0"
+                                       Margin="5,158,0,0"
                                        Cursor="Help" ToolTip="实际文件中的NP率,有时与理论计算结果有出入." />
-                            <TextBox x:Name="nprate" HorizontalAlignment="Left" Height="46" Margin="68,204,0,0"
-                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
+                            <TextBox x:Name="nprate" HorizontalAlignment="Left" Height="46" Margin="68,148,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="414"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontFamily="Source Han Sans SC" Foreground="#FF333333">
@@ -340,7 +349,7 @@
                                        Text=""
                                        VerticalAlignment="Top" Width="63" Foreground="#FF333333"
                                        ToolTip="点击此处跳转职介技能详细数据." FontSize="10">
-                                <Hyperlink NavigateUri="" Click="JumpToClassPassive">
+                                <Hyperlink Click="JumpToClassPassive">
                                     <Run Text="详细数据..." />
                                 </Hyperlink>
                             </TextBlock>
@@ -348,7 +357,7 @@
                                      TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="722"
                                      IsReadOnly="True" HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
-                                     FontFamily="Source Han Sans SC" Foreground="#FF333333" FontSize="11.5">
+                                     FontFamily="Source Han Sans SC" Foreground="#FF333333">
                                 <TextBox.Background>
                                     <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                 </TextBox.Background>
@@ -416,7 +425,7 @@
                             <TextBlock x:Name="sixwei" Text="" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top"
                                        Width="414" FontSize="12" Foreground="#FF333333"
-                                       Margin="68,172,0,0" FontWeight="Bold" />
+                                       Margin="68,116,0,0" FontWeight="Bold" />
                             <TextBlock x:Name="hpatkbalance" Text="( 攻防倾向: 均衡 )" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="173" FontSize="14"
                                        Foreground="#FF333333" Margin="495,314,0,0" FontWeight="Bold" />
@@ -433,6 +442,33 @@
                                        Width="97"
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="630,314,0,0" />
+                            <TextBlock Text="属性:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                       Width="97"
+                                       FontSize="12" Foreground="#FF333333"
+                                       Margin="350,43,0,0" />
+                            <TextBox x:Name="IndividualalityClean" HorizontalAlignment="Left" Height="17"
+                                     Margin="392,38,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="90"
+                                     IsReadOnly="True" HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontFamily="Source Han Sans SC" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
+                            <TextBlock Text="→ 备注:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
+                                       Width="62"
+                                       FontSize="12" Foreground="#FF333333"
+                                       Margin="501,158,0,0" />
+                            <TextBox x:Name="BeiZhu" HorizontalAlignment="Left" Height="46" Margin="551,148,0,0"
+                                     TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="239"
+                                     IsReadOnly="True" HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontFamily="Source Han Sans SC" Foreground="#FF333333">
+                                <TextBox.Background>
+                                    <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                </TextBox.Background>
+                            </TextBox>
                         </Grid>
                     </GroupBox>
                     <Grid x:Name="svtcards" Margin="5,425,0,0">
@@ -569,7 +605,7 @@
             </TabItem>
             <TabItem Header="宝具信息">
                 <Grid x:Name="svtTDs" Margin="0,0,0,0">
-                    <GroupBox Margin="0,225,0,0">
+                    <GroupBox Margin="0,225,0,0" BorderThickness="0">
                         <GroupBox.Background>
                             <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                         </GroupBox.Background>
@@ -577,7 +613,7 @@
                             <TextBlock Text="具体数值" FontWeight="Bold" />
                         </GroupBox.Header>
                         <Grid>
-                            <ListView x:Name="TDFuncList" Margin="5,5,5,5" Foreground="#FF737373" FontSize="10">
+                            <ListView x:Name="TDFuncList" Margin="2,2,2,2" Foreground="#FF737373" FontSize="10">
                                 <ListView.Background>
                                     <SolidColorBrush Color="White" Opacity="0.4" />
                                 </ListView.Background>
@@ -813,7 +849,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,135,5,5">
+                                <GroupBox Margin="5,135,5,5" BorderThickness="0">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>
@@ -937,7 +973,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,135,5,5">
+                                <GroupBox Margin="5,135,5,5" BorderThickness="0">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>
@@ -1061,7 +1097,7 @@
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
                                 </TextBox>
-                                <GroupBox Margin="5,135,5,5">
+                                <GroupBox Margin="5,135,5,5" BorderThickness="0">
                                     <GroupBox.Background>
                                         <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                                     </GroupBox.Background>

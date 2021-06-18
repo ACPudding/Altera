@@ -286,23 +286,47 @@ namespace Altera
                 if (((JObject) TDlvtmp)["treaureDeviceId"].ToString() == svtTDID)
                 {
                     var TDlvobjtmp = JObject.Parse(TDlvtmp.ToString());
-                    NPRateTD = Convert.ToDouble(TDlvobjtmp["tdPoint"].ToString());
-                    NPRateArts = Convert.ToDouble(TDlvobjtmp["tdPointA"].ToString());
-                    NPRateBuster = Convert.ToDouble(TDlvobjtmp["tdPointB"].ToString());
-                    NPRateQuick = Convert.ToDouble(TDlvobjtmp["tdPointQ"].ToString());
-                    NPRateEX = Convert.ToDouble(TDlvobjtmp["tdPointEx"].ToString());
-                    NPRateDef = Convert.ToDouble(TDlvobjtmp["tdPointDef"].ToString());
+                    NPRateTD = Convert.ToDouble(TDlvobjtmp["tdPoint"].ToString()) / 10000;
+                    NPRateArts = Convert.ToDouble(TDlvobjtmp["tdPointA"].ToString()) / 10000;
+                    NPRateBuster = Convert.ToDouble(TDlvobjtmp["tdPointB"].ToString()) / 10000;
+                    NPRateQuick = Convert.ToDouble(TDlvobjtmp["tdPointQ"].ToString()) / 10000;
+                    NPRateEX = Convert.ToDouble(TDlvobjtmp["tdPointEx"].ToString()) / 10000;
+                    NPRateDef = Convert.ToDouble(TDlvobjtmp["tdPointDef"].ToString()) / 10000;
                     break;
                 }
 
+            var nptmp = (int) (NPRateTD * 1000000 + NPRateArts * 1000000 + NPRateBuster * 1000000 +
+                               NPRateQuick * 1000000 + NPRateEX * 1000000);
+            var average = nptmp / 5;
+
             nprate.Dispatcher.Invoke(() =>
             {
-                nprate.Text = "Quick: " + (NPRateQuick / 10000).ToString("P") + "   Arts: " +
-                              (NPRateArts / 10000).ToString("P") + "   Buster: " +
-                              (NPRateBuster / 10000).ToString("P") + "\r\nExtra: " +
-                              (NPRateEX / 10000).ToString("P") + "   宝具: " + (NPRateTD / 10000).ToString("P") +
-                              "   受击: " + (NPRateDef / 10000).ToString("P");
+                nprate.Text = "Quick: " + NPRateQuick.ToString("P") + "   Arts: " +
+                              NPRateArts.ToString("P") + "   Buster: " +
+                              NPRateBuster.ToString("P") + "\r\nExtra: " +
+                              NPRateEX.ToString("P") + "   宝具: " + NPRateTD.ToString("P") +
+                              "   受击: " + NPRateDef.ToString("P");
             });
+
+            if (average - (int) (NPRateTD * 1000000) != 0 || average - (int) (NPRateArts * 1000000) != 0 ||
+                average - (int) (NPRateBuster * 1000000) != 0 || average - (int) (NPRateQuick * 1000000) != 0 ||
+                average - (int) (NPRateEX * 1000000) != 0)
+            {
+                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "NP率有特殊情况,请留意."; });
+            }
+            else
+            {
+                if (average - (int) (GlobalPathsAndDatas.notrealnprate * 1000000) > 0)
+                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 > 理论值."; });
+                else if (average - (int) (GlobalPathsAndDatas.notrealnprate * 1000000) == 0)
+                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 = 理论值."; });
+                else
+                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 < 理论值."; });
+            }
+
+            if (NPRateTD == 0.0 || NPRateArts == 0.0 || NPRateBuster == 0.0 || NPRateQuick == 0.0 || NPRateEX == 0.0 ||
+                NPRateDef == 0.0)
+                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为敌方从者(尚未实装),实装后实际数据可能会有所差别."; });
         }
 
         private void ServantTreasureDeviceInformationCheck(object svtTDID)
@@ -524,8 +548,8 @@ namespace Altera
                 var svtClass = "unknown"; //ClassID
                 var svtgender = "unknown";
                 var gender = new string[4];
-                gender[1] = "男性";
-                gender[2] = "女性";
+                gender[1] = "男";
+                gender[2] = "女";
                 gender[3] = "其他";
                 var nprateclassbase = new double[150];
                 nprateclassbase[1] = 1.5;
@@ -632,6 +656,7 @@ namespace Altera
                 var CardArrange = "[Q,Q,Q,Q,Q]";
                 var svtIndividualityInput = "";
                 GlobalPathsAndDatas.askxlsx = true;
+                GlobalPathsAndDatas.notrealnprate = 0.0;
                 foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
                     if (((JObject) svtIDtmp)["id"].ToString() == JB.svtid)
                     {
@@ -748,7 +773,9 @@ namespace Altera
                     NPrate = nprateclassbase[classData] * nprateartscount[svtArtsCardQuantity] *
                         npratemagicbase[magicData] / GlobalPathsAndDatas.svtArtsCardhit / 100;
                     NPrate = Math.Floor(NPrate * 10000) / 10000;
+                    GlobalPathsAndDatas.notrealnprate = NPrate;
                     notrealnprate.Text = NPrate.ToString("P");
+                    //notrealnprate.Text = Math.Round(NPrate * 100,4) + "%";
                 }
 
                 switch (classData)
@@ -1328,7 +1355,6 @@ namespace Altera
                         into mstFuncobjtmp
                         select mstFuncobjtmp["popupText"].ToString()).ToArray();
                 TDFuncstrArray = svtTreasureDeviceFuncArray;
-                svtTreasureDeviceFunc = string.Join(", ", svtTreasureDeviceFuncArray);
                 for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                 {
                     if ((TDFuncstrArray[i] == "なし" || TDFuncstrArray[i] == "" &&
@@ -2462,9 +2488,12 @@ namespace Altera
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 300; });
             File.WriteAllText(gamedata.FullName + "decrypted_masterdata/" + "DataVer.json",
                 res["response"][0]["success"]["dateVer"].ToString());
+            var unixdatatime = res["response"][0]["success"]["dateVer"];
             updatestatus.Dispatcher.Invoke(() =>
             {
-                updatestatus.Text = "当前游戏数据版本: " + res["response"][0]["success"]["dateVer"];
+                updatestatus.Text = "当前游戏数据版本: " + Convert.ToString(
+                    TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)) +
+                    new TimeSpan(long.Parse(unixdatatime + "0000000")));
             });
             var data = File.ReadAllText(gamedata.FullName + "master");
             var masterData =
@@ -2560,6 +2589,7 @@ namespace Altera
                 var DataVersionTimer = new TimeSpan(long.Parse(GameDataVersion + "0000000"));
                 var DataVerTag = Convert.ToString(dateTimeStart + DataVersionTimer);
                 DataVersionLabel.Text = "已读取游戏数据版本:" + DataVerTag;
+                SvtIDHelper.Visibility = Visibility.Visible;
             });
             progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
             AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
@@ -2619,6 +2649,7 @@ namespace Altera
             var DS = new Task(() => { DrawScale(); });
             VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
             DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Visible; });
+            SvtIDHelper.Dispatcher.Invoke(() => { SvtIDHelper.Visibility = Visibility.Collapsed; });
             DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
@@ -2626,6 +2657,7 @@ namespace Altera
                 {
                     MessageBox.Info("没有游戏数据,请先下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
                     DataUpdate.IsSelected = true;
+                    SvtIDHelper.Visibility = Visibility.Collapsed;
                 });
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
                 DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
@@ -2646,6 +2678,7 @@ namespace Altera
                         var DataVersionTimer = new TimeSpan(long.Parse(GameDataVersion + "0000000"));
                         var DataVerTag = Convert.ToString(dateTimeStart + DataVersionTimer);
                         DataVersionLabel.Text += DataVerTag;
+                        SvtIDHelper.Visibility = Visibility.Visible;
                     });
                     Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                     DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
@@ -2656,6 +2689,7 @@ namespace Altera
                     {
                         MessageBox.Info("游戏数据损坏,请重新下载游戏数据(位于\"数据更新\"选项卡).", "温馨提示:");
                         DataUpdate.IsSelected = true;
+                        SvtIDHelper.Visibility = Visibility.Collapsed;
                     });
                     Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
                     DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Collapsed; });
@@ -3448,6 +3482,8 @@ namespace Altera
                 for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
             }
 
+            var CleanIndi = "";
+
             var Outputs = "";
             foreach (var Cases in IndividualityStringArray)
             {
@@ -3457,7 +3493,10 @@ namespace Altera
                 {
                     if (Cases == IndividualityCommons[k][0])
                     {
-                        Outputs += IndividualityCommons[k][1] + ",";
+                        if (Cases.Substring(0, 1) == "3" && Cases.Length == 3)
+                            CleanIndi += IndividualityCommons[k][1] + "·";
+                        if (Cases.Length != 3 && Cases.Length != 1)
+                            Outputs += IndividualityCommons[k][1] + ",";
                         break;
                     }
 
@@ -3467,7 +3506,9 @@ namespace Altera
             }
 
             Outputs = Outputs.Substring(0, Outputs.Length - 1);
+            CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
             svtIndividuality.Dispatcher.Invoke(() => { svtIndividuality.Text = Outputs; });
+            IndividualalityClean.Dispatcher.Invoke(() => { IndividualalityClean.Text = CleanIndi; });
         }
 
         private void EasternEggSvt()
@@ -3971,6 +4012,16 @@ namespace Altera
                 SkillInfoTI.IsSelected = true;
                 ClassPassiveInfo.IsSelected = true;
             });
+        }
+
+        private void EnterSvtIDExtraWindow(object sender, RoutedEventArgs e)
+        {
+            var SvtExtraWindow = new SvtIDExtraInputBox();
+            SvtExtraWindow.ShowDialog();
+            var ReturnStr = SvtExtraWindow.svtidreturnS;
+            if (string.IsNullOrEmpty(ReturnStr)) return;
+            Dispatcher.Invoke(() => { textbox1.Text = ReturnStr; });
+            Button_Click(sender, e);
         }
 
         private struct SkillListSval

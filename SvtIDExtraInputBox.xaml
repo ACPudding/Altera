@@ -1,0 +1,30 @@
+﻿<hc:Window x:Class="Altera.SvtIDExtraInputBox"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+           mc:Ignorable="d"
+           Title="从者ID辅助输入窗口" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+           Icon="icon.ico" ContentRendered="Load">
+    <Grid Background="White">
+        <TextBlock Text="呼呼哈哈哈哈哈哈哈哈！哼，杂修。&#xA;本王早就预想到你的无知。&#xA;无妨，本王为你准备了一些微不足道的工具。&#xA;双击列表就能解析从者了，杂修。"
+                   HorizontalAlignment="Left" Height="90" Margin="83,10,0,0"
+                   VerticalAlignment="Top"
+                   Width="301" FontSize="15" Foreground="#FF333333" FontWeight="Bold" FontFamily="Source Han Sans SC" />
+        <ListView x:Name="SvtList" HorizontalAlignment="Left" Height="355" Margin="10,105,0,0" VerticalAlignment="Top"
+                  Width="374" MouseDoubleClick="Double_Click">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="100"
+                                    DisplayMemberBinding="{Binding SVTID}" />
+                    <GridViewColumn Header="从者名称" Width="250"
+                                    DisplayMemberBinding="{Binding SVTNME}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Image HorizontalAlignment="Left" Height="90" Margin="10,10,0,0" VerticalAlignment="Top" Width="89"
+               Source="images/Gilgamesh-Fools.png" />
+
+    </Grid>
+</hc:Window>
