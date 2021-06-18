@@ -326,7 +326,7 @@ namespace Altera
 
             if (NPRateTD == 0.0 || NPRateArts == 0.0 || NPRateBuster == 0.0 || NPRateQuick == 0.0 || NPRateEX == 0.0 ||
                 NPRateDef == 0.0)
-                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为敌方从者(尚未实装),实装后实际数据可能会有所差别."; });
+                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为尚未实装的从者(敌方BOSS)或小怪."; });
         }
 
         private void ServantTreasureDeviceInformationCheck(object svtTDID)
