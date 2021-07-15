@@ -20,6 +20,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using Color = System.Drawing.Color;
 using MessageBox = HandyControl.Controls.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -181,55 +182,51 @@ namespace Altera
             {
                 foreach (var svtTreasureDevicestmp in GlobalPathsAndDatas.mstSvtTreasureDevicedArray)
                 {
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "101")
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "101")
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "102")
-                    {
-                        switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "102")
+                        switch (((JObject)svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
                         {
                             case "9":
-                            {
-                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                                isNPStrengthen = "true";
-                                break;
-                            }
+                                {
+                                    var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                    svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                    isNPStrengthen = "true";
+                                    break;
+                                }
                             case "0":
-                            {
-                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                                svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
-                                break;
-                            }
+                                {
+                                    var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                    svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
+                                    break;
+                                }
                         }
-                    }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "103")
-                    {
-                        switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "103")
+                        switch (((JObject)svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
                         {
                             case "9":
-                            {
-                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                                isNPStrengthen = "truetrue";
-                                break;
-                            }
+                                {
+                                    var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                    svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                    isNPStrengthen = "truetrue";
+                                    break;
+                                }
                             case "2":
-                            {
-                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                                isNPStrengthen = "true";
-                                break;
-                            }
+                                {
+                                    var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                    svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                    isNPStrengthen = "true";
+                                    break;
+                                }
                         }
-                    }
 
                     if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
                         ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "104")
@@ -240,48 +237,49 @@ namespace Altera
                             svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                             isNPStrengthen = "true";
                         }
+
                         break;
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["num"].ToString() == "1" &&
-                        ((JObject) svtTreasureDevicestmp)["treasureDeviceId"].ToString().Length <= 5)
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["num"].ToString() == "1" &&
+                        ((JObject)svtTreasureDevicestmp)["treasureDeviceId"].ToString().Length <= 5)
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["num"].ToString() == "98" &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "0")
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["num"].ToString() == "98" &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "0")
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "198")
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "198")
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "199")
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "199")
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["treasureDeviceId"].ToString().Length == svtID.Length)
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["treasureDeviceId"].ToString().Length == svtID.Length)
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() != svtID ||
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() != "105") continue;
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() != svtID ||
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() != "105") continue;
                     {
                         var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                         svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
@@ -290,7 +288,6 @@ namespace Altera
                 }
 
                 if (svtTDID.Contains("*"))
-                {
                     Dispatcher.Invoke(() =>
                     {
                         GlobalPathsAndDatas.IDListStr = svtTDID;
@@ -299,7 +296,6 @@ namespace Altera
                         var ReturnStr = ChoiceTD.idreturn;
                         svtTDID = ReturnStr;
                     });
-                }
                 result[0] = svtTDID;
                 result[1] = isNPStrengthen;
                 Dispatcher.Invoke(() => { TreasureDeviceID.Text = svtTDID; });
@@ -326,7 +322,7 @@ namespace Altera
             var NPRateEX = 0.0;
             var NPRateDef = 0.0;
             foreach (var TDlvtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
-                if (((JObject) TDlvtmp)["treaureDeviceId"].ToString() == svtTDID)
+                if (((JObject)TDlvtmp)["treaureDeviceId"].ToString() == svtTDID)
                 {
                     var TDlvobjtmp = JObject.Parse(TDlvtmp.ToString());
                     NPRateTD = Convert.ToDouble(TDlvobjtmp["tdPoint"].ToString()) / 10000;
@@ -338,7 +334,7 @@ namespace Altera
                     break;
                 }
 
-            var nptmp = (int) (NPRateTD * 1000000 + NPRateArts * 1000000 + NPRateBuster * 1000000 +
+            var nptmp = (int)(NPRateTD * 1000000 + NPRateArts * 1000000 + NPRateBuster * 1000000 +
                                NPRateQuick * 1000000 + NPRateEX * 1000000);
             var average = nptmp / 5;
 
@@ -353,17 +349,17 @@ namespace Altera
 
             if (GlobalPathsAndDatas.notrealnprate == 0.0) return;
 
-            if (average - (int) (NPRateTD * 1000000) != 0 || average - (int) (NPRateArts * 1000000) != 0 ||
-                average - (int) (NPRateBuster * 1000000) != 0 || average - (int) (NPRateQuick * 1000000) != 0 ||
-                average - (int) (NPRateEX * 1000000) != 0)
+            if (average - (int)(NPRateTD * 1000000) != 0 || average - (int)(NPRateArts * 1000000) != 0 ||
+                average - (int)(NPRateBuster * 1000000) != 0 || average - (int)(NPRateQuick * 1000000) != 0 ||
+                average - (int)(NPRateEX * 1000000) != 0)
             {
                 BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "NP率有特殊情况,请留意."; });
             }
             else
             {
-                if (average - (int) (GlobalPathsAndDatas.notrealnprate * 1000000) > 0)
+                if (average - (int)(GlobalPathsAndDatas.notrealnprate * 1000000) > 0)
                     BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 > 理论值."; });
-                else if (average - (int) (GlobalPathsAndDatas.notrealnprate * 1000000) == 0)
+                else if (average - (int)(GlobalPathsAndDatas.notrealnprate * 1000000) == 0)
                     BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 = 理论值."; });
                 else
                     BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 < 理论值."; });
@@ -388,7 +384,7 @@ namespace Altera
             var DNR = new Task(() => { DisplayNPRate(svtTDID.ToString()); });
             DNR.Start();
             foreach (var TDDtmp in GlobalPathsAndDatas.mstTreasureDeviceDetailArray)
-                if (((JObject) TDDtmp)["id"].ToString() == svtTDID.ToString())
+                if (((JObject)TDDtmp)["id"].ToString() == svtTDID.ToString())
                 {
                     var TDDobjtmp = JObject.Parse(TDDtmp.ToString());
                     ToggleDetailbr.Dispatcher.Invoke(() =>
@@ -408,7 +404,7 @@ namespace Altera
 
             foreach (var TreasureDevicestmp in GlobalPathsAndDatas.mstTreasureDevicedArray)
             {
-                if (((JObject) TreasureDevicestmp)["id"].ToString() != svtTDID.ToString()) continue;
+                if (((JObject)TreasureDevicestmp)["id"].ToString() != svtTDID.ToString()) continue;
                 var mstTDobjtmp = JObject.Parse(TreasureDevicestmp.ToString());
                 NPName = mstTDobjtmp["name"].ToString();
                 npname.Dispatcher.Invoke(() => { npname.Text = NPName; });
@@ -421,8 +417,8 @@ namespace Altera
                     .Replace("1", "全体宝具").Replace("2", "单体宝具");
                 nptype.Dispatcher.Invoke(() => { nptype.Text = svtNPDamageType; });
                 foreach (var svtTreasureDevicestmp in GlobalPathsAndDatas.mstSvtTreasureDevicedArray)
-                    if (((JObject) svtTreasureDevicestmp)["treasureDeviceId"].ToString() ==
-                        ((JObject) TreasureDevicestmp)["id"].ToString())
+                    if (((JObject)svtTreasureDevicestmp)["treasureDeviceId"].ToString() ==
+                        ((JObject)TreasureDevicestmp)["id"].ToString())
                     {
                         var mstsvtTDobjtmp2 = JObject.Parse(svtTreasureDevicestmp.ToString());
                         svtNPCardhitDamage = mstsvtTDobjtmp2["damage"].ToString().Replace("\n", "")
@@ -458,63 +454,63 @@ namespace Altera
             {
                 if (NPDetail != "unknown") return;
                 foreach (var TreasureDevicestmp2 in GlobalPathsAndDatas.mstTreasureDevicedArray)
-                    if (((JObject) TreasureDevicestmp2)["name"].ToString() == NPName)
+                    if (((JObject)TreasureDevicestmp2)["name"].ToString() == NPName)
                     {
                         var TreasureDevicesobjtmp2 = JObject.Parse(TreasureDevicestmp2.ToString());
                         newtmpid = TreasureDevicesobjtmp2["id"].ToString();
                         switch (newtmpid.Length)
                         {
                             case 6:
-                            {
-                                var FinTDID_TMP = newtmpid;
-                                foreach (var TDDtmp2 in GlobalPathsAndDatas.mstTreasureDeviceDetailArray)
-                                    if (((JObject) TDDtmp2)["id"].ToString() == FinTDID_TMP)
-                                    {
-                                        var TDDobjtmp2 = JObject.Parse(TDDtmp2.ToString());
-                                        if (ToggleDetailbr.IsChecked == true)
-                                            NPDetail = TDDobjtmp2["detail"].ToString()
-                                                .Replace("[{0}]", "[Lv.1 - Lv.5]")
-                                                .Replace("[g]", "")
-                                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                .Replace(@"＆", "\r\n ＋")
-                                                .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
-                                        else
-                                            NPDetail = TDDobjtmp2["detail"].ToString()
-                                                .Replace("[{0}]", "[Lv.1 - Lv.5]")
-                                                .Replace("[g]", "")
-                                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                .Replace(@"＆", " ＋");
-                                    }
-
-                                break;
-                            }
-                            case 7:
-                            {
-                                if (newtmpid.Substring(0, 2) == "10" || newtmpid.Substring(0, 2) == "11" ||
-                                    newtmpid.Substring(0, 2) == "23" || newtmpid.Substring(0, 2) == "25")
                                 {
                                     var FinTDID_TMP = newtmpid;
-                                    foreach (var TDDtmp2 in GlobalPathsAndDatas.mstTreasureDeviceDetailArray
-                                    )
-                                        if (((JObject) TDDtmp2)["id"].ToString() == FinTDID_TMP)
+                                    foreach (var TDDtmp2 in GlobalPathsAndDatas.mstTreasureDeviceDetailArray)
+                                        if (((JObject)TDDtmp2)["id"].ToString() == FinTDID_TMP)
                                         {
                                             var TDDobjtmp2 = JObject.Parse(TDDtmp2.ToString());
                                             if (ToggleDetailbr.IsChecked == true)
                                                 NPDetail = TDDobjtmp2["detail"].ToString()
-                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
+                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]")
+                                                    .Replace("[g]", "")
                                                     .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
                                                     .Replace(@"＆", "\r\n ＋")
                                                     .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
                                             else
                                                 NPDetail = TDDobjtmp2["detail"].ToString()
-                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
+                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]")
+                                                    .Replace("[g]", "")
                                                     .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
                                                     .Replace(@"＆", " ＋");
                                         }
-                                }
 
-                                break;
-                            }
+                                    break;
+                                }
+                            case 7:
+                                {
+                                    if (newtmpid.Substring(0, 2) == "10" || newtmpid.Substring(0, 2) == "11" ||
+                                        newtmpid.Substring(0, 2) == "23" || newtmpid.Substring(0, 2) == "25")
+                                    {
+                                        var FinTDID_TMP = newtmpid;
+                                        foreach (var TDDtmp2 in GlobalPathsAndDatas.mstTreasureDeviceDetailArray
+                                        )
+                                            if (((JObject)TDDtmp2)["id"].ToString() == FinTDID_TMP)
+                                            {
+                                                var TDDobjtmp2 = JObject.Parse(TDDtmp2.ToString());
+                                                if (ToggleDetailbr.IsChecked == true)
+                                                    NPDetail = TDDobjtmp2["detail"].ToString()
+                                                        .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
+                                                        .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
+                                                        .Replace(@"＆", "\r\n ＋")
+                                                        .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
+                                                else
+                                                    NPDetail = TDDobjtmp2["detail"].ToString()
+                                                        .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
+                                                        .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
+                                                        .Replace(@"＆", " ＋");
+                                            }
+                                    }
+
+                                    break;
+                                }
                         }
                     }
             });
@@ -703,7 +699,7 @@ namespace Altera
                 GlobalPathsAndDatas.askxlsx = true;
                 GlobalPathsAndDatas.notrealnprate = 0.0;
                 foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
-                    if (((JObject) svtIDtmp)["id"].ToString() == JB.svtid)
+                    if (((JObject)svtIDtmp)["id"].ToString() == JB.svtid)
                     {
                         var mstSvtobjtmp = JObject.Parse(svtIDtmp.ToString());
                         svtName = mstSvtobjtmp["name"].ToString();
@@ -756,7 +752,7 @@ namespace Altera
                     }
 
                 foreach (var svtLimittmp in GlobalPathsAndDatas.mstSvtLimitArray)
-                    if (((JObject) svtLimittmp)["svtId"].ToString() == JB.svtid)
+                    if (((JObject)svtLimittmp)["svtId"].ToString() == JB.svtid)
                     {
                         var mstsvtLimitobjtmp = JObject.Parse(svtLimittmp.ToString());
                         svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
@@ -1034,7 +1030,7 @@ namespace Altera
         {
             foreach (var SCTMP in GlobalPathsAndDatas.mstSvtCommentArray)
             {
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "1")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "1")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext1.Dispatcher.Invoke(() =>
@@ -1046,7 +1042,7 @@ namespace Altera
                     JB.JB1 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "2")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "2")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext2.Dispatcher.Invoke(() =>
@@ -1056,7 +1052,7 @@ namespace Altera
                     JB.JB2 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "3")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "3")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext3.Dispatcher.Invoke(() =>
@@ -1066,7 +1062,7 @@ namespace Altera
                     JB.JB3 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "4")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "4")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext4.Dispatcher.Invoke(() =>
@@ -1076,7 +1072,7 @@ namespace Altera
                     JB.JB4 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "5")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "5")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext5.Dispatcher.Invoke(() =>
@@ -1086,7 +1082,7 @@ namespace Altera
                     JB.JB5 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "6")
+                if (((JObject)SCTMP)["svtId"].ToString() == JB.svtid && ((JObject)SCTMP)["id"].ToString() == "6")
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext6.Dispatcher.Invoke(() =>
@@ -1096,8 +1092,8 @@ namespace Altera
                     JB.JB6 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
-                if (((JObject) SCTMP)["svtId"].ToString() != JB.svtid ||
-                    ((JObject) SCTMP)["id"].ToString() != "7") continue;
+                if (((JObject)SCTMP)["svtId"].ToString() != JB.svtid ||
+                    ((JObject)SCTMP)["id"].ToString() != "7") continue;
                 {
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext7.Dispatcher.Invoke(() =>
@@ -1112,22 +1108,22 @@ namespace Altera
         private void ServantCombineLimitItemsCheck()
         {
             foreach (var mstCombineLimittmp in GlobalPathsAndDatas.mstCombineLimitArray)
-                if (((JObject) mstCombineLimittmp)["id"].ToString() == JB.svtid)
+                if (((JObject)mstCombineLimittmp)["id"].ToString() == JB.svtid)
                 {
-                    var LimitID = ((JObject) mstCombineLimittmp)["svtLimit"].ToString();
+                    var LimitID = ((JObject)mstCombineLimittmp)["svtLimit"].ToString();
                     switch (Convert.ToInt64(LimitID))
                     {
                         case 0:
                         case 1:
                         case 2:
                         case 3:
-                            var itemIds = ((JObject) mstCombineLimittmp)["itemIds"].ToString().Replace("\n", "")
+                            var itemIds = ((JObject)mstCombineLimittmp)["itemIds"].ToString().Replace("\n", "")
                                 .Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            var itemNums = ((JObject) mstCombineLimittmp)["itemNums"].ToString().Replace("\n", "")
+                            var itemNums = ((JObject)mstCombineLimittmp)["itemNums"].ToString().Replace("\n", "")
                                 .Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            var qp = ((JObject) mstCombineLimittmp)["qp"].ToString();
+                            var qp = ((JObject)mstCombineLimittmp)["qp"].ToString();
                             var itemIdArray = itemIds.Split(',');
                             var itemNumsArray = itemNums.Split(',');
                             var itemDisplay = "";
@@ -1148,9 +1144,9 @@ namespace Altera
         private void ServantCombineSkillItemsCheck()
         {
             foreach (var mstCombineSkilltmp in GlobalPathsAndDatas.mstCombineSkillArray)
-                if (((JObject) mstCombineSkilltmp)["id"].ToString() == JB.svtid)
+                if (((JObject)mstCombineSkilltmp)["id"].ToString() == JB.svtid)
                 {
-                    var LimitID = ((JObject) mstCombineSkilltmp)["skillLv"].ToString();
+                    var LimitID = ((JObject)mstCombineSkilltmp)["skillLv"].ToString();
                     switch (Convert.ToInt64(LimitID))
                     {
                         case 1:
@@ -1162,13 +1158,13 @@ namespace Altera
                         case 7:
                         case 8:
                         case 9:
-                            var itemIds = ((JObject) mstCombineSkilltmp)["itemIds"].ToString().Replace("\n", "")
+                            var itemIds = ((JObject)mstCombineSkilltmp)["itemIds"].ToString().Replace("\n", "")
                                 .Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            var itemNums = ((JObject) mstCombineSkilltmp)["itemNums"].ToString().Replace("\n", "")
+                            var itemNums = ((JObject)mstCombineSkilltmp)["itemNums"].ToString().Replace("\n", "")
                                 .Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            var qp = ((JObject) mstCombineSkilltmp)["qp"].ToString();
+                            var qp = ((JObject)mstCombineSkilltmp)["qp"].ToString();
                             var itemIdArray = itemIds.Split(',');
                             var itemNumsArray = itemNums.Split(',');
                             var itemDisplay = "";
@@ -1198,7 +1194,7 @@ namespace Altera
 
             foreach (var mstItemtmp in GlobalPathsAndDatas.mstItemArray)
             {
-                if (((JObject) mstItemtmp)["id"].ToString() != ID.ToString()) continue;
+                if (((JObject)mstItemtmp)["id"].ToString() != ID.ToString()) continue;
                 var mstItemtmpobjtmp = JObject.Parse(mstItemtmp.ToString());
                 return mstItemtmpobjtmp["name"].ToString();
             }
@@ -1213,7 +1209,7 @@ namespace Altera
             var svtCVName = "unknown";
             var svtILLUSTName = "unknown";
             foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
-                if (((JObject) svtIDtmp)["id"].ToString() == JB.svtid)
+                if (((JObject)svtIDtmp)["id"].ToString() == JB.svtid)
                 {
                     var mstSvtobjtmp = JObject.Parse(svtIDtmp.ToString());
                     svtillust = mstSvtobjtmp["illustratorId"].ToString(); //illustID
@@ -1222,7 +1218,7 @@ namespace Altera
                 }
 
             foreach (var cvidtmp in GlobalPathsAndDatas.mstCvArray)
-                if (((JObject) cvidtmp)["id"].ToString() == svtcv)
+                if (((JObject)cvidtmp)["id"].ToString() == svtcv)
                 {
                     var mstCVobjtmp = JObject.Parse(cvidtmp.ToString());
                     svtCVName = mstCVobjtmp["name"].ToString();
@@ -1231,7 +1227,7 @@ namespace Altera
                 }
 
             foreach (var illustidtmp in GlobalPathsAndDatas.mstIllustratorArray)
-                if (((JObject) illustidtmp)["id"].ToString() == svtillust)
+                if (((JObject)illustidtmp)["id"].ToString() == svtillust)
                 {
                     var mstillustobjtmp = JObject.Parse(illustidtmp.ToString());
                     svtILLUSTName = mstillustobjtmp["name"].ToString();
@@ -1254,8 +1250,8 @@ namespace Altera
             GlobalPathsAndDatas.svtArtsCardhit = 1;
             foreach (var svtCardtmp in GlobalPathsAndDatas.mstSvtCardArray)
             {
-                if (((JObject) svtCardtmp)["svtId"].ToString() == JB.svtid &&
-                    ((JObject) svtCardtmp)["cardId"].ToString() == "1")
+                if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
+                    ((JObject)svtCardtmp)["cardId"].ToString() == "1")
                 {
                     var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
                     svtArtsCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
@@ -1268,8 +1264,8 @@ namespace Altera
                     });
                 }
 
-                if (((JObject) svtCardtmp)["svtId"].ToString() == JB.svtid &&
-                    ((JObject) svtCardtmp)["cardId"].ToString() == "2")
+                if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
+                    ((JObject)svtCardtmp)["cardId"].ToString() == "2")
                 {
                     var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
                     svtBustersCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
@@ -1281,8 +1277,8 @@ namespace Altera
                     });
                 }
 
-                if (((JObject) svtCardtmp)["svtId"].ToString() == JB.svtid &&
-                    ((JObject) svtCardtmp)["cardId"].ToString() == "3")
+                if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
+                    ((JObject)svtCardtmp)["cardId"].ToString() == "3")
                 {
                     var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
                     svtQuicksCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
@@ -1294,8 +1290,8 @@ namespace Altera
                     });
                 }
 
-                if (((JObject) svtCardtmp)["svtId"].ToString() != JB.svtid ||
-                    ((JObject) svtCardtmp)["cardId"].ToString() != "4") continue;
+                if (((JObject)svtCardtmp)["svtId"].ToString() != JB.svtid ||
+                    ((JObject)svtCardtmp)["cardId"].ToString() != "4") continue;
                 {
                     var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
                     svtExtraCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
@@ -1324,8 +1320,8 @@ namespace Altera
             SkillLvs.TDforExcel = "";
             foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
             {
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
-                    ((JObject) TDLVtmp)["lv"].ToString() == "1")
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
+                    ((JObject)TDLVtmp)["lv"].ToString() == "1")
                 {
                     var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                     var NPval1 = TDLVobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1334,8 +1330,8 @@ namespace Altera
                     TDlv1OC1strArray = NPval1.Split('|');
                 }
 
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
-                    ((JObject) TDLVtmp)["lv"].ToString() == "2")
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
+                    ((JObject)TDLVtmp)["lv"].ToString() == "2")
                 {
                     var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                     var NPval2 = TDLVobjtmp["svals2"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1344,8 +1340,8 @@ namespace Altera
                     TDlv2OC2strArray = NPval2.Split('|');
                 }
 
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
-                    ((JObject) TDLVtmp)["lv"].ToString() == "3")
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
+                    ((JObject)TDLVtmp)["lv"].ToString() == "3")
                 {
                     var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                     var NPval3 = TDLVobjtmp["svals3"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1354,8 +1350,8 @@ namespace Altera
                     TDlv3OC3strArray = NPval3.Split('|');
                 }
 
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
-                    ((JObject) TDLVtmp)["lv"].ToString() == "4")
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() == svtTDID &&
+                    ((JObject)TDLVtmp)["lv"].ToString() == "4")
                 {
                     var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                     var NPval4 = TDLVobjtmp["svals4"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1364,8 +1360,8 @@ namespace Altera
                     TDlv4OC4strArray = NPval4.Split('|');
                 }
 
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() != svtTDID ||
-                    ((JObject) TDLVtmp)["lv"].ToString() != "5") continue;
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() != svtTDID ||
+                    ((JObject)TDLVtmp)["lv"].ToString() != "5") continue;
                 {
                     var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                     var NPval5 = TDLVobjtmp["svals5"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1387,18 +1383,18 @@ namespace Altera
                 });
                 if (NeedTranslate)
                     svtTreasureDeviceFuncArray = (from skfuncidtmp in svtTreasureDeviceFuncIDArray
-                        from functmp in GlobalPathsAndDatas.mstFuncArray
-                        where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                        select JObject.Parse(functmp.ToString())
+                                                  from functmp in GlobalPathsAndDatas.mstFuncArray
+                                                  where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                                  select JObject.Parse(functmp.ToString())
                         into mstFuncobjtmp
-                        select TranslateBuff(mstFuncobjtmp["popupText"].ToString())).ToArray();
+                                                  select TranslateBuff(mstFuncobjtmp["popupText"].ToString())).ToArray();
                 else
                     svtTreasureDeviceFuncArray = (from skfuncidtmp in svtTreasureDeviceFuncIDArray
-                        from functmp in GlobalPathsAndDatas.mstFuncArray
-                        where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                        select JObject.Parse(functmp.ToString())
+                                                  from functmp in GlobalPathsAndDatas.mstFuncArray
+                                                  where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                                  select JObject.Parse(functmp.ToString())
                         into mstFuncobjtmp
-                        select mstFuncobjtmp["popupText"].ToString()).ToArray();
+                                                  select mstFuncobjtmp["popupText"].ToString()).ToArray();
                 TDFuncstrArray = svtTreasureDeviceFuncArray;
                 for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                 {
@@ -1558,13 +1554,13 @@ namespace Altera
                 var svtClassPassive = string.Empty;
                 svtClassPassiveIDArray = ClassPassiveID.Split(',');
                 svtClassPassiveArray = (from skilltmp in GlobalPathsAndDatas.mstSkillArray
-                    from classpassiveidtmp in svtClassPassiveIDArray
-                    where ((JObject) skilltmp)["id"].ToString() == classpassiveidtmp
-                    select JObject.Parse(skilltmp.ToString())
+                                        from classpassiveidtmp in svtClassPassiveIDArray
+                                        where ((JObject)skilltmp)["id"].ToString() == classpassiveidtmp
+                                        select JObject.Parse(skilltmp.ToString())
                     into mstsvtPskillobjtmp
-                    select mstsvtPskillobjtmp["name"].ToString() != ""
-                        ? mstsvtPskillobjtmp["name"] + " (" + mstsvtPskillobjtmp["id"] + ")"
-                        : "未知技能???" + " (" + mstsvtPskillobjtmp["id"] + ")").ToArray();
+                                        select mstsvtPskillobjtmp["name"].ToString() != ""
+                                            ? mstsvtPskillobjtmp["name"] + " (" + mstsvtPskillobjtmp["id"] + ")"
+                                            : "未知技能???" + " (" + mstsvtPskillobjtmp["id"] + ")").ToArray();
                 svtClassPassive = string.Join(", ", svtClassPassiveArray);
                 classskill.Dispatcher.Invoke(() => { classskill.Text = svtClassPassive; });
                 var SCPSSLC = new Task(() => { ServantClassPassiveSkillSvalListCheck(ClassPassiveID); });
@@ -1594,7 +1590,7 @@ namespace Altera
                 {
                     foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
                     {
-                        if (((JObject) skilltmp)["id"].ToString() != svtClassPassiveIDListArray[i]) continue;
+                        if (((JObject)skilltmp)["id"].ToString() != svtClassPassiveIDListArray[i]) continue;
                         var skillobjtmp = JObject.Parse(skilltmp.ToString());
                         ClassPassiveSkillFuncName = NeedTranslate
                             ? TranslateBuff(skillobjtmp["name"].ToString())
@@ -1649,8 +1645,8 @@ namespace Altera
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
             {
-                if (((JObject) SKLTMP)["skillId"].ToString() != SkillID ||
-                    ((JObject) SKLTMP)["lv"].ToString() != "10") continue;
+                if (((JObject)SKLTMP)["skillId"].ToString() != SkillID ||
+                    ((JObject)SKLTMP)["lv"].ToString() != "10") continue;
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -1662,18 +1658,18 @@ namespace Altera
                     svtSKFuncIDArray = svtSKFuncIDList.ToArray();
                     if (NeedTranslate)
                         svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
+                                               from functmp in GlobalPathsAndDatas.mstFuncArray
+                                               where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                               select JObject.Parse(functmp.ToString())
                             into mstFuncobjtmp
-                            select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
+                                               select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
                     else
                         svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
+                                               from functmp in GlobalPathsAndDatas.mstFuncArray
+                                               where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                               select JObject.Parse(functmp.ToString())
                             into mstFuncobjtmp
-                            select mstFuncobjtmp["popupText"].ToString());
+                                               select mstFuncobjtmp["popupText"].ToString());
                 }
             }
 
@@ -1696,17 +1692,17 @@ namespace Altera
             var result = new string[6];
             foreach (var svtskill in GlobalPathsAndDatas.mstSvtSkillArray)
             {
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "1" &&
-                    ((JObject) svtskill)["priority"].ToString() == "1")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "1" &&
+                    ((JObject)svtskill)["priority"].ToString() == "1")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID1 = mstsvtskillobjtmp["skillId"].ToString();
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "1" &&
-                    ((JObject) svtskill)["priority"].ToString() == "2")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "1" &&
+                    ((JObject)svtskill)["priority"].ToString() == "2")
                 {
                     if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
@@ -1721,26 +1717,26 @@ namespace Altera
                     }
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "1" &&
-                    ((JObject) svtskill)["priority"].ToString() == "3")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "1" &&
+                    ((JObject)svtskill)["priority"].ToString() == "3")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID1 = mstsvtskillobjtmp["skillId"].ToString();
                     sk1IsStrengthened = "twice";
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "2" &&
-                    ((JObject) svtskill)["priority"].ToString() == "1")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "2" &&
+                    ((JObject)svtskill)["priority"].ToString() == "1")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID2 = mstsvtskillobjtmp["skillId"].ToString();
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "2" &&
-                    ((JObject) svtskill)["priority"].ToString() == "2")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "2" &&
+                    ((JObject)svtskill)["priority"].ToString() == "2")
                 {
                     if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
@@ -1755,28 +1751,28 @@ namespace Altera
                     }
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "2" &&
-                    ((JObject) svtskill)["priority"].ToString() == "3")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "2" &&
+                    ((JObject)svtskill)["priority"].ToString() == "3")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID2 = mstsvtskillobjtmp["skillId"].ToString();
                     sk2IsStrengthened = "twice";
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "3" &&
-                    ((JObject) svtskill)["priority"].ToString() == "1")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "3" &&
+                    ((JObject)svtskill)["priority"].ToString() == "1")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID3 = mstsvtskillobjtmp["skillId"].ToString();
                 }
 
-                if (((JObject) svtskill)["svtId"].ToString() == svtID &&
-                    ((JObject) svtskill)["num"].ToString() == "3" &&
-                    ((JObject) svtskill)["priority"].ToString() == "2")
+                if (((JObject)svtskill)["svtId"].ToString() == svtID &&
+                    ((JObject)svtskill)["num"].ToString() == "3" &&
+                    ((JObject)svtskill)["priority"].ToString() == "2")
                 {
-                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0,1) != "0")
+                    if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                         skillID3 = mstsvtskillobjtmp["skillId"].ToString();
@@ -1785,12 +1781,13 @@ namespace Altera
                     else
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
-                        skillID3 += "*"+mstsvtskillobjtmp["skillId"]+"^SK";
+                        skillID3 += "*" + mstsvtskillobjtmp["skillId"] + "^SK";
                     }
                 }
-                if (((JObject) svtskill)["svtId"].ToString() != svtID ||
-                    ((JObject) svtskill)["num"].ToString() != "3" ||
-                    ((JObject) svtskill)["priority"].ToString() != "3") continue;
+
+                if (((JObject)svtskill)["svtId"].ToString() != svtID ||
+                    ((JObject)svtskill)["num"].ToString() != "3" ||
+                    ((JObject)svtskill)["priority"].ToString() != "3") continue;
                 {
                     var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                     skillID3 = mstsvtskillobjtmp["skillId"].ToString();
@@ -1806,7 +1803,6 @@ namespace Altera
             }
 
             if (skillID1.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID1;
@@ -1815,10 +1811,8 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID1 = ReturnStr;
                 });
-            }
 
             if (skillID2.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID2;
@@ -1827,10 +1821,8 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID2 = ReturnStr;
                 });
-            }
 
             if (skillID3.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID3;
@@ -1839,7 +1831,6 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID3 = ReturnStr;
                 });
-            }
 
             result[0] = skillID1;
             result[2] = skillID2;
@@ -1915,7 +1906,7 @@ namespace Altera
             var skillDetail = "";
             foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
             {
-                if (((JObject) skilltmp)["id"].ToString() != SkillID) continue;
+                if (((JObject)skilltmp)["id"].ToString() != SkillID) continue;
                 var skillobjtmp = JObject.Parse(skilltmp.ToString());
                 skillName = skillobjtmp["name"].ToString();
                 if (isStrengthed) skillName += " ▲";
@@ -1925,7 +1916,7 @@ namespace Altera
             {
                 foreach (var skillDetailtmp in GlobalPathsAndDatas.mstSkillDetailArray)
                 {
-                    if (((JObject) skillDetailtmp)["id"].ToString() != SkillID) continue;
+                    if (((JObject)skillDetailtmp)["id"].ToString() != SkillID) continue;
                     var skillDetailobjtmp = JObject.Parse(skillDetailtmp.ToString());
                     if (ToggleDetailbr.IsChecked == true)
                         skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
@@ -1967,7 +1958,7 @@ namespace Altera
         {
             foreach (var npcSvtFollowertmp in GlobalPathsAndDatas.npcSvtFollowerArray)
             {
-                if (((JObject) npcSvtFollowertmp)["svtId"].ToString() != svtid) continue;
+                if (((JObject)npcSvtFollowertmp)["svtId"].ToString() != svtid) continue;
                 var npcSvtFollowerobjtmp = JObject.Parse(npcSvtFollowertmp.ToString());
                 switch (skillnum)
                 {
@@ -1996,8 +1987,8 @@ namespace Altera
                 try
                 {
                     var output = GlobalPathsAndDatas.mstSvtArray.Aggregate("",
-                        (current, svtIDtmp) => current + "ID: " + ((JObject) svtIDtmp)["id"] + "    " + "名称: " +
-                                               ((JObject) svtIDtmp)["name"] + "\r\n");
+                        (current, svtIDtmp) => current + "ID: " + ((JObject)svtIDtmp)["id"] + "    " + "名称: " +
+                                               ((JObject)svtIDtmp)["name"] + "\r\n");
                     File.WriteAllText(GlobalPathsAndDatas.path + "/SearchIDList.txt", output);
                     Dispatcher.Invoke(() => { MessageBox.Success("导出成功, 文件名为 SearchIDList.txt", "完成"); });
                     Process.Start(GlobalPathsAndDatas.path + "/SearchIDList.txt");
@@ -2234,7 +2225,7 @@ namespace Altera
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
             {
-                if (((JObject) SKLTMP)["skillId"].ToString() == SkillID && ((JObject) SKLTMP)["lv"].ToString() == "1")
+                if (((JObject)SKLTMP)["skillId"].ToString() == SkillID && ((JObject)SKLTMP)["lv"].ToString() == "1")
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv1sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -2243,7 +2234,7 @@ namespace Altera
                     skilllv1chargetime = SKLobjtmp["chargeTurn"].ToString();
                 }
 
-                if (((JObject) SKLTMP)["skillId"].ToString() == SkillID && ((JObject) SKLTMP)["lv"].ToString() == "6")
+                if (((JObject)SKLTMP)["skillId"].ToString() == SkillID && ((JObject)SKLTMP)["lv"].ToString() == "6")
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv6sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -2252,8 +2243,8 @@ namespace Altera
                     skilllv6chargetime = SKLobjtmp["chargeTurn"].ToString();
                 }
 
-                if (((JObject) SKLTMP)["skillId"].ToString() != SkillID ||
-                    ((JObject) SKLTMP)["lv"].ToString() != "10") continue;
+                if (((JObject)SKLTMP)["skillId"].ToString() != SkillID ||
+                    ((JObject)SKLTMP)["lv"].ToString() != "10") continue;
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -2266,18 +2257,18 @@ namespace Altera
                     svtSKFuncIDArray = svtSKFuncIDList.ToArray();
                     if (NeedTranslate)
                         svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
+                                               from functmp in GlobalPathsAndDatas.mstFuncArray
+                                               where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                               select JObject.Parse(functmp.ToString())
                             into mstFuncobjtmp
-                            select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
+                                               select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
                     else
                         svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
+                                               from functmp in GlobalPathsAndDatas.mstFuncArray
+                                               where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                                               select JObject.Parse(functmp.ToString())
                             into mstFuncobjtmp
-                            select mstFuncobjtmp["popupText"].ToString());
+                                               select mstFuncobjtmp["popupText"].ToString());
                 }
             }
 
@@ -2467,56 +2458,56 @@ namespace Altera
                     switch (res["response"][0]["fail"]["action"].ToString())
                     {
                         case "app_version_up":
-                        {
-                            var tmp = res["response"][0]["fail"]["detail"].ToString();
-                            tmp = Regex.Replace(tmp, @".*新ver.：(.*)、現.*", "$1", RegexOptions.Singleline);
-                            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "当前游戏版本: " + tmp; });
+                            {
+                                var tmp = res["response"][0]["fail"]["detail"].ToString();
+                                tmp = Regex.Replace(tmp, @".*新ver.：(.*)、現.*", "$1", RegexOptions.Singleline);
+                                updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "当前游戏版本: " + tmp; });
 
-                            result = HttpRequest.PhttpReq("https://game.fate-go.jp/gamedata/top",
-                                "appVer=" + tmp);
-                            res = JObject.Parse(result);
-                            break;
-                        }
-                        case "maint":
-                        {
-                            var tmp = res["response"][0]["fail"]["detail"].ToString();
-                            Dispatcher.Invoke(() =>
-                            {
-                                GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                    Application.Current.MainWindow,
-                                    "游戏服务器正在维护，请在维护后下载/更新数据. \r\n以下为服务器公告内容:\r\n\r\n『" +
-                                    tmp.Replace("[00FFFF]", "").Replace("[url=", "")
-                                        .Replace("][u]公式サイト お知らせ[/u][/url][-]", "") + "』\r\n\r\n点击\"确定\"可打开公告页面.",
-                                    "维护中", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                            });
-                            if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            {
-                                var re = new Regex(@"(?<url>http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)");
-                                var mc = re.Matches(tmp);
-                                foreach (Match m in mc)
-                                {
-                                    var url = m.Result("${url}");
-                                    Process.Start(url);
-                                }
+                                result = HttpRequest.PhttpReq("https://game.fate-go.jp/gamedata/top",
+                                    "appVer=" + tmp);
+                                res = JObject.Parse(result);
+                                break;
                             }
+                        case "maint":
+                            {
+                                var tmp = res["response"][0]["fail"]["detail"].ToString();
+                                Dispatcher.Invoke(() =>
+                                {
+                                    GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                        Application.Current.MainWindow,
+                                        "游戏服务器正在维护，请在维护后下载/更新数据. \r\n以下为服务器公告内容:\r\n\r\n『" +
+                                        tmp.Replace("[00FFFF]", "").Replace("[url=", "")
+                                            .Replace("][u]公式サイト お知らせ[/u][/url][-]", "") + "』\r\n\r\n点击\"确定\"可打开公告页面.",
+                                        "维护中", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                                });
+                                if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                                {
+                                    var re = new Regex(@"(?<url>http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)");
+                                    var mc = re.Matches(tmp);
+                                    foreach (Match m in mc)
+                                    {
+                                        var url = m.Result("${url}");
+                                        Process.Start(url);
+                                    }
+                                }
 
-                            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
-                            updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
-                            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
-                            progressbar.Dispatcher.Invoke(() =>
-                            {
-                                progressbar.Visibility = Visibility.Hidden;
-                                updatedatabutton.IsEnabled = true;
-                            });
-                            progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
-                            progressloading.Dispatcher.Invoke(() =>
-                            {
-                                progressloading.Visibility = Visibility.Hidden;
-                            });
-                            Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
-                            OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
-                            return;
-                        }
+                                updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
+                                updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
+                                AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
+                                progressbar.Dispatcher.Invoke(() =>
+                                {
+                                    progressbar.Visibility = Visibility.Hidden;
+                                    updatedatabutton.IsEnabled = true;
+                                });
+                                progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                                progressloading.Dispatcher.Invoke(() =>
+                                {
+                                    progressloading.Visibility = Visibility.Hidden;
+                                });
+                                Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
+                                OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
+                                return;
+                            }
                     }
             }
             catch (Exception e)
@@ -2601,14 +2592,14 @@ namespace Altera
             });
             var data = File.ReadAllText(gamedata.FullName + "master");
             var masterData =
-                (Dictionary<string, byte[]>) MasterDataUnpacker.MouseGame2Unpacker(
+                (Dictionary<string, byte[]>)MasterDataUnpacker.MouseGame2Unpacker(
                     Convert.FromBase64String(data));
             var miniMessagePacker = new MiniMessagePacker();
             foreach (var item in masterData)
             {
                 var DataCount = masterData.Count;
-                var ProgressValue = (double) 9800 / DataCount;
-                var unpackeditem = (List<object>) miniMessagePacker.Unpack(item.Value);
+                var ProgressValue = (double)9800 / DataCount;
+                var unpackeditem = (List<object>)miniMessagePacker.Unpack(item.Value);
                 var json = JsonConvert.SerializeObject(unpackeditem, Formatting.Indented);
                 var t = "";
                 try
@@ -2644,7 +2635,7 @@ namespace Altera
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1500; });
             var data2 = File.ReadAllText(gamedata.FullName + "assetbundle");
             var dictionary =
-                (Dictionary<string, object>) MasterDataUnpacker.MouseInfoMsgPack(
+                (Dictionary<string, object>)MasterDataUnpacker.MouseInfoMsgPack(
                     Convert.FromBase64String(data2));
             var str = dictionary.Aggregate<KeyValuePair<string, object>, string>(null,
                 (current, a) => current + a.Key + ": " + a.Value + "\r\n");
@@ -2654,14 +2645,14 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var data3 = File.ReadAllText(gamedata.FullName + "webview");
             var dictionary2 =
-                (Dictionary<string, object>) MasterDataUnpacker.MouseGame2MsgPack(
+                (Dictionary<string, object>)MasterDataUnpacker.MouseGame2MsgPack(
                     Convert.FromBase64String(data3));
             var str2 = "baseURL: " + dictionary2["baseURL"] + "\r\n contactURL: " +
                        dictionary2["contactURL"] + "\r\n";
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = str2; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 150; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
-            var filePassInfo = (Dictionary<string, object>) dictionary2["filePass"];
+            var filePassInfo = (Dictionary<string, object>)dictionary2["filePass"];
             str = filePassInfo.Aggregate(str, (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "webview.txt", str2);
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt"; });
@@ -2819,6 +2810,8 @@ namespace Altera
                 var xlsx =
                     new ExcelPackage(streamget);
                 var worksheet = xlsx.Workbook.Worksheets[0];
+                var Pickup = new ExcelAddress("C18");
+                worksheet.ConditionalFormatting.RemoveAll();
                 worksheet.Cells["H3"].Value = JB.svtid;
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
                 worksheet.Cells["B3"].Value = Svtname.Text;
@@ -2873,6 +2866,28 @@ namespace Altera
                 worksheet.Cells["P15"].Value = SkillLvs.skill2forExcel;
                 worksheet.Cells["P24"].Value = SkillLvs.skill3forExcel;
                 worksheet.Cells["C24"].Value = SkillLvs.TDforExcel;
+                switch (worksheet.Cells["C18"].Value.ToString())
+                {
+                    case "Quick":
+                        var GreenExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        GreenExp.Formula = "C18=\"Quick\"";
+                        GreenExp.Style.Font.Bold = true;
+                        GreenExp.Style.Font.Color.Color = Color.LightGreen;
+                        break;
+                    case "Arts":
+                        var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        BlueExp.Formula = "C18=\"Arts\"";
+                        BlueExp.Style.Font.Bold = true;
+                        BlueExp.Style.Font.Color.Color = Color.Blue;
+                        break;
+                    case "Buster":
+                        var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        RedExp.Formula = "C18=\"Buster\"";
+                        RedExp.Style.Font.Bold = true;
+                        RedExp.Style.Font.Color.Color = Color.Red;
+                        break;
+                }
+
                 xlsx.SaveAs(new FileInfo(svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx"));
                 streamget.Close();
                 Dispatcher.Invoke(() =>
@@ -2932,7 +2947,7 @@ namespace Altera
                 });
                 if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
                 {
-                    VerAssetsJArray = (JArray) JsonConvert.DeserializeObject(VerChk["assets"].ToString());
+                    VerAssetsJArray = (JArray)JsonConvert.DeserializeObject(VerChk["assets"].ToString());
                     for (var i = 0; i <= VerAssetsJArray.Count - 1; i++)
                         if (VerAssetsJArray[i]["name"].ToString() == "Altera.exe")
                             GlobalPathsAndDatas.ExeUpdateUrl = VerAssetsJArray[i]["browser_download_url"].ToString();
@@ -3067,11 +3082,11 @@ namespace Altera
             {
                 foreach (var mstQuestPickup in GlobalPathsAndDatas.mstQuestPickupArray)
                 {
-                    var QuestPUEndTimeStamp = Convert.ToInt32(((JObject) mstQuestPickup)["endedAt"]);
-                    var QuestPUStartTimeStamp = Convert.ToInt32(((JObject) mstQuestPickup)["startedAt"]);
+                    var QuestPUEndTimeStamp = Convert.ToInt32(((JObject)mstQuestPickup)["endedAt"]);
+                    var QuestPUStartTimeStamp = Convert.ToInt32(((JObject)mstQuestPickup)["startedAt"]);
                     var TimeMinus = (DateTime.Now.Ticks - dateTimeStart.Ticks) / 10000000;
                     if (TimeMinus > QuestPUEndTimeStamp) continue;
-                    questid = ((JObject) mstQuestPickup)["questId"].ToString();
+                    questid = ((JObject)mstQuestPickup)["questId"].ToString();
                     QuestName = GetQuestNameAndType(questid);
                     var QuestPUStartTime = new TimeSpan(long.Parse(QuestPUStartTimeStamp + "0000000"));
                     var QuestPUEndTime = new TimeSpan(long.Parse(QuestPUEndTimeStamp + "0000000"));
@@ -3100,8 +3115,8 @@ namespace Altera
             var QuestName = "";
             foreach (var mstQuest in GlobalPathsAndDatas.mstQuestArray)
             {
-                if (((JObject) mstQuest)["id"].ToString() != questid) continue;
-                var CharaID = ((JObject) mstQuest)["charaIconId"].ToString();
+                if (((JObject)mstQuest)["id"].ToString() != questid) continue;
+                var CharaID = ((JObject)mstQuest)["charaIconId"].ToString();
                 try
                 {
                     CharaID = CharaID.Substring(0, CharaID.Length - 3) + "00";
@@ -3111,19 +3126,19 @@ namespace Altera
                     //ignore
                 }
 
-                var TempName = ((JObject) mstQuest)["name"].ToString();
+                var TempName = ((JObject)mstQuest)["name"].ToString();
                 if (TempName.Length > 14) TempName = TempName.Insert(14, "\r\n");
-                QuestName = "\r\n" + TempName + "\r\n\r\nAP消耗: " + ((JObject) mstQuest)["actConsume"] + "   等级推荐: lv." +
-                            ((JObject) mstQuest)["recommendLv"] + "\r\n从者: " + CharaID + " - " +
+                QuestName = "\r\n" + TempName + "\r\n\r\nAP消耗: " + ((JObject)mstQuest)["actConsume"] + "   等级推荐: lv." +
+                            ((JObject)mstQuest)["recommendLv"] + "\r\n从者: " + CharaID + " - " +
                             GetSvtName(CharaID, 1) + "\r\n";
-                if (((JObject) mstQuest)["giftId"].ToString() != "0")
+                if (((JObject)mstQuest)["giftId"].ToString() != "0")
                 {
-                    var giftid = ((JObject) mstQuest)["giftId"].ToString();
+                    var giftid = ((JObject)mstQuest)["giftId"].ToString();
                     QuestName += "任务奖励: " + CheckGiftNames(giftid) + "\r\n";
                 }
                 else
                 {
-                    var itemid = ((JObject) mstQuest)["giftIconId"].ToString();
+                    var itemid = ((JObject)mstQuest)["giftIconId"].ToString();
                     QuestName += "任务奖励: " + CheckItemName(itemid) + "\r\n";
                 }
 
@@ -3140,9 +3155,9 @@ namespace Altera
             var giftNames = "";
             foreach (var mstGifttmp in GlobalPathsAndDatas.mstGiftArray)
             {
-                if (((JObject) mstGifttmp)["id"].ToString() != giftid) continue;
-                giftids += ((JObject) mstGifttmp)["objectId"] + ",";
-                giftquantities += ((JObject) mstGifttmp)["num"] + ",";
+                if (((JObject)mstGifttmp)["id"].ToString() != giftid) continue;
+                giftids += ((JObject)mstGifttmp)["objectId"] + ",";
+                giftquantities += ((JObject)mstGifttmp)["num"] + ",";
             }
 
             try
@@ -3183,27 +3198,27 @@ namespace Altera
                     var ClassName = "";
                     var WeakClass = "\r\n";
                     var ResistClass = "\r\n";
-                    ClassName = ((JObject) mstClasstmp)["name"] + "(" + ((JObject) mstClasstmp)["id"] + ")";
-                    var tmpid = ((JObject) mstClasstmp)["id"].ToString();
+                    ClassName = ((JObject)mstClasstmp)["name"] + "(" + ((JObject)mstClasstmp)["id"] + ")";
+                    var tmpid = ((JObject)mstClasstmp)["id"].ToString();
                     foreach (var mstClassRelationtmp in GlobalPathsAndDatas.mstClassRelationArray)
                     {
-                        if (((JObject) mstClassRelationtmp)["atkClass"].ToString() != tmpid) continue;
-                        var ATKRATE = Convert.ToInt64(((JObject) mstClassRelationtmp)["attackRate"].ToString());
+                        if (((JObject)mstClassRelationtmp)["atkClass"].ToString() != tmpid) continue;
+                        var ATKRATE = Convert.ToInt64(((JObject)mstClassRelationtmp)["attackRate"].ToString());
                         if (ATKRATE > 1000)
                         {
-                            var tmpweakid = ((JObject) mstClassRelationtmp)["defClass"].ToString();
+                            var tmpweakid = ((JObject)mstClassRelationtmp)["defClass"].ToString();
                             WeakClass +=
                                 (GetClassName(tmpweakid) == "？"
                                     ? GetClassName(tmpweakid) + "(ID:" + tmpweakid + ")"
-                                    : GetClassName(tmpweakid)) + " (" + (float) ATKRATE / 1000 + "x)\r\n";
+                                    : GetClassName(tmpweakid)) + " (" + (float)ATKRATE / 1000 + "x)\r\n";
                         }
                         else if (ATKRATE < 1000)
                         {
-                            var tmpresistid = ((JObject) mstClassRelationtmp)["defClass"].ToString();
+                            var tmpresistid = ((JObject)mstClassRelationtmp)["defClass"].ToString();
                             ResistClass +=
                                 (GetClassName(tmpresistid) == "？"
                                     ? GetClassName(tmpresistid) + "(ID:" + tmpresistid + ")"
-                                    : GetClassName(tmpresistid)) + "(" + (float) ATKRATE / 1000 + "x)\r\n";
+                                    : GetClassName(tmpresistid)) + "(" + (float)ATKRATE / 1000 + "x)\r\n";
                         }
                     }
 
@@ -3230,8 +3245,8 @@ namespace Altera
             var ClassName = "";
             foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
             {
-                if (((JObject) mstClasstmp)["id"].ToString() != id) continue;
-                ClassName = ((JObject) mstClasstmp)["name"].ToString();
+                if (((JObject)mstClasstmp)["id"].ToString() != id) continue;
+                ClassName = ((JObject)mstClasstmp)["name"].ToString();
                 break;
             }
 
@@ -3251,11 +3266,11 @@ namespace Altera
             {
                 foreach (var mstEventtmp in GlobalPathsAndDatas.mstEventArray)
                 {
-                    var EventEndTimeStamp = Convert.ToInt32(((JObject) mstEventtmp)["endedAt"]);
+                    var EventEndTimeStamp = Convert.ToInt32(((JObject)mstEventtmp)["endedAt"]);
                     var TimeMinus = (DateTime.Now.Ticks - dateTimeStart.Ticks) / 10000000;
-                    EventName = ((JObject) mstEventtmp)["name"].ToString();
+                    EventName = ((JObject)mstEventtmp)["name"].ToString();
                     if (EventName.Length > 40) EventName = EventName.Insert(40, "\r\n");
-                    Eventid = ((JObject) mstEventtmp)["id"].ToString();
+                    Eventid = ((JObject)mstEventtmp)["id"].ToString();
                     var EventEndTime = new TimeSpan(long.Parse(EventEndTimeStamp + "0000000"));
                     var EndStr = Convert.ToString(dateTimeStart + EventEndTime);
                     if (EventEndTimeStamp == 1893423600)
@@ -3312,11 +3327,11 @@ namespace Altera
             {
                 foreach (var mstGachatmp in GlobalPathsAndDatas.mstGachaArray)
                 {
-                    var EventEndTimeStamp = Convert.ToInt32(((JObject) mstGachatmp)["closedAt"]);
+                    var EventEndTimeStamp = Convert.ToInt32(((JObject)mstGachatmp)["closedAt"]);
                     var TimeMinus = (DateTime.Now.Ticks - dateTimeStart.Ticks) / 10000000;
-                    EventName = ((JObject) mstGachatmp)["name"].ToString();
+                    EventName = ((JObject)mstGachatmp)["name"].ToString();
                     if (EventName.Length > 40) EventName = EventName.Insert(40, "\r\n");
-                    Eventid = ((JObject) mstGachatmp)["id"].ToString();
+                    Eventid = ((JObject)mstGachatmp)["id"].ToString();
                     var EventEndTime = new TimeSpan(long.Parse(EventEndTimeStamp + "0000000"));
                     var EndStr = Convert.ToString(dateTimeStart + EventEndTime);
                     if (EventEndTimeStamp == 1911653999)
@@ -3459,7 +3474,7 @@ namespace Altera
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
                 var xmin = 0.0;
-                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount-1);
+                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
                 var ymin = 0.0;
                 var ymax = 0.0;
                 var AdjustHPCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
@@ -3478,9 +3493,10 @@ namespace Altera
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
                 ymin = 0.0;
-                ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1], AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1]);
+                ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
+                    AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
                 // Draw ATK curve:
-                platk = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2};
+                platk = new Polyline { Stroke = Brushes.Red, StrokeThickness = 2 };
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
@@ -3491,7 +3507,7 @@ namespace Altera
 
                 chartCanvas.Children.Add(platk);
                 // Draw HP curve:
-                plhp = new Polyline {Stroke = Brushes.Blue, StrokeThickness = 2};
+                plhp = new Polyline { Stroke = Brushes.Blue, StrokeThickness = 2 };
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
@@ -3525,7 +3541,7 @@ namespace Altera
                     {
                         StrokeEndLineCap = PenLineCap.Triangle,
                         StrokeThickness = 1,
-                        Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
                         X1 = 0 + i * 4.5
                     };
 
@@ -3550,14 +3566,16 @@ namespace Altera
         private static int[] GetSvtCurveData(object TypeID)
         {
             GlobalPathsAndDatas.LvExpCurveLvCount = 0;
-            var lvcount= GlobalPathsAndDatas.mstSvtExpArray.Count(mstSvtExptmp => ((JObject) mstSvtExptmp)["type"].ToString() == TypeID.ToString());
-            var TempData = new int[lvcount+1];
+            var lvcount = GlobalPathsAndDatas.mstSvtExpArray.Count(mstSvtExptmp =>
+                ((JObject)mstSvtExptmp)["type"].ToString() == TypeID.ToString());
+            var TempData = new int[lvcount + 1];
             foreach (var mstSvtExptmp in GlobalPathsAndDatas.mstSvtExpArray)
             {
-                if (((JObject) mstSvtExptmp)["type"].ToString() != TypeID.ToString()) continue;
-                TempData[Convert.ToInt32(((JObject) mstSvtExptmp)["lv"])] =
-                    Convert.ToInt32(((JObject) mstSvtExptmp)["curve"].ToString());
+                if (((JObject)mstSvtExptmp)["type"].ToString() != TypeID.ToString()) continue;
+                TempData[Convert.ToInt32(((JObject)mstSvtExptmp)["lv"])] =
+                    Convert.ToInt32(((JObject)mstSvtExptmp)["curve"].ToString());
             }
+
             GlobalPathsAndDatas.LvExpCurveLvCount = lvcount;
             return TempData;
         }
@@ -3725,7 +3743,7 @@ namespace Altera
 
         private async void Button_DecryptBinFile(object sender, RoutedEventArgs e)
         {
-            var inputdialog = new CommonOpenFileDialog {Title = "选择cpk文件"};
+            var inputdialog = new CommonOpenFileDialog { Title = "选择cpk文件" };
             var resultinput = inputdialog.ShowDialog();
             var inputfile = "";
             if (resultinput == CommonFileDialogResult.Ok) inputfile = inputdialog.FileName;
@@ -3776,7 +3794,7 @@ namespace Altera
 
         private async void Button_DecryptBinFolder(object sender, RoutedEventArgs e)
         {
-            var inputdialog = new CommonOpenFileDialog {IsFolderPicker = true, Title = "需要解密的资源文件目录"};
+            var inputdialog = new CommonOpenFileDialog { IsFolderPicker = true, Title = "需要解密的资源文件目录" };
             var resultinput = inputdialog.ShowDialog();
             var inputfolder = "";
             if (resultinput == CommonFileDialogResult.Ok) inputfolder = inputdialog.FileName;
@@ -3850,7 +3868,7 @@ namespace Altera
             var svtName = "";
             foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
             {
-                if (((JObject) svtIDtmp)["id"].ToString() != svtID) continue;
+                if (((JObject)svtIDtmp)["id"].ToString() != svtID) continue;
                 var mstSvtobjtmp = JObject.Parse(svtIDtmp.ToString());
                 svtName = Option == 1 ? mstSvtobjtmp["battleName"].ToString() : mstSvtobjtmp["name"].ToString();
                 return svtName;
@@ -3949,12 +3967,12 @@ namespace Altera
             Task.WaitAll(Sub1);
             Dispatcher.Invoke(() => { decryptprogress.Value = 0; });
             var AssetJsonName = File.ReadAllText(decrypt.FullName + @"\AssetName.json");
-            var AssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(AssetJsonName);
+            var AssetJsonNameArray = (JArray)JsonConvert.DeserializeObject(AssetJsonName);
             Parallel.ForEach(renamedAssets.GetFiles("*.bin"), file =>
             {
                 Parallel.ForEach(AssetJsonNameArray, FileNametmp =>
                 {
-                    if (((JObject) FileNametmp)["fileName"].ToString() != file.Name) return;
+                    if (((JObject)FileNametmp)["fileName"].ToString() != file.Name) return;
                     var FileNameObjtmp = JObject.Parse(FileNametmp.ToString());
                     var FileAssetNametmp = FileNameObjtmp["assetName"].ToString();
                     RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp + "\n";
@@ -3968,12 +3986,12 @@ namespace Altera
                 });
             });
             var AudioAssetJsonName = File.ReadAllText(decrypt.FullName + @"\AudioName.json");
-            var AudioAssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(AudioAssetJsonName);
+            var AudioAssetJsonNameArray = (JArray)JsonConvert.DeserializeObject(AudioAssetJsonName);
             Parallel.ForEach(folder.GetFiles("*."), file =>
             {
                 Parallel.ForEach(AudioAssetJsonNameArray, FileNametmp2 =>
                 {
-                    if (((JObject) FileNametmp2)["fileName"].ToString() != file.Name) return;
+                    if (((JObject)FileNametmp2)["fileName"].ToString() != file.Name) return;
                     var FileNameObjtmp2 = JObject.Parse(FileNametmp2.ToString());
                     var FileAssetNametmp2 = FileNameObjtmp2["audioName"].ToString();
                     RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp2 + "\n";
@@ -3991,12 +4009,12 @@ namespace Altera
                 });
             });
             var MovieAssetJsonName = File.ReadAllText(decrypt.FullName + @"\MovieName.json");
-            var MovieAssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(MovieAssetJsonName);
+            var MovieAssetJsonNameArray = (JArray)JsonConvert.DeserializeObject(MovieAssetJsonName);
             Parallel.ForEach(folder.GetFiles("*."), file =>
             {
                 Parallel.ForEach(MovieAssetJsonNameArray, FileNametmp3 =>
                 {
-                    if (((JObject) FileNametmp3)["fileName"].ToString() != file.Name) return;
+                    if (((JObject)FileNametmp3)["fileName"].ToString() != file.Name) return;
                     var FileNameObjtmp3 = JObject.Parse(FileNametmp3.ToString());
                     var FileAssetNametmp3 = FileNameObjtmp3["movieName"].ToString();
                     RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp3 + "\n";
@@ -4031,7 +4049,7 @@ namespace Altera
                         {
                             Dispatcher.Invoke(() => { decryptprogress.Value = 0; });
                             var AudioDecodeStatusVision =
-                                (double) 100000 / Directory.GetFiles(renamedAudio.FullName).Length;
+                                (double)100000 / Directory.GetFiles(renamedAudio.FullName).Length;
                             foreach (var file in renamedAudio.GetFiles("*.cpk.bytes"))
                             {
                                 RemindLog = "解包音频: " + file.Name;
@@ -4077,7 +4095,7 @@ namespace Altera
             var FilterID = "";
             foreach (var svtFiltertmp in GlobalPathsAndDatas.mstSvtFilterArray)
             {
-                if (((JObject) svtFiltertmp)["name"].ToString() != "次回イベント対象") continue;
+                if (((JObject)svtFiltertmp)["name"].ToString() != "次回イベント対象") continue;
                 var svtFilterobjtmp = JObject.Parse(svtFiltertmp.ToString());
                 FilterID = svtFilterobjtmp["id"].ToString();
                 svtIDlist = svtFilterobjtmp["svtIds"].ToString().Replace("\n", "").Replace("\t", "").Replace("\r", "")
