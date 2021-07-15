@@ -146,7 +146,7 @@ namespace Altera
             SCLIC.Start();
             SCSIC.Start();
             STDI.Start();
-            Task.WaitAny(SCLIC);
+            Task.WaitAll(SCLIC, STDI);
             var STDSC = new Task(() => { ServantTreasureDeviceSvalCheck(svtTDID); });
             STDSC.Start();
             SSIC.Start();
@@ -176,6 +176,7 @@ namespace Altera
             var result = new string[2];
             result[0] = svtTDID;
             result[1] = isNPStrengthen;
+            GlobalPathsAndDatas.IDListStr = "";
             try
             {
                 foreach (var svtTreasureDevicestmp in GlobalPathsAndDatas.mstSvtTreasureDevicedArray)
@@ -190,17 +191,55 @@ namespace Altera
                     if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
                         ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "102")
                     {
-                        var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                        svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                        isNPStrengthen = "true";
+                        switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
+                        {
+                            case "9":
+                            {
+                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                isNPStrengthen = "true";
+                                break;
+                            }
+                            case "0":
+                            {
+                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
+                                break;
+                            }
+                        }
                     }
 
                     if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
                         ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "103")
                     {
-                        var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                        svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                        isNPStrengthen = "truetrue";
+                        switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
+                        {
+                            case "9":
+                            {
+                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                isNPStrengthen = "truetrue";
+                                break;
+                            }
+                            case "2":
+                            {
+                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                                isNPStrengthen = "true";
+                                break;
+                            }
+                        }
+                    }
+
+                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "104")
+                    {
+                        if (((JObject)svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1) == "2")
+                        {
+                            var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                            svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
+                            isNPStrengthen = "true";
+                        }
                         break;
                     }
 
@@ -241,13 +280,6 @@ namespace Altera
                         if (svtTDID == "") svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                     }
 
-                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "104")
-                    {
-                        var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
-                        svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
-                    }
-
                     if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() != svtID ||
                         ((JObject) svtTreasureDevicestmp)["priority"].ToString() != "105") continue;
                     {
@@ -257,6 +289,17 @@ namespace Altera
                     }
                 }
 
+                if (svtTDID.Contains("*"))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        GlobalPathsAndDatas.IDListStr = svtTDID;
+                        var ChoiceTD = new SvtSTDIDChoice();
+                        ChoiceTD.ShowDialog();
+                        var ReturnStr = ChoiceTD.idreturn;
+                        svtTDID = ReturnStr;
+                    });
+                }
                 result[0] = svtTDID;
                 result[1] = isNPStrengthen;
                 Dispatcher.Invoke(() => { TreasureDeviceID.Text = svtTDID; });
@@ -307,6 +350,8 @@ namespace Altera
                               NPRateEX.ToString("P") + "   宝具: " + NPRateTD.ToString("P") +
                               "   受击: " + NPRateDef.ToString("P");
             });
+
+            if (GlobalPathsAndDatas.notrealnprate == 0.0) return;
 
             if (average - (int) (NPRateTD * 1000000) != 0 || average - (int) (NPRateArts * 1000000) != 0 ||
                 average - (int) (NPRateBuster * 1000000) != 0 || average - (int) (NPRateQuick * 1000000) != 0 ||
@@ -1663,9 +1708,17 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "1" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
-                    skillID1 = mstsvtskillobjtmp["skillId"].ToString();
-                    sk1IsStrengthened = "true";
+                    if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID1 = mstsvtskillobjtmp["skillId"].ToString();
+                        sk1IsStrengthened = "true";
+                    }
+                    else
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID1 += "*" + mstsvtskillobjtmp["skillId"] + "^SK";
+                    }
                 }
 
                 if (((JObject) svtskill)["svtId"].ToString() == svtID &&
@@ -1689,9 +1742,17 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "2" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
-                    skillID2 = mstsvtskillobjtmp["skillId"].ToString();
-                    sk2IsStrengthened = "true";
+                    if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID2 = mstsvtskillobjtmp["skillId"].ToString();
+                        sk2IsStrengthened = "true";
+                    }
+                    else
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID2 += "*" + mstsvtskillobjtmp["skillId"] + "^SK";
+                    }
                 }
 
                 if (((JObject) svtskill)["svtId"].ToString() == svtID &&
@@ -1715,11 +1776,18 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "3" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
-                    skillID3 = mstsvtskillobjtmp["skillId"].ToString();
-                    sk3IsStrengthened = "true";
+                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0,1) != "0")
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID3 = mstsvtskillobjtmp["skillId"].ToString();
+                        sk3IsStrengthened = "true";
+                    }
+                    else
+                    {
+                        var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
+                        skillID3 += "*"+mstsvtskillobjtmp["skillId"]+"^SK";
+                    }
                 }
-
                 if (((JObject) svtskill)["svtId"].ToString() != svtID ||
                     ((JObject) svtskill)["num"].ToString() != "3" ||
                     ((JObject) svtskill)["priority"].ToString() != "3") continue;
@@ -1735,6 +1803,42 @@ namespace Altera
                 skillID1 = FindSkillIDinNPCSvt(svtID, 1);
                 skillID2 = FindSkillIDinNPCSvt(svtID, 2);
                 skillID3 = FindSkillIDinNPCSvt(svtID, 3);
+            }
+
+            if (skillID1.Contains("*"))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    GlobalPathsAndDatas.IDListStr = skillID1;
+                    var ChoiceSK = new SvtSTDIDChoice();
+                    ChoiceSK.ShowDialog();
+                    var ReturnStr = ChoiceSK.idreturn;
+                    skillID1 = ReturnStr;
+                });
+            }
+
+            if (skillID2.Contains("*"))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    GlobalPathsAndDatas.IDListStr = skillID2;
+                    var ChoiceSK = new SvtSTDIDChoice();
+                    ChoiceSK.ShowDialog();
+                    var ReturnStr = ChoiceSK.idreturn;
+                    skillID2 = ReturnStr;
+                });
+            }
+
+            if (skillID3.Contains("*"))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    GlobalPathsAndDatas.IDListStr = skillID3;
+                    var ChoiceSK = new SvtSTDIDChoice();
+                    ChoiceSK.ShowDialog();
+                    var ReturnStr = ChoiceSK.idreturn;
+                    skillID3 = ReturnStr;
+                });
             }
 
             result[0] = skillID1;
@@ -2650,7 +2754,7 @@ namespace Altera
             VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
             DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Visible; });
             SvtIDHelper.Dispatcher.Invoke(() => { SvtIDHelper.Visibility = Visibility.Collapsed; });
-            DS.Start();
+            //DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
                 Dispatcher.Invoke(() =>
@@ -3355,12 +3459,12 @@ namespace Altera
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
                 var xmin = 0.0;
-                var xmax = 100.0;
+                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount-1);
                 var ymin = 0.0;
                 var ymax = 0.0;
-                var AdjustHPCurve = new int[101];
-                var AdjustATKCurve = new int[101];
-                for (var lv = 0; lv < 101; lv++)
+                var AdjustHPCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
+                var AdjustATKCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
+                for (var lv = 0; lv < GlobalPathsAndDatas.LvExpCurveLvCount; lv++)
                 {
                     AdjustHPCurve[lv] = GlobalPathsAndDatas.basichp +
                                         Array[lv] * (GlobalPathsAndDatas.maxhp - GlobalPathsAndDatas.basichp) / 1000;
@@ -3374,10 +3478,10 @@ namespace Altera
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
                 ymin = 0.0;
-                ymax = Math.Max(AdjustATKCurve[100], AdjustHPCurve[100]);
+                ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1], AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1]);
                 // Draw ATK curve:
                 platk = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2};
-                for (var i = 1; i < 101; i++)
+                for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
                     double y = AdjustATKCurve[i];
@@ -3388,7 +3492,7 @@ namespace Altera
                 chartCanvas.Children.Add(platk);
                 // Draw HP curve:
                 plhp = new Polyline {Stroke = Brushes.Blue, StrokeThickness = 2};
-                for (var i = 1; i < 101; i++)
+                for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
                     double y = AdjustHPCurve[i];
@@ -3445,14 +3549,16 @@ namespace Altera
 
         private static int[] GetSvtCurveData(object TypeID)
         {
-            var TempData = new int[101];
+            GlobalPathsAndDatas.LvExpCurveLvCount = 0;
+            var lvcount= GlobalPathsAndDatas.mstSvtExpArray.Count(mstSvtExptmp => ((JObject) mstSvtExptmp)["type"].ToString() == TypeID.ToString());
+            var TempData = new int[lvcount+1];
             foreach (var mstSvtExptmp in GlobalPathsAndDatas.mstSvtExpArray)
             {
                 if (((JObject) mstSvtExptmp)["type"].ToString() != TypeID.ToString()) continue;
                 TempData[Convert.ToInt32(((JObject) mstSvtExptmp)["lv"])] =
                     Convert.ToInt32(((JObject) mstSvtExptmp)["curve"].ToString());
             }
-
+            GlobalPathsAndDatas.LvExpCurveLvCount = lvcount;
             return TempData;
         }
 

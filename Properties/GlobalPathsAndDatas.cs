@@ -53,6 +53,8 @@ namespace Altera.Properties
         public static int maxatk;
         public static string CurveType;
         public static string svtIDListStr;
+        public static string IDListStr;
         public static double notrealnprate;
+        public static int LvExpCurveLvCount;
     }
 }

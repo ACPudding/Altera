@@ -419,6 +419,18 @@ namespace Altera
                     }
                     else if (Tempsval.Length == 4)
                     {
+                        if (Tempsval[1] == "304800")
+                            try
+                            {
+                                output = "第" + Tempsval[3] + "再臨\r\n宝具换装";
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         try
                         {
                             output = "[" + Tempsval[3] + "]\r\n" +

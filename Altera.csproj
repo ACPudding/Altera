@@ -131,6 +131,9 @@
     <Compile Include="SvtIDExtraInputBox.xaml.cs">
       <DependentUpon>SvtIDExtraInputBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SvtSTDIDChoice.xaml.cs">
+      <DependentUpon>SvtSTDIDChoice.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -146,6 +149,10 @@
     <Page Include="SvtIDExtraInputBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SvtSTDIDChoice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
