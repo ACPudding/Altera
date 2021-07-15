@@ -20,6 +20,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using Color = System.Drawing.Color;
 using MessageBox = HandyControl.Controls.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -190,7 +191,6 @@ namespace Altera
 
                     if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
                         ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "102")
-                    {
                         switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
                         {
                             case "9":
@@ -207,11 +207,9 @@ namespace Altera
                                 break;
                             }
                         }
-                    }
 
                     if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
                         ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "103")
-                    {
                         switch (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1))
                         {
                             case "9":
@@ -229,17 +227,17 @@ namespace Altera
                                 break;
                             }
                         }
-                    }
 
-                    if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
-                        ((JObject)svtTreasureDevicestmp)["priority"].ToString() == "104")
+                    if (((JObject) svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
+                        ((JObject) svtTreasureDevicestmp)["priority"].ToString() == "104")
                     {
-                        if (((JObject)svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1) == "2")
+                        if (((JObject) svtTreasureDevicestmp)["condQuestId"].ToString().Substring(0, 1) == "2")
                         {
                             var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                             svtTDID = mstsvtTDobjtmp["treasureDeviceId"].ToString();
                             isNPStrengthen = "true";
                         }
+
                         break;
                     }
 
@@ -290,7 +288,6 @@ namespace Altera
                 }
 
                 if (svtTDID.Contains("*"))
-                {
                     Dispatcher.Invoke(() =>
                     {
                         GlobalPathsAndDatas.IDListStr = svtTDID;
@@ -299,7 +296,6 @@ namespace Altera
                         var ReturnStr = ChoiceTD.idreturn;
                         svtTDID = ReturnStr;
                     });
-                }
                 result[0] = svtTDID;
                 result[1] = isNPStrengthen;
                 Dispatcher.Invoke(() => { TreasureDeviceID.Text = svtTDID; });
@@ -1708,7 +1704,7 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "1" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
+                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                         skillID1 = mstsvtskillobjtmp["skillId"].ToString();
@@ -1742,7 +1738,7 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "2" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    if (((JObject)svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
+                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                         skillID2 = mstsvtskillobjtmp["skillId"].ToString();
@@ -1776,7 +1772,7 @@ namespace Altera
                     ((JObject) svtskill)["num"].ToString() == "3" &&
                     ((JObject) svtskill)["priority"].ToString() == "2")
                 {
-                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0,1) != "0")
+                    if (((JObject) svtskill)["condQuestId"].ToString().Substring(0, 1) != "0")
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
                         skillID3 = mstsvtskillobjtmp["skillId"].ToString();
@@ -1785,9 +1781,10 @@ namespace Altera
                     else
                     {
                         var mstsvtskillobjtmp = JObject.Parse(svtskill.ToString());
-                        skillID3 += "*"+mstsvtskillobjtmp["skillId"]+"^SK";
+                        skillID3 += "*" + mstsvtskillobjtmp["skillId"] + "^SK";
                     }
                 }
+
                 if (((JObject) svtskill)["svtId"].ToString() != svtID ||
                     ((JObject) svtskill)["num"].ToString() != "3" ||
                     ((JObject) svtskill)["priority"].ToString() != "3") continue;
@@ -1806,7 +1803,6 @@ namespace Altera
             }
 
             if (skillID1.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID1;
@@ -1815,10 +1811,8 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID1 = ReturnStr;
                 });
-            }
 
             if (skillID2.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID2;
@@ -1827,10 +1821,8 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID2 = ReturnStr;
                 });
-            }
 
             if (skillID3.Contains("*"))
-            {
                 Dispatcher.Invoke(() =>
                 {
                     GlobalPathsAndDatas.IDListStr = skillID3;
@@ -1839,7 +1831,6 @@ namespace Altera
                     var ReturnStr = ChoiceSK.idreturn;
                     skillID3 = ReturnStr;
                 });
-            }
 
             result[0] = skillID1;
             result[2] = skillID2;
@@ -2819,6 +2810,8 @@ namespace Altera
                 var xlsx =
                     new ExcelPackage(streamget);
                 var worksheet = xlsx.Workbook.Worksheets[0];
+                var Pickup = new ExcelAddress("C18");
+                worksheet.ConditionalFormatting.RemoveAll();
                 worksheet.Cells["H3"].Value = JB.svtid;
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
                 worksheet.Cells["B3"].Value = Svtname.Text;
@@ -2873,6 +2866,28 @@ namespace Altera
                 worksheet.Cells["P15"].Value = SkillLvs.skill2forExcel;
                 worksheet.Cells["P24"].Value = SkillLvs.skill3forExcel;
                 worksheet.Cells["C24"].Value = SkillLvs.TDforExcel;
+                switch (worksheet.Cells["C18"].Value.ToString())
+                {
+                    case "Quick":
+                        var GreenExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        GreenExp.Formula = "C18=\"Quick\"";
+                        GreenExp.Style.Font.Bold = true;
+                        GreenExp.Style.Font.Color.Color = Color.LightGreen;
+                        break;
+                    case "Arts":
+                        var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        BlueExp.Formula = "C18=\"Arts\"";
+                        BlueExp.Style.Font.Bold = true;
+                        BlueExp.Style.Font.Color.Color = Color.Blue;
+                        break;
+                    case "Buster":
+                        var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
+                        RedExp.Formula = "C18=\"Buster\"";
+                        RedExp.Style.Font.Bold = true;
+                        RedExp.Style.Font.Color.Color = Color.Red;
+                        break;
+                }
+
                 xlsx.SaveAs(new FileInfo(svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx"));
                 streamget.Close();
                 Dispatcher.Invoke(() =>
@@ -3459,7 +3474,7 @@ namespace Altera
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
                 var xmin = 0.0;
-                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount-1);
+                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
                 var ymin = 0.0;
                 var ymax = 0.0;
                 var AdjustHPCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
@@ -3478,7 +3493,8 @@ namespace Altera
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
                 ymin = 0.0;
-                ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1], AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount-1]);
+                ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
+                    AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
                 // Draw ATK curve:
                 platk = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2};
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
@@ -3525,7 +3541,7 @@ namespace Altera
                     {
                         StrokeEndLineCap = PenLineCap.Triangle,
                         StrokeThickness = 1,
-                        Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
                         X1 = 0 + i * 4.5
                     };
 
@@ -3550,14 +3566,16 @@ namespace Altera
         private static int[] GetSvtCurveData(object TypeID)
         {
             GlobalPathsAndDatas.LvExpCurveLvCount = 0;
-            var lvcount= GlobalPathsAndDatas.mstSvtExpArray.Count(mstSvtExptmp => ((JObject) mstSvtExptmp)["type"].ToString() == TypeID.ToString());
-            var TempData = new int[lvcount+1];
+            var lvcount = GlobalPathsAndDatas.mstSvtExpArray.Count(mstSvtExptmp =>
+                ((JObject) mstSvtExptmp)["type"].ToString() == TypeID.ToString());
+            var TempData = new int[lvcount + 1];
             foreach (var mstSvtExptmp in GlobalPathsAndDatas.mstSvtExpArray)
             {
                 if (((JObject) mstSvtExptmp)["type"].ToString() != TypeID.ToString()) continue;
                 TempData[Convert.ToInt32(((JObject) mstSvtExptmp)["lv"])] =
                     Convert.ToInt32(((JObject) mstSvtExptmp)["curve"].ToString());
             }
+
             GlobalPathsAndDatas.LvExpCurveLvCount = lvcount;
             return TempData;
         }
