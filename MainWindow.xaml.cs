@@ -574,6 +574,7 @@ namespace Altera
                 ClassName[24] = "Beast III/R";
                 ClassName[26] = "Beast III/L";
                 ClassName[27] = "Beast ?";
+                ClassName[28] = "Pretender";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -606,6 +607,7 @@ namespace Altera
                 nprateclassbase[11] = 1.45;
                 nprateclassbase[23] = 1.6;
                 nprateclassbase[25] = 1.5;
+                nprateclassbase[28] = 1.5;
                 nprateclassbase[20] = 0.0;
                 nprateclassbase[22] = 0.0;
                 nprateclassbase[24] = 0.0;
@@ -752,23 +754,30 @@ namespace Altera
                     }
 
                 foreach (var svtLimittmp in GlobalPathsAndDatas.mstSvtLimitArray)
-                    if (((JObject) svtLimittmp)["svtId"].ToString() == JB.svtid)
+                    if (((JObject) svtLimittmp)["svtId"].ToString() == JB.svtid &&
+                        ((JObject) svtLimittmp)["limitCount"].ToString() == "4")
                     {
                         var mstsvtLimitobjtmp = JObject.Parse(svtLimittmp.ToString());
                         svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
+                        svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
+                        svthpMax = mstsvtLimitobjtmp["hpMax"].ToString();
+                        svtatkBase = mstsvtLimitobjtmp["atkBase"].ToString();
+                        svtatkMax = mstsvtLimitobjtmp["atkMax"].ToString();
                         var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
                         DSR.Start();
                         var DSC = new Task(() => { DisplaySvtClassPng(classData, Convert.ToInt32(svtrarity)); });
                         DSC.Start();
                         rarity.Text = svtrarity + " ☆";
-                        svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
-                        basichp.Text = svthpBase;
-                        svthpMax = mstsvtLimitobjtmp["hpMax"].ToString();
                         maxhp.Text = svthpMax;
-                        svtatkBase = mstsvtLimitobjtmp["atkBase"].ToString();
+                        basichp.Text = svthpBase;
                         basicatk.Text = svtatkBase;
-                        svtatkMax = mstsvtLimitobjtmp["atkMax"].ToString();
                         maxatk.Text = svtatkMax;
+                        if (JB.svtid == "800100")
+                        {
+                            maxhp.Text = "12877";
+                            maxatk.Text = "8730";
+                        }
+
                         GlobalPathsAndDatas.basicatk = Convert.ToInt32(svtatkBase);
                         GlobalPathsAndDatas.basichp = Convert.ToInt32(svthpBase);
                         GlobalPathsAndDatas.maxatk = Convert.ToInt32(svtatkMax);
@@ -832,6 +841,7 @@ namespace Altera
                     case 23:
                     case 25:
                     case 17:
+                    case 28:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
@@ -3436,7 +3446,7 @@ namespace Altera
                 double resultHPBaseCheck;
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
-                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25")
+                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28")
                 {
                     hpatkbalance.Text = ShowString[7];
                     return;
@@ -3477,16 +3487,18 @@ namespace Altera
                 var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
                 var ymin = 0.0;
                 var ymax = 0.0;
-                var AdjustHPCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
-                var AdjustATKCurve = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
+                var AdjustHPCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
+                var AdjustATKCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
                 for (var lv = 0; lv < GlobalPathsAndDatas.LvExpCurveLvCount; lv++)
                 {
                     AdjustHPCurve[lv] = GlobalPathsAndDatas.basichp +
-                                        Array[lv] * (GlobalPathsAndDatas.maxhp - GlobalPathsAndDatas.basichp) / 1000;
+                                        Array[lv] * (GlobalPathsAndDatas.maxhp - GlobalPathsAndDatas.basichp) * 100 /
+                                        100000;
                     AdjustATKCurve[lv] = GlobalPathsAndDatas.basicatk +
-                                         Array[lv] * (GlobalPathsAndDatas.maxatk - GlobalPathsAndDatas.basicatk) / 1000;
+                                         Array[lv] * (GlobalPathsAndDatas.maxatk - GlobalPathsAndDatas.basicatk) * 100 /
+                                         100000;
                     if (lv == 0) continue;
-                    HpAtkListView.Items.Add(new HpAtkList(lv.ToString(), AdjustHPCurve[lv].ToString(),
+                    HpAtkListView.Items.Add(new HpAtkList(lv.ToString(), Convert.ToInt32(AdjustHPCurve[lv]).ToString(),
                         AdjustATKCurve[lv].ToString()));
                 }
 
@@ -3500,7 +3512,7 @@ namespace Altera
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
-                    double y = AdjustATKCurve[i];
+                    var y = AdjustATKCurve[i];
                     var atklinep = CurvePoint(new Point(x, y), xmin, xmax, ymin, ymax);
                     platk.Points.Add(atklinep);
                 }
@@ -3511,7 +3523,7 @@ namespace Altera
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
                 {
                     double x = i;
-                    double y = AdjustHPCurve[i];
+                    var y = AdjustHPCurve[i];
                     var hplinep = CurvePoint(new Point(x, y), xmin, xmax, ymin, ymax);
                     plhp.Points.Add(hplinep);
                 }
