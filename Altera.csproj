@@ -287,5 +287,9 @@
   <ItemGroup>
     <Resource Include="images\Gilgamesh-Fools.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassPretender2.png" />
+    <Resource Include="images\ClassPretender3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

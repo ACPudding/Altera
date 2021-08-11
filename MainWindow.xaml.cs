@@ -147,7 +147,7 @@ namespace Altera
             SCLIC.Start();
             SCSIC.Start();
             STDI.Start();
-            Task.WaitAll(SCLIC, STDI);
+            Task.WaitAll(SCLIC, STDI, SBIC);
             var STDSC = new Task(() => { ServantTreasureDeviceSvalCheck(svtTDID); });
             STDSC.Start();
             SSIC.Start();
@@ -607,7 +607,7 @@ namespace Altera
                 nprateclassbase[11] = 1.45;
                 nprateclassbase[23] = 1.6;
                 nprateclassbase[25] = 1.5;
-                nprateclassbase[28] = 1.5;
+                nprateclassbase[28] = 1.55;
                 nprateclassbase[20] = 0.0;
                 nprateclassbase[22] = 0.0;
                 nprateclassbase[24] = 0.0;
@@ -763,11 +763,11 @@ namespace Altera
                         svthpMax = mstsvtLimitobjtmp["hpMax"].ToString();
                         svtatkBase = mstsvtLimitobjtmp["atkBase"].ToString();
                         svtatkMax = mstsvtLimitobjtmp["atkMax"].ToString();
+                        rarity.Text = svtrarity + " ☆";
                         var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
                         DSR.Start();
                         var DSC = new Task(() => { DisplaySvtClassPng(classData, Convert.ToInt32(svtrarity)); });
                         DSC.Start();
-                        rarity.Text = svtrarity + " ☆";
                         maxhp.Text = svthpMax;
                         basichp.Text = svthpBase;
                         basicatk.Text = svtatkBase;
@@ -811,6 +811,69 @@ namespace Altera
                                       RankString[TreasureData];
                         break;
                     }
+
+                if (svtrarity == "")
+                    foreach (var svtLimittmp in GlobalPathsAndDatas.mstSvtLimitArray)
+                        if (((JObject) svtLimittmp)["svtId"].ToString() == JB.svtid &&
+                            ((JObject) svtLimittmp)["limitCount"].ToString() == "1")
+                        {
+                            var mstsvtLimitobjtmp = JObject.Parse(svtLimittmp.ToString());
+                            svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
+                            svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
+                            svthpMax = mstsvtLimitobjtmp["hpMax"].ToString();
+                            svtatkBase = mstsvtLimitobjtmp["atkBase"].ToString();
+                            svtatkMax = mstsvtLimitobjtmp["atkMax"].ToString();
+                            rarity.Text = svtrarity + " ☆";
+                            var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
+                            DSR.Start();
+                            var DSC = new Task(() => { DisplaySvtClassPng(classData, Convert.ToInt32(svtrarity)); });
+                            DSC.Start();
+                            maxhp.Text = svthpMax;
+                            basichp.Text = svthpBase;
+                            basicatk.Text = svtatkBase;
+                            maxatk.Text = svtatkMax;
+                            if (JB.svtid == "800100")
+                            {
+                                maxhp.Text = "12877";
+                                maxatk.Text = "8730";
+                            }
+
+                            GlobalPathsAndDatas.basicatk = Convert.ToInt32(svtatkBase);
+                            GlobalPathsAndDatas.basichp = Convert.ToInt32(svthpBase);
+                            GlobalPathsAndDatas.maxatk = Convert.ToInt32(svtatkMax);
+                            GlobalPathsAndDatas.maxhp = Convert.ToInt32(svthpMax);
+                            var DSSCL = new Task(() =>
+                            {
+                                DrawServantStrengthenCurveLine(GlobalPathsAndDatas.CurveType);
+                            });
+                            DSSCL.Start();
+                            svtcriticalWeight = mstsvtLimitobjtmp["criticalWeight"].ToString();
+                            jixing.Text = svtcriticalWeight;
+                            svtpower = mstsvtLimitobjtmp["power"].ToString();
+                            svtdefense = mstsvtLimitobjtmp["defense"].ToString();
+                            svtagility = mstsvtLimitobjtmp["agility"].ToString();
+                            svtmagic = mstsvtLimitobjtmp["magic"].ToString();
+                            svtluck = mstsvtLimitobjtmp["luck"].ToString();
+                            svttreasureDevice = mstsvtLimitobjtmp["treasureDevice"].ToString();
+                            var SHAB = new Task(() =>
+                            {
+                                ShowHPAtkBalance(JB.svtid, svtrarity, svtdefense, svthpBase, svtClass);
+                            });
+                            SHAB.Start();
+                            powerData = int.Parse(svtpower);
+                            defenseData = int.Parse(svtdefense);
+                            agilityData = int.Parse(svtagility);
+                            magicData = int.Parse(svtmagic);
+                            luckData = int.Parse(svtluck);
+                            TreasureData = int.Parse(svttreasureDevice);
+                            sixwei.Text = "筋力: " + RankString[powerData] + "    耐久: " + RankString[defenseData] +
+                                          "    敏捷: " +
+                                          RankString[agilityData] +
+                                          "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
+                                          "    宝具: " +
+                                          RankString[TreasureData];
+                            break;
+                        }
 
                 var svtArtsCardQuantity = CardArrange.Count(c => c == 'A');
                 if (svtArtsCardQuantity == 0)
@@ -952,6 +1015,7 @@ namespace Altera
             ClassName[24] = "BeastIII";
             ClassName[26] = "BeastIII";
             ClassName[27] = "Beast？";
+            ClassName[28] = "Pretender";
             var pngArr = 0;
             switch (rarity)
             {
@@ -1549,6 +1613,7 @@ namespace Altera
                     case 11:
                     case 23:
                     case 25:
+                    case 28:
                         Growl.Info("该从者尚未实装或为敌方数据,故最终实装的数据可能会与目前的解析结果不同,请以实装之后的数据为准!望知悉.");
                         break;
                 }
@@ -3435,6 +3500,7 @@ namespace Altera
                 ClassBasicBase[17] = 0.98;
                 ClassBasicBase[23] = 1.05;
                 ClassBasicBase[25] = 1.00;
+                ClassBasicBase[28] = 0.95;
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -3492,11 +3558,11 @@ namespace Altera
                 for (var lv = 0; lv < GlobalPathsAndDatas.LvExpCurveLvCount; lv++)
                 {
                     AdjustHPCurve[lv] = GlobalPathsAndDatas.basichp +
-                                        Array[lv] * (GlobalPathsAndDatas.maxhp - GlobalPathsAndDatas.basichp) * 100 /
-                                        100000;
+                                        Array[lv] * (GlobalPathsAndDatas.maxhp - GlobalPathsAndDatas.basichp) /
+                                        1000;
                     AdjustATKCurve[lv] = GlobalPathsAndDatas.basicatk +
-                                         Array[lv] * (GlobalPathsAndDatas.maxatk - GlobalPathsAndDatas.basicatk) * 100 /
-                                         100000;
+                                         Array[lv] * (GlobalPathsAndDatas.maxatk - GlobalPathsAndDatas.basicatk) /
+                                         1000;
                     if (lv == 0) continue;
                     HpAtkListView.Items.Add(new HpAtkList(lv.ToString(), Convert.ToInt32(AdjustHPCurve[lv]).ToString(),
                         AdjustATKCurve[lv].ToString()));
