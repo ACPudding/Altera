@@ -673,7 +673,7 @@ namespace Altera
             if (Funcname.Contains("特殊特攻攻撃"))
             {
                 Tempsval = Funcsval.Split(',');
-                if (Tempsval.Length == 7)
+                if (Tempsval.Length == 7 || Tempsval.Length == 8)
                     try
                     {
                         output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff(ID):\r\n〔 " +

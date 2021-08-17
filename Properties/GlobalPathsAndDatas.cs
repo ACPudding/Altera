@@ -56,5 +56,7 @@ namespace Altera.Properties
         public static string IDListStr;
         public static double notrealnprate;
         public static int LvExpCurveLvCount;
+        public static int[] CurveBaseData;
+        public static double ymax;
     }
 }

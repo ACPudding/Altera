@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -53,6 +54,11 @@ namespace Altera
 
         private readonly string TDAttackNameTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
+
+        private readonly TextBlock AtkDispLatest = new TextBlock {Text = ""};
+        private readonly TextBlock HpDispLatest = new TextBlock {Text = ""};
+        private Line LatestAtkLine;
+        private Line LatestHpLine;
 
         private Polyline platk;
         private Polyline plhp;
@@ -2201,6 +2207,10 @@ namespace Altera
                 Title = "Altera";
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
+                chartCanvas.Children.Remove(LatestAtkLine);
+                chartCanvas.Children.Remove(LatestHpLine);
+                chartCanvas.Children.Remove(AtkDispLatest);
+                chartCanvas.Children.Remove(HpDispLatest);
                 TreasureDeviceID.Text = "";
                 hpatkbalance.Text = "( 攻防倾向: 均衡 )";
                 var QuickUri = "images\\Quick.png";
@@ -3609,6 +3619,8 @@ namespace Altera
 
         private void AddChart(int[] Array)
         {
+            GlobalPathsAndDatas.CurveBaseData = null;
+            GlobalPathsAndDatas.ymax = 0.0;
             Dispatcher.Invoke(() =>
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
@@ -3636,6 +3648,7 @@ namespace Altera
                 ymin = 0.0;
                 ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
                     AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
+                GlobalPathsAndDatas.ymax = ymax;
                 // Draw ATK curve:
                 platk = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2};
                 for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
@@ -3659,6 +3672,7 @@ namespace Altera
 
                 chartCanvas.Children.Add(plhp);
             });
+            GlobalPathsAndDatas.CurveBaseData = Array;
         }
 
         private Point CurvePoint(Point pt, double xmin, double xmax, double ymin, double ymax)
@@ -3670,6 +3684,166 @@ namespace Altera
                     / (ymax - ymin)
             };
             return result;
+        }
+
+        private void DisplayPoint_C(object sender, SelectionChangedEventArgs e)
+        {
+            if (HpAtkListView.SelectedItem == null) return;
+            var GetSelectedItem = (HpAtkList) HpAtkListView.SelectedItem;
+            var level = GetSelectedItem.SvtLevel;
+            var HP = GetSelectedItem.SvtHp;
+            var ATK = GetSelectedItem.SvtAtk;
+            DrawDisplayPoint(level, ATK, HP);
+        }
+
+        private void DisplayPoint(object sender, MouseButtonEventArgs e)
+        {
+            if (HpAtkListView.SelectedItem == null) return;
+            var GetSelectedItem = (HpAtkList) HpAtkListView.SelectedItem;
+            var level = GetSelectedItem.SvtLevel;
+            var HP = GetSelectedItem.SvtHp;
+            var ATK = GetSelectedItem.SvtAtk;
+            DrawDisplayPoint(level, ATK, HP);
+        }
+
+        private void DrawDisplayPoint(string level, string atk, string hp)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var Lv = Convert.ToInt32(level);
+                var ATK = Convert.ToInt32(atk);
+                var HP = Convert.ToInt32(hp);
+                var SelectedAtkPoint = new Point
+                {
+                    X = Lv * chartCanvas.Width * 0.95 / 120,
+                    Y = chartCanvas.Height - ATK * chartCanvas.Height * 0.80
+                        / GlobalPathsAndDatas.ymax
+                };
+                var SelectedHPPoint = new Point
+                {
+                    X = Lv * chartCanvas.Width * 0.95 / 120,
+                    Y = chartCanvas.Height - HP * chartCanvas.Height * 0.80
+                        / GlobalPathsAndDatas.ymax
+                };
+                try
+                {
+                    chartCanvas.Children.Remove(LatestAtkLine);
+                    chartCanvas.Children.Remove(LatestHpLine);
+                    chartCanvas.Children.Remove(AtkDispLatest);
+                    chartCanvas.Children.Remove(HpDispLatest);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                if (HP >= ATK)
+                {
+                    var HP_scale = new Line
+                    {
+                        StrokeThickness = 2,
+                        StrokeEndLineCap = PenLineCap.Triangle,
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
+                        X1 = SelectedHPPoint.X,
+                        Y1 = SelectedHPPoint.Y,
+                        X2 = SelectedHPPoint.X + 25,
+                        Y2 = SelectedHPPoint.Y - 40
+                    };
+                    LatestHpLine = HP_scale;
+                    var Atk_scale = new Line
+                    {
+                        StrokeThickness = 2,
+                        StrokeEndLineCap = PenLineCap.Triangle,
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
+                        X1 = SelectedAtkPoint.X,
+                        Y1 = SelectedAtkPoint.Y,
+                        X2 = SelectedAtkPoint.X + 50,
+                        Y2 = SelectedAtkPoint.Y + 20
+                    };
+                    LatestAtkLine = Atk_scale;
+                    HpDispLatest.Text = "HP: " + hp;
+                    Canvas.SetLeft(HpDispLatest, HP_scale.X2 - 30);
+                    Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 15);
+                    AtkDispLatest.Text = "ATK: " + atk;
+                    Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 + 5);
+                    Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 + 2.5);
+                    if (Lv >= 110)
+                    {
+                        Canvas.SetLeft(AtkDispLatest, Atk_scale.X2);
+                        if (Lv >= 115)
+                            Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 - 30);
+                    }
+
+                    if (Lv <= 30)
+                    {
+                        Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 10);
+                        if (Lv <= 20)
+                        {
+                            Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 15);
+                            if (Lv <= 10)
+                                Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 25);
+                        }
+                    }
+
+                    chartCanvas.Children.Add(LatestAtkLine);
+                    chartCanvas.Children.Add(LatestHpLine);
+                    chartCanvas.Children.Add(AtkDispLatest);
+                    chartCanvas.Children.Add(HpDispLatest);
+                }
+                else
+                {
+                    var HP_scale = new Line
+                    {
+                        StrokeThickness = 2,
+                        StrokeEndLineCap = PenLineCap.Triangle,
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
+                        X1 = SelectedHPPoint.X,
+                        Y1 = SelectedHPPoint.Y,
+                        X2 = SelectedHPPoint.X + 50,
+                        Y2 = SelectedHPPoint.Y + 20
+                    };
+                    LatestHpLine = HP_scale;
+                    var Atk_scale = new Line
+                    {
+                        StrokeThickness = 2,
+                        StrokeEndLineCap = PenLineCap.Triangle,
+                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
+                        X1 = SelectedAtkPoint.X,
+                        Y1 = SelectedAtkPoint.Y,
+                        X2 = SelectedAtkPoint.X + 25,
+                        Y2 = SelectedAtkPoint.Y - 40
+                    };
+                    LatestAtkLine = Atk_scale;
+                    HpDispLatest.Text = "HP: " + hp;
+                    Canvas.SetLeft(HpDispLatest, HP_scale.X2 + 5);
+                    Canvas.SetTop(HpDispLatest, HP_scale.Y2 + 2.5);
+                    AtkDispLatest.Text = "ATK: " + atk;
+                    Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 - 30);
+                    Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 15);
+                    if (Lv >= 110)
+                    {
+                        Canvas.SetLeft(HpDispLatest, HP_scale.X2);
+                        if (Lv >= 115)
+                            Canvas.SetLeft(HpDispLatest, HP_scale.X2 - 30);
+                    }
+
+                    if (Lv <= 30)
+                    {
+                        Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 10);
+                        if (Lv <= 20)
+                        {
+                            Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 15);
+                            if (Lv <= 10)
+                                Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 30);
+                        }
+                    }
+
+                    chartCanvas.Children.Add(LatestAtkLine);
+                    chartCanvas.Children.Add(LatestHpLine);
+                    chartCanvas.Children.Add(AtkDispLatest);
+                    chartCanvas.Children.Add(HpDispLatest);
+                }
+            });
         }
 
         private void DrawScale()

@@ -565,10 +565,11 @@
                                HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
                                Width="248" FontSize="20" Foreground="#FF333333"
                                FontWeight="Bold" Margin="10,10,0,0" />
-                    <TextBlock Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线,目前仅能实现显示功能."
-                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
-                               Width="515" FontSize="11.5" Foreground="#FF333333"
-                               FontWeight="Bold" Margin="10,461,0,0" />
+                    <TextBlock
+                        Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线.&#xA;在右侧单击或双击选择对应等级可在曲线图中标出相应位置.(小怪和敌方boss除外,会发生显示错误)"
+                        HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
+                        Width="515" FontSize="11.5" Foreground="#FF333333"
+                        FontWeight="Bold" Margin="10,461,0,0" />
                     <Canvas x:Name="chartCanvas" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top"
                             Width="472" Margin="15,70,0,0">
                         <Line x:Name="x_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="472" Y2="352"
@@ -586,7 +587,8 @@
                         <TextBlock x:Name="o_label" Text="0" Canvas.Left="-10" Canvas.Top="350"
                                    FontSize="14" />
                     </Canvas>
-                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="11.5">
+                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="11.5"
+                              MouseDoubleClick="DisplayPoint" SelectionChanged="DisplayPoint_C">
                         <ListView.Background>
                             <SolidColorBrush Color="White" Opacity="0.4" />
                         </ListView.Background>
