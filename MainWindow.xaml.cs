@@ -31,6 +31,9 @@ namespace Altera
     /// </summary>
     public partial class MainWindow
     {
+        private const string V =
+            "\r\n--------------------------------------------------\r\n{注:以下文本为满足相应条件之后显示的新羁绊文本.}\r\n--------------------------------------------------\r\n";
+
         private static string GameDataVersion;
 
         private readonly string BuffTranslationListLinkA =
@@ -1102,6 +1105,7 @@ namespace Altera
 
         private void ServantJibanTextCheck()
         {
+            var isJBChangeByCond = false;
             foreach (var SCTMP in GlobalPathsAndDatas.mstSvtCommentArray)
             {
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "1")
@@ -1109,11 +1113,19 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext1.Dispatcher.Invoke(() =>
                     {
-                        jibantext1.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext1.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB1 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         if (jibantext1.Text != "")
                             JBOutput.Dispatcher.Invoke(() => { JBOutput.IsEnabled = true; });
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext1.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB1 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB1 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "2")
@@ -1121,9 +1133,17 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext2.Dispatcher.Invoke(() =>
                     {
-                        jibantext2.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext2.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB2 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext2.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB2 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB2 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "3")
@@ -1131,9 +1151,17 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext3.Dispatcher.Invoke(() =>
                     {
-                        jibantext3.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext3.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB3 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext3.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB3 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB3 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "4")
@@ -1141,9 +1169,17 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext4.Dispatcher.Invoke(() =>
                     {
-                        jibantext4.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext4.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB4 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext4.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB4 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB4 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "5")
@@ -1151,9 +1187,17 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext5.Dispatcher.Invoke(() =>
                     {
-                        jibantext5.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext5.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB5 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext5.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB5 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB5 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() == JB.svtid && ((JObject) SCTMP)["id"].ToString() == "6")
@@ -1161,9 +1205,17 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext6.Dispatcher.Invoke(() =>
                     {
-                        jibantext6.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext6.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB6 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext6.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB6 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB6 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
 
                 if (((JObject) SCTMP)["svtId"].ToString() != JB.svtid ||
@@ -1172,11 +1224,22 @@ namespace Altera
                     var SCobjtmp = JObject.Parse(SCTMP.ToString());
                     jibantext7.Dispatcher.Invoke(() =>
                     {
-                        jibantext7.Text = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (((JObject) SCTMP)["priority"].ToString() == "0")
+                        {
+                            jibantext7.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB7 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
+                        if (((JObject) SCTMP)["priority"].ToString() != "1") return;
+                        jibantext7.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB7 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        isJBChangeByCond = true;
                     });
-                    JB.JB7 = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                 }
             }
+
+            if (isJBChangeByCond)
+                Dispatcher.Invoke(() => { Growl.Info("注意,该从者的羁绊文本会随部分条件而发生改变，详情可查看各个文本框!"); });
         }
 
         private void ServantCombineLimitItemsCheck()
@@ -2779,13 +2842,13 @@ namespace Altera
         private void JBOut()
         {
             var output = "";
-            output = "文本1:\n\r" + JB.JB1 + "\n\r" +
-                     "文本2:\n\r" + JB.JB2 + "\n\r" +
-                     "文本3:\n\r" + JB.JB3 + "\n\r" +
-                     "文本4:\n\r" + JB.JB4 + "\n\r" +
-                     "文本5:\n\r" + JB.JB5 + "\n\r" +
-                     "文本6:\n\r" + JB.JB6 + "\n\r" +
-                     "文本7:\n\r" + JB.JB7;
+            output = "【文本1】:\n\r" + JB.JB1 + "\n\r" +
+                     "【文本2】:\n\r" + JB.JB2 + "\n\r" +
+                     "【文本3】:\n\r" + JB.JB3 + "\n\r" +
+                     "【文本4】:\n\r" + JB.JB4 + "\n\r" +
+                     "【文本5】:\n\r" + JB.JB5 + "\n\r" +
+                     "【文本6】:\n\r" + JB.JB6 + "\n\r" +
+                     "【文本7】:\n\r" + JB.JB7;
             if (!Directory.Exists(GlobalPathsAndDatas.outputdir.FullName))
                 Directory.CreateDirectory(GlobalPathsAndDatas.outputdir.FullName);
             File.WriteAllText(GlobalPathsAndDatas.outputdir.FullName + "羁绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt",
@@ -2820,7 +2883,7 @@ namespace Altera
             VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
             DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Visible; });
             SvtIDHelper.Dispatcher.Invoke(() => { SvtIDHelper.Visibility = Visibility.Collapsed; });
-            //DS.Start();
+            DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
                 Dispatcher.Invoke(() =>
@@ -3613,23 +3676,37 @@ namespace Altera
         {
             Dispatcher.Invoke(() =>
             {
-                for (var i = 0; i < 101; i++)
+                for (var i = 0; i < 121; i++)
                 {
                     var x_scale = new Line
                     {
                         StrokeEndLineCap = PenLineCap.Triangle,
                         StrokeThickness = 1,
                         Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = 0 + i * 4.5
+                        X1 = 0 + i * 3.75
                     };
-
                     x_scale.X2 = x_scale.X1;
-
                     x_scale.Y1 = 352;
                     if (i % 5 == 0 && i != 0)
                     {
-                        x_scale.StrokeThickness = 2;
-                        x_scale.Y2 = x_scale.Y1 - 8;
+                        if (i % 10 == 0)
+                        {
+                            x_scale.StrokeThickness = 2;
+                            x_scale.Y2 = x_scale.Y1 - 8;
+                            var LvText = new TextBlock
+                            {
+                                Text = i.ToString()
+                            };
+                            Canvas.SetLeft(LvText, x_scale.X1 - 7.5);
+                            if (i >= 100)
+                                Canvas.SetLeft(LvText, x_scale.X1 - 11.25);
+                            Canvas.SetTop(LvText, x_scale.Y2 + 8);
+                            chartCanvas.Children.Add(LvText);
+                        }
+                        else
+                        {
+                            x_scale.Y2 = x_scale.Y1 - 6;
+                        }
                     }
                     else
                     {
