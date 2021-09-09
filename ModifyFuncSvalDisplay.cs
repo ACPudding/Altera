@@ -136,7 +136,26 @@ namespace Altera
                     }
                     else
                     {
-                        if (Tempsval.Length > 4)
+                        if (Tempsval.Length == 5)
+                        {
+                            if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+                        }
+                        else if (Tempsval.Length > 5)
                         {
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
@@ -169,6 +188,28 @@ namespace Altera
                             output = Funcsval;
                             break;
                         }
+                    }
+                    else if (Tempsval.Length == 5)
+                    {
+                        if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                            try
+                            {
+                                output = Convert.ToDouble(Tempsval[3]) / 100 + "%" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        output = Funcsval;
+                        break;
                     }
                     else
                     {
@@ -241,6 +282,28 @@ namespace Altera
                             break;
                         }
                     }
+                    else if (Tempsval.Length == 5)
+                    {
+                        if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                            try
+                            {
+                                output = Tempsval[3] + "HP" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        output = Funcsval;
+                        break;
+                    }
                     else
                     {
                         output = Funcsval;
@@ -270,6 +333,28 @@ namespace Altera
                             output = Funcsval;
                             break;
                         }
+                    }
+                    else if (Tempsval.Length == 5)
+                    {
+                        if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                            try
+                            {
+                                output = Tempsval[3] +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        output = Funcsval;
+                        break;
                     }
                     else
                     {
@@ -354,6 +439,28 @@ namespace Altera
                             output = Funcsval;
                             break;
                         }
+                    }
+                    else if (Tempsval.Length == 5)
+                    {
+                        if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                            try
+                            {
+                                output = Tempsval[3] + "個" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        output = Funcsval;
+                        break;
                     }
                     else
                     {
@@ -497,7 +604,6 @@ namespace Altera
                 case "灼傷無効":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3)
-                    {
                         try
                         {
                             output = "∅" +
@@ -509,11 +615,8 @@ namespace Altera
                         {
                             output = Funcsval;
                         }
-                    }
                     else
-                    {
                         output = Funcsval;
-                    }
 
                     break;
                 case "HP減少":
