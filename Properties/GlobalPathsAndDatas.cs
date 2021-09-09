@@ -58,5 +58,6 @@ namespace Altera.Properties
         public static int LvExpCurveLvCount;
         public static int[] CurveBaseData;
         public static double ymax;
+        public static int classid;
     }
 }

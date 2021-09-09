@@ -494,6 +494,28 @@ namespace Altera
                     }
 
                     break;
+                case "灼傷無効":
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 3)
+                    {
+                        try
+                        {
+                            output = "∅" +
+                                     (Tempsval[0] == "1000" ? "" : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                    }
+
+                    break;
                 case "HP減少":
                 case "HP回復":
                     Tempsval = Funcsval.Split(',');
@@ -618,10 +640,10 @@ namespace Altera
             if (Funcname.Contains("對特性") || Funcname.Contains("對Buff"))
             {
                 Tempsval = Funcsval.Split(',');
-                if (Tempsval.Length == 4)
+                if (Tempsval.Length == 4 || Tempsval.Length == 5)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象(ID):\r\n〔 " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象(ID):\r\n〔" +
                                  SearchIndividualality(Tempsval[2]) +
                                  "〕\r\n特攻倍率: " +
                                  Convert.ToDouble(Tempsval[3]) / 10 + "%";

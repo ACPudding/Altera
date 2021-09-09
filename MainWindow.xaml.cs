@@ -37,11 +37,15 @@ namespace Altera
 
         private static string GameDataVersion;
 
+        private readonly TextBlock AtkDispLatest = new TextBlock {Text = ""};
+
         private readonly string BuffTranslationListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
 
         private readonly string BuffTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
+
+        private readonly TextBlock HpDispLatest = new TextBlock {Text = ""};
 
         private readonly string IndividualListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
@@ -55,8 +59,6 @@ namespace Altera
         private readonly string TDAttackNameTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
 
-        private readonly TextBlock AtkDispLatest = new TextBlock {Text = ""};
-        private readonly TextBlock HpDispLatest = new TextBlock {Text = ""};
         private Line LatestAtkLine;
         private Line LatestHpLine;
 
@@ -161,6 +163,7 @@ namespace Altera
             STDSC.Start();
             SSIC.Start();
             Task.WaitAll(STDSC, SSIC);
+            AskForExcelOutput();
             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
             Dispatcher.Invoke(() =>
             {
@@ -177,6 +180,98 @@ namespace Altera
                     Growl.Info("此ID为小怪(或部分boss以及种火芙芙),配卡、技能、宝具信息解析并不准确,请知悉.");
             });
             GC.Collect();
+        }
+
+        private void AskForExcelOutput()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                switch (GlobalPathsAndDatas.classid)
+                {
+                    case 1:
+                    case 4:
+                    case 8:
+                    case 10:
+                    case 20:
+                    case 22:
+                    case 24:
+                    case 26:
+                    case 23:
+                    case 25:
+                    case 17:
+                    case 28:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
+                        break;
+                    case 3:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
+                        break;
+                    case 5:
+                    case 6:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
+                        break;
+                    case 2:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
+                        break;
+                    case 7:
+                    case 9:
+                    case 11:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
+                        break;
+                    case 1001:
+                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
+                        break;
+                }
+            });
         }
 
         private string[] GetSvtTDID(string svtID)
@@ -748,6 +843,8 @@ namespace Altera
                         SCPSC.Start();
                         hiddenattri.Text = svtHideAttri;
                         classData = int.Parse(svtClass);
+                        GlobalPathsAndDatas.classid = 0;
+                        GlobalPathsAndDatas.classid = classData;
                         svtclass.Text = ClassName[classData] != null
                             ? ClassName[classData]
                             : ReadClassName.ReadClassOriginName(classData);
@@ -916,80 +1013,25 @@ namespace Altera
                     case 28:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
                         break;
                     case 3:
                         atkbalance1.Text = "( x 1.05 △)";
                         atkbalance2.Text = "( x 1.05 △)";
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
                         break;
                     case 5:
                     case 6:
                         atkbalance1.Text = "( x 0.9 ▽)";
                         atkbalance2.Text = "( x 0.9 ▽)";
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
                         break;
                     case 2:
                         atkbalance1.Text = "( x 0.95 ▽)";
                         atkbalance2.Text = "( x 0.95 ▽)";
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
                         break;
                     case 7:
                     case 9:
                     case 11:
                         atkbalance1.Text = "( x 1.1 △)";
                         atkbalance2.Text = "( x 1.1 △)";
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
                         break;
                     case 1001:
                         Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
