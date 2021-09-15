@@ -2419,7 +2419,7 @@ namespace Altera
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv1sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
-                        .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        .Replace("[", "").Replace("]\"", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                     skilllv1sval = skilllv1sval.Substring(0, skilllv1sval.Length - 2);
                     skilllv1chargetime = SKLobjtmp["chargeTurn"].ToString();
                 }
@@ -2428,7 +2428,7 @@ namespace Altera
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv6sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
-                        .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        .Replace("[", "").Replace("]\"", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                     skilllv6sval = skilllv6sval.Substring(0, skilllv6sval.Length - 2);
                     skilllv6chargetime = SKLobjtmp["chargeTurn"].ToString();
                 }
@@ -2438,7 +2438,7 @@ namespace Altera
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
-                        .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        .Replace("[", "").Replace("]\"", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                     skilllv10sval = skilllv10sval.Substring(0, skilllv10sval.Length - 2);
                     skilllv10chargetime = SKLobjtmp["chargeTurn"].ToString();
                     svtSKFuncID = SKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")

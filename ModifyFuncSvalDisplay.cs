@@ -157,6 +157,29 @@ namespace Altera
                         }
                         else if (Tempsval.Length > 5)
                         {
+                            if (Tempsval.Length == 8)
+                                if (Tempsval[4].Contains("Param"))
+                                    try
+                                    {
+                                        output = Convert.ToDouble(Tempsval[3]) / 10 + "% + " +
+                                                 Convert.ToDouble(Tempsval[6].Replace("ParamAddValue:", "")) / 10 +
+                                                 "% * N " + " ( N ≤ " +
+                                                 Convert.ToInt32(Tempsval[5].Replace("ParamAddMaxCount:", "")) +
+                                                 " ) \r\n" + "关联Buff: " +
+                                                 Tempsval[4].Replace("ParamAddOpIndividuality:", "") + " \r\n" +
+                                                 (Tempsval[0] == "1000"
+                                                     ? ""
+                                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                        break;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        output = Funcsval;
+                                        break;
+                                    }
+
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                             tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
@@ -226,6 +249,48 @@ namespace Altera
                             output = Tempsval[1] + "格" + (Tempsval[0] == "1000"
                                 ? ""
                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
+                case 160:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4)
+                    {
+                        try
+                        {
+                            var PossibleCount = (Tempsval[2] + "," + Tempsval[3]).Replace("DependFuncVals1:", "")
+                                .Replace("]", "").Split(',');
+                            output = "最大 " + PossibleCount[1] + " 格/単体" + (Tempsval[0] == "1000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else if (Tempsval.Length == 5)
+                    {
+                        try
+                        {
+                            var PossibleCount = (Tempsval[2] + "," + Tempsval[3] + "," + Tempsval[4])
+                                .Replace("DependFuncVals1:", "").Replace("]", "").Replace("Value2:", "").Split(',');
+                            output = "减少敌方最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/単体, \r\n增加 " +
+                                     Convert.ToDouble(PossibleCount[2]) / 100 + "格 充能(按成功数叠加)" + (Tempsval[0] == "1000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                             break;
                         }
                         catch (Exception)
@@ -619,6 +684,49 @@ namespace Altera
                         output = Funcsval;
 
                     break;
+                case "NP吸収":
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4)
+                    {
+                        try
+                        {
+                            var PossibleCount = (Tempsval[2] + "," + Tempsval[3]).Replace("DependFuncVals1:", "")
+                                .Replace("]", "").Split(',');
+                            output = "最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/単体" +
+                                     (Tempsval[0] == "1000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else if (Tempsval.Length == 5)
+                    {
+                        try
+                        {
+                            var PossibleCount = (Tempsval[2] + "," + Tempsval[3] + "," + Tempsval[4])
+                                .Replace("DependFuncVals1:", "").Replace("]", "").Replace("Value2:", "").Split(',');
+                            output = "减少敌方最大 " + PossibleCount[1] + "格充能/単体, \r\n增加 " +
+                                     Convert.ToDouble(PossibleCount[2]) / 100 + "% NP(按成功数叠加)" + (Tempsval[0] == "1000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
                 case "HP減少":
                 case "HP回復":
                     Tempsval = Funcsval.Split(',');
