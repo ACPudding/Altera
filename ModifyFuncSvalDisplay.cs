@@ -283,6 +283,18 @@ namespace Altera
                     }
                     else if (Tempsval.Length == 5)
                     {
+                        if (!Funcsval.Contains("DependFunc"))
+                        {
+                            var tmpstr = "";
+                            for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
+                            tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
+                            output = "[" + tmpstr + "]\r\n" +
+                                     (Tempsval[0] == "1000" ? "" : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+
                         try
                         {
                             var PossibleCount = (Tempsval[2] + "," + Tempsval[3] + "," + Tempsval[4])
