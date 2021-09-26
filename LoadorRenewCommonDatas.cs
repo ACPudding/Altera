@@ -70,6 +70,10 @@ namespace Altera
                 File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" + "mstGacha");
             var mstSvtFilter =
                 File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" + "mstSvtFilter");
+            var mstSvtAppendPassiveSkill =
+                File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" + "mstSvtAppendPassiveSkill");
+            GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray =
+                (JArray)JsonConvert.DeserializeObject(mstSvtAppendPassiveSkill);
             GlobalPathsAndDatas.mstSvtFilterArray =
                 (JArray)JsonConvert.DeserializeObject(mstSvtFilter);
             GlobalPathsAndDatas.mstSvtExpArray =

@@ -124,6 +124,7 @@ namespace Altera
             var SSIC = new Task(() => { ServantSkillInformationCheck(svtID); });
             var SCLIC = new Task(ServantCombineLimitItemsCheck);
             var SCSIC = new Task(ServantCombineSkillItemsCheck);
+            var SASC = new Task(() => { SvtAppendSkillCheck(svtID); });
             SkillLvs.skillID1 = "";
             SkillLvs.skillID2 = "";
             SkillLvs.skillID3 = "";
@@ -158,6 +159,7 @@ namespace Altera
             SCLIC.Start();
             SCSIC.Start();
             STDI.Start();
+            SASC.Start();
             Task.WaitAll(SCLIC, STDI, SBIC);
             var STDSC = new Task(() => { ServantTreasureDeviceSvalCheck(svtTDID); });
             STDSC.Start();
@@ -1674,7 +1676,7 @@ namespace Altera
             }
         }
 
-        private string TranslateBuff(string buffname)
+        public static string TranslateBuff(string buffname)
         {
             try
             {
@@ -1694,7 +1696,7 @@ namespace Altera
             }
             catch (Exception e)
             {
-                Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
                     MessageBox.Show(
                         Application.Current.MainWindow, "翻译列表损坏.\r\n" + e, "错误", MessageBoxButton.OK,
@@ -1865,6 +1867,111 @@ namespace Altera
             result[0] = skilllv10sval;
             result[1] = svtSKFunc;
             return result;
+        }
+
+        private void SvtAppendSkillCheck(string svtID)
+        {
+            var ASID1 = "";
+            var ASID2 = "";
+            var ASID3 = "";
+            var AS1NME = "";
+            var AS2NME = "";
+            var AS3NME = "";
+            var AS1DTL1 = "";
+            var AS2DTL1 = "";
+            var AS3DTL1 = "";
+            var AS1DTL10 = "";
+            var AS2DTL10 = "";
+            var AS3DTL10 = "";
+            var AS1OVal = "";
+            var AS2OVal = "";
+            var AS3OVal = "";
+            foreach (var item in GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray)
+                if (((JObject) item)["svtId"].ToString() == svtID &&
+                    ((JObject) item)["num"].ToString() == "100" &&
+                    ((JObject) item)["priority"].ToString() == "1")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(item.ToString());
+                    ASID1 = mstsvtskillobjtmp["skillId"].ToString();
+                }
+                else if (((JObject) item)["svtId"].ToString() == svtID &&
+                         ((JObject) item)["num"].ToString() == "101" &&
+                         ((JObject) item)["priority"].ToString() == "1")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(item.ToString());
+                    ASID2 = mstsvtskillobjtmp["skillId"].ToString();
+                }
+                else if (((JObject) item)["svtId"].ToString() == svtID &&
+                         ((JObject) item)["num"].ToString() == "102" &&
+                         ((JObject) item)["priority"].ToString() == "1")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(item.ToString());
+                    ASID3 = mstsvtskillobjtmp["skillId"].ToString();
+                    break;
+                }
+
+            if (ASID1 == "") return;
+
+            foreach (var mstSkilltmp in GlobalPathsAndDatas.mstSkillArray)
+                if (((JObject) mstSkilltmp)["id"].ToString() == ASID1)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
+                    AS1NME = mstsvtskillobjtmp["name"].ToString();
+                }
+                else if (((JObject) mstSkilltmp)["id"].ToString() == ASID2)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
+                    AS2NME = mstsvtskillobjtmp["name"].ToString();
+                }
+                else if (((JObject) mstSkilltmp)["id"].ToString() == ASID3)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
+                    AS3NME = mstsvtskillobjtmp["name"].ToString();
+                    break;
+                }
+
+            foreach (var mstSkillDetailtmp in GlobalPathsAndDatas.mstSkillDetailArray)
+                if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID1)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS1DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
+                }
+                else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID1.Substring(0, ASID1.Length - 1) + "9")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS1DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                }
+                else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID2)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS2DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
+                }
+                else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID2.Substring(0, ASID2.Length - 1) + "9")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS2DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                }
+                else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID3)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS3DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
+                }
+                else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID3.Substring(0, ASID3.Length - 1) + "9")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS3DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                }
+
+            Dispatcher.Invoke(() =>
+            {
+                AppendClassPassiveFuncList.Items.Clear();
+                AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS1NME, ASID1,
+                    AS1DTL1 + "\r\n" + AS1DTL10));
+                AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS2NME, ASID2,
+                    AS2DTL1 + "\r\n" + AS2DTL10));
+                AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS3NME, ASID3,
+                    AS3DTL1 + "\r\n" + AS3DTL10));
+            });
         }
 
         private string[] GetSvtSkillIDs(string svtID)
@@ -2246,6 +2353,7 @@ namespace Altera
                 HpAtkListView.Items.Clear();
                 TDFuncList.Items.Clear();
                 ClassPassiveFuncList.Items.Clear();
+                AppendClassPassiveFuncList.Items.Clear();
                 Title = "Altera";
                 chartCanvas.Children.Remove(plhp);
                 chartCanvas.Children.Remove(platk);
@@ -4548,6 +4656,20 @@ namespace Altera
                 ClassPassiveID = v2;
                 ClassPassiveFuncName = v3;
                 ClassPassiveFuncSval = v4;
+            }
+        }
+
+        private struct AppendClassPassiveSvalList
+        {
+            public string AppendClassPassiveName { get; }
+            public string AppendClassPassiveID { get; }
+            public string AppendClassPassiveFuncName { get; }
+
+            public AppendClassPassiveSvalList(string v1, string v2, string v3) : this()
+            {
+                AppendClassPassiveName = v1;
+                AppendClassPassiveID = v2;
+                AppendClassPassiveFuncName = v3;
             }
         }
 

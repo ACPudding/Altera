@@ -39,6 +39,7 @@ namespace Altera.Properties
         public static JArray mstFuncArray = null;
         public static JArray mstGachaArray = null;
         public static JArray mstTreasureDeviceLvArray = null;
+        public static JArray mstSvtAppendPassiveSkillArray = null;
         public static int svtArtsCardhit;
         public static bool askxlsx = true;
         public static string ExeUpdateUrl;

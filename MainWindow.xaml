@@ -1157,7 +1157,32 @@
                                 </ListView>
                             </Grid>
                         </TabItem>
-
+                        <TabItem Header="附加技能" x:Name="AppendClassPassiveInfo">
+                            <Grid Margin="0,0,0,0">
+                                <TextBlock Text="注:&#xA;此处显示从者的附加技能(Append Skill).仅显示lv1与lv10的数值."
+                                           HorizontalAlignment="Left"
+                                           Height="52" VerticalAlignment="Top"
+                                           Width="485"
+                                           FontSize="12" Foreground="#FF333333"
+                                           Margin="5,7,0,0" FontWeight="Bold" />
+                                <ListView x:Name="AppendClassPassiveFuncList" Margin="5,59,5,2" Foreground="#FF737373"
+                                          FontSize="11.5">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="技能名称" Width="200"
+                                                            DisplayMemberBinding="{Binding AppendClassPassiveName}" />
+                                            <GridViewColumn Header="ID" Width="90"
+                                                            DisplayMemberBinding="{Binding AppendClassPassiveID}" />
+                                            <GridViewColumn Header="效果与数值" Width="500"
+                                                            DisplayMemberBinding="{Binding AppendClassPassiveFuncName}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
                     </TabControl>
                 </Grid>
             </TabItem>
