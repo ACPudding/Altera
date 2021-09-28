@@ -9,7 +9,7 @@
         Title="日服资源下载(测试版)" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Icon="icon.ico">
     <Grid>
-        <TextBlock Text="本功能可帮助下载日服的资源文件.&#xA;推荐打开全局VPN.&#xA;下载并发数设置为4.&#xA;音频和视频暂不做解包处理.Assets已进行解密处理."
+        <TextBlock Text="本功能可帮助下载日服的资源文件.&#xA;推荐打开全局VPN.&#xA;下载并发数设置为5.&#xA;音频和视频暂不做解包处理.Assets已进行解密处理."
                    HorizontalAlignment="Left" Height="80" Margin="10,20,0,0"
                    VerticalAlignment="Top"
                    Width="374" FontSize="13" Foreground="#FF333333" FontWeight="Bold" FontFamily="Source Han Sans SC" />

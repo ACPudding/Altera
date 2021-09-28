@@ -54,10 +54,12 @@ namespace Altera
                     AssetTask.Start();
                     if (isDownloadAudio.IsChecked == true) AudioTask.Start();
                     if (isDownloadMovie.IsChecked == true) MovieTask.Start();
+                    GC.Collect();
                 }
                 else
                 {
                     SpecialTask.Start();
+                    GC.Collect();
                 }
             });
         }
@@ -75,7 +77,7 @@ namespace Altera
             });
             if (!File.Exists(AssetStorageLastFilePath)) File.Copy(AssetStorageFilePath, AssetStorageLastFilePath);
             var ASOldLine = File.ReadAllLines(AssetStorageLastFilePath);
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
             for (var i = 0; i < ASLineCount; i++)
             {
                 var tmp = ASLine[i].Split(',');
@@ -121,9 +123,11 @@ namespace Altera
                         SubTask.Start();
                     }
                 });
+                GC.Collect();
             }
 
             Dispatcher.Invoke(() => { Start.IsEnabled = true; });
+            GC.Collect();
         }
 
         private void DownloadAssetsSpecialSub(string assetBundleFolder, string filename, string writePath, string names,
@@ -163,7 +167,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var assetList = JArray.Parse(File.ReadAllText(gamedata.FullName + "AssetName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
             Parallel.ForEach(assetList, paralleloptions, asset =>
             {
                 Dispatcher.Invoke(() =>
@@ -204,6 +208,7 @@ namespace Altera
                 });
             });
             Dispatcher.Invoke(() => { Start.IsEnabled = true; });
+            GC.Collect();
         }
 
         private void DownloadAudioSub()
@@ -213,7 +218,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var audioList = JArray.Parse(File.ReadAllText(gamedata.FullName + "AudioName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
             Dispatcher.Invoke(() =>
             {
                 if (isDownloadAudio.IsChecked == true)
@@ -254,6 +259,7 @@ namespace Altera
                         SubTask2.Start();
                     });
             });
+            GC.Collect();
         }
 
         private void DownloadMovieSub()
@@ -263,7 +269,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var movieList = JArray.Parse(File.ReadAllText(gamedata.FullName + "MovieName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
             Dispatcher.Invoke(() =>
             {
                 if (isDownloadMovie.IsChecked == true)
@@ -304,6 +310,7 @@ namespace Altera
                         SubTask2.Start();
                     });
             });
+            GC.Collect();
         }
 
         private void DownloadAssetSub1(string assetBundleFolder, string filename, string writePath, string[] names,
@@ -331,6 +338,7 @@ namespace Altera
                 Dispatcher.Invoke(() =>
                 {
                     Download_Status.Items.Insert(0, "下载错误: " + $"{string.Join(@"\", names)}");
+                    Download_Progress.Value += ProgressBarValueAdd;
                     Download_Status.Items.Insert(0, ex);
                 });
             }
