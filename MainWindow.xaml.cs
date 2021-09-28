@@ -2711,8 +2711,8 @@ namespace Altera
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
             var folder = new DirectoryInfo(path + @"\Android\");
-            string result;
             JObject res;
+            var result = "";
             var Check = true;
             ToggleDeleteLastData.Dispatcher.Invoke(() =>
             {
@@ -2750,20 +2750,21 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
-                result = HttpRequest.PhttpReq("https://game.fate-go.jp/gamedata/top", "appVer=2.17.0");
-                res = JObject.Parse(result);
+                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.38.0");
+                result = resulttmp.ToString();
+                res = resulttmp.ToJson();
                 if (res["response"][0]["fail"]["action"] != null)
                     switch (res["response"][0]["fail"]["action"].ToString())
                     {
                         case "app_version_up":
                         {
-                            var tmp = res["response"][0]["fail"]["detail"].ToString();
+                            string tmp = res["response"][0]["fail"]["detail"].ToString();
                             tmp = Regex.Replace(tmp, @".*新ver.：(.*)、現.*", "$1", RegexOptions.Singleline);
                             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "当前游戏版本: " + tmp; });
-
-                            result = HttpRequest.PhttpReq("https://game.fate-go.jp/gamedata/top",
-                                "appVer=" + tmp);
-                            res = JObject.Parse(result);
+                            var result2 = HttpRequest.Get($"https://game.fate-go.jp/gamedata/top?appVer={tmp}").ToText();
+                            res = JObject.Parse(result2);
+                            if (!Directory.Exists(gamedata.FullName))
+                                Directory.CreateDirectory(gamedata.FullName);
                             break;
                         }
                         case "maint":
@@ -2938,7 +2939,39 @@ namespace Altera
             var str = dictionary.Aggregate<KeyValuePair<string, object>, string>(null,
                 (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "assetbundle.txt", str);
-            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "folder name: " + dictionary["folderName"]; });
+            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "folder name: " + dictionary["folderName"] + " 正在下载AssetStorage.txt..."; });
+            var AssetStorageRes = GetAssetStorage(dictionary["folderName"].ToString());
+            File.WriteAllText(gamedata.FullName + "assetBundleFolder.txt", dictionary["folderName"].ToString());
+            if (File.Exists(gamedata.FullName + "AssetStorage.txt"))
+            {
+                var ASReadtmp = File.ReadAllText(gamedata.FullName + "AssetStorage.txt");
+                if (string.CompareOrdinal(ASReadtmp, AssetStorageRes) != 0)
+                {
+                    if (File.Exists(gamedata.FullName + "AssetStorage_last.txt"))
+                    {
+                        File.Delete(gamedata.FullName + "AssetStorage_last.txt");
+                    }
+                    File.Move(gamedata.FullName + "AssetStorage.txt", gamedata.FullName + "AssetStorage_last.txt");
+                    File.WriteAllText(gamedata.FullName + "AssetStorage.txt", AssetStorageRes);
+                    var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
+                    DecryptBinfileSub(ASLine,gamedata);
+                }
+                else
+                {
+                    if (!File.Exists(gamedata.FullName + "AssetStorage_last.txt"))
+                    {
+                        File.Copy(gamedata.FullName + "AssetStorage.txt", gamedata.FullName + "AssetStorage_last.txt");
+                    }
+                    var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
+                    DecryptBinfileSub(ASLine, gamedata);
+                }
+            }
+            else
+            {
+                File.WriteAllText(gamedata.FullName + "AssetStorage.txt", AssetStorageRes);
+                var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
+                DecryptBinfileSub(ASLine, gamedata);
+            }
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 150; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var data3 = File.ReadAllText(gamedata.FullName + "webview");
@@ -2991,8 +3024,13 @@ namespace Altera
             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
             GC.Collect();
         }
-
-
+        static string GetAssetStorage(string assetBundleKey)
+        {
+            var assetStorage = HttpRequest
+                .Get($"https://cdn.data.fate-go.jp/AssetStorages/{assetBundleKey}Android/AssetStorage.txt")
+                .ToText();
+            return CatAndMouseGame.MouseGame8(assetStorage);
+        }
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             var UpgradeMasterData = new Task(() => { HttpRequestData(); });
@@ -4332,14 +4370,9 @@ namespace Altera
                         new JProperty("fileName", fileName)));
                 }
             }
-
-            var serializerSettings = new JsonSerializerSettings();
-            var AudioArrayConverter = JsonConvert.SerializeObject(AudioArray, serializerSettings);
-            var MovieArrayConverter = JsonConvert.SerializeObject(MovieArray, serializerSettings);
-            var AssetArrayConverter = JsonConvert.SerializeObject(AssetArray, serializerSettings);
-            File.WriteAllText(decrypt.FullName + @"\AudioName.json", AudioArrayConverter);
-            File.WriteAllText(decrypt.FullName + @"\MovieName.json", MovieArrayConverter);
-            File.WriteAllText(decrypt.FullName + @"\AssetName.json", AssetArrayConverter);
+            File.WriteAllText(decrypt.FullName + @"\AudioName.json", AudioArray.ToString());
+            File.WriteAllText(decrypt.FullName + @"\MovieName.json", MovieArray.ToString());
+            File.WriteAllText(decrypt.FullName + @"\AssetName.json", AssetArray.ToString());
         }
 
         private string GetSvtName(string svtID, int Option)
@@ -4777,6 +4810,12 @@ namespace Altera
                 SvtHp = v2;
                 SvtAtk = v3;
             }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            var ADWindow = new AssetsDownload();
+            ADWindow.ShowDialog();
         }
     }
 }

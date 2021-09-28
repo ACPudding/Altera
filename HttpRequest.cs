@@ -3,42 +3,71 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
 namespace Altera
 {
-    internal class HttpRequest
+    internal static class HttpRequest
     {
-        public static string PhttpReq(string url, string parameters)
+        private const string METHOD_GET = "GET";
+        private const string METHOD_POST = "POST";
+
+        public static WebResponse Get(string url)
         {
-            var hRequest = (HttpWebRequest) WebRequest.Create(url);
-            hRequest.CookieContainer = new CookieContainer();
-
-            hRequest.Accept = "gzip, identity";
-            hRequest.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0.1; MI 6 Build/V417IR)";
-            hRequest.ServicePoint.Expect100Continue = false;
-            hRequest.KeepAlive = true;
-            hRequest.Method = "POST";
-
-            hRequest.ContentType = "application/x-www-form-urlencoded";
-
-            hRequest.ContentLength = parameters.Length;
-
-            var dataParsed = Encoding.UTF8.GetBytes(parameters);
-            hRequest.GetRequestStream().Write(dataParsed, 0, dataParsed.Length);
-
-
-            hRequest.Timeout = 5 * 1000;
-
-            var response = (HttpWebResponse) hRequest.GetResponse();
-
-            var myResponseStream = response.GetResponseStream();
-            var myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
-            var retString = myStreamReader.ReadToEnd();
-            myStreamReader.Close();
-            myResponseStream.Close();
-            return retString;
+            HttpWebRequest request = SetupRequest(url);
+            request.Method = METHOD_GET;
+            return request.GetResponse();
         }
 
+        private static HttpWebRequest SetupRequest(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.CookieContainer = new CookieContainer();
+            request.AllowAutoRedirect = true;
+            request.KeepAlive = true;
+            request.ServicePoint.Expect100Continue = false;
+            request.Accept = "gzip, identity";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 10; SM-G960W Build/QP1A.190711.020)";
+            request.Timeout = 10000;
+            return request;
+        }
+
+        public static string ToText(this WebResponse response)
+        {
+            using (Stream stream = response.GetResponseStream())
+            {
+                StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
+                return streamReader.ReadToEnd();
+            }
+        }
+
+        public static JObject ToJson(this WebResponse response)
+        {
+            string text = response.ToText();
+            return JObject.Parse(text);
+        }
+
+        public static byte[] ToBinary(this WebResponse response)
+        {
+            using (Stream stream = response.GetResponseStream())
+            {
+                int readCount = 0;
+
+                int bufferSize = 1 << 17;
+
+                var buffer = new byte[bufferSize];
+                using (var memory = new MemoryStream())
+                {
+                    while ((readCount = stream.Read(buffer, 0, bufferSize)) > 0)
+                    {
+                        memory.Write(buffer, 0, readCount);
+                    }
+                    return memory.ToArray();
+                }
+
+            }
+        }
         public static Stream GetXlsx()
         {
             var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtInfo.xlsx";

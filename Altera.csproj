@@ -39,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -118,6 +119,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AssetsDownload.xaml.cs">
+      <DependentUpon>AssetsDownload.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CatAndMouseGame.cs" />
     <Compile Include="CPK.cs" />
     <Compile Include="FGOAudioDecode.cs" />
@@ -134,6 +138,10 @@
     <Compile Include="SvtSTDIDChoice.xaml.cs">
       <DependentUpon>SvtSTDIDChoice.xaml</DependentUpon>
     </Compile>
+    <Page Include="AssetsDownload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

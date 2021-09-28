@@ -1609,6 +1609,17 @@
                     </Button>
                     <hc:GifImage x:Name="AlteraGif" Height="100" Width="100" Margin="362,235,346.8,235.4"
                                  Visibility="Hidden" Uri="images/AlteraDancing.gif" />
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
+                        x:Name="updatedatabutton_Copy" Content="日服资源文件下载" HorizontalAlignment="Left"
+                        Margin="335,518,0,0" VerticalAlignment="Top" Width="157" Click="Button_Click_4"
+                        Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0" />
+                                <GradientStop Color="#FF7BA2FF" Offset="1" />
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
                 </Grid>
             </TabItem>
             <TabItem Header="资源解包">
