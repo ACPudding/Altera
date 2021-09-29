@@ -16,6 +16,9 @@ namespace Altera
         private static readonly string AssetStorageFilePath = gamedata.FullName + "AssetStorage.txt";
         private static readonly string AssetStorageLastFilePath = gamedata.FullName + "AssetStorage_last.txt";
         private static readonly DirectoryInfo AssetsFolder = new DirectoryInfo(folder + @"\assets\bin\Data\");
+        private static string[,] tmp;
+        private static string[,] tmpold;
+        private static object LockedList = new object();
 
         public AssetsDownload()
         {
@@ -44,58 +47,48 @@ namespace Altera
                 Close();
             }
 
-            var AssetTask = new Task(DownloadAssetsSub);
-            var AudioTask = new Task(DownloadAudioSub);
-            var MovieTask = new Task(DownloadMovieSub);
-            var SpecialTask = new Task(DownloadHighAcc);
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(async () =>
             {
                 if (Mode1.IsChecked != true)
                 {
-                    AssetTask.Start();
-                    if (isDownloadAudio.IsChecked == true) AudioTask.Start();
-                    if (isDownloadMovie.IsChecked == true) MovieTask.Start();
+                    await Task.Run(DownloadAssetsSub).ConfigureAwait(false);
+                    if (isDownloadAudio.IsChecked == true) await Task.Run(DownloadAudioSub).ConfigureAwait(false);
+                    if (isDownloadMovie.IsChecked == true) await Task.Run(DownloadMovieSub).ConfigureAwait(false);
                     GC.Collect();
                 }
                 else
                 {
-                    SpecialTask.Start();
+                    await Task.Run(DownloadHighAcc).ConfigureAwait(false);
                     GC.Collect();
                 }
             });
         }
 
-        private async void DHASub(IEnumerable<string> ASOldLine, ParallelOptions option, IReadOnlyList<string> tmp)
+        private async Task DHASub(int[] DownloadLine)
         {
-            var downloadName = "";
-            var ProgressBarValueAdd = 0;
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
+            var ProgressBarValueAdd = 50000 / DownloadLine.Length;
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
-            Parallel.ForEach(ASOldLine, option, async ASOldItem =>
+            Parallel.ForEach(DownloadLine, paralleloptions, async DownloadItem =>
             {
-                var tmpold = ASOldItem.Split(',');
-                if (tmpold.Length != 5) return;
-                if (tmpold[4] != tmp[4]) return;
-                if (tmpold[2] == tmp[2] && tmpold[3] == tmp[3]) return;
-                if (tmp[4].Contains("Audio") || tmp[4].Contains("Movie"))
+                if (tmp[DownloadItem, 4].Contains("Audio") || tmp[DownloadItem, 4].Contains("Movie"))
                 {
-                    downloadName = tmp[4].Replace('/', '_');
-                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmp[4]); });
+                    var downloadName = tmp[DownloadItem, 4].Replace('/', '_');
                     var downloadfile = downloadName;
-                    var writePath = AssetsFolder.FullName + tmp[4].Replace("/", "\\");
+                    var writePath = AssetsFolder.FullName + tmp[DownloadItem, 4].Replace("/", "\\");
                     var writeDirectory = Path.GetDirectoryName(writePath);
                     if (!Directory.Exists(writeDirectory)) Directory.CreateDirectory(writeDirectory);
                     File.Delete(writePath);
                     await Task.Run(() =>
                     {
-                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[4],
+                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[DownloadItem, 4],
                             ProgressBarValueAdd);
                     }).ConfigureAwait(false);
                 }
                 else
                 {
-                    var tmpname = tmp[4].Replace('/', '@') + ".unity3d";
-                    downloadName = CatAndMouseGame.GetShaName(tmpname);
-                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmpname); });
+                    var tmpname = tmp[DownloadItem, 4].Replace('/', '@') + ".unity3d";
+                    var downloadName = CatAndMouseGame.GetShaName(tmpname);
                     var downloadfile = downloadName;
                     var writePath = AssetsFolder.FullName + tmpname.Replace('@', '\\').Replace("/", "\\");
                     var writeDirectory = Path.GetDirectoryName(writePath);
@@ -103,68 +96,168 @@ namespace Altera
                     File.Delete(writePath);
                     await Task.Run(() =>
                     {
-                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[4],
+                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[DownloadItem, 4],
                             ProgressBarValueAdd);
                     }).ConfigureAwait(false);
                 }
             });
+        }
+
+        private async Task<List<int>> FindASDiffer(int min, int max)
+        {
+            var resultlist = new List<int>();
+            var ASLine = File.ReadAllLines(AssetStorageFilePath);
+            var ASOldLine = File.ReadAllLines(AssetStorageLastFilePath);
+            tmpold = new string[ASOldLine.Length, 5];
+            tmp = new string [ASLine.Length, 5];
+            for (var kk = 0; kk < ASLine.Length; kk++)
+            {
+                var tmpkk = ASLine[kk].Split(',');
+                if (tmpkk.Length != 5)
+                {
+                    tmp[kk, 0] = "0";
+                    tmp[kk, 1] = "0";
+                    tmp[kk, 2] = "0";
+                    tmp[kk, 3] = "0";
+                    tmp[kk, 4] = "0";
+                    continue;
+                }
+
+                tmp[kk, 0] = tmpkk[0];
+                tmp[kk, 1] = tmpkk[1];
+                tmp[kk, 2] = tmpkk[2];
+                tmp[kk, 3] = tmpkk[3];
+                tmp[kk, 4] = tmpkk[4];
+            }
+
+            for (var jj = 0; jj < ASOldLine.Length; jj++)
+            {
+                var tmpkk = ASOldLine[jj].Split(',');
+                if (tmpkk.Length != 5)
+                {
+                    tmpold[jj, 0] = "0";
+                    tmpold[jj, 1] = "0";
+                    tmpold[jj, 2] = "0";
+                    tmpold[jj, 3] = "0";
+                    tmpold[jj, 4] = "0";
+                    continue;
+                }
+
+                tmpold[jj, 0] = tmpkk[0];
+                tmpold[jj, 1] = tmpkk[1];
+                tmpold[jj, 2] = tmpkk[2];
+                tmpold[jj, 3] = tmpkk[3];
+                tmpold[jj, 4] = tmpkk[4];
+            }
+
+            for (var i = max - 1; i >= min; i--)
+            {
+                if (tmp[i, 0] == "0") continue;
+                try
+                {
+                    resultlist.Add(await FindASDifferNiceSub(tmp[i, 4], tmp[i, 2], tmp[i, 3]));
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+            }
+
+            try
+            {
+                resultlist.RemoveAll(s => s == 0);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
             GC.Collect();
+            return resultlist;
+        }
+
+        private async Task<int> FindASDifferNiceSub(string FindStr, string check1, string check2)
+        {
+            var value = 0;
+            Parallel.For(0, tmpold.GetLength(0), j =>
+            {
+                if (tmpold[j, 0] == "0") return;
+                if (tmpold[j, 4] != FindStr) return;
+                if (tmpold[j, 2] == check1 && tmpold[j, 3] == check2)
+                {
+                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "跳过: " + tmpold[j, 4]); });
+                    return;
+                }
+
+                value = j;
+                _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmpold[j, 4]); });
+            });
+            return value;
         }
 
         private async void DownloadHighAcc()
         {
-            var ASLine = File.ReadAllLines(AssetStorageFilePath);
-            var ASLineCount = ASLine.Length;
-            var ProgressBarValueAdd = 0;
             _ = Dispatcher.InvokeAsync(() =>
             {
-                Download_Status.Items.Insert(0, "正在检测需要下载的文件...该模式下方进度条不可用. ");
-                Download_Status.Items.Insert(0, "等下方列表长时间没有动静后即可关闭该窗口.");
+                Download_Status.Items.Insert(0, "正在检测需要下载的文件... ");
+                Download_Progress.Value = 0;
             });
-            if (!File.Exists(AssetStorageLastFilePath)) File.Copy(AssetStorageFilePath, AssetStorageLastFilePath);
-            var ASOldLine = File.ReadAllLines(AssetStorageLastFilePath);
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
-            var n = ASLineCount / 3;
-            var mod = ASLineCount % 3;
-            var action3n = new Action[]
+            await Task.Delay(2000);
+            var ASLineCount = File.ReadAllLines(AssetStorageFilePath).Length;
+            var n = ASLineCount / 8;
+            var mod = ASLineCount % 8;
+            var task1 = FindASDiffer(0, n);
+            var task2 = FindASDiffer(n, 2 * n);
+            var task3 = FindASDiffer(2 * n, 3 * n);
+            var task4 = FindASDiffer(3 * n, 4 * n);
+            var task5 = FindASDiffer(4 * n, 5 * n);
+            var task6 = FindASDiffer(5 * n, 6 * n);
+            var task7 = FindASDiffer(6 * n, 7 * n);
+            var task8 = FindASDiffer(7 * n, 8 * n + mod);
+            var DownloadLinePart1List = new List<int>();
+            var DownloadLinePart2List = new List<int>();
+            var DownloadLinePart3List = new List<int>();
+            var DownloadLinePart4List = new List<int>();
+            var DownloadLinePart5List = new List<int>();
+            var DownloadLinePart6List = new List<int>();
+            var DownloadLinePart7List = new List<int>();
+            var DownloadLinePart8List = new List<int>();
+            var actions = new Action[]
             {
-                async () =>
-                {
-                    for (var i = n; i >= 0; i--)
-                    {
-                        var tmp = ASLine[i].Split(',');
-                        if (tmp.Length != 5) continue;
-                        var downloadName = "";
-                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
-                        GC.Collect();
-                    }
-                },
-                async () =>
-                {
-                    for (var i = 2 * n - 1; i > n; i--)
-                    {
-                        var tmp = ASLine[i].Split(',');
-                        if (tmp.Length != 5) continue;
-                        var downloadName = "";
-                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
-                        GC.Collect();
-                    }
-                },
-                async () =>
-                {
-                    for (var i = 3 * n - 1 + mod; i > 2 * n - 1; i--)
-                    {
-                        var tmp = ASLine[i].Split(',');
-                        if (tmp.Length != 5) continue;
-                        var downloadName = "";
-                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
-                        GC.Collect();
-                    }
-                }
+                async () => { DownloadLinePart1List.AddRange(await task1); },
+                async () => { DownloadLinePart2List.AddRange(await task2); },
+                async () => { DownloadLinePart3List.AddRange(await task3); },
+                async () => { DownloadLinePart4List.AddRange(await task4); },
+                async () => { DownloadLinePart5List.AddRange(await task5); },
+                async () => { DownloadLinePart6List.AddRange(await task6); },
+                async () => { DownloadLinePart7List.AddRange(await task7); },
+                async () => { DownloadLinePart8List.AddRange(await task8); }
             };
-            Parallel.Invoke(action3n);
-            _ = Dispatcher.InvokeAsync(() => { Start.IsEnabled = true; });
-            GC.Collect();
+            Parallel.Invoke(actions);
+            var DownloadLine = new List<int>();
+            DownloadLine.AddRange(DownloadLinePart1List);
+            DownloadLine.AddRange(DownloadLinePart2List);
+            DownloadLine.AddRange(DownloadLinePart3List);
+            DownloadLine.AddRange(DownloadLinePart4List);
+            DownloadLine.AddRange(DownloadLinePart5List);
+            DownloadLine.AddRange(DownloadLinePart6List);
+            DownloadLine.AddRange(DownloadLinePart7List);
+            DownloadLine.AddRange(DownloadLinePart8List);
+            _ = Dispatcher.InvokeAsync(() =>
+            {
+                Download_Status.Items.Clear();
+                Download_Status.Items.Insert(0, "核对完成,准备下载... ");
+                Download_Progress.Value = 0;
+            });
+            await Task.Delay(2000);
+            var DownloadLineArray = DownloadLine.ToArray();
+            await Task.Run(() => { _ = DHASub(DownloadLineArray); }).ConfigureAwait(false);
+            _ = Dispatcher.InvokeAsync(() =>
+            {
+                Download_Status.Items.Insert(0, "共需下载" + DownloadLineArray.Length + "个差异文件.");
+                Download_Status.Items.Insert(0, "下载按钮将不再可用,如需再次点击请关闭窗口后再打开.");
+            });
+            await Task.Delay(2000);
         }
 
         private void DownloadAssetsSpecialSub(string assetBundleFolder, string filename, string writePath, string names,
