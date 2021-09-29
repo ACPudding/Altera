@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -64,69 +65,105 @@ namespace Altera
             });
         }
 
-        private void DownloadHighAcc()
+        private async void DHASub(IEnumerable<string> ASOldLine, ParallelOptions option, IReadOnlyList<string> tmp)
+        {
+            var downloadName = "";
+            var ProgressBarValueAdd = 0;
+            var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
+            Parallel.ForEach(ASOldLine, option, async ASOldItem =>
+            {
+                var tmpold = ASOldItem.Split(',');
+                if (tmpold.Length != 5) return;
+                if (tmpold[4] != tmp[4]) return;
+                if (tmpold[2] == tmp[2] && tmpold[3] == tmp[3]) return;
+                if (tmp[4].Contains("Audio") || tmp[4].Contains("Movie"))
+                {
+                    downloadName = tmp[4].Replace('/', '_');
+                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmp[4]); });
+                    var downloadfile = downloadName;
+                    var writePath = AssetsFolder.FullName + tmp[4].Replace("/", "\\");
+                    var writeDirectory = Path.GetDirectoryName(writePath);
+                    if (!Directory.Exists(writeDirectory)) Directory.CreateDirectory(writeDirectory);
+                    File.Delete(writePath);
+                    await Task.Run(() =>
+                    {
+                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[4],
+                            ProgressBarValueAdd);
+                    }).ConfigureAwait(false);
+                }
+                else
+                {
+                    var tmpname = tmp[4].Replace('/', '@') + ".unity3d";
+                    downloadName = CatAndMouseGame.GetShaName(tmpname);
+                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmpname); });
+                    var downloadfile = downloadName;
+                    var writePath = AssetsFolder.FullName + tmpname.Replace('@', '\\').Replace("/", "\\");
+                    var writeDirectory = Path.GetDirectoryName(writePath);
+                    if (!Directory.Exists(writeDirectory)) Directory.CreateDirectory(writeDirectory);
+                    File.Delete(writePath);
+                    await Task.Run(() =>
+                    {
+                        DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[4],
+                            ProgressBarValueAdd);
+                    }).ConfigureAwait(false);
+                }
+            });
+            GC.Collect();
+        }
+
+        private async void DownloadHighAcc()
         {
             var ASLine = File.ReadAllLines(AssetStorageFilePath);
             var ASLineCount = ASLine.Length;
             var ProgressBarValueAdd = 0;
-            var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
-            Dispatcher.Invoke(() =>
+            _ = Dispatcher.InvokeAsync(() =>
             {
                 Download_Status.Items.Insert(0, "正在检测需要下载的文件...该模式下方进度条不可用. ");
                 Download_Status.Items.Insert(0, "等下方列表长时间没有动静后即可关闭该窗口.");
             });
             if (!File.Exists(AssetStorageLastFilePath)) File.Copy(AssetStorageFilePath, AssetStorageLastFilePath);
             var ASOldLine = File.ReadAllLines(AssetStorageLastFilePath);
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
-            for (var i = 0; i < ASLineCount; i++)
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var n = ASLineCount / 3;
+            var mod = ASLineCount % 3;
+            var action3n = new Action[]
             {
-                var tmp = ASLine[i].Split(',');
-                if (tmp.Length != 5) continue;
-                var downloadName = "";
-                Parallel.ForEach(ASOldLine, paralleloptions, ASOldItem =>
+                async () =>
                 {
-                    var tmpold = ASOldItem.Split(',');
-                    if (tmpold.Length != 5) return;
-                    if (tmpold[4] != tmp[4]) return;
-                    if (tmpold[2] == tmp[2] && tmpold[3] == tmp[3]) return;
-                    if (tmp[4].Contains("Audio") || tmp[4].Contains("Movie"))
+                    for (var i = n; i >= 0; i--)
                     {
-                        downloadName = tmp[4].Replace('/', '_');
-                        Dispatcher.Invoke(() => { Download_Status.Items.Insert(0, "差异: " + tmp[4]); });
-                        var downloadfile = downloadName;
-                        var writePath = AssetsFolder.FullName + tmp[4].Replace("/", "\\");
-                        var writeDirectory = Path.GetDirectoryName(writePath);
-                        if (!Directory.Exists(writeDirectory)) Directory.CreateDirectory(writeDirectory);
-                        File.Delete(writePath);
-                        var SubTask = new Task(() =>
-                        {
-                            DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmp[4],
-                                ProgressBarValueAdd);
-                        });
-                        SubTask.Start();
+                        var tmp = ASLine[i].Split(',');
+                        if (tmp.Length != 5) continue;
+                        var downloadName = "";
+                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
+                        GC.Collect();
                     }
-                    else
+                },
+                async () =>
+                {
+                    for (var i = 2 * n - 1; i > n; i--)
                     {
-                        var tmpname = tmp[4].Replace('/', '@') + ".unity3d";
-                        downloadName = CatAndMouseGame.GetShaName(tmpname);
-                        Dispatcher.Invoke(() => { Download_Status.Items.Insert(0, "差异: " + tmpname); });
-                        var downloadfile = downloadName;
-                        var writePath = AssetsFolder.FullName + tmpname.Replace('@', '\\').Replace("/", "\\");
-                        var writeDirectory = Path.GetDirectoryName(writePath);
-                        if (!Directory.Exists(writeDirectory)) Directory.CreateDirectory(writeDirectory);
-                        File.Delete(writePath);
-                        var SubTask = new Task(() =>
-                        {
-                            DownloadAssetsSpecialSub(assetBundleFolder, downloadfile, writePath, tmpname,
-                                ProgressBarValueAdd);
-                        });
-                        SubTask.Start();
+                        var tmp = ASLine[i].Split(',');
+                        if (tmp.Length != 5) continue;
+                        var downloadName = "";
+                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
+                        GC.Collect();
                     }
-                });
-                GC.Collect();
-            }
-
-            Dispatcher.Invoke(() => { Start.IsEnabled = true; });
+                },
+                async () =>
+                {
+                    for (var i = 3 * n - 1 + mod; i > 2 * n - 1; i--)
+                    {
+                        var tmp = ASLine[i].Split(',');
+                        if (tmp.Length != 5) continue;
+                        var downloadName = "";
+                        await Task.Run(() => { DHASub(ASOldLine, paralleloptions, tmp); }).ConfigureAwait(false);
+                        GC.Collect();
+                    }
+                }
+            };
+            Parallel.Invoke(action3n);
+            _ = Dispatcher.InvokeAsync(() => { Start.IsEnabled = true; });
             GC.Collect();
         }
 
@@ -144,7 +181,7 @@ namespace Altera
                     fs.Write(output, 0, output.Length);
                 }
 
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载: " + names);
                     Download_Progress.Value += ProgressBarValueAdd;
@@ -152,7 +189,7 @@ namespace Altera
             }
             catch (Exception ex)
             {
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载错误: " + names);
                     Download_Status.Items.Insert(0, ex);
@@ -160,7 +197,7 @@ namespace Altera
             }
         }
 
-        private void DownloadAssetsSub()
+        private async void DownloadAssetsSub()
         {
             var ASLine = File.ReadAllLines(AssetStorageFilePath);
             var ASLineCount = ASLine.Length;
@@ -170,7 +207,7 @@ namespace Altera
             var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
             Parallel.ForEach(assetList, paralleloptions, asset =>
             {
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(async () =>
                 {
                     var filename = asset["fileName"].ToString();
                     var assetName = asset["assetName"].ToString();
@@ -200,18 +237,17 @@ namespace Altera
                         File.Delete(writePath);
                     }
 
-                    var SubTask = new Task(() =>
+                    await Task.Run(() =>
                     {
                         DownloadAssetSub1(assetBundleFolder, filename, writePath, names, ProgressBarValueAdd);
-                    });
-                    SubTask.Start();
+                    }).ConfigureAwait(false);
                 });
             });
-            Dispatcher.Invoke(() => { Start.IsEnabled = true; });
+            _ = Dispatcher.InvokeAsync(() => { Start.IsEnabled = true; });
             GC.Collect();
         }
 
-        private void DownloadAudioSub()
+        private async void DownloadAudioSub()
         {
             var ASLine = File.ReadAllLines(AssetStorageFilePath);
             var ASLineCount = ASLine.Length;
@@ -219,10 +255,10 @@ namespace Altera
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var audioList = JArray.Parse(File.ReadAllText(gamedata.FullName + "AudioName.json"));
             var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
-            Dispatcher.Invoke(() =>
+            _ = Dispatcher.InvokeAsync(() =>
             {
                 if (isDownloadAudio.IsChecked == true)
-                    Parallel.ForEach(audioList, paralleloptions, audio =>
+                    Parallel.ForEach(audioList, paralleloptions, async audio =>
                     {
                         var audioName = audio["audioName"].ToString();
                         var writePath = AssetsFolder.FullName;
@@ -251,12 +287,11 @@ namespace Altera
                         }
 
                         var realAudioDownloadName = audioName.Replace("@", "_");
-                        var SubTask2 = new Task(() =>
+                        await Task.Run(() =>
                         {
                             DownloadAssetSub2(assetBundleFolder, realAudioDownloadName, writePath, names,
                                 ProgressBarValueAdd);
-                        });
-                        SubTask2.Start();
+                        }).ConfigureAwait(false);
                     });
             });
             GC.Collect();
@@ -269,11 +304,11 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var movieList = JArray.Parse(File.ReadAllText(gamedata.FullName + "MovieName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
-            Dispatcher.Invoke(() =>
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 3};
+            Dispatcher.InvokeAsync(() =>
             {
                 if (isDownloadMovie.IsChecked == true)
-                    Parallel.ForEach(movieList, paralleloptions, movie =>
+                    Parallel.ForEach(movieList, paralleloptions, async movie =>
                     {
                         var movieName = movie["movieName"].ToString();
                         var writePath = AssetsFolder.FullName;
@@ -302,12 +337,11 @@ namespace Altera
                         }
 
                         var realAudioDownloadName = movieName.Replace("@", "_");
-                        var SubTask2 = new Task(() =>
+                        await Task.Run(() =>
                         {
                             DownloadAssetSub2(assetBundleFolder, realAudioDownloadName, writePath, names,
                                 ProgressBarValueAdd);
-                        });
-                        SubTask2.Start();
+                        }).ConfigureAwait(false);
                     });
             });
             GC.Collect();
@@ -327,7 +361,7 @@ namespace Altera
                     fs.Write(output, 0, output.Length);
                 }
 
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载: " + $"{string.Join(@"\", names)}");
                     Download_Progress.Value += ProgressBarValueAdd;
@@ -335,7 +369,7 @@ namespace Altera
             }
             catch (Exception ex)
             {
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载错误: " + $"{string.Join(@"\", names)}");
                     Download_Progress.Value += ProgressBarValueAdd;
@@ -358,7 +392,7 @@ namespace Altera
                     fs.Write(output, 0, output.Length);
                 }
 
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载: " + $"{string.Join(@"\", names)}");
                     Download_Progress.Value += ProgressBarValueAdd;
@@ -366,7 +400,7 @@ namespace Altera
             }
             catch (Exception ex)
             {
-                Dispatcher.Invoke(() =>
+                _ = Dispatcher.InvokeAsync(() =>
                 {
                     Download_Status.Items.Insert(0, "下载错误: " + $"{string.Join(@"\", names)}");
                     Download_Status.Items.Insert(0, ex);
