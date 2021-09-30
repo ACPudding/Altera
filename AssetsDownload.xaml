@@ -3,27 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Altera"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="日服资源下载(测试版)" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Icon="icon.ico">
     <Grid>
-        <TextBlock Text="本功能可帮助下载日服的资源文件.&#xA;推荐打开全局VPN.&#xA;下载并发数设置为5.&#xA;音频和视频暂不做解包处理.Assets已进行解密处理."
+        <TextBlock Text="本功能可帮助下载日服的资源文件.&#xA;推荐打开全局VPN.&#xA;下载并发数设置为4.&#xA;音频和视频暂不做解包处理.Assets已进行解密处理."
                    HorizontalAlignment="Left" Height="80" Margin="10,20,0,0"
                    VerticalAlignment="Top"
                    Width="374" FontSize="13" Foreground="#FF333333" FontWeight="Bold" FontFamily="Source Han Sans SC" />
-        <ProgressBar x:Name="Download_Progress" HorizontalAlignment="Left" Height="20" Margin="10,440,10,0" VerticalAlignment="Top" Width="374" Maximum="50000" SmallChange="0.01" LargeChange="5"/>
-        <ListBox x:Name="Download_Status" HorizontalAlignment="Left" Height="187" Margin="10,248,0,0" VerticalAlignment="Top" Width="374" Foreground="#FF737373"
-                  FontSize="10.5">
+        <ProgressBar x:Name="Download_Progress" HorizontalAlignment="Left" Height="20" Margin="10,440,10,0"
+                     VerticalAlignment="Top" Width="374" Maximum="50000" SmallChange="0.01" LargeChange="5" />
+        <ListBox x:Name="Download_Status" HorizontalAlignment="Left" Height="187" Margin="10,248,0,0"
+                 VerticalAlignment="Top" Width="374" Foreground="#FF737373"
+                 FontSize="10.5">
             <ListBox.Background>
                 <SolidColorBrush Color="White" Opacity="0.4" />
             </ListBox.Background>
         </ListBox>
         <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
-            x:Name="Start" Content="开始下载" HorizontalAlignment="Left"
-            Margin="118,119,0,0" VerticalAlignment="Top" Width="157"
-            Foreground="#FFFFFFFF" Click="DownloadOn">
+                x:Name="Start" Content="开始下载" HorizontalAlignment="Left"
+                Margin="118,119,0,0" VerticalAlignment="Top" Width="157"
+                Foreground="#FFFFFFFF" Click="DownloadOn">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                     <GradientStop Color="#FF326CF3" Offset="0" />
@@ -32,16 +33,20 @@
             </Button.Background>
         </Button>
         <TextBlock Text="下载模式:"
-            HorizontalAlignment="Left" Height="24" Margin="10,150,0,0"
-            VerticalAlignment="Top"
-            Width="66" FontSize="13" Foreground="#FF333333" FontFamily="Source Han Sans SC" />
-        <RadioButton x:Name="Mode1" Content="差异下载1" HorizontalAlignment="Left" Margin="74,179,0,0" VerticalAlignment="Top" GroupName="DownloadMode"
+                   HorizontalAlignment="Left" Height="24" Margin="10,150,0,0"
+                   VerticalAlignment="Top"
+                   Width="66" FontSize="13" Foreground="#FF333333" FontFamily="Source Han Sans SC" />
+        <RadioButton x:Name="Mode1" Content="差异下载1" HorizontalAlignment="Left" Margin="74,179,0,0"
+                     VerticalAlignment="Top" GroupName="DownloadMode"
                      IsChecked="True"
-                     ToolTip="根据AssetStorage.txt中进行逐行比对差异下载，精准度高但速度慢.&#xA;须有上一版本的AssetStorage.txt进行比对,且无视右边音视频的复选框." />
+                     ToolTip="根据AssetStorage.txt中进行逐行比对差异下载，精准度高但很吃CPU(速度因电脑而异).&#xA;须有上一版本的AssetStorage.txt进行比对,且无视右边音视频的复选框." />
         <RadioButton x:Name="Mode2" Content="差异下载2" HorizontalAlignment="Left" Margin="74,202,0,0"
-                     VerticalAlignment="Top" GroupName="DownloadMode" ToolTip="根据文件是否有增加进行差异下载，精准度低."/>
-        <RadioButton x:Name="Mode3" Content="全部下载" HorizontalAlignment="Left" Margin="74,225,0,0" VerticalAlignment="Top" GroupName="DownloadMode" ToolTip="不论文件是否已经存在，执行全量下载."/>
-        <CheckBox x:Name="isDownloadAudio" Content="下载音频资源" HorizontalAlignment="Left" Margin="214,188,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <CheckBox x:Name="isDownloadMovie" Content="下载视频资源" HorizontalAlignment="Left" Margin="214,211,0,0" VerticalAlignment="Top"/>
+                     VerticalAlignment="Top" GroupName="DownloadMode" ToolTip="根据文件是否有增加进行差异下载，精准度低." />
+        <RadioButton x:Name="Mode3" Content="全部下载" HorizontalAlignment="Left" Margin="74,225,0,0"
+                     VerticalAlignment="Top" GroupName="DownloadMode" ToolTip="不论文件是否已经存在，执行全量下载." />
+        <CheckBox x:Name="isDownloadAudio" Content="下载音频资源" HorizontalAlignment="Left" Margin="214,188,0,0"
+                  VerticalAlignment="Top" IsChecked="True" />
+        <CheckBox x:Name="isDownloadMovie" Content="下载视频资源" HorizontalAlignment="Left" Margin="214,211,0,0"
+                  VerticalAlignment="Top" />
     </Grid>
 </Window>

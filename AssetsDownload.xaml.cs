@@ -64,10 +64,10 @@ namespace Altera
             });
         }
 
-        private async Task DHASub(int[] DownloadLine)
+        private async Task DHASub(IReadOnlyCollection<int> DownloadLine)
         {
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
-            var ProgressBarValueAdd = 50000 / DownloadLine.Length;
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            var ProgressBarValueAdd = 50000 / DownloadLine.Count;
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             Parallel.ForEach(DownloadLine, paralleloptions, async DownloadItem =>
             {
@@ -258,6 +258,7 @@ namespace Altera
                 Download_Status.Items.Insert(0, "下载按钮将不再可用,如需再次点击请关闭窗口后再打开.");
             });
             await Task.Delay(2000);
+            GC.Collect();
         }
 
         private void DownloadAssetsSpecialSub(string assetBundleFolder, string filename, string writePath, string names,
@@ -297,7 +298,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var assetList = JArray.Parse(File.ReadAllText(gamedata.FullName + "AssetName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
             Parallel.ForEach(assetList, paralleloptions, asset =>
             {
                 _ = Dispatcher.InvokeAsync(async () =>
@@ -347,7 +348,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var audioList = JArray.Parse(File.ReadAllText(gamedata.FullName + "AudioName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
             _ = Dispatcher.InvokeAsync(() =>
             {
                 if (isDownloadAudio.IsChecked == true)
@@ -397,7 +398,7 @@ namespace Altera
             var ProgressBarValueAdd = Convert.ToInt32(50000 / ASLineCount);
             var assetBundleFolder = File.ReadAllText(gamedata.FullName + "assetBundleFolder.txt");
             var movieList = JArray.Parse(File.ReadAllText(gamedata.FullName + "MovieName.json"));
-            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 3};
+            var paralleloptions = new ParallelOptions {MaxDegreeOfParallelism = 4};
             Dispatcher.InvokeAsync(() =>
             {
                 if (isDownloadMovie.IsChecked == true)

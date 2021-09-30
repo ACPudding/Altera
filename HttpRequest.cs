@@ -14,60 +14,57 @@ namespace Altera
 
         public static WebResponse Get(string url)
         {
-            HttpWebRequest request = SetupRequest(url);
+            var request = SetupRequest(url);
             request.Method = METHOD_GET;
             return request.GetResponse();
         }
 
         private static HttpWebRequest SetupRequest(string url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest) WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
             request.AllowAutoRedirect = true;
             request.KeepAlive = true;
             request.ServicePoint.Expect100Continue = false;
             request.Accept = "gzip, identity";
             request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 10; SM-G960W Build/QP1A.190711.020)";
+            request.UserAgent = "fategrandorder/2.38.0 CFNetword/1312 Darwin/21.0.0";
             request.Timeout = 10000;
             return request;
         }
 
         public static string ToText(this WebResponse response)
         {
-            using (Stream stream = response.GetResponseStream())
+            using (var stream = response.GetResponseStream())
             {
-                StreamReader streamReader = new StreamReader(stream, Encoding.UTF8);
+                var streamReader = new StreamReader(stream, Encoding.UTF8);
                 return streamReader.ReadToEnd();
             }
         }
 
         public static JObject ToJson(this WebResponse response)
         {
-            string text = response.ToText();
+            var text = response.ToText();
             return JObject.Parse(text);
         }
 
         public static byte[] ToBinary(this WebResponse response)
         {
-            using (Stream stream = response.GetResponseStream())
+            using (var stream = response.GetResponseStream())
             {
-                int readCount = 0;
+                var readCount = 0;
 
-                int bufferSize = 1 << 17;
+                var bufferSize = 1 << 17;
 
                 var buffer = new byte[bufferSize];
                 using (var memory = new MemoryStream())
                 {
-                    while ((readCount = stream.Read(buffer, 0, bufferSize)) > 0)
-                    {
-                        memory.Write(buffer, 0, readCount);
-                    }
+                    while ((readCount = stream.Read(buffer, 0, bufferSize)) > 0) memory.Write(buffer, 0, readCount);
                     return memory.ToArray();
                 }
-
             }
         }
+
         public static Stream GetXlsx()
         {
             var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtInfo.xlsx";

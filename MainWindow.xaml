@@ -74,7 +74,7 @@
                             Margin="362,330,0,0" VerticalAlignment="Top"
                             Width="81" Foreground="#FF333333" Click="Button_Click_2" FontFamily="Source Han Sans SC" />
                     <ToggleButton Style="{StaticResource ToggleButtonSwitch}" Content="显示高级选项" Margin="0,360,9.8,161.4"
-                                  IsChecked="false" x:Name="ButtonVisibilitySwitch" FontFamily="Source Han Sans SC" />
+                                  x:Name="ButtonVisibilitySwitch" FontFamily="Source Han Sans SC" />
                     <Grid
                         Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=ButtonVisibilitySwitch}"
                         Margin="250,345,0,0">
@@ -85,50 +85,43 @@
                         <TextBlock Text="询问是否导出xlsx文件" HorizontalAlignment="Left" Height="25" Margin="47,58,0,0"
                                    VerticalAlignment="Top" Width="165" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
-                        <CheckBox x:Name="ToggleDeleteLastData" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,80,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
-                                  FontSize="9"
-                                  ToolTip="勾选此项时,每次下载或者更新MasterData游戏数据时&#xA;均会删除上次的内容而不会提示已是最新版本." />
-                        <TextBlock Text="更新MasterData时删除上次内容而不提醒" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,81,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
-                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDispIndi" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,104,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,79,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,&quot;基础信息&quot;界面的&quot;特性&quot;文本框&#xA;会显示解析过后的特性名称(有可能会有翻译错误)&#xA;不勾选则直接显示特性ID"
                                   IsChecked="True" />
                         <TextBlock Text="特性显示解析结果(Beta)" HorizontalAlignment="Left" Height="26"
-                                   Margin="47,106,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,81,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDetailbr" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,128,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,103,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,宝具/技能界面的&quot;描述&quot;文本框&#xA;会按照每个Buff进行换行显示&#xA;不勾选则直接不换行显示." />
                         <TextBlock Text="宝具/技能描述按照Buff换行" HorizontalAlignment="Left" Height="26"
-                                   Margin="47,129,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,104,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleBuffFuncTranslate" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,152,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,127,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的具体数值的效果名称会进行翻译,不勾选则直接显示原文." IsChecked="True" />
                         <TextBlock Text="翻译部分Buff名称" HorizontalAlignment="Left" Height="27"
-                                   Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,128,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleFuncDiffer" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,176,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,151,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的具体数值的效果数值会进行分析显示&#xA;如1000,3,-1,200的BusterUP会写成20%(100%) - 3回合·无限次&#xA;不勾选则原样显示.&#xA;注:目前实现方式比较杂乱可能会带来误解析的可能性."
                                   IsChecked="True" />
                         <TextBlock Text="对效果进行分析显示(Beta)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,178,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleTDSpecialFont" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,200,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,175,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,宝具特效字体选用FOT-Matisse&#xA;否则宝具特效字体选用FOT-Skip"
                                   IsChecked="True" />
                         <TextBlock Text="宝具特效字体选用(勾选为&quot;FOT-Matisse&quot;)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,202,0,-5.6" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,177,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                     </Grid>
                 </Grid>
@@ -1610,9 +1603,9 @@
                     <hc:GifImage x:Name="AlteraGif" Height="100" Width="100" Margin="362,235,346.8,235.4"
                                  Visibility="Hidden" Uri="images/AlteraDancing.gif" />
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
-                        x:Name="updatedatabutton_Copy" Content="日服资源文件下载" HorizontalAlignment="Left"
-                        Margin="335,518,0,0" VerticalAlignment="Top" Width="157" Click="Button_Click_4"
-                        Foreground="#FFFFFFFF">
+                            x:Name="updatedatabutton_Copy" Content="日服资源文件下载" HorizontalAlignment="Left"
+                            Margin="335,518,0,0" VerticalAlignment="Top" Width="157" Click="Button_Click_4"
+                            Foreground="#FFFFFFFF">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                                 <GradientStop Color="#FF326CF3" Offset="0" />

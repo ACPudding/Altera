@@ -2713,11 +2713,6 @@ namespace Altera
             var folder = new DirectoryInfo(path + @"\Android\");
             JObject res;
             var result = "";
-            var Check = true;
-            ToggleDeleteLastData.Dispatcher.Invoke(() =>
-            {
-                if (ToggleDeleteLastData.IsChecked == true) Check = !Check;
-            });
             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = false; });
             updatedatabutton.Dispatcher.Invoke(() => { updatedatabutton.IsEnabled = false; });
@@ -2758,10 +2753,11 @@ namespace Altera
                     {
                         case "app_version_up":
                         {
-                            string tmp = res["response"][0]["fail"]["detail"].ToString();
+                            var tmp = res["response"][0]["fail"]["detail"].ToString();
                             tmp = Regex.Replace(tmp, @".*新ver.：(.*)、現.*", "$1", RegexOptions.Singleline);
                             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "当前游戏版本: " + tmp; });
-                            var result2 = HttpRequest.Get($"https://game.fate-go.jp/gamedata/top?appVer={tmp}").ToText();
+                            var result2 = HttpRequest.Get($"https://game.fate-go.jp/gamedata/top?appVer={tmp}")
+                                .ToText();
                             res = JObject.Parse(result2);
                             if (!Directory.Exists(gamedata.FullName))
                                 Directory.CreateDirectory(gamedata.FullName);
@@ -2829,39 +2825,6 @@ namespace Altera
                 Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
                 OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
                 return;
-            }
-
-            if (File.Exists(gamedata.FullName + "raw"))
-            {
-                var oldRaw = File.ReadAllText(gamedata.FullName + "raw");
-
-                if (string.CompareOrdinal(oldRaw, result) == 0 && Check)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                            Application.Current.MainWindow,
-                            "当前的MasterData已是最新版本,无需重复下载.\r\n\r\n您确定要重新覆盖当前的MasterData数据吗?\r\n\r\n点击\"确认\"进行覆盖.",
-                            "无需更新",
-                            MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                    });
-                    if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.Cancel)
-                    {
-                        updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
-                        updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
-                        progressbar.Dispatcher.Invoke(() =>
-                        {
-                            progressbar.Visibility = Visibility.Hidden;
-                            updatedatabutton.IsEnabled = true;
-                        });
-                        progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
-                        AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
-                        progressloading.Dispatcher.Invoke(() => { progressloading.Visibility = Visibility.Hidden; });
-                        Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
-                        OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
-                        return;
-                    }
-                }
             }
 
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
@@ -2939,7 +2902,10 @@ namespace Altera
             var str = dictionary.Aggregate<KeyValuePair<string, object>, string>(null,
                 (current, a) => current + a.Key + ": " + a.Value + "\r\n");
             File.WriteAllText(gamedata.FullName + "assetbundle.txt", str);
-            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "folder name: " + dictionary["folderName"] + " 正在下载AssetStorage.txt..."; });
+            updatestatus.Dispatcher.Invoke(() =>
+            {
+                updatestatus.Text = "folder name: " + dictionary["folderName"] + " 正在下载AssetStorage.txt...";
+            });
             var AssetStorageRes = GetAssetStorage(dictionary["folderName"].ToString());
             File.WriteAllText(gamedata.FullName + "assetBundleFolder.txt", dictionary["folderName"].ToString());
             if (File.Exists(gamedata.FullName + "AssetStorage.txt"))
@@ -2948,20 +2914,16 @@ namespace Altera
                 if (string.CompareOrdinal(ASReadtmp, AssetStorageRes) != 0)
                 {
                     if (File.Exists(gamedata.FullName + "AssetStorage_last.txt"))
-                    {
                         File.Delete(gamedata.FullName + "AssetStorage_last.txt");
-                    }
                     File.Move(gamedata.FullName + "AssetStorage.txt", gamedata.FullName + "AssetStorage_last.txt");
                     File.WriteAllText(gamedata.FullName + "AssetStorage.txt", AssetStorageRes);
                     var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
-                    DecryptBinfileSub(ASLine,gamedata);
+                    DecryptBinfileSub(ASLine, gamedata);
                 }
                 else
                 {
                     if (!File.Exists(gamedata.FullName + "AssetStorage_last.txt"))
-                    {
                         File.Copy(gamedata.FullName + "AssetStorage.txt", gamedata.FullName + "AssetStorage_last.txt");
-                    }
                     var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
                     DecryptBinfileSub(ASLine, gamedata);
                 }
@@ -2972,6 +2934,7 @@ namespace Altera
                 var ASLine = File.ReadAllLines(gamedata.FullName + "AssetStorage.txt");
                 DecryptBinfileSub(ASLine, gamedata);
             }
+
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 150; });
             progressring.Dispatcher.Invoke(() => { progressring.Value += 40; });
             var data3 = File.ReadAllText(gamedata.FullName + "webview");
@@ -3024,13 +2987,15 @@ namespace Altera
             OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
             GC.Collect();
         }
-        static string GetAssetStorage(string assetBundleKey)
+
+        private static string GetAssetStorage(string assetBundleKey)
         {
             var assetStorage = HttpRequest
                 .Get($"https://cdn.data.fate-go.jp/AssetStorages/{assetBundleKey}Android/AssetStorage.txt")
                 .ToText();
             return CatAndMouseGame.MouseGame8(assetStorage);
         }
+
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             var UpgradeMasterData = new Task(() => { HttpRequestData(); });
@@ -4370,6 +4335,7 @@ namespace Altera
                         new JProperty("fileName", fileName)));
                 }
             }
+
             File.WriteAllText(decrypt.FullName + @"\AudioName.json", AudioArray.ToString());
             File.WriteAllText(decrypt.FullName + @"\MovieName.json", MovieArray.ToString());
             File.WriteAllText(decrypt.FullName + @"\AssetName.json", AssetArray.ToString());
@@ -4660,6 +4626,12 @@ namespace Altera
             Button_Click(sender, e);
         }
 
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            var ADWindow = new AssetsDownload();
+            ADWindow.ShowDialog();
+        }
+
         private struct SkillListSval
         {
             public string SkillName { get; }
@@ -4810,12 +4782,6 @@ namespace Altera
                 SvtHp = v2;
                 SvtAtk = v3;
             }
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            var ADWindow = new AssetsDownload();
-            ADWindow.ShowDialog();
         }
     }
 }
