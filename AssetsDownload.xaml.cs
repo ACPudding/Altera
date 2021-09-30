@@ -18,7 +18,7 @@ namespace Altera
         private static readonly DirectoryInfo AssetsFolder = new DirectoryInfo(folder + @"\assets\bin\Data\");
         private static string[,] tmp;
         private static string[,] tmpold;
-        private static object LockedList = new object();
+        private static readonly object LockedList = new object();
 
         public AssetsDownload()
         {
@@ -155,7 +155,18 @@ namespace Altera
                 if (tmp[i, 0] == "0") continue;
                 try
                 {
-                    resultlist.Add(await FindASDifferNiceSub(tmp[i, 4], tmp[i, 2], tmp[i, 3]));
+                    var addValueTask = await FindASDifferNiceSub(tmp[i, 4], tmp[i, 2], tmp[i, 3]);
+                    switch (addValueTask)
+                    {
+                        case "true":
+                            resultlist.Add(i);
+                            break;
+                        case "false":
+                            break;
+                        case "NeedSecCheck":
+                            resultlist.Add(i);
+                            break;
+                    }
                 }
                 catch (Exception)
                 {
@@ -163,35 +174,32 @@ namespace Altera
                 }
             }
 
-            try
-            {
-                resultlist.RemoveAll(s => s == 0);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
-
             GC.Collect();
             return resultlist;
         }
 
-        private async Task<int> FindASDifferNiceSub(string FindStr, string check1, string check2)
+        private async Task<string> FindASDifferNiceSub(string FindStr, string check1, string check2)
         {
-            var value = 0;
+            var value = "false";
+            var countno = 0;
             Parallel.For(0, tmpold.GetLength(0), j =>
             {
-                if (tmpold[j, 0] == "0") return;
-                if (tmpold[j, 4] != FindStr) return;
-                if (tmpold[j, 2] == check1 && tmpold[j, 3] == check2)
+                if (tmpold[j, 0] == "0" || tmpold[j, 4] != FindStr)
                 {
-                    _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "跳过: " + tmpold[j, 4]); });
+                    lock (LockedList)
+                    {
+                        countno++;
+                    }
+
                     return;
                 }
 
-                value = j;
+                if (tmpold[j, 2] == check1 && tmpold[j, 3] == check2) return;
+                value = "true";
                 _ = Dispatcher.InvokeAsync(() => { Download_Status.Items.Insert(0, "差异: " + tmpold[j, 4]); });
             });
+            if (countno != tmpold.GetLength(0)) return value;
+            value = "true";
             return value;
         }
 
@@ -251,13 +259,14 @@ namespace Altera
             });
             await Task.Delay(2000);
             var DownloadLineArray = DownloadLine.ToArray();
-            await Task.Run(() => { _ = DHASub(DownloadLineArray); }).ConfigureAwait(false);
             _ = Dispatcher.InvokeAsync(() =>
             {
                 Download_Status.Items.Insert(0, "共需下载" + DownloadLineArray.Length + "个差异文件.");
                 Download_Status.Items.Insert(0, "下载按钮将不再可用,如需再次点击请关闭窗口后再打开.");
+                Download_Status.Items.Insert(0, "若进度条长期不动以及VPN没有流量即下载完成.");
             });
             await Task.Delay(2000);
+            await Task.Run(() => { _ = DHASub(DownloadLineArray); }).ConfigureAwait(false);
             GC.Collect();
         }
 
