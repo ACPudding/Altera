@@ -11,13 +11,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Altera.Properties;
 using HandyControl.Controls;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using LiveCharts.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -71,6 +70,10 @@ namespace Altera
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
         }
+
+        public string[] LabelX { get; set; }
+        public int[] LineHP { get; set; }
+        public int[] LineATK { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -2355,12 +2358,20 @@ namespace Altera
                 ClassPassiveFuncList.Items.Clear();
                 AppendClassPassiveFuncList.Items.Clear();
                 Title = "Altera";
-                chartCanvas.Children.Remove(plhp);
-                chartCanvas.Children.Remove(platk);
-                chartCanvas.Children.Remove(LatestAtkLine);
-                chartCanvas.Children.Remove(LatestHpLine);
-                chartCanvas.Children.Remove(AtkDispLatest);
-                chartCanvas.Children.Remove(HpDispLatest);
+                var Zeros = new int[121];
+                var levels = new int[120];
+                for (var i = 0; i <= 119; i++)
+                {
+                    Zeros[i] = 0;
+                    levels[i] = i + 1;
+                }
+
+                LabelX = new string[120];
+                LineHP = Zeros;
+                LineATK = Zeros;
+                HPCurveX.Values = LineHP.AsChartValues();
+                ATKCurveX.Values = LineATK.AsChartValues();
+                for (var j = 0; j <= 119; j++) LabelX[j] = levels[j].ToString();
                 TreasureDeviceID.Text = "";
                 hpatkbalance.Text = "( 攻防倾向: 均衡 )";
                 var QuickUri = "images\\Quick.png";
@@ -2988,6 +2999,45 @@ namespace Altera
             GC.Collect();
         }
 
+        private void DecryptBinfileSub(string[] assetStore, DirectoryInfo outputdest)
+        {
+            var decrypt = outputdest;
+            var AudioArray = new JArray();
+            var MovieArray = new JArray();
+            var AssetArray = new JArray();
+            for (var i = 2; i < assetStore.Length; ++i)
+            {
+                var tmp = assetStore[i].Split(',');
+                string assetName;
+                string fileName;
+                if (tmp[4].Contains("Audio"))
+                {
+                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                    fileName = CatAndMouseGame.GetMD5String(assetName);
+                    AudioArray.Add(new JObject(new JProperty("audioName", assetName),
+                        new JProperty("fileName", fileName)));
+                }
+                else if (tmp[4].Contains("Movie"))
+                {
+                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                    fileName = CatAndMouseGame.GetMD5String(assetName);
+                    MovieArray.Add(new JObject(new JProperty("movieName", assetName),
+                        new JProperty("fileName", fileName)));
+                }
+                else if (!tmp[4].Contains("Movie"))
+                {
+                    assetName = tmp[tmp.Length - 1].Replace('/', '@') + ".unity3d";
+                    fileName = CatAndMouseGame.GetShaName(assetName);
+                    AssetArray.Add(new JObject(new JProperty("assetName", assetName),
+                        new JProperty("fileName", fileName)));
+                }
+            }
+
+            File.WriteAllText(decrypt.FullName + @"\AudioName.json", AudioArray.ToString());
+            File.WriteAllText(decrypt.FullName + @"\MovieName.json", MovieArray.ToString());
+            File.WriteAllText(decrypt.FullName + @"\AssetName.json", AssetArray.ToString());
+        }
+
         private static string GetAssetStorage(string assetBundleKey)
         {
             var assetStorage = HttpRequest
@@ -3042,11 +3092,9 @@ namespace Altera
             Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = false; });
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
-            var DS = new Task(() => { DrawScale(); });
             VersionLabel.Dispatcher.Invoke(() => { VersionLabel.Text = CommonStrings.Version; });
             DataLoadingRing.Dispatcher.Invoke(() => { DataLoadingRing.Visibility = Visibility.Visible; });
             SvtIDHelper.Dispatcher.Invoke(() => { SvtIDHelper.Visibility = Visibility.Collapsed; });
-            DS.Start();
             if (!Directory.Exists(gamedata.FullName))
             {
                 Dispatcher.Invoke(() =>
@@ -3097,6 +3145,21 @@ namespace Altera
         {
             var Loading = new Task(() => { LoadingProgress(); });
             Loading.Start();
+            var Zeros = new int[121];
+            var levels = new int[120];
+            for (var i = 0; i <= 119; i++)
+            {
+                Zeros[i] = 0;
+                levels[i] = i + 1;
+            }
+
+            LabelX = new string[120];
+            LineHP = Zeros;
+            LineATK = Zeros;
+            HPCurveX.Values = LineHP.AsChartValues();
+            ATKCurveX.Values = LineATK.AsChartValues();
+            for (var j = 0; j <= 119; j++) LabelX[j] = levels[j].ToString();
+            DataContext = this;
         }
 
         private void ExcelFileOutput()
@@ -3796,253 +3859,24 @@ namespace Altera
                         AdjustATKCurve[lv].ToString()));
                 }
 
-                chartCanvas.Children.Remove(plhp);
-                chartCanvas.Children.Remove(platk);
                 ymin = 0.0;
                 ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
                     AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
                 GlobalPathsAndDatas.ymax = ymax;
-                // Draw ATK curve:
-                platk = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2};
-                for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
+                LineHP = new int[120];
+                LineATK = new int[120];
+                for (var q = 1; q <= 120; q++)
                 {
-                    double x = i;
-                    var y = AdjustATKCurve[i];
-                    var atklinep = CurvePoint(new Point(x, y), xmin, xmax, ymin, ymax);
-                    platk.Points.Add(atklinep);
+                    LineHP[q - 1] = Convert.ToInt32(AdjustHPCurve[q]);
+                    LineATK[q - 1] = Convert.ToInt32(AdjustATKCurve[q]);
                 }
 
-                chartCanvas.Children.Add(platk);
-                // Draw HP curve:
-                plhp = new Polyline {Stroke = Brushes.Blue, StrokeThickness = 2};
-                for (var i = 1; i < GlobalPathsAndDatas.LvExpCurveLvCount; i++)
-                {
-                    double x = i;
-                    var y = AdjustHPCurve[i];
-                    var hplinep = CurvePoint(new Point(x, y), xmin, xmax, ymin, ymax);
-                    plhp.Points.Add(hplinep);
-                }
-
-                chartCanvas.Children.Add(plhp);
+                HPCurveX.Values = LineHP.AsChartValues();
+                ATKCurveX.Values = LineATK.AsChartValues();
+                DataContext = this;
+                HPAtkXCurve.Update();
             });
             GlobalPathsAndDatas.CurveBaseData = Array;
-        }
-
-        private Point CurvePoint(Point pt, double xmin, double xmax, double ymin, double ymax)
-        {
-            var result = new Point
-            {
-                X = (pt.X - xmin) * chartCanvas.Width * 0.95 / (xmax - xmin),
-                Y = chartCanvas.Height - (pt.Y - ymin) * chartCanvas.Height * 0.80
-                    / (ymax - ymin)
-            };
-            return result;
-        }
-
-        private void DisplayPoint_C(object sender, SelectionChangedEventArgs e)
-        {
-            if (HpAtkListView.SelectedItem == null) return;
-            var GetSelectedItem = (HpAtkList) HpAtkListView.SelectedItem;
-            var level = GetSelectedItem.SvtLevel;
-            var HP = GetSelectedItem.SvtHp;
-            var ATK = GetSelectedItem.SvtAtk;
-            DrawDisplayPoint(level, ATK, HP);
-        }
-
-        private void DisplayPoint(object sender, MouseButtonEventArgs e)
-        {
-            if (HpAtkListView.SelectedItem == null) return;
-            var GetSelectedItem = (HpAtkList) HpAtkListView.SelectedItem;
-            var level = GetSelectedItem.SvtLevel;
-            var HP = GetSelectedItem.SvtHp;
-            var ATK = GetSelectedItem.SvtAtk;
-            DrawDisplayPoint(level, ATK, HP);
-        }
-
-        private void DrawDisplayPoint(string level, string atk, string hp)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var Lv = Convert.ToInt32(level);
-                var ATK = Convert.ToInt32(atk);
-                var HP = Convert.ToInt32(hp);
-                var SelectedAtkPoint = new Point
-                {
-                    X = Lv * chartCanvas.Width * 0.95 / 120,
-                    Y = chartCanvas.Height - ATK * chartCanvas.Height * 0.80
-                        / GlobalPathsAndDatas.ymax
-                };
-                var SelectedHPPoint = new Point
-                {
-                    X = Lv * chartCanvas.Width * 0.95 / 120,
-                    Y = chartCanvas.Height - HP * chartCanvas.Height * 0.80
-                        / GlobalPathsAndDatas.ymax
-                };
-                try
-                {
-                    chartCanvas.Children.Remove(LatestAtkLine);
-                    chartCanvas.Children.Remove(LatestHpLine);
-                    chartCanvas.Children.Remove(AtkDispLatest);
-                    chartCanvas.Children.Remove(HpDispLatest);
-                }
-                catch (Exception)
-                {
-                    //ignore
-                }
-
-                if (HP >= ATK)
-                {
-                    var HP_scale = new Line
-                    {
-                        StrokeThickness = 2,
-                        StrokeEndLineCap = PenLineCap.Triangle,
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = SelectedHPPoint.X,
-                        Y1 = SelectedHPPoint.Y,
-                        X2 = SelectedHPPoint.X + 25,
-                        Y2 = SelectedHPPoint.Y - 40
-                    };
-                    LatestHpLine = HP_scale;
-                    var Atk_scale = new Line
-                    {
-                        StrokeThickness = 2,
-                        StrokeEndLineCap = PenLineCap.Triangle,
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = SelectedAtkPoint.X,
-                        Y1 = SelectedAtkPoint.Y,
-                        X2 = SelectedAtkPoint.X + 50,
-                        Y2 = SelectedAtkPoint.Y + 20
-                    };
-                    LatestAtkLine = Atk_scale;
-                    HpDispLatest.Text = "HP: " + hp;
-                    Canvas.SetLeft(HpDispLatest, HP_scale.X2 - 30);
-                    Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 15);
-                    AtkDispLatest.Text = "ATK: " + atk;
-                    Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 + 5);
-                    Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 + 2.5);
-                    if (Lv >= 110)
-                    {
-                        Canvas.SetLeft(AtkDispLatest, Atk_scale.X2);
-                        if (Lv >= 115)
-                            Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 - 30);
-                    }
-
-                    if (Lv <= 30)
-                    {
-                        Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 10);
-                        if (Lv <= 20)
-                        {
-                            Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 15);
-                            if (Lv <= 10)
-                                Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 25);
-                        }
-                    }
-
-                    chartCanvas.Children.Add(LatestAtkLine);
-                    chartCanvas.Children.Add(LatestHpLine);
-                    chartCanvas.Children.Add(AtkDispLatest);
-                    chartCanvas.Children.Add(HpDispLatest);
-                }
-                else
-                {
-                    var HP_scale = new Line
-                    {
-                        StrokeThickness = 2,
-                        StrokeEndLineCap = PenLineCap.Triangle,
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = SelectedHPPoint.X,
-                        Y1 = SelectedHPPoint.Y,
-                        X2 = SelectedHPPoint.X + 50,
-                        Y2 = SelectedHPPoint.Y + 20
-                    };
-                    LatestHpLine = HP_scale;
-                    var Atk_scale = new Line
-                    {
-                        StrokeThickness = 2,
-                        StrokeEndLineCap = PenLineCap.Triangle,
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = SelectedAtkPoint.X,
-                        Y1 = SelectedAtkPoint.Y,
-                        X2 = SelectedAtkPoint.X + 25,
-                        Y2 = SelectedAtkPoint.Y - 40
-                    };
-                    LatestAtkLine = Atk_scale;
-                    HpDispLatest.Text = "HP: " + hp;
-                    Canvas.SetLeft(HpDispLatest, HP_scale.X2 + 5);
-                    Canvas.SetTop(HpDispLatest, HP_scale.Y2 + 2.5);
-                    AtkDispLatest.Text = "ATK: " + atk;
-                    Canvas.SetLeft(AtkDispLatest, Atk_scale.X2 - 30);
-                    Canvas.SetTop(AtkDispLatest, Atk_scale.Y2 - 15);
-                    if (Lv >= 110)
-                    {
-                        Canvas.SetLeft(HpDispLatest, HP_scale.X2);
-                        if (Lv >= 115)
-                            Canvas.SetLeft(HpDispLatest, HP_scale.X2 - 30);
-                    }
-
-                    if (Lv <= 30)
-                    {
-                        Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 10);
-                        if (Lv <= 20)
-                        {
-                            Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 15);
-                            if (Lv <= 10)
-                                Canvas.SetTop(HpDispLatest, HP_scale.Y2 - 30);
-                        }
-                    }
-
-                    chartCanvas.Children.Add(LatestAtkLine);
-                    chartCanvas.Children.Add(LatestHpLine);
-                    chartCanvas.Children.Add(AtkDispLatest);
-                    chartCanvas.Children.Add(HpDispLatest);
-                }
-            });
-        }
-
-        private void DrawScale()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                for (var i = 0; i < 121; i++)
-                {
-                    var x_scale = new Line
-                    {
-                        StrokeEndLineCap = PenLineCap.Triangle,
-                        StrokeThickness = 1,
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
-                        X1 = 0 + i * 3.75
-                    };
-                    x_scale.X2 = x_scale.X1;
-                    x_scale.Y1 = 352;
-                    if (i % 5 == 0 && i != 0)
-                    {
-                        if (i % 10 == 0)
-                        {
-                            x_scale.StrokeThickness = 2;
-                            x_scale.Y2 = x_scale.Y1 - 8;
-                            var LvText = new TextBlock
-                            {
-                                Text = i.ToString()
-                            };
-                            Canvas.SetLeft(LvText, x_scale.X1 - 7.5);
-                            if (i >= 100)
-                                Canvas.SetLeft(LvText, x_scale.X1 - 11.25);
-                            Canvas.SetTop(LvText, x_scale.Y2 + 8);
-                            chartCanvas.Children.Add(LvText);
-                        }
-                        else
-                        {
-                            x_scale.Y2 = x_scale.Y1 - 6;
-                        }
-                    }
-                    else
-                    {
-                        x_scale.Y2 = x_scale.Y1 - 4;
-                    }
-
-                    chartCanvas.Children.Add(x_scale);
-                }
-            });
         }
 
         private static int[] GetSvtCurveData(object TypeID)
@@ -4112,7 +3946,15 @@ namespace Altera
             }
 
             Outputs = Outputs.Substring(0, Outputs.Length - 1);
-            CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
+            try
+            {
+                CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
             svtIndividuality.Dispatcher.Invoke(() => { svtIndividuality.Text = Outputs; });
             IndividualalityClean.Dispatcher.Invoke(() => { IndividualalityClean.Text = CleanIndi; });
         }
@@ -4223,124 +4065,6 @@ namespace Altera
             LEL.Start();
         }
 
-        private async void Button_DecryptBinFile(object sender, RoutedEventArgs e)
-        {
-            var inputdialog = new CommonOpenFileDialog {Title = "选择cpk文件"};
-            var resultinput = inputdialog.ShowDialog();
-            var inputfile = "";
-            if (resultinput == CommonFileDialogResult.Ok) inputfile = inputdialog.FileName;
-            if (inputfile == "") return;
-            var file = new FileInfo(inputfile);
-            var outputfolder = file.DirectoryName;
-            var output = new DirectoryInfo(outputfolder);
-            ButtonCpkSelect.IsEnabled = false;
-            ButtonBinSelectFolder.IsEnabled = false;
-            await Task.Run(async () => { await DecryptCpkFile(file, output); });
-            ButtonCpkSelect.IsEnabled = true;
-            ButtonBinSelectFolder.IsEnabled = true;
-            Thread.Sleep(1000);
-            decryptstatus.Content = "";
-        }
-
-        private async Task DecryptCpkFile(FileInfo file, DirectoryInfo outputfolder)
-        {
-            var RemindLog = "解包音频: " + file.Name;
-            Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-            var acbFilename = "";
-            await Task.Run(() =>
-            {
-                try
-                {
-                    acbFilename = FGOAudioDecoder.UnpackCpkFiles(file, outputfolder);
-                }
-                catch (Exception)
-                {
-                    //ignore
-                }
-            });
-            if (acbFilename == "")
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    decryptstatus.Content = "该文件不是cpk类型文件.请重试.";
-                    MessageBox.Error("该文件不是cpk类型文件.", "错误");
-                });
-                return;
-            }
-
-            await Task.Run(() => { FGOAudioDecoder.DecodeAcbFiles(new FileInfo(acbFilename), outputfolder); });
-            Dispatcher.Invoke(() => { decryptstatus.Content = "完成."; });
-            Thread.Sleep(1500);
-            Process.Start(outputfolder.FullName + @"\DecodedWavs");
-        }
-
-        private async void Button_DecryptBinFolder(object sender, RoutedEventArgs e)
-        {
-            var inputdialog = new CommonOpenFileDialog {IsFolderPicker = true, Title = "需要解密的资源文件目录"};
-            var resultinput = inputdialog.ShowDialog();
-            var inputfolder = "";
-            if (resultinput == CommonFileDialogResult.Ok) inputfolder = inputdialog.FileName;
-            if (inputfolder == "") return;
-            var outputfolder = inputfolder + @"\DecryptedResources";
-            var isDeleteFile = false;
-            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                Application.Current.MainWindow,
-                "是否删除源文件夹内的所有文件?(全部移动至输出文件夹)",
-                "提示", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-            if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                isDeleteFile = true;
-            var input = new DirectoryInfo(inputfolder);
-            var output = new DirectoryInfo(outputfolder);
-            ButtonBinSelectFolder.IsEnabled = false;
-            ButtonCpkSelect.IsEnabled = false;
-            decryptprogress.Visibility = Visibility.Visible;
-            decryptprogress.Value = 0;
-            await Task.Run(async () => { await DecryptBinFileFolderAsync(input, output, isDeleteFile); });
-            ButtonBinSelectFolder.IsEnabled = true;
-            ButtonCpkSelect.IsEnabled = true;
-            decryptstatus.Content = "";
-            decryptprogress.Visibility = Visibility.Hidden;
-        }
-
-        private void DecryptBinfileSub(string[] assetStore, DirectoryInfo outputdest)
-        {
-            var decrypt = outputdest;
-            var AudioArray = new JArray();
-            var MovieArray = new JArray();
-            var AssetArray = new JArray();
-            for (var i = 2; i < assetStore.Length; ++i)
-            {
-                var tmp = assetStore[i].Split(',');
-                string assetName;
-                string fileName;
-                if (tmp[4].Contains("Audio"))
-                {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
-                    fileName = CatAndMouseGame.GetMD5String(assetName);
-                    AudioArray.Add(new JObject(new JProperty("audioName", assetName),
-                        new JProperty("fileName", fileName)));
-                }
-                else if (tmp[4].Contains("Movie"))
-                {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
-                    fileName = CatAndMouseGame.GetMD5String(assetName);
-                    MovieArray.Add(new JObject(new JProperty("movieName", assetName),
-                        new JProperty("fileName", fileName)));
-                }
-                else if (!tmp[4].Contains("Movie"))
-                {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@') + ".unity3d";
-                    fileName = CatAndMouseGame.GetShaName(assetName);
-                    AssetArray.Add(new JObject(new JProperty("assetName", assetName),
-                        new JProperty("fileName", fileName)));
-                }
-            }
-
-            File.WriteAllText(decrypt.FullName + @"\AudioName.json", AudioArray.ToString());
-            File.WriteAllText(decrypt.FullName + @"\MovieName.json", MovieArray.ToString());
-            File.WriteAllText(decrypt.FullName + @"\AssetName.json", AssetArray.ToString());
-        }
-
         private string GetSvtName(string svtID, int Option)
         {
             var svtName = "";
@@ -4353,210 +4077,6 @@ namespace Altera
             }
 
             return "???";
-        }
-
-        private async Task DecryptBinFileFolderAsync(DirectoryInfo inputdest, DirectoryInfo outputdest,
-            bool isDeleteFile)
-        {
-            var folder = inputdest;
-            var decrypt = outputdest;
-            if (!Directory.Exists(decrypt.FullName))
-                Directory.CreateDirectory(decrypt.FullName);
-            var renamedAudio = new DirectoryInfo(outputdest.FullName + @"\Audio\");
-            var renamedMovie = new DirectoryInfo(outputdest.FullName + @"\Movie\");
-            var renamedAssets = new DirectoryInfo(outputdest.FullName + @"\Assets\");
-            byte[] raw;
-            byte[] output;
-            if (File.Exists(folder.FullName + @"\cfb1d36393fd67385e046b084b7cf7ed"))
-            {
-                if (File.Exists(decrypt.FullName + @"\AssetStorage.txt"))
-                    File.Delete(decrypt.FullName + @"\AssetStorage.txt");
-                if (isDeleteFile)
-                    File.Move(folder.FullName + @"\cfb1d36393fd67385e046b084b7cf7ed",
-                        decrypt.FullName + @"\AssetStorage.txt");
-                else
-                    File.Copy(folder.FullName + @"\cfb1d36393fd67385e046b084b7cf7ed",
-                        decrypt.FullName + @"\AssetStorage.txt");
-            }
-            else
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Error(
-                        "AssetStorage.txt文件不存在\r\n请检查输入文件夹内是否存在\"cfb1d36393fd67385e046b084b7cf7ed\"\r\n或者\"AssetStorage.txt\"文件.",
-                        "错误");
-                });
-                return;
-            }
-
-            if (File.Exists(folder.FullName + @"\4fb2705e743f2eed610a17b9eaba5541"))
-            {
-                if (File.Exists(decrypt.FullName + @"\AssetStorageBack.txt"))
-                    File.Delete(decrypt.FullName + @"\AssetStorageBack.txt");
-                if (isDeleteFile)
-                    File.Move(folder.FullName + @"\4fb2705e743f2eed610a17b9eaba5541",
-                        decrypt.FullName + @"\AssetStorageBack.txt");
-                else
-                    File.Copy(folder.FullName + @"\4fb2705e743f2eed610a17b9eaba5541",
-                        decrypt.FullName + @"\AssetStorageBack.txt");
-            }
-
-            var data = File.ReadAllText(decrypt.FullName + @"\AssetStorage.txt");
-            var loadData = CatAndMouseGame.MouseGame8(data);
-            File.WriteAllText(decrypt.FullName + @"\AssetStorage_dec.txt", loadData);
-            var RemindLog = "写入: " + decrypt.FullName + @"\AssetStorage_dec.txt";
-            Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-            var assetStore = File.ReadAllLines(decrypt.FullName + @"\AssetStorage_dec.txt");
-            var Sub1 = new Task(() => { DecryptBinfileSub(assetStore, decrypt); });
-            Sub1.Start();
-            Thread.Sleep(1500);
-            Dispatcher.Invoke(() => { decryptstatus.Content = "开始解密bin."; });
-            var fileCountbin = Directory.GetFiles(folder.FullName, "*.bin").Length;
-            var fileCountall = Directory.GetFiles(folder.FullName).Length;
-            var progressValuebin = Convert.ToDouble(100000 / fileCountbin);
-            var progressValueall = Convert.ToDouble(100000 / fileCountall);
-            Parallel.ForEach(folder.GetFiles("*.bin"), file =>
-            {
-                try
-                {
-                    RemindLog = "解密: " + file.FullName;
-                    Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-                    raw = File.ReadAllBytes(file.FullName);
-                    output = CatAndMouseGame.MouseGame4(raw);
-                    if (!Directory.Exists(renamedAssets.FullName))
-                        Directory.CreateDirectory(renamedAssets.FullName);
-                    File.WriteAllBytes(renamedAssets.FullName + @"\" + file.Name, output);
-                    Dispatcher.Invoke(() => { decryptprogress.Value += progressValuebin; });
-                    if (isDeleteFile)
-                        File.Delete(file.FullName);
-                    Thread.Sleep(10);
-                }
-                catch (Exception)
-                {
-                    Dispatcher.Invoke(() => { MessageBox.Error("解密时遇到错误.\r\n", "错误"); });
-                }
-            });
-            Dispatcher.Invoke(() =>
-            {
-                decryptprogress.Value = decryptprogress.Maximum;
-                decryptstatus.Content = "解密完成.现在开始重命名所有资源文件.\r\n读取json中...";
-            });
-            Thread.Sleep(1500);
-            Task.WaitAll(Sub1);
-            Dispatcher.Invoke(() => { decryptprogress.Value = 0; });
-            var AssetJsonName = File.ReadAllText(decrypt.FullName + @"\AssetName.json");
-            var AssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(AssetJsonName);
-            Parallel.ForEach(renamedAssets.GetFiles("*.bin"), file =>
-            {
-                Parallel.ForEach(AssetJsonNameArray, FileNametmp =>
-                {
-                    if (((JObject) FileNametmp)["fileName"].ToString() != file.Name) return;
-                    var FileNameObjtmp = JObject.Parse(FileNametmp.ToString());
-                    var FileAssetNametmp = FileNameObjtmp["assetName"].ToString();
-                    RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp + "\n";
-                    Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-                    if (File.Exists(renamedAssets.FullName + @"\" + FileAssetNametmp))
-                        File.Delete(renamedAssets.FullName + @"\" + FileAssetNametmp);
-                    File.Move(renamedAssets.FullName + @"\" + file.Name,
-                        renamedAssets.FullName + @"\" + FileAssetNametmp);
-                    Dispatcher.Invoke(() => { decryptprogress.Value += progressValueall; });
-                    Thread.Sleep(10);
-                });
-            });
-            var AudioAssetJsonName = File.ReadAllText(decrypt.FullName + @"\AudioName.json");
-            var AudioAssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(AudioAssetJsonName);
-            Parallel.ForEach(folder.GetFiles("*."), file =>
-            {
-                Parallel.ForEach(AudioAssetJsonNameArray, FileNametmp2 =>
-                {
-                    if (((JObject) FileNametmp2)["fileName"].ToString() != file.Name) return;
-                    var FileNameObjtmp2 = JObject.Parse(FileNametmp2.ToString());
-                    var FileAssetNametmp2 = FileNameObjtmp2["audioName"].ToString();
-                    RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp2 + "\n";
-                    Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-                    if (!Directory.Exists(renamedAudio.FullName))
-                        Directory.CreateDirectory(renamedAudio.FullName);
-                    if (File.Exists(renamedAudio.FullName + @"\" + FileAssetNametmp2))
-                        File.Delete(renamedAudio.FullName + @"\" + FileAssetNametmp2);
-                    if (isDeleteFile)
-                        File.Move(folder.FullName + @"\" + file.Name, renamedAudio.FullName + @"\" + FileAssetNametmp2);
-                    else
-                        File.Copy(folder.FullName + @"\" + file.Name, renamedAudio.FullName + @"\" + FileAssetNametmp2);
-                    Dispatcher.Invoke(() => { decryptprogress.Value += progressValueall; });
-                    Thread.Sleep(10);
-                });
-            });
-            var MovieAssetJsonName = File.ReadAllText(decrypt.FullName + @"\MovieName.json");
-            var MovieAssetJsonNameArray = (JArray) JsonConvert.DeserializeObject(MovieAssetJsonName);
-            Parallel.ForEach(folder.GetFiles("*."), file =>
-            {
-                Parallel.ForEach(MovieAssetJsonNameArray, FileNametmp3 =>
-                {
-                    if (((JObject) FileNametmp3)["fileName"].ToString() != file.Name) return;
-                    var FileNameObjtmp3 = JObject.Parse(FileNametmp3.ToString());
-                    var FileAssetNametmp3 = FileNameObjtmp3["movieName"].ToString();
-                    RemindLog = "重命名: " + file.Name + " → \r\n" + FileAssetNametmp3 + "\n";
-                    Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-                    if (!Directory.Exists(renamedMovie.FullName))
-                        Directory.CreateDirectory(renamedMovie.FullName);
-                    if (File.Exists(renamedMovie.FullName + @"\" + FileAssetNametmp3))
-                        File.Delete(renamedMovie.FullName + @"\" + FileAssetNametmp3);
-                    if (isDeleteFile)
-                        File.Move(folder.FullName + @"\" + file.Name, renamedMovie.FullName + @"\" + FileAssetNametmp3);
-                    else
-                        File.Copy(folder.FullName + @"\" + file.Name, renamedMovie.FullName + @"\" + FileAssetNametmp3);
-                    Dispatcher.Invoke(() => { decryptprogress.Value += progressValueall; });
-                    Thread.Sleep(10);
-                });
-            });
-            if (Directory.Exists(renamedAudio.FullName))
-                try
-                {
-                    var AudioFileQuantityCheck = Directory.GetFiles(renamedAudio.FullName).Length;
-                    var acbFilename = "";
-                    if (AudioFileQuantityCheck > 0)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "解密完成,是否需要尝试解包音频文件?",
-                                "提示", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                        {
-                            Dispatcher.Invoke(() => { decryptprogress.Value = 0; });
-                            var AudioDecodeStatusVision =
-                                (double) 100000 / Directory.GetFiles(renamedAudio.FullName).Length;
-                            foreach (var file in renamedAudio.GetFiles("*.cpk.bytes"))
-                            {
-                                RemindLog = "解包音频: " + file.Name;
-                                Dispatcher.Invoke(() => { decryptstatus.Content = RemindLog; });
-                                await Task.Run(() =>
-                                {
-                                    acbFilename = FGOAudioDecoder.UnpackCpkFiles(file, renamedAudio);
-                                });
-                                await Task.Run(() =>
-                                {
-                                    FGOAudioDecoder.DecodeAcbFiles(new FileInfo(acbFilename), renamedAudio);
-                                });
-                                Dispatcher.Invoke(() => { decryptprogress.Value += AudioDecodeStatusVision; });
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() => { MessageBox.Show("解密时遇到错误.\r\n" + ex, "错误"); });
-                }
-
-            Dispatcher.Invoke(() =>
-            {
-                decryptprogress.Value = decryptprogress.Maximum;
-                decryptstatus.Content = "完成.";
-            });
-            Thread.Sleep(2000);
-            Process.Start(decrypt.FullName);
         }
 
         private void Button_Click_SvtFilter(object sender, RoutedEventArgs e)
@@ -4626,11 +4146,36 @@ namespace Altera
             Button_Click(sender, e);
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void ResetZoomSettings(object sender, RoutedEventArgs e)
         {
-            var ADWindow = new AssetsDownload();
-            ADWindow.ShowDialog();
+            XZhou.MinValue = 0.0;
+            XZhou.MaxValue = double.NaN;
+            YZhou.MinValue = 0.0;
+            YZhou.MaxValue = double.NaN;
         }
+
+        private void CallHime(object sender, RoutedEventArgs e)
+        {
+            var path = Directory.GetCurrentDirectory();
+            if (File.Exists(path + @"\Osakabehime.exe"))
+            {
+                var process = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = path + @"\Osakabehime.exe",
+                        UseShellExecute = true,
+                        CreateNoWindow = true
+                    }
+                };
+                process.Start();
+            }
+            else
+            {
+                Dispatcher.Invoke(() => { MessageBox.Error("未找到相关模块,请检查.", "错误"); });
+            }
+        }
+
 
         private struct SkillListSval
         {

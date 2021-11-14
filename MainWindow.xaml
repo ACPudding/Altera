@@ -4,6 +4,7 @@
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:hc="https://handyorg.github.io/handycontrol"
+           xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
            mc:Ignorable="d"
            Title="Altera" Height="600" Width="900" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
            Icon="icon.ico" ContentRendered="Form_Load">
@@ -559,29 +560,63 @@
                                Width="248" FontSize="20" Foreground="#FF333333"
                                FontWeight="Bold" Margin="10,10,0,0" />
                     <TextBlock
-                        Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线.&#xA;在右侧单击或双击选择对应等级可在曲线图中标出相应位置.(小怪和敌方boss除外,会发生显示错误)"
+                        Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线.可进行缩放与拖动查看.&#xA;小怪和敌方boss除外会发生显示错误."
                         HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
-                        Width="515" FontSize="11.5" Foreground="#FF333333"
+                        Width="540" FontSize="11.5" Foreground="#FF333333"
                         FontWeight="Bold" Margin="10,461,0,0" />
-                    <Canvas x:Name="chartCanvas" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top"
-                            Width="472" Margin="15,70,0,0">
-                        <Line x:Name="x_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="472" Y2="352"
-                              StrokeStartLineCap="Round" />
-                        <Line x:Name="y_axis" Stroke="Black" StrokeThickness="2" X1="0" Y1="352" X2="0" Y2="60"
-                              StrokeStartLineCap="Round" />
-                        <Path x:Name="x_axisArrow" Fill="Black" Data="M472,347 L472,356 L482,352 z" />
-                        <Path x:Name="y_axisArrow" Fill="Black" Data="M-4,60 L4,60 L0,50 z" />
-                        <TextBlock x:Name="x_label" Text="lv" Canvas.Left="455" Canvas.Top="325"
-                                   FontFamily="Source Han Sans SC" FontSize="14" />
-
-                        <TextBlock x:Name="y_label" Text="max" Canvas.Left="-10" Canvas.Top="30"
-                                   FontFamily="Source Han Sans SC" FontSize="14" />
-
-                        <TextBlock x:Name="o_label" Text="0" Canvas.Left="-10" Canvas.Top="350"
-                                   FontSize="14" />
-                    </Canvas>
-                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="11.5"
-                              MouseDoubleClick="DisplayPoint" SelectionChanged="DisplayPoint_C">
+                    <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
+                            x:Name="ResetZoom"
+                            Content="重置视角" HorizontalAlignment="Left"
+                            Margin="243,530,0,0" VerticalAlignment="Top" Width="75"
+                            Click="ResetZoomSettings"
+                            Foreground="#FFFFFFFF">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="#FF326CF3" Offset="0" />
+                                <GradientStop Color="#FF7BA2FF" Offset="1" />
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <ToggleButton x:Name="CurveAnimationToggle" Margin="405,530,373.8,10.4" BorderThickness="0"
+                                  IsChecked="False" Style="{StaticResource ToggleButtonFlip}">
+                        <hc:StatusSwitchElement.CheckedElement>
+                            <Border Background="{DynamicResource PrimaryBrush}">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="开"
+                                           Foreground="{DynamicResource TextIconBrush}" />
+                            </Border>
+                        </hc:StatusSwitchElement.CheckedElement>
+                        <Border Background="{DynamicResource DangerBrush}">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="关"
+                                       Foreground="{DynamicResource TextIconBrush}" />
+                        </Border>
+                    </ToggleButton>
+                    <TextBlock Text="关闭表格动画(高性能)" HorizontalAlignment="Left" Height="26"
+                               Margin="440,537,0,0" VerticalAlignment="Top" Width="115"
+                               FontSize="11.5" Foreground="#FF333333" />
+                    <Grid Margin="10,46,258.8,109.4">
+                        <lvc:CartesianChart x:Name="HPAtkXCurve" LegendLocation="Top" Zoom="X" ZoomingSpeed="2.5"
+                                            DisableAnimations="{Binding IsChecked,ElementName=CurveAnimationToggle}"
+                                            Pan="X">
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="YZhou" Title="HP/Atk" MinValue="0" FontFamily="Source Han Sans SC" />
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="XZhou" Title="等级" Labels="{Binding LabelX}"
+                                          FontFamily="Source Han Sans SC" MinValue="0">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="5" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries x:Name="HPCurveX" Title="HP" Values="" LineSmoothness="1"
+                                                PointGeometrySize="0" />
+                                <lvc:LineSeries x:Name="ATKCurveX" Title="ATK" Values="" LineSmoothness="1"
+                                                PointGeometrySize="0" />
+                            </lvc:CartesianChart.Series>
+                        </lvc:CartesianChart>
+                    </Grid>
+                    <ListView x:Name="HpAtkListView" Margin="555,10,10,10" Foreground="#FF737373" FontSize="11.5">
                         <ListView.Background>
                             <SolidColorBrush Color="White" Opacity="0.4" />
                         </ListView.Background>
@@ -1602,9 +1637,22 @@
                     </Button>
                     <hc:GifImage x:Name="AlteraGif" Height="100" Width="100" Margin="362,235,346.8,235.4"
                                  Visibility="Hidden" Uri="images/AlteraDancing.gif" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="附加工具">
+                <Grid>
+                    <Label Content="附加工具" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0"
+                           VerticalAlignment="Top" Width="789" FontSize="20"
+                           Foreground="#FF333333" FontWeight="Bold" Background="#FFF6F6F6" />
+                    <TextBlock
+                        Text="&#xA;本页面中的资源解包功能已经移动到新开的程序Osakabehime中，点击下方按钮可打开进行操作.&#xA;需在Altera中下载相应的数据文件后再进行操作.该附加功能本体请先在Github进行下载并放在Altera的目录下."
+                        HorizontalAlignment="Left" Height="88" Margin="10,60,0,0" VerticalAlignment="Top"
+                        Width="789" Foreground="#FF333333" FontWeight="Bold" />
+                    <Image HorizontalAlignment="Left" Height="337" Margin="217,177,0,0" VerticalAlignment="Top"
+                           Width="337" Source="images/Buxing.jpg" />
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
-                            x:Name="updatedatabutton_Copy" Content="日服资源文件下载" HorizontalAlignment="Left"
-                            Margin="335,518,0,0" VerticalAlignment="Top" Width="157" Click="Button_Click_4"
+                            x:Name="CallHimesama" Content="刑部，你就是不行" HorizontalAlignment="Left"
+                            Margin="307,484,0,0" VerticalAlignment="Top" Width="157" Click="CallHime"
                             Foreground="#FFFFFFFF">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
@@ -1613,44 +1661,6 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                </Grid>
-            </TabItem>
-            <TabItem Header="资源解包">
-                <Grid>
-                    <TextBlock Text="资源文件解密/重命名(JP Version Only)" HorizontalAlignment="Left" Height="40"
-                               VerticalAlignment="Top"
-                               Width="383"
-                               FontSize="16" Foreground="#FF333333" FontWeight="Bold" Margin="10,16,0,0" />
-                    <Button x:Name="ButtonBinSelectFolder" hc:BorderElement.CornerRadius="15" Content="选择文件夹"
-                            HorizontalAlignment="Left"
-                            Margin="360,175,0,0"
-                            VerticalAlignment="Top" Width="81" Click="Button_DecryptBinFolder" Foreground="#FF333333" />
-                    <ProgressBar Style="{DynamicResource ProgressBarInfo}" x:Name="decryptprogress"
-                                 HorizontalAlignment="Left" Height="29"
-                                 Margin="10,225,0,0"
-                                 VerticalAlignment="Top" Width="789" Maximum="100000"
-                                 Background="#FFB9B9B9" Visibility="Hidden" />
-                    <Label x:Name="decryptstatus" Content="" Height="31"
-                           Margin="10,259,9.8,0"
-                           VerticalAlignment="Top" FontSize="12"
-                           Foreground="#FF333333" Width="789" />
-                    <TextBlock
-                        Text="使用说明:&#xA;点击按钮后选择完源文件夹后程序会自动进行资源的解密与改名操作.需保证源文件夹有cfb1d36393fd67385e046b084b7cf7ed文件即&#xA;AssetStorage.txt,无需对该文件进行改名.输出文件夹为同目录下的DecryptedResources文件夹.解密完成后输出文件夹中会生成Assets,Audio,Movie&#xA;三个文件夹分别存储不同类型的资源.&#xA;如果解包中有音频资源会在重命名过后提示是否继续音频解包.(本项功能使用CriPakTools以及DeleTore中的部分代码与类库实现cpk2wav的一步到位)&#xA;解包后的音频输出文件夹为/Audio/DecodedWavs.(视频资源本程序不会进行任何解密操作,仅进行重命名便于分辨和另行解包)"
-                        Height="109"
-                        Margin="5,61,4.8,0"
-                        VerticalAlignment="Top" FontSize="12"
-                        Foreground="#FF333333" />
-                    <hc:Divider LineStrokeThickness="1" Margin="10,325,10,0" LineStrokeDashArray="2,2"
-                                LineStroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
-                    <TextBlock Text="单音频文件转wav(cpk2wav)" HorizontalAlignment="Left" Height="40"
-                               VerticalAlignment="Top"
-                               Width="217"
-                               FontSize="16" Foreground="#FF333333" FontWeight="Bold" Margin="304,350,0,0" />
-                    <Button x:Name="ButtonCpkSelect" hc:BorderElement.CornerRadius="15" Content="选择文件"
-                            HorizontalAlignment="Left"
-                            Margin="360,450,0,0"
-                            VerticalAlignment="Top" Width="81" Click="Button_DecryptBinFile"
-                            Foreground="#FF333333" />
                 </Grid>
             </TabItem>
             <TabItem Header="关于">
