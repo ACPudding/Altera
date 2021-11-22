@@ -3259,9 +3259,11 @@ namespace Altera
                         GreenExp.Style.Font.Bold = true;
                         GreenExp.Style.Font.Color.Color = Color.LightGreen;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(198, 224, 180));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(198, 224, 180));
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
+                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
                         break;
                     case "Arts":
                         var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
@@ -3269,9 +3271,11 @@ namespace Altera
                         BlueExp.Style.Font.Bold = true;
                         BlueExp.Style.Font.Color.Color = Color.Blue;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(189, 215, 238));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(189, 215, 238));
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
+                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
                         break;
                     case "Buster":
                         var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
