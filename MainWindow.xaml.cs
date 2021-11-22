@@ -20,6 +20,7 @@ using LiveCharts.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Color = System.Drawing.Color;
 using MessageBox = HandyControl.Controls.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -1889,6 +1890,12 @@ namespace Altera
             var AS1OVal = "";
             var AS2OVal = "";
             var AS3OVal = "";
+            GlobalPathsAndDatas.AS1D = "";
+            GlobalPathsAndDatas.AS1N = "";
+            GlobalPathsAndDatas.AS2D = "";
+            GlobalPathsAndDatas.AS2N = "";
+            GlobalPathsAndDatas.AS3D = "";
+            GlobalPathsAndDatas.AS3N = "";
             foreach (var item in GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray)
                 if (((JObject) item)["svtId"].ToString() == svtID &&
                     ((JObject) item)["num"].ToString() == "100" &&
@@ -1920,16 +1927,19 @@ namespace Altera
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS1NME = mstsvtskillobjtmp["name"].ToString();
+                    GlobalPathsAndDatas.AS1N = AS1NME;
                 }
                 else if (((JObject) mstSkilltmp)["id"].ToString() == ASID2)
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS2NME = mstsvtskillobjtmp["name"].ToString();
+                    GlobalPathsAndDatas.AS2N = AS2NME;
                 }
                 else if (((JObject) mstSkilltmp)["id"].ToString() == ASID3)
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS3NME = mstsvtskillobjtmp["name"].ToString();
+                    GlobalPathsAndDatas.AS3N = AS3NME;
                     break;
                 }
 
@@ -1943,6 +1953,7 @@ namespace Altera
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS1DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                    GlobalPathsAndDatas.AS1D = AS1DTL10;
                 }
                 else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID2)
                 {
@@ -1953,6 +1964,7 @@ namespace Altera
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS2DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                    GlobalPathsAndDatas.AS2D = AS2DTL10;
                 }
                 else if (((JObject) mstSkillDetailtmp)["id"].ToString() == ASID3)
                 {
@@ -1963,6 +1975,7 @@ namespace Altera
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS3DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
+                    GlobalPathsAndDatas.AS3D = AS3DTL10;
                 }
 
             Dispatcher.Invoke(() =>
@@ -3174,81 +3187,103 @@ namespace Altera
                 var xlsx =
                     new ExcelPackage(streamget);
                 var worksheet = xlsx.Workbook.Worksheets[0];
-                var Pickup = new ExcelAddress("C18");
+                var Pickup = new ExcelAddress("E26");
                 worksheet.ConditionalFormatting.RemoveAll();
-                worksheet.Cells["H3"].Value = JB.svtid;
+                worksheet.Cells["L4"].Value = JB.svtid;
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
-                worksheet.Cells["B3"].Value = Svtname.Text;
-                worksheet.Cells["B4"].Value = svtclass.Text;
-                worksheet.Cells["E4"].Value = rarity.Text;
-                worksheet.Cells["H4"].Value = gendle.Text;
-                worksheet.Cells["L4"].Value = hiddenattri.Text;
-                worksheet.Cells["K3"].Value = collection.Text;
-                worksheet.Cells["B5"].Value = cv.Text;
-                worksheet.Cells["H5"].Value = illust.Text;
-                worksheet.Cells["B6"].Value = ssvtstarrate.Text;
-                worksheet.Cells["E6"].Value = ssvtdeathrate.Text;
-                worksheet.Cells["I6"].Value = jixing.Text;
-                worksheet.Cells["L6"].Value = notrealnprate.Text;
-                worksheet.Cells["C7"].Value = nprate.Text;
-                worksheet.Cells["C10"].Value = classskill.Text;
-                worksheet.Cells["C9"].Value = basichp.Text;
-                worksheet.Cells["F9"].Value = basicatk.Text;
-                worksheet.Cells["I9"].Value = maxhp.Text;
-                worksheet.Cells["L9"].Value = maxatk.Text;
-                worksheet.Cells["C13"].Value = cards.Text;
-                worksheet.Cells["D15"].Value = bustercard.Text;
-                worksheet.Cells["I15"].Value = artscard.Text;
-                worksheet.Cells["D16"].Value = quickcard.Text;
-                worksheet.Cells["I16"].Value = extracard.Text;
-                worksheet.Cells["E17"].Value = treasuredevicescard.Text;
-                worksheet.Cells["C18"].Value = npcardtype.Text;
-                worksheet.Cells["G18"].Value = nptype.Text;
-                worksheet.Cells["J18"].Value = nprank.Text;
-                worksheet.Cells["C19"].Value = npruby.Text;
-                worksheet.Cells["C20"].Value = npname.Text;
-                worksheet.Cells["C21"].Value = npdetail.Text;
-                worksheet.Cells["P1"].Value = skill1name.Text;
-                worksheet.Cells["T1"].Value = skill1cdlv1.Text;
-                worksheet.Cells["V1"].Value = skill1cdlv6.Text;
-                worksheet.Cells["X1"].Value = skill1cdlv10.Text;
-                worksheet.Cells["P2"].Value = skill1details.Text;
-                worksheet.Cells["P10"].Value = skill2name.Text;
-                worksheet.Cells["T10"].Value = skill2cdlv1.Text;
-                worksheet.Cells["V10"].Value = skill2cdlv6.Text;
-                worksheet.Cells["X10"].Value = skill2cdlv10.Text;
-                worksheet.Cells["P11"].Value = skill2details.Text;
-                worksheet.Cells["P19"].Value = skill3name.Text;
-                worksheet.Cells["T19"].Value = skill3cdlv1.Text;
-                worksheet.Cells["V19"].Value = skill3cdlv6.Text;
-                worksheet.Cells["X19"].Value = skill3cdlv10.Text;
-                worksheet.Cells["P20"].Value = skill3details.Text;
-                worksheet.Cells["C28"].Value = svtIndividuality.Text;
-                worksheet.Cells["C12"].Value = Convert.ToString(sixwei.Text) + "    " +
-                                               hpatkbalance.Text;
-                worksheet.Cells["P6"].Value = SkillLvs.skill1forExcel;
-                worksheet.Cells["P15"].Value = SkillLvs.skill2forExcel;
-                worksheet.Cells["P24"].Value = SkillLvs.skill3forExcel;
-                worksheet.Cells["C24"].Value = SkillLvs.TDforExcel;
-                switch (worksheet.Cells["C18"].Value.ToString())
+                worksheet.Cells["E3"].Value = Svtname.Text;
+                worksheet.Cells["E4"].Value = IndividualalityClean.Text;
+                worksheet.Cells["E14"].Value = BeiZhu.Text;
+                worksheet.Cells["L3"].Value = svtclass.Text;
+                worksheet.Cells["H4"].Value = rarity.Text;
+                worksheet.Cells["J4"].Value = gendle.Text;
+                worksheet.Cells["L6"].Value = hiddenattri.Text;
+                worksheet.Cells["L5"].Value = collection.Text;
+                worksheet.Cells["E5"].Value = cv.Text;
+                worksheet.Cells["E6"].Value = illust.Text;
+                worksheet.Cells["E7"].Value = ssvtstarrate.Text;
+                worksheet.Cells["I7"].Value = ssvtdeathrate.Text;
+                worksheet.Cells["L7"].Value = jixing.Text;
+                worksheet.Cells["G11"].Value = notrealnprate.Text;
+                worksheet.Cells["E12"].Value = nprate.Text;
+                worksheet.Cells["C24"].Value = classskill.Text;
+                worksheet.Cells["E8"].Value = basichp.Text;
+                worksheet.Cells["I8"].Value = basicatk.Text;
+                worksheet.Cells["E9"].Value = maxhp.Text;
+                worksheet.Cells["I9"].Value = maxatk.Text;
+                worksheet.Cells["E16"].Value = cards.Text;
+                worksheet.Cells["E19"].Value = bustercard.Text;
+                worksheet.Cells["E20"].Value = artscard.Text;
+                worksheet.Cells["E21"].Value = quickcard.Text;
+                worksheet.Cells["E22"].Value = extracard.Text;
+                worksheet.Cells["E23"].Value = treasuredevicescard.Text;
+                worksheet.Cells["E26"].Value = npcardtype.Text;
+                worksheet.Cells["I26"].Value = nptype.Text;
+                worksheet.Cells["E27"].Value = nprank.Text;
+                worksheet.Cells["E28"].Value = npruby.Text;
+                worksheet.Cells["E29"].Value = npname.Text;
+                worksheet.Cells["E30"].Value = npdetail.Text;
+                worksheet.Cells["Q3"].Value = skill1name.Text;
+                worksheet.Cells["V3"].Value = skill1cdlv1.Text;
+                worksheet.Cells["X3"].Value = skill1cdlv6.Text;
+                worksheet.Cells["Z3"].Value = skill1cdlv10.Text;
+                worksheet.Cells["Q4"].Value = skill1details.Text;
+                worksheet.Cells["Q14"].Value = skill2name.Text;
+                worksheet.Cells["V14"].Value = skill2cdlv1.Text;
+                worksheet.Cells["X14"].Value = skill2cdlv6.Text;
+                worksheet.Cells["Z14"].Value = skill2cdlv10.Text;
+                worksheet.Cells["Q15"].Value = skill2details.Text;
+                worksheet.Cells["Q25"].Value = skill3name.Text;
+                worksheet.Cells["V25"].Value = skill3cdlv1.Text;
+                worksheet.Cells["X25"].Value = skill3cdlv6.Text;
+                worksheet.Cells["Z25"].Value = skill3cdlv10.Text;
+                worksheet.Cells["Q26"].Value = skill3details.Text;
+                worksheet.Cells["P42"].Value = svtIndividuality.Text;
+                worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
+                worksheet.Cells["K8"].Value = hpatkbalance.Text.Replace("(", "").Replace(")", "");
+                worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
+                worksheet.Cells["Q19"].Value = SkillLvs.skill2forExcel;
+                worksheet.Cells["Q30"].Value = SkillLvs.skill3forExcel;
+                worksheet.Cells["E37"].Value = SkillLvs.TDforExcel;
+                worksheet.Cells["Q36"].Value = GlobalPathsAndDatas.AS1N;
+                worksheet.Cells["Q38"].Value = GlobalPathsAndDatas.AS2N;
+                worksheet.Cells["Q40"].Value = GlobalPathsAndDatas.AS3N;
+                worksheet.Cells["T36"].Value = GlobalPathsAndDatas.AS1D;
+                worksheet.Cells["T38"].Value = GlobalPathsAndDatas.AS2D;
+                worksheet.Cells["T40"].Value = GlobalPathsAndDatas.AS3D;
+                switch (worksheet.Cells["E26"].Value.ToString())
                 {
                     case "Quick":
                         var GreenExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        GreenExp.Formula = "C18=\"Quick\"";
+                        GreenExp.Formula = "E26=\"Quick\"";
                         GreenExp.Style.Font.Bold = true;
                         GreenExp.Style.Font.Color.Color = Color.LightGreen;
+                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(198, 224, 180));
+                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(198, 224, 180));
                         break;
                     case "Arts":
                         var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        BlueExp.Formula = "C18=\"Arts\"";
+                        BlueExp.Formula = "E26=\"Arts\"";
                         BlueExp.Style.Font.Bold = true;
                         BlueExp.Style.Font.Color.Color = Color.Blue;
+                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(189, 215, 238));
+                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(189, 215, 238));
                         break;
                     case "Buster":
                         var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        RedExp.Formula = "C18=\"Buster\"";
+                        RedExp.Formula = "E26=\"Buster\"";
                         RedExp.Style.Font.Bold = true;
                         RedExp.Style.Font.Color.Color = Color.Red;
+                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 137, 137));
+                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 137, 137));
+                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
+                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
                         break;
                 }
 

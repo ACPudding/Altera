@@ -60,5 +60,11 @@ namespace Altera.Properties
         public static int[] CurveBaseData;
         public static double ymax;
         public static int classid;
+        public static string AS1N;
+        public static string AS1D;
+        public static string AS2N;
+        public static string AS2D; 
+        public static string AS3N;
+        public static string AS3D;
     }
 }
