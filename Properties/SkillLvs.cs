@@ -9,5 +9,10 @@
         public static string skill2forExcel;
         public static string skill3forExcel;
         public static string TDforExcel;
+        public static string NPQ;
+        public static string NPA;
+        public static string NPB;
+        public static string NPEX;
+        public static string NPTD;
     }
 }

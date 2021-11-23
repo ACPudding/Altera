@@ -431,6 +431,11 @@ namespace Altera
             var NPRateQuick = 0.0;
             var NPRateEX = 0.0;
             var NPRateDef = 0.0;
+            SkillLvs.NPA = "";
+            SkillLvs.NPB = "";
+            SkillLvs.NPQ = "";
+            SkillLvs.NPEX = "";
+            SkillLvs.NPTD = "";
             foreach (var TDlvtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
                 if (((JObject) TDlvtmp)["treaureDeviceId"].ToString() == svtTDID)
                 {
@@ -457,6 +462,12 @@ namespace Altera
                               "   受击: " + NPRateDef.ToString("P");
             });
 
+            SkillLvs.NPA = NPRateArts.ToString("P");
+            SkillLvs.NPB = NPRateBuster.ToString("P");
+            SkillLvs.NPQ = NPRateQuick.ToString("P");
+            SkillLvs.NPEX = NPRateEX.ToString("P");
+            SkillLvs.NPTD = NPRateTD.ToString("P");
+
             if (GlobalPathsAndDatas.notrealnprate == 0.0) return;
 
             if (average - (int) (NPRateTD * 1000000) != 0 || average - (int) (NPRateArts * 1000000) != 0 ||
@@ -477,7 +488,7 @@ namespace Altera
 
             if (NPRateTD == 0.0 || NPRateArts == 0.0 || NPRateBuster == 0.0 || NPRateQuick == 0.0 || NPRateEX == 0.0 ||
                 NPRateDef == 0.0)
-                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为尚未实装的从者(敌方BOSS)或小怪."; });
+                BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为尚未实装的从者(敌方BOSS/NPC)或小怪."; });
         }
 
         private void ServantTreasureDeviceInformationCheck(object svtTDID)
@@ -3212,11 +3223,11 @@ namespace Altera
                 worksheet.Cells["E9"].Value = maxhp.Text;
                 worksheet.Cells["I9"].Value = maxatk.Text;
                 worksheet.Cells["E16"].Value = cards.Text;
-                worksheet.Cells["E19"].Value = bustercard.Text;
-                worksheet.Cells["E20"].Value = artscard.Text;
-                worksheet.Cells["E21"].Value = quickcard.Text;
-                worksheet.Cells["E22"].Value = extracard.Text;
-                worksheet.Cells["E23"].Value = treasuredevicescard.Text;
+                worksheet.Cells["G19"].Value = bustercard.Text;
+                worksheet.Cells["G20"].Value = artscard.Text;
+                worksheet.Cells["G21"].Value = quickcard.Text;
+                worksheet.Cells["G22"].Value = extracard.Text;
+                worksheet.Cells["G23"].Value = treasuredevicescard.Text;
                 worksheet.Cells["E26"].Value = npcardtype.Text;
                 worksheet.Cells["I26"].Value = nptype.Text;
                 worksheet.Cells["E27"].Value = nprank.Text;
@@ -3251,6 +3262,11 @@ namespace Altera
                 worksheet.Cells["T36"].Value = GlobalPathsAndDatas.AS1D;
                 worksheet.Cells["T38"].Value = GlobalPathsAndDatas.AS2D;
                 worksheet.Cells["T40"].Value = GlobalPathsAndDatas.AS3D;
+                worksheet.Cells["E19"].Value = SkillLvs.NPB;
+                worksheet.Cells["E20"].Value = SkillLvs.NPA;
+                worksheet.Cells["E21"].Value = SkillLvs.NPQ;
+                worksheet.Cells["E22"].Value = SkillLvs.NPEX;
+                worksheet.Cells["E23"].Value = SkillLvs.NPTD;
                 switch (worksheet.Cells["E26"].Value.ToString())
                 {
                     case "Quick":
@@ -3262,8 +3278,6 @@ namespace Altera
                         worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                         worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
-                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
-                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
                         break;
                     case "Arts":
                         var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
@@ -3274,8 +3288,6 @@ namespace Altera
                         worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                         worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
-                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
-                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
                         break;
                     case "Buster":
                         var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
@@ -3283,11 +3295,9 @@ namespace Altera
                         RedExp.Style.Font.Bold = true;
                         RedExp.Style.Font.Color.Color = Color.Red;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 137, 137));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 137, 137));
-                        worksheet.Cells["E28"].Style.Font.Color.SetColor(Color.White);
-                        worksheet.Cells["E29"].Style.Font.Color.SetColor(Color.White);
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
                         break;
                 }
 

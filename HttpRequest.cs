@@ -67,9 +67,9 @@ namespace Altera
 
         public static Stream GetXlsx()
         {
-            var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfo.xlsx";
+            var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfoBotNew.xlsx";
             var xlsxurl2 =
-                "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtBasicInfo.xlsx";
+                "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtBasicInfoBotNew.xlsx";
             var httpWebRequest =
                 (HttpWebRequest) WebRequest.Create(xlsxurl2);
             httpWebRequest.Method = "GET";
