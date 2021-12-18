@@ -2891,7 +2891,7 @@ namespace Altera
                 var t = "";
                 try
                 {
-                    t = File.ReadAllText(gamedata.FullName + "decrypted_masterdata/" + item.Key);
+                    t = File.ReadAllText(gamedata.FullName + "decrypted_masterdata/" + item.Key + ".json");
                 }
                 catch (Exception)
                 {
