@@ -13,7 +13,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Altera.Properties;
 using HandyControl.Controls;
 using LiveCharts.Helpers;
@@ -37,8 +36,6 @@ namespace Altera
 
         private static string GameDataVersion;
 
-        private readonly TextBlock AtkDispLatest = new TextBlock {Text = ""};
-
         private readonly string BuffTranslationListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
 
@@ -58,13 +55,6 @@ namespace Altera
 
         private readonly string TDAttackNameTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
-
-        private Line LatestAtkLine;
-        private Line LatestHpLine;
-
-        private Polyline platk;
-        private Polyline plhp;
-
 
         public MainWindow()
         {
@@ -2910,11 +2900,11 @@ namespace Altera
 
                 if (string.CompareOrdinal(t, json) != 0)
                 {
-                    File.WriteAllText(gamedata.FullName + "decrypted_masterdata/" + item.Key, json);
+                    File.WriteAllText(gamedata.FullName + "decrypted_masterdata/" + item.Key + ".json", json);
                     updatestatus.Dispatcher.Invoke(() =>
                     {
                         updatestatus.Text = "写入: " + gamedata.FullName +
-                                            "decrypted__masterdata\\" + item.Key;
+                                            "decrypted__masterdata\\" + item.Key + ".json";
                     });
                 }
                 else
@@ -2922,7 +2912,7 @@ namespace Altera
                     updatestatus.Dispatcher.Invoke(() =>
                     {
                         updatestatus.Text = "跳过: " + gamedata.FullName +
-                                            "decrypted__masterdata\\" + item.Key;
+                                            "decrypted__masterdata\\" + item.Key + ".json";
                     });
                 }
 
@@ -3490,8 +3480,8 @@ namespace Altera
             var QuestName = "";
             var questid = "";
             PickupQuestList.Dispatcher.Invoke(() => { PickupQuestList.Items.Clear(); });
-            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstQuest") &&
-                File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstQuestPickup"))
+            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstQuest.json") &&
+                File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstQuestPickup.json"))
             {
                 foreach (var mstQuestPickup in GlobalPathsAndDatas.mstQuestPickupArray)
                 {
@@ -3603,8 +3593,8 @@ namespace Altera
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
             ClassList.Dispatcher.Invoke(() => { ClassList.Items.Clear(); });
-            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClass") &&
-                File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClassRelation"))
+            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClass.json") &&
+                File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClassRelation.json"))
             {
                 foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
                 {
@@ -3675,7 +3665,7 @@ namespace Altera
             var Eventid = "";
             PickupEventList.Dispatcher.Invoke(() => { PickupEventList.Items.Clear(); });
             PickupEndedEventList.Dispatcher.Invoke(() => { PickupEndedEventList.Items.Clear(); });
-            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstEvent"))
+            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstEvent.json"))
             {
                 foreach (var mstEventtmp in GlobalPathsAndDatas.mstEventArray)
                 {
@@ -3736,7 +3726,7 @@ namespace Altera
             var Eventid = "";
             PickupGachaList.Dispatcher.Invoke(() => { PickupEventList.Items.Clear(); });
             PickupEndedGachaList.Dispatcher.Invoke(() => { PickupEndedEventList.Items.Clear(); });
-            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstGacha"))
+            if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstGacha.json"))
             {
                 foreach (var mstGachatmp in GlobalPathsAndDatas.mstGachaArray)
                 {
