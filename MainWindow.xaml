@@ -1526,9 +1526,9 @@
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
                                Width="247" FontSize="20" Foreground="#FF333333"
                                Margin="10,10,0,0" FontWeight="Bold" />
-                    <TextBlock Text="注:职介栏中括号内显示的为克制/逆克制伤害倍率.(全部为攻击侧数据)"
+                    <TextBlock Text="注:职介栏中括号内显示的为克制/逆克制伤害倍率.(会自动导出为txt文件.)"
                                HorizontalAlignment="Left" Height="21" VerticalAlignment="Top"
-                               Width="352" FontSize="11" Foreground="#FF333333" Margin="447,124,0,0" />
+                               Width="362" FontSize="11" Foreground="#FF333333" Margin="437,124,0,0" />
                     <ListView x:Name="ClassList" Margin="5,150,5,5" Foreground="#FF737373" FontSize="11.5">
                         <ListView.Background>
                             <SolidColorBrush Color="White" Opacity="0.4" />
@@ -1537,10 +1537,14 @@
                             <GridView>
                                 <GridViewColumn Header="职介名称(ID)" Width="190"
                                                 DisplayMemberBinding="{Binding ClassName}" />
-                                <GridViewColumn Header="Weak职介(红字)" Width="300"
-                                                DisplayMemberBinding="{Binding WeakClass}" />
-                                <GridViewColumn Header="Resist职介(蓝字)" Width="300"
-                                                DisplayMemberBinding="{Binding ResistClass}" />
+                                <GridViewColumn Header="攻击侧Weak职介(红字)" Width="150"
+                                                DisplayMemberBinding="{Binding WeakClassA}" />
+                                <GridViewColumn Header="攻击侧Resist职介(蓝字)" Width="150"
+                                                DisplayMemberBinding="{Binding ResistClassA}" />
+                                <GridViewColumn Header="防御侧Weak职介(红字)" Width="150"
+                                                DisplayMemberBinding="{Binding WeakClassD}" />
+                                <GridViewColumn Header="防御侧Resist职介(蓝字)" Width="150"
+                                                DisplayMemberBinding="{Binding ResistClassD}" />
                             </GridView>
                         </ListView.View>
                     </ListView>

@@ -42,8 +42,6 @@ namespace Altera
         private readonly string BuffTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
 
-        private readonly TextBlock HpDispLatest = new TextBlock {Text = ""};
-
         private readonly string IndividualListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
 
@@ -265,6 +263,20 @@ namespace Altera
                         break;
                     case 1001:
                         Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
+                        break;
+                    default:
+                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
+                        if (cards.Text == "[Q,Q,Q,Q,Q]" && svtclass.Text != "礼装") return;
+                        Thread.Sleep(500);
+                        Dispatcher.Invoke(() =>
+                        {
+                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                Application.Current.MainWindow,
+                                "是否需要以xlsx的形式导出该从者的基础数据?",
+                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        });
+                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
+                            ExcelFileOutput();
                         break;
                 }
             });
@@ -2906,6 +2918,7 @@ namespace Altera
                         updatestatus.Text = "写入: " + gamedata.FullName +
                                             "decrypted__masterdata\\" + item.Key + ".json";
                     });
+                    await LoadorRenewCommonDatas.ReloadGivenData(item.Key, json);
                 }
                 else
                 {
@@ -2919,6 +2932,7 @@ namespace Altera
                 progressring.Dispatcher.Invoke(() => { progressring.Value += ProgressValue; });
             }
 
+            GC.Collect();
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1500; });
             var data2 = File.ReadAllText(gamedata.FullName + "assetbundle");
             var dictionary =
@@ -2977,7 +2991,7 @@ namespace Altera
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt"; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "正在更新数据..."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
-            await LoadorRenewCommonDatas.ReloadData();
+            //await LoadorRenewCommonDatas.ReloadData();
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "下载/更新完成，可以开始解析."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value = progressbar.Maximum; });
@@ -3593,15 +3607,19 @@ namespace Altera
             var path = Directory.GetCurrentDirectory();
             var gamedata = new DirectoryInfo(path + @"\Android\masterdata\");
             ClassList.Dispatcher.Invoke(() => { ClassList.Items.Clear(); });
+            var outputStr = "";
             if (File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClass.json") &&
                 File.Exists(gamedata.FullName + "decrypted_masterdata/" + "mstClassRelation.json"))
             {
                 foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
                 {
                     var ClassName = "";
-                    var WeakClass = "\r\n";
-                    var ResistClass = "\r\n";
-                    ClassName = ((JObject) mstClasstmp)["name"] + "(" + ((JObject) mstClasstmp)["id"] + ")";
+                    var WeakClassA = "\r\n";
+                    var ResistClassA = "\r\n";
+                    var WeakClassD = "\r\n";
+                    var ResistClassD = "\r\n";
+                    ClassName = GetClassName(((JObject) mstClasstmp)["id"].ToString()) + "(" +
+                                ((JObject) mstClasstmp)["id"] + ")";
                     var tmpid = ((JObject) mstClasstmp)["id"].ToString();
                     foreach (var mstClassRelationtmp in GlobalPathsAndDatas.mstClassRelationArray)
                     {
@@ -3610,7 +3628,7 @@ namespace Altera
                         if (ATKRATE > 1000)
                         {
                             var tmpweakid = ((JObject) mstClassRelationtmp)["defClass"].ToString();
-                            WeakClass +=
+                            WeakClassA +=
                                 (GetClassName(tmpweakid) == "？"
                                     ? GetClassName(tmpweakid) + "(ID:" + tmpweakid + ")"
                                     : GetClassName(tmpweakid)) + " (" + (float) ATKRATE / 1000 + "x)\r\n";
@@ -3618,23 +3636,59 @@ namespace Altera
                         else if (ATKRATE < 1000)
                         {
                             var tmpresistid = ((JObject) mstClassRelationtmp)["defClass"].ToString();
-                            ResistClass +=
+                            ResistClassA +=
                                 (GetClassName(tmpresistid) == "？"
                                     ? GetClassName(tmpresistid) + "(ID:" + tmpresistid + ")"
-                                    : GetClassName(tmpresistid)) + "(" + (float) ATKRATE / 1000 + "x)\r\n";
+                                    : GetClassName(tmpresistid)) + " (" + (float) ATKRATE / 1000 + "x)\r\n";
                         }
                     }
 
-                    WeakClass = WeakClass.Substring(0, WeakClass.Length - 2) + "\r\n";
-                    ResistClass = ResistClass.Substring(0, ResistClass.Length - 2) + "\r\n";
+                    foreach (var mstClassRelationtmp in GlobalPathsAndDatas.mstClassRelationArray)
+                    {
+                        if (((JObject) mstClassRelationtmp)["defClass"].ToString() != tmpid) continue;
+                        var ATKRATE = Convert.ToInt64(((JObject) mstClassRelationtmp)["attackRate"].ToString());
+                        if (ATKRATE > 1000)
+                        {
+                            var tmpweakid = ((JObject) mstClassRelationtmp)["atkClass"].ToString();
+                            WeakClassD +=
+                                (GetClassName(tmpweakid) == "？"
+                                    ? GetClassName(tmpweakid) + "(ID:" + tmpweakid + ")"
+                                    : GetClassName(tmpweakid)) + " (" + (float) ATKRATE / 1000 + "x)\r\n";
+                        }
+                        else if (ATKRATE < 1000)
+                        {
+                            var tmpresistid = ((JObject) mstClassRelationtmp)["atkClass"].ToString();
+                            ResistClassD +=
+                                (GetClassName(tmpresistid) == "？"
+                                    ? GetClassName(tmpresistid) + "(ID:" + tmpresistid + ")"
+                                    : GetClassName(tmpresistid)) + " (" + (float) ATKRATE / 1000 + "x)\r\n";
+                        }
+                    }
+
+                    WeakClassA = WeakClassA.Substring(0, WeakClassA.Length - 2) + "\r\n";
+                    ResistClassA = ResistClassA.Substring(0, ResistClassA.Length - 2) + "\r\n";
+                    WeakClassD = WeakClassD.Substring(0, WeakClassD.Length - 2) + "\r\n";
+                    ResistClassD = ResistClassD.Substring(0, ResistClassD.Length - 2) + "\r\n";
                     ClassList.Dispatcher.Invoke(() =>
                     {
-                        ClassList.Items.Add(new ClassRelationList(ClassName, WeakClass, ResistClass));
+                        ClassList.Items.Add(new ClassRelationList(ClassName, WeakClassA, WeakClassD, ResistClassA,
+                            ResistClassD));
                     });
+                    outputStr += "职介名:" + ClassName + "\r\n" + " - 攻击侧:\r\n" + "Weak:\r\n" +
+                                 WeakClassA.Substring(2, WeakClassA.Length - 2).Replace("\r\n", ",") +
+                                 "\r\nResist:\r\n" + ResistClassA.Substring(2, ResistClassA.Length - 2)
+                                     .Replace("\r\n", ",")
+                                 + "\r\n\r\n - 防御侧:\r\nWeak:\r\n" +
+                                 WeakClassD.Substring(2, WeakClassD.Length - 2).Replace("\r\n", ",") +
+                                 "\r\nResist:\r\n" +
+                                 ResistClassD.Substring(2, ResistClassD.Length - 2).Replace("\r\n", ",") +
+                                 "\r\n\r\n---------------------------------\r\n\r\n";
                 }
 
                 ButtonClass.Dispatcher.Invoke(() => { ButtonClass.IsEnabled = true; });
                 Dispatcher.Invoke(() => { Growl.Info("显示完毕."); });
+                File.WriteAllText(path + "/ClassRelation.txt", outputStr);
+                Process.Start(path + "/ClassRelation.txt");
             }
             else
             {
@@ -3646,11 +3700,77 @@ namespace Altera
         private static string GetClassName(string id)
         {
             var ClassName = "";
-            foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
+            switch (Convert.ToInt32(id))
             {
-                if (((JObject) mstClasstmp)["id"].ToString() != id) continue;
-                ClassName = ((JObject) mstClasstmp)["name"].ToString();
-                break;
+                case 1:
+                    ClassName = "Saber";
+                    break;
+                case 2:
+                    ClassName = "Archer";
+                    break;
+                case 3:
+                    ClassName = "Lancer";
+                    break;
+                case 4:
+                    ClassName = "Rider";
+                    break;
+                case 5:
+                    ClassName = "Caster";
+                    break;
+                case 6:
+                    ClassName = "Assassin";
+                    break;
+                case 7:
+                    ClassName = "Berserker";
+                    break;
+                case 8:
+                    ClassName = "Shielder";
+                    break;
+                case 9:
+                    ClassName = "Ruler";
+                    break;
+                case 10:
+                    ClassName = "AlterEgo";
+                    break;
+                case 11:
+                    ClassName = "Avenger";
+                    break;
+                case 17:
+                    ClassName = "Grand Caster";
+                    break;
+                case 20:
+                    ClassName = "Beast II";
+                    break;
+                case 22:
+                    ClassName = "Beast I";
+                    break;
+                case 23:
+                    ClassName = "MoonCancer";
+                    break;
+                case 24:
+                    ClassName = "Beast Ⅲ／R";
+                    break;
+                case 25:
+                    ClassName = "Foreigner";
+                    break;
+                case 26:
+                    ClassName = "Beast Ⅲ／L";
+                    break;
+                case 27:
+                    ClassName = "Beast ?";
+                    break;
+                case 28:
+                    ClassName = "Pretender";
+                    break;
+                default:
+                    foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
+                    {
+                        if (((JObject) mstClasstmp)["id"].ToString() != id) continue;
+                        ClassName = ((JObject) mstClasstmp)["name"].ToString();
+                        break;
+                    }
+
+                    break;
             }
 
             return ClassName;
@@ -4329,14 +4449,18 @@ namespace Altera
         private struct ClassRelationList
         {
             public string ClassName { get; }
-            public string WeakClass { get; }
-            public string ResistClass { get; }
+            public string WeakClassA { get; }
+            public string ResistClassA { get; }
+            public string WeakClassD { get; }
+            public string ResistClassD { get; }
 
-            public ClassRelationList(string v1, string v2, string v3) : this()
+            public ClassRelationList(string v1, string v2, string v3, string v4, string v5) : this()
             {
                 ClassName = v1;
-                WeakClass = v2;
-                ResistClass = v3;
+                WeakClassA = v2;
+                ResistClassA = v4;
+                WeakClassD = v3;
+                ResistClassD = v5;
             }
         }
 
