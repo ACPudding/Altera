@@ -698,6 +698,7 @@ namespace Altera
                 ClassName[26] = "Beast III/L";
                 ClassName[27] = "Beast ?";
                 ClassName[28] = "Pretender";
+                ClassName[29] = "Beast IV";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -736,6 +737,7 @@ namespace Altera
                 nprateclassbase[24] = 0.0;
                 nprateclassbase[26] = 0.0;
                 nprateclassbase[27] = 0.0;
+                nprateclassbase[29] = 0.0;
                 nprateclassbase[97] = 0.0;
                 nprateclassbase[107] = 0.0;
                 nprateclassbase[21] = 0.0;
@@ -1065,7 +1067,7 @@ namespace Altera
 
         private void DisplaySvtClassPng(int classid, int rarity)
         {
-            var ClassName = new string[30];
+            var ClassName = new string[50];
             ClassName[1] = "Saber";
             ClassName[2] = "Archer";
             ClassName[3] = "Lancer";
@@ -1086,6 +1088,7 @@ namespace Altera
             ClassName[26] = "BeastIII";
             ClassName[27] = "Beast？";
             ClassName[28] = "Pretender";
+            ClassName[29] = "BeastIV";
             var pngArr = 0;
             switch (rarity)
             {
@@ -3761,6 +3764,9 @@ namespace Altera
                     break;
                 case 28:
                     ClassName = "Pretender";
+                    break;
+                case 29:
+                    ClassName = "Beast IV";
                     break;
                 default:
                     foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
