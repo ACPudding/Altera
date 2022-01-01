@@ -4088,7 +4088,6 @@ namespace Altera
             }
 
             var CleanIndi = "";
-
             var Outputs = "";
             foreach (var Cases in IndividualityStringArray)
             {
@@ -4110,10 +4109,14 @@ namespace Altera
                 }
             }
 
-            Outputs = Outputs.Substring(0, Outputs.Length - 1);
+            var SvtIndividualityAdd1 = SvtIndiSpec1(JB.svtid, IndividualityCommons);
+            var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityCommons);
+            if (SvtIndividualityAdd1 != "") Outputs += SvtIndividualityAdd1;
+            if (SvtIndividualityAdd2 != "") Outputs += SvtIndividualityAdd2;
             try
             {
                 CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
+                Outputs = Outputs.Substring(0, Outputs.Length - 1);
             }
             catch (Exception)
             {
@@ -4122,6 +4125,190 @@ namespace Altera
 
             svtIndividuality.Dispatcher.Invoke(() => { svtIndividuality.Text = Outputs; });
             IndividualalityClean.Dispatcher.Invoke(() => { IndividualalityClean.Text = CleanIndi; });
+        }
+
+        private string SvtIndiSpec1(string SvtID, string[][] CheckList)
+        {
+            var resultstring = "";
+            foreach (var mstSvtIndividualitytmp in GlobalPathsAndDatas.mstSvtIndividualityArray)
+            {
+                if (((JObject) mstSvtIndividualitytmp)["svtId"].ToString() != SvtID) continue;
+                if (((JObject) mstSvtIndividualitytmp)["idx"].ToString() != "1") continue;
+                if (((JObject) mstSvtIndividualitytmp)["limitCount"].ToString() != "-1") continue;
+                resultstring = ((JObject) mstSvtIndividualitytmp)["individuality"].ToString().Replace("\n", "")
+                    .Replace("\t", "")
+                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+            }
+
+            if (resultstring == "") return "";
+            var SpIndiList = resultstring.Split(',');
+            var CheckedName = "";
+            foreach (var Cases in SpIndiList)
+            {
+                if (Cases == "5010" || Cases == "5000") continue;
+                for (var k = 0; k < CheckList.Length; k++)
+                    if (Cases == CheckList[k][0])
+                    {
+                        CheckedName += CheckList[k][1] + ",";
+                        break;
+                    }
+            }
+
+            return CheckedName;
+        }
+
+        private string SvtIndiSpec2(string SvtID, string[][] CheckList)
+        {
+            var resultstring = "";
+            var Limitindi0 = "";
+            var Limitindi1 = "";
+            var Limitindi2 = "";
+            var Limitindi3 = "";
+            var Limitindi4 = "";
+            var LimitindiOthers = "";
+            foreach (var mstSvtLimitAddtmp in GlobalPathsAndDatas.mstSvtLimitAddArray)
+            {
+                if (((JObject) mstSvtLimitAddtmp)["svtId"].ToString() != SvtID) continue;
+                switch (((JObject) mstSvtLimitAddtmp)["limitCount"].ToString())
+                {
+                    case "0":
+                        Limitindi0 = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "1":
+                        Limitindi1 = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "2":
+                        Limitindi2 = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "3":
+                        Limitindi3 = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "4":
+                        Limitindi4 = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    default:
+                        var tmp = ((JObject) mstSvtLimitAddtmp)["individuality"].ToString().Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        if (tmp == "") break;
+                        LimitindiOthers += tmp + ",";
+                        break;
+                }
+            }
+
+            var OutputSpecialOther = "";
+            if (LimitindiOthers != "")
+            {
+                try
+                {
+                    LimitindiOthers = LimitindiOthers.Substring(0, LimitindiOthers.Length - 1);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                var LimitindiOtherArray = LimitindiOthers.Split(',');
+                LimitindiOtherArray = new HashSet<string>(LimitindiOtherArray).ToArray();
+                var Othertmp = "[";
+                foreach (var Cases in LimitindiOtherArray)
+                {
+                    if (Cases == "5010" || Cases == "5000") continue;
+                    foreach (var t in CheckList)
+                    {
+                        if (Cases != t[0]) continue;
+                        Othertmp += t[1] + "、";
+                        break;
+                    }
+                }
+
+                try
+                {
+                    Othertmp = Othertmp.Substring(0, Othertmp.Length - 1) + "]";
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                OutputSpecialOther = Othertmp + "(灵衣或特殊条件),";
+            }
+
+            var LimitindiArray = new string[5];
+            LimitindiArray[0] = Limitindi0;
+            LimitindiArray[1] = Limitindi1;
+            LimitindiArray[2] = Limitindi2;
+            LimitindiArray[3] = Limitindi3;
+            LimitindiArray[4] = Limitindi4;
+            for (var i = 0; i < 5; i++)
+            {
+                if (LimitindiArray[i] == "") continue;
+                var SpIndiList = LimitindiArray[i].Split(',');
+                var CheckedName = "[";
+                foreach (var Cases in SpIndiList)
+                {
+                    if (Cases == "5010" || Cases == "5000") continue;
+                    foreach (var t in CheckList)
+                    {
+                        if (Cases != t[0]) continue;
+                        CheckedName += t[1] + "、";
+                        break;
+                    }
+                }
+
+                try
+                {
+                    CheckedName = CheckedName.Substring(0, CheckedName.Length - 1) + "]";
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                LimitindiArray[i] = CheckedName;
+            }
+
+            var UniqueIndiStringList = new HashSet<string>(LimitindiArray);
+            var UniqueIndiStringArray = UniqueIndiStringList.ToArray();
+            var ListDisplayBefore = new List<string>();
+            foreach (var t in UniqueIndiStringArray)
+            {
+                var tmpLimitStatus = "";
+                for (var i = 0; i < 5; i++)
+                    if (LimitindiArray[i] == t)
+                        tmpLimitStatus += i + ",";
+                try
+                {
+                    tmpLimitStatus = tmpLimitStatus.Substring(0, tmpLimitStatus.Length - 1);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                ListDisplayBefore.Add(tmpLimitStatus);
+            }
+
+            var ListDisplayAfter = ListDisplayBefore.ToArray();
+            var OutputString = "";
+            for (var j = 0; j < ListDisplayAfter.Length; j++)
+            {
+                if (UniqueIndiStringArray[j] == "") continue;
+                OutputString += UniqueIndiStringArray[j] + "(再临" + ListDisplayAfter[j] + "),";
+            }
+
+            OutputString += OutputSpecialOther;
+            return OutputString;
         }
 
         private void EasternEggSvt()

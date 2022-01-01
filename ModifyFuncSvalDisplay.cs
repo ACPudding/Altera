@@ -200,7 +200,7 @@ namespace Altera
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                                 var Clockval = FindClockBuff(Tempsval[3], Lv);
-                                output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + "\r\n" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -260,7 +260,7 @@ namespace Altera
                                         var Lv = "1";
                                         if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                                         var Clockval = FindClockBuff(Tempsval[3], Lv);
-                                        output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + "\r\n" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -441,7 +441,7 @@ namespace Altera
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
-                                        output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + "\r\n" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -454,7 +454,7 @@ namespace Altera
                                         break;
                                     }
 
-                                output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + "\r\n" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -609,7 +609,7 @@ namespace Altera
                             if (Tempsval.Length >= 6)
                                 if (Tempsval[5].Contains("UseRate"))
                                 {
-                                    output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                    output = "\r\n" + Clockval + "\r\n" +
                                              (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -622,7 +622,7 @@ namespace Altera
                                     break;
                                 }
 
-                            output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -979,7 +979,7 @@ namespace Altera
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
-                                        output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + "\r\n" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -992,7 +992,7 @@ namespace Altera
                                         break;
                                     }
 
-                                output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + "\r\n" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1207,7 +1207,7 @@ namespace Altera
                         if (Tempsval.Length >= 6)
                         {
                             if (Tempsval[5].Contains("UseRate"))
-                                output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + "\r\n" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1217,7 +1217,7 @@ namespace Altera
                                              ? ""
                                              : Convert.ToDouble(Tempsval[5].Replace("UseRate:", "")) / 10 + "%");
                             else
-                                output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + "\r\n" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1226,7 +1226,7 @@ namespace Altera
                         }
                         else
                         {
-                            output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1241,7 +1241,7 @@ namespace Altera
                             var Lv = "1";
                             if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                             var Clockval = FindClockBuff(Tempsval[3], Lv);
-                            output = "特殊状态Buff:\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +

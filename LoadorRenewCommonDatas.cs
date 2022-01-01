@@ -82,6 +82,16 @@ namespace Altera
             var mstSvtAppendPassiveSkill =
                 File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
                                  "mstSvtAppendPassiveSkill.json");
+            var mstSvtLimitAdd =
+                File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
+                                 "mstSvtLimitAdd.json");
+            var mstSvtIndividuality =
+                File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
+                                 "mstSvtIndividuality.json");
+            GlobalPathsAndDatas.mstSvtLimitAddArray =
+                (JArray)JsonConvert.DeserializeObject(mstSvtLimitAdd);
+            GlobalPathsAndDatas.mstSvtIndividualityArray =
+                (JArray)JsonConvert.DeserializeObject(mstSvtIndividuality);
             GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray =
                 (JArray) JsonConvert.DeserializeObject(mstSvtAppendPassiveSkill);
             GlobalPathsAndDatas.mstSvtFilterArray =
@@ -153,6 +163,14 @@ namespace Altera
         {
             switch (name)
             {
+                case "mstSvtIndividuality":
+                    GlobalPathsAndDatas.mstSvtIndividualityArray =
+                        (JArray)JsonConvert.DeserializeObject(data);
+                    break;
+                case "mstSvtLimitAdd":
+                    GlobalPathsAndDatas.mstSvtLimitAddArray =
+                        (JArray)JsonConvert.DeserializeObject(data);
+                    break;
                 case "mstSvtAppendPassiveSkill":
                     GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray =
                         (JArray) JsonConvert.DeserializeObject(data);
