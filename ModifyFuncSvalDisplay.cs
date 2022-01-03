@@ -160,6 +160,23 @@ namespace Altera
                                     break;
                                 }
 
+                            if (Tempsval[4].Contains("ShowState"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
                             if (Tempsval[4].Contains("StarHigher"))
                                 try
                                 {
@@ -1453,17 +1470,17 @@ namespace Altera
                 select MainWindow.TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
             var FuncListArray = FuncList.ToArray();
             var FuncSvalArray = FuncSval.Split('|');
-            var result = "\r\n";
+            var result = "<\r\n";
             for (var i = 0; i < FuncListArray.Length; i++)
             {
                 if (FuncListArray[i] == "" &&
                     FuncSvalArray[i].Count(c => c == ',') == 1 &&
                     !FuncSvalArray[i].Contains("Hide"))
                     FuncListArray[i] = "HP回復";
-                result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "\r\n数值: " +
-                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + "\r\n";
+                result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
+                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";
             }
-
+            result += ">\r\n";
             return result;
         }
 

@@ -789,11 +789,7 @@ namespace Altera
                 float starrate = 0;
                 float deathrate = 0;
                 var svtdeathrate = "";
-                var svtillust = "unknown"; //illustID 不输出
-                var svtcv = "unknown"; //CVID 不输出
                 var svtcollectionid = "";
-                var svtCVName = "unknown";
-                var svtILLUSTName = "unknown";
                 var svtrarity = "";
                 var svthpBase = "";
                 var svthpMax = "";
@@ -1128,7 +1124,7 @@ namespace Altera
                             UriKind.Relative));
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     ClassPng.Visibility = Visibility.Collapsed;
                 }
@@ -1447,7 +1443,6 @@ namespace Altera
         {
             var svtArtsCardhit = 1;
             var svtArtsCardhitDamage = "unknown";
-            var svtArtsCardQuantity = 0;
             var svtBustersCardhit = 1;
             var svtBustersCardhitDamage = "unknown";
             var svtQuicksCardhit = 1;
@@ -1788,7 +1783,6 @@ namespace Altera
                 var ClassPassiveSkillFuncName = "";
                 var SvalStr = "";
                 var NeedTranslate = false;
-                var lv10sval = "";
                 string[] lv10svalArray = null;
                 ToggleBuffFuncTranslate.Dispatcher.Invoke(() =>
                 {
@@ -1841,8 +1835,6 @@ namespace Altera
         private string[] GetSvtClassPassiveSval(string SkillID)
         {
             var skilllv10sval = "";
-            var SkillFuncStr = "";
-            string[] SKLFuncstrArray = null;
             string svtSKFuncID;
             string[] svtSKFuncIDArray;
             List<string> svtSKFuncIDList;
@@ -1903,9 +1895,6 @@ namespace Altera
             var AS1DTL10 = "";
             var AS2DTL10 = "";
             var AS3DTL10 = "";
-            var AS1OVal = "";
-            var AS2OVal = "";
-            var AS3OVal = "";
             GlobalPathsAndDatas.AS1D = "";
             GlobalPathsAndDatas.AS1N = "";
             GlobalPathsAndDatas.AS2D = "";
@@ -2551,8 +2540,6 @@ namespace Altera
             var skilllv1sval = "";
             var skilllv6sval = "";
             var skilllv10sval = "";
-            var SkillFuncStr = "";
-            string[] SKLFuncstrArray = null;
             string svtSKFuncID;
             string[] svtSKFuncIDArray;
             List<string> svtSKFuncIDList;
@@ -2913,7 +2900,7 @@ namespace Altera
                     t = "";
                 }
 
-                if (string.CompareOrdinal(t, json) != 0)
+                if (t != json)
                 {
                     File.WriteAllText(gamedata.FullName + "decrypted_masterdata/" + item.Key + ".json", json);
                     updatestatus.Dispatcher.Invoke(() =>
@@ -2953,7 +2940,7 @@ namespace Altera
             if (File.Exists(gamedata.FullName + "AssetStorage.txt"))
             {
                 var ASReadtmp = File.ReadAllText(gamedata.FullName + "AssetStorage.txt");
-                if (string.CompareOrdinal(ASReadtmp, AssetStorageRes) != 0)
+                if (ASReadtmp != AssetStorageRes)
                 {
                     if (File.Exists(gamedata.FullName + "AssetStorage_last.txt"))
                         File.Delete(gamedata.FullName + "AssetStorage_last.txt");
@@ -2994,7 +2981,6 @@ namespace Altera
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "写入: " + gamedata.FullName + "webview.txt"; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "正在更新数据..."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
-            //await LoadorRenewCommonDatas.ReloadData();
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 450; });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = "下载/更新完成，可以开始解析."; });
             progressbar.Dispatcher.Invoke(() => { progressbar.Value = progressbar.Maximum; });
@@ -4005,9 +3991,7 @@ namespace Altera
             Dispatcher.Invoke(() =>
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
-                var xmin = 0.0;
                 var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
-                var ymin = 0.0;
                 var ymax = 0.0;
                 var AdjustHPCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
                 var AdjustATKCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
@@ -4024,7 +4008,6 @@ namespace Altera
                         AdjustATKCurve[lv].ToString()));
                 }
 
-                ymin = 0.0;
                 ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
                     AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
                 GlobalPathsAndDatas.ymax = ymax;
@@ -4159,7 +4142,6 @@ namespace Altera
 
         private string SvtIndiSpec2(string SvtID, string[][] CheckList)
         {
-            var resultstring = "";
             var Limitindi0 = "";
             var Limitindi1 = "";
             var Limitindi2 = "";
