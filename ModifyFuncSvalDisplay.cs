@@ -160,6 +160,24 @@ namespace Altera
                                     break;
                                 }
 
+                            if (Tempsval[4].Contains("UseRate"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "% (" +
+                                             Convert.ToDouble(Tempsval[4].Replace("UseRate:", "")) / 10 + "%概率生效)" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
                             if (Tempsval[4].Contains("ShowState"))
                                 try
                                 {
@@ -228,6 +246,25 @@ namespace Altera
                         }
                         else if (Tempsval.Length > 5)
                         {
+                            if (Tempsval.Length == 7)
+                                if (Tempsval[4].Contains("ShowState") && (Tempsval[5].Contains("Individualty") ||
+                                                                          Tempsval[6].Contains("Individualty")))
+                                    try
+                                    {
+                                        output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                     ? ""
+                                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                        break;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        output = Funcsval;
+                                        break;
+                                    }
+
                             if (Tempsval.Length == 8)
                                 if (Tempsval[4].Contains("Param"))
                                     try
@@ -257,6 +294,27 @@ namespace Altera
                                     try
                                     {
                                         output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                     ? ""
+                                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                        break;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        output = Funcsval;
+                                        break;
+                                    }
+
+                                if (Tempsval[4].Contains("ParamAdd") && Tempsval[5].Contains("ParamMax"))
+                                    try
+                                    {
+                                        output = Convert.ToDouble(Tempsval[3]) / 10 + "%" + " + " +
+                                                 Convert.ToDouble(Tempsval[4].Replace("ParamAdd:", "")) / 10 +
+                                                 "% * T \r\n" + "最大值:" +
+                                                 Convert.ToDouble(Tempsval[5].Replace("ParamMax:", "")) / 10 +
+                                                 "% (T为持续第T-1回合)" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -352,6 +410,56 @@ namespace Altera
                             break;
                         }
 
+                        output = Funcsval;
+                        break;
+                    }
+                case 112:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 6)
+                    {
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[3]) + "倍" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
+                case 143:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4 || Tempsval.Length == 5 && Tempsval[4].Contains("ShowState"))
+                    {
+                        try
+                        {
+                            output = "場地特性附加: " + Convert.ToDouble(Tempsval[3]) + "\r\n" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
                         output = Funcsval;
                         break;
                     }
@@ -850,6 +958,24 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[4].Contains("UseRate"))
+                            try
+                            {
+                                output = Tempsval[3] + "個 (" +
+                                         Convert.ToDouble(Tempsval[4].Replace("UseRate:", "")) / 10 + "%概率生效)" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         output = Funcsval;
                         break;
                     }
@@ -1073,7 +1199,7 @@ namespace Altera
                     break;
                 case "灼傷無効":
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length == 3)
+                    if (Tempsval.Length == 3 || Funcsval.Contains("Individualty"))
                         try
                         {
                             output = "∅" +
@@ -1157,7 +1283,7 @@ namespace Altera
                 case "詛咒":
                 case "每回合回復HP":
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length == 4)
+                    if (Tempsval.Length == 4 || Tempsval.Length == 6 && Tempsval[4].Contains("Individualty"))
                     {
                         try
                         {
@@ -1420,7 +1546,7 @@ namespace Altera
                 if (Tempsval.Length == 7 || Tempsval.Length == 8)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff(ID):\r\n〔 " +
+                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff(ID):\r\n〔" +
                                  SearchIndividualality(Tempsval[4].Replace("TargetList:", "")) +
                                  "〕\r\n" + "特攻倍率:\r\n" +
                                  Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10 + "% + " +
@@ -1480,6 +1606,7 @@ namespace Altera
                 result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
                           ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";
             }
+
             result += ">\r\n";
             return result;
         }

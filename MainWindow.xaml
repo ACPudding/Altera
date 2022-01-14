@@ -1522,7 +1522,7 @@
             </TabItem>
             <TabItem Header="职介一览">
                 <Grid Margin="0,0,0,0">
-                    <TextBlock Text="攻击侧职介克制关系显示"
+                    <TextBlock Text="职介克制关系显示"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
                                Width="247" FontSize="20" Foreground="#FF333333"
                                Margin="10,10,0,0" FontWeight="Bold" />

@@ -96,6 +96,11 @@ namespace Altera
                 var mstSvtIndividuality =
                     File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
                                      "mstSvtIndividuality.json");
+                var mstBuff =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
+                                     "mstBuff.json");
+                GlobalPathsAndDatas.mstBuffArray =
+                    (JArray)JsonConvert.DeserializeObject(mstBuff);
                 GlobalPathsAndDatas.mstSvtLimitAddArray =
                     (JArray) JsonConvert.DeserializeObject(mstSvtLimitAdd);
                 GlobalPathsAndDatas.mstSvtIndividualityArray =
@@ -173,6 +178,10 @@ namespace Altera
             {
                 switch (name)
                 {
+                    case "mstBuff":
+                        GlobalPathsAndDatas.mstBuffArray =
+                            (JArray)JsonConvert.DeserializeObject(data);
+                        break;
                     case "mstSvtIndividuality":
                         GlobalPathsAndDatas.mstSvtIndividualityArray =
                             (JArray) JsonConvert.DeserializeObject(data);

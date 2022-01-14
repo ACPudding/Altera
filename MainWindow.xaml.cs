@@ -1584,19 +1584,62 @@ namespace Altera
                     if (ToggleBuffFuncTranslate.IsChecked == true) NeedTranslate = true;
                 });
                 if (NeedTranslate)
-                    svtTreasureDeviceFuncArray = (from skfuncidtmp in svtTreasureDeviceFuncIDArray
-                        from functmp in GlobalPathsAndDatas.mstFuncArray
-                        where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                        select JObject.Parse(functmp.ToString())
-                        into mstFuncobjtmp
-                        select TranslateBuff(mstFuncobjtmp["popupText"].ToString())).ToArray();
+                {
+                    var funcnametmp = "";
+                    var TmpList = new List<string>();
+                    TmpList.Clear();
+                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                    {
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                            if (funcnametmp != "") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+
+                        TmpList.Add(TranslateBuff(funcnametmp));
+                    }
+
+                    svtTreasureDeviceFuncArray = TmpList.ToArray();
+                }
                 else
-                    svtTreasureDeviceFuncArray = (from skfuncidtmp in svtTreasureDeviceFuncIDArray
-                        from functmp in GlobalPathsAndDatas.mstFuncArray
-                        where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                        select JObject.Parse(functmp.ToString())
-                        into mstFuncobjtmp
-                        select mstFuncobjtmp["popupText"].ToString()).ToArray();
+                {
+                    var funcnametmp = "";
+                    var TmpList = new List<string>();
+                    TmpList.Clear();
+                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                    {
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                            if (funcnametmp != "") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+
+                        TmpList.Add(funcnametmp);
+                    }
+
+                    svtTreasureDeviceFuncArray = TmpList.ToArray();
+                }
+
                 TDFuncstrArray = svtTreasureDeviceFuncArray;
                 for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                 {
@@ -1857,19 +1900,53 @@ namespace Altera
                     svtSKFuncIDList = new List<string>(svtSKFuncID.Split(','));
                     svtSKFuncIDArray = svtSKFuncIDList.ToArray();
                     if (NeedTranslate)
-                        svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
-                            into mstFuncobjtmp
-                            select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(TranslateBuff(funcnametmp));
+                        }
+                    }
                     else
-                        svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
-                            into mstFuncobjtmp
-                            select mstFuncobjtmp["popupText"].ToString());
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(funcnametmp);
+                        }
+                    }
                 }
             }
 
@@ -2581,19 +2658,53 @@ namespace Altera
                     svtSKFuncIDList = new List<string>(svtSKFuncID.Split(','));
                     svtSKFuncIDArray = svtSKFuncIDList.ToArray();
                     if (NeedTranslate)
-                        svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
-                            into mstFuncobjtmp
-                            select TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(TranslateBuff(funcnametmp));
+                        }
+                    }
                     else
-                        svtSKFuncList.AddRange(from skfuncidtmp in svtSKFuncIDArray
-                            from functmp in GlobalPathsAndDatas.mstFuncArray
-                            where ((JObject) functmp)["id"].ToString() == skfuncidtmp
-                            select JObject.Parse(functmp.ToString())
-                            into mstFuncobjtmp
-                            select mstFuncobjtmp["popupText"].ToString());
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(funcnametmp);
+                        }
+                    }
                 }
             }
 
