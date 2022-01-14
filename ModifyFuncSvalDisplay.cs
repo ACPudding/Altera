@@ -312,9 +312,9 @@ namespace Altera
                                     {
                                         output = Convert.ToDouble(Tempsval[3]) / 10 + "%" + " + " +
                                                  Convert.ToDouble(Tempsval[4].Replace("ParamAdd:", "")) / 10 +
-                                                 "% * T \r\n" + "最大值:" +
+                                                 "% * (T-1) " + "最大值:" +
                                                  Convert.ToDouble(Tempsval[5].Replace("ParamMax:", "")) / 10 +
-                                                 "% (T为持续第T-1回合)" +
+                                                 "% \r\n注: T为持续第T回合\r\n" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
