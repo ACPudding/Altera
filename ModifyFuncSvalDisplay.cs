@@ -23,6 +23,12 @@ namespace Altera
 
         public static string[] IndividualListStringTemp;
 
+        private static readonly string TDAttackNameTranslationListLinkA =
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/TDAttackName";
+
+        private static readonly string TDAttackNameTranslationListLinkB =
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
+
         public static string ModifyFuncStr(string Funcname, string Funcsval)
         {
             var output = Funcsval;
@@ -1407,7 +1413,7 @@ namespace Altera
                 }
             }
 
-            if (Funcname.Contains("強力攻撃") || Funcname.Contains("防御無視攻撃"))
+            if (Funcname.Contains("強力攻撃") || Funcname.Contains("防御無視攻撃") || Funcname.Contains("被傷害反射"))
             {
                 Tempsval = Funcsval.Split(',');
                 try
@@ -1603,12 +1609,44 @@ namespace Altera
                     FuncSvalArray[i].Count(c => c == ',') == 1 &&
                     !FuncSvalArray[i].Contains("Hide"))
                     FuncListArray[i] = "HP回復";
+                if ((FuncListArray[i] == "なし" || FuncListArray[i] == "" &&
+                        FuncSvalArray[i].Contains("Hide")) &&
+                    FuncSvalArray[i].Count(c => c == ',') > 0)
+                    FuncListArray[i] = TranslateTDAttackNameForClock(FuncIDArray[i]);
+                if (FuncListArray[i] == "生贄")
+                    FuncListArray[i] = "活祭";
                 result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
                           ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";
             }
 
             result += ">\r\n";
             return result;
+        }
+
+        private static string TranslateTDAttackNameForClock(string TDFuncID)
+        {
+            try
+            {
+                var GetTDFuncTranslationListArray = HttpRequest
+                    .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
+                    .Replace("+", Environment.NewLine).Split('|');
+                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
+                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
+                {
+                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
+                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
+                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
+                }
+
+                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
+                    if (TDTranslistFullArray[k][0] == TDFuncID)
+                        return TDTranslistFullArray[k][1];
+                return "暫無翻譯";
+            }
+            catch (Exception)
+            {
+                return "FuncID: " + TDFuncID;
+            }
         }
 
         private static int ReturnArrayNum(string str)
