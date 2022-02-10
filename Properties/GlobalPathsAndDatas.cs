@@ -69,5 +69,7 @@ namespace Altera.Properties
         public static string AS2D; 
         public static string AS3N;
         public static string AS3D;
+        public static string TDAttackNameTranslation;
+        public static string SvtIndividualityTranslation;
     }
 }

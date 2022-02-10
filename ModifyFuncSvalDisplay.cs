@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using Altera.Properties;
@@ -9,25 +10,7 @@ namespace Altera
     //对所有从者数值进行规范化显示(可能会有误显示的问题)
     internal class ModifyFuncSvalDisplay
     {
-        private static readonly string BuffTranslationListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
-
-        private static readonly string BuffTranslationListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
-
-        private static readonly string IndividualListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
-
-        private static readonly string IndividualListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/IndividualityList";
-
         public static string[] IndividualListStringTemp;
-
-        private static readonly string TDAttackNameTranslationListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/TDAttackName";
-
-        private static readonly string TDAttackNameTranslationListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
 
         public static string ModifyFuncStr(string Funcname, string Funcsval)
         {
@@ -1036,6 +1019,35 @@ namespace Altera
                     }
 
                     break;
+                case 164:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length==8)
+                    {
+                        try
+                        {
+                            var CounterTDID = Tempsval[3].Replace("CounterId:", "");
+                            var CounterTDLv = Tempsval[4].Replace("CounterLv:", "");
+                            var result = ServantTreasureDeviceSvalCheckForCounter(CounterTDID, CounterTDLv);
+                            if (result != "false")
+                            {
+                                output = "<\r\n" + result + ">" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次"); ;
+                            }
+                            else
+                            {
+                                output = Funcsval;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+                    }
+                    break;
                 default:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3)
@@ -1627,9 +1639,7 @@ namespace Altera
         {
             try
             {
-                var GetTDFuncTranslationListArray = HttpRequest
-                    .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
-                    .Replace("+", Environment.NewLine).Split('|');
+                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
                 var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
                 for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
                 {
@@ -1651,10 +1661,6 @@ namespace Altera
 
         private static int ReturnArrayNum(string str)
         {
-            if (GlobalPathsAndDatas.TranslationListArray == null)
-                GlobalPathsAndDatas.TranslationListArray =
-                    HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB).Replace("\r\n", "")
-                        .Split('|');
             var TranslationListFullArray = new string[GlobalPathsAndDatas.TranslationListArray.Length][];
             for (var i = 0; i < GlobalPathsAndDatas.TranslationListArray.Length; i++)
             {
@@ -1676,7 +1682,7 @@ namespace Altera
         {
             if (IndividualListStringTemp == null)
             {
-                var TempSplit1 = HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "")
+                var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation
                     .Split('|');
                 IndividualListStringTemp = TempSplit1;
             }
@@ -1701,6 +1707,126 @@ namespace Altera
 
 
             return Input;
+        }
+        public static string TranslateBuff(string buffname)
+        {
+            try
+            {
+                var TranslationListArray = GlobalPathsAndDatas.TranslationList.Replace("\r\n", "").Split('|');
+                var TranslationListFullArray = new string[TranslationListArray.Length][];
+                for (var i = 0; i < TranslationListArray.Length; i++)
+                {
+                    var TempSplit2 = TranslationListArray[i].Split(',');
+                    TranslationListFullArray[i] = new string[TempSplit2.Length];
+                    for (var j = 0; j < TempSplit2.Length; j++) TranslationListFullArray[i][j] = TempSplit2[j];
+                }
+
+                for (var k = 0; k < TranslationListArray.Length; k++)
+                    if (buffname.Contains(TranslationListFullArray[k][0]))
+                        buffname = buffname.Replace(TranslationListFullArray[k][0], TranslationListFullArray[k][1]);
+                return buffname;
+            }
+            catch (Exception)
+            {
+                return buffname;
+            }
+        }
+        private static string ServantTreasureDeviceSvalCheckForCounter(string svtTDID,string Lv)
+        {
+            string svtTreasureDeviceFuncID;
+            string[] svtTreasureDeviceFuncIDArray = null;
+            string[] svtTreasureDeviceFuncArray;
+            string[] TDFuncstrArray = null;
+            string[] TDlv1OC1strArray = null;
+            var output = "";
+            foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
+            {
+                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() != svtTDID ||
+                    ((JObject) TDLVtmp)["lv"].ToString() != Lv) continue;
+                var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
+                var NPval1 = TDLVobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                    .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                if (NPval1.Length >= 2) NPval1 = NPval1.Substring(0, NPval1.Length - 2);
+                TDlv1OC1strArray = NPval1.Split('|');
+                svtTreasureDeviceFuncID = TDLVobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                svtTreasureDeviceFuncIDArray = svtTreasureDeviceFuncID.Split(',');
+            }
+            try
+            {
+                var funcnametmp = "";
+                    var TmpList = new List<string>();
+                    TmpList.Clear();
+                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                    {
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                            if (funcnametmp != "") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                funcnametmp = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                        TmpList.Add(TranslateBuff(funcnametmp));
+                    }
+                    svtTreasureDeviceFuncArray = TmpList.ToArray();
+                    TDFuncstrArray = svtTreasureDeviceFuncArray;
+                for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
+                {
+                    if ((TDFuncstrArray[i] == "なし" || TDFuncstrArray[i] == "" &&
+                            TDlv1OC1strArray[i].Contains("Hide")) &&
+                        TDlv1OC1strArray[i].Count(c => c == ',') > 0)
+                        TDFuncstrArray[i] = TranslateTDAttackName(svtTreasureDeviceFuncIDArray[i]);
+
+                    if (TDFuncstrArray[i] == "生贄" && svtTreasureDeviceFuncIDArray[i] == "3851")
+                        TDFuncstrArray[i] = "活祭";
+
+                    if (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "7011")
+                        TDFuncstrArray[i] = "从者位置变更";
+
+                    if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
+                        !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
+                    TDlv1OC1strArray[i] = ModifyFuncStr(TDFuncstrArray[i],
+                        TDlv1OC1strArray[i]);
+                    output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ")\r\n";
+                }
+                GC.Collect();
+                return output;
+            }
+            catch (Exception)
+            {
+                return "false";
+            }
+        }
+        private static string TranslateTDAttackName(string TDFuncID)
+        {
+            try
+            {
+                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
+                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
+                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
+                {
+                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
+                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
+                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
+                }
+
+                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
+                    if (TDTranslistFullArray[k][0] == TDFuncID)
+                        return TDTranslistFullArray[k][1];
+                return "暫無翻譯\r\nID: " + TDFuncID;
+            }
+            catch (Exception)
+            {
+                return "FuncID: " + TDFuncID;
+            }
         }
     }
 }

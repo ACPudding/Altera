@@ -36,22 +36,22 @@ namespace Altera
 
         private static string GameDataVersion;
 
-        private readonly string BuffTranslationListLinkA =
+        private static readonly string BuffTranslationListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
 
-        private readonly string BuffTranslationListLinkB =
+        private static readonly string BuffTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
 
-        private readonly string IndividualListLinkA =
+        private static readonly string IndividualListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
 
-        private readonly string IndividualListLinkB =
+        private static readonly string IndividualListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/IndividualityList";
 
-        private readonly string TDAttackNameTranslationListLinkA =
+        private static readonly string TDAttackNameTranslationListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/TDAttackName";
 
-        private readonly string TDAttackNameTranslationListLinkB =
+        private static readonly string TDAttackNameTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
 
         public MainWindow()
@@ -131,19 +131,13 @@ namespace Altera
             JB.JB6 = "";
             JB.JB7 = "";
             ClearTexts();
+            RefreshTranslationsList();
             var TDStringBar = GetSvtTDID(svtID);
             if (TDStringBar[1] == "true") IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲"; });
             if (TDStringBar[1] == "truetrue")
                 IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲▲"; });
             svtTDID = TDStringBar[0];
             textbox1.Dispatcher.Invoke(() => { textbox1.Text = svtID; });
-
-            ToggleBuffFuncTranslate.Dispatcher.Invoke(() =>
-            {
-                if (ToggleBuffFuncTranslate.IsChecked == true)
-                    GlobalPathsAndDatas.TranslationList =
-                        HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
-            });
             SCAC.Start();
             SBIC.Start();
             SCIC.Start();
@@ -1702,13 +1696,68 @@ namespace Altera
             }
         }
 
+        private void RefreshTranslationsList()
+        {
+            GlobalPathsAndDatas.SvtIndividualityTranslation =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
+                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
+                    : HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "");
+            ;
+            GlobalPathsAndDatas.TDAttackNameTranslation =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
+                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
+                    : HttpRequest
+                        .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
+                        .Replace("+", Environment.NewLine);
+            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
+            {
+                GlobalPathsAndDatas.TranslationList =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data");
+                GlobalPathsAndDatas.TranslationListArray =
+                    GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
+                        .Split('|');
+            }
+            else
+            {
+                GlobalPathsAndDatas.TranslationList =
+                    HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
+                GlobalPathsAndDatas.TranslationListArray = GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
+                    .Split('|');
+            }
+        }
+
+        private void UpdateTranslationData(object sender, RoutedEventArgs e)
+        {
+            UTD();
+        }
+
+        private void UTD()
+        {
+            GlobalPathsAndDatas.TDAttackNameTranslation = HttpRequest
+                .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
+                .Replace("+", Environment.NewLine);
+            GlobalPathsAndDatas.SvtIndividualityTranslation =
+                HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "");
+            GlobalPathsAndDatas.TranslationList =
+                HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
+            GlobalPathsAndDatas.TranslationListArray =
+                GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
+                    .Split('|');
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data",
+                GlobalPathsAndDatas.SvtIndividualityTranslation);
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data",
+                GlobalPathsAndDatas.TDAttackNameTranslation);
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data",
+                GlobalPathsAndDatas.TranslationList);
+            Dispatcher.Invoke(() => { Growl.Info("翻译列表更新完成."); });
+            GC.Collect();
+        }
+
         private string TranslateTDAttackName(string TDFuncID)
         {
             try
             {
-                var GetTDFuncTranslationListArray = HttpRequest
-                    .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
-                    .Replace("+", Environment.NewLine).Split('|');
+                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
                 var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
                 for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
                 {
@@ -3288,6 +3337,32 @@ namespace Altera
             ATKCurveX.Values = LineATK.AsChartValues();
             for (var j = 0; j <= 119; j++) LabelX[j] = levels[j].ToString();
             DataContext = this;
+            GlobalPathsAndDatas.SvtIndividualityTranslation =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
+                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
+                    : null;
+            GlobalPathsAndDatas.TDAttackNameTranslation =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
+                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
+                    : null;
+            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
+            {
+                GlobalPathsAndDatas.TranslationList =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data");
+                GlobalPathsAndDatas.TranslationListArray =
+                    GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
+                        .Split('|');
+            }
+            else
+            {
+                GlobalPathsAndDatas.TranslationList = null;
+                GlobalPathsAndDatas.TranslationListArray = null;
+            }
+
+            if (!File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data") ||
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data") ||
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
+                Dispatcher.Invoke(() => { Growl.Info("翻译列表缺失,建议先前往数据更新选项卡更新."); });
         }
 
         private void ExcelFileOutput()
@@ -4171,8 +4246,7 @@ namespace Altera
         public void CheckSvtIndividuality(object Input)
         {
             var IndividualityStringArray = Input.ToString().Split(',');
-            var TempSplit1 = HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "")
-                .Split('|');
+            var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation.Split('|');
             var IndividualityCommons = new string[TempSplit1.Length][];
             for (var i = 0; i < TempSplit1.Length; i++)
             {
