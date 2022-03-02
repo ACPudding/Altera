@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using Altera.Properties;
@@ -133,6 +132,23 @@ namespace Altera
                         if (Tempsval.Length == 5)
                         {
                             if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            if (Tempsval[4].Contains("IgnoreIndivUnreleaseable"))
                                 try
                                 {
                                     output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -1021,8 +1037,7 @@ namespace Altera
                     break;
                 case 164:
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length==8)
-                    {
+                    if (Tempsval.Length == 8)
                         try
                         {
                             var CounterTDID = Tempsval[3].Replace("CounterId:", "");
@@ -1035,7 +1050,8 @@ namespace Altera
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                          (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次"); ;
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                ;
                             }
                             else
                             {
@@ -1046,7 +1062,7 @@ namespace Altera
                         {
                             output = Funcsval;
                         }
-                    }
+
                     break;
                 default:
                     Tempsval = Funcsval.Split(',');
@@ -1708,6 +1724,7 @@ namespace Altera
 
             return Input;
         }
+
         public static string TranslateBuff(string buffname)
         {
             try
@@ -1731,7 +1748,8 @@ namespace Altera
                 return buffname;
             }
         }
-        private static string ServantTreasureDeviceSvalCheckForCounter(string svtTDID,string Lv)
+
+        private static string ServantTreasureDeviceSvalCheckForCounter(string svtTDID, string Lv)
         {
             string svtTreasureDeviceFuncID;
             string[] svtTreasureDeviceFuncIDArray = null;
@@ -1752,32 +1770,35 @@ namespace Altera
                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                 svtTreasureDeviceFuncIDArray = svtTreasureDeviceFuncID.Split(',');
             }
+
             try
             {
                 var funcnametmp = "";
-                    var TmpList = new List<string>();
-                    TmpList.Clear();
-                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                var TmpList = new List<string>();
+                TmpList.Clear();
+                foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                {
+                    foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                     {
-                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                        var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                        funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                        if (funcnametmp != "") continue;
+                        var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
                         {
-                            if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
-                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
-                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                            if (funcnametmp != "") continue;
-                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
-                            {
-                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
-                                funcnametmp = ((JObject)Bufftmp)["name"].ToString();
-                                break;
-                            }
+                            if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
+                            funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                            break;
                         }
-                        TmpList.Add(TranslateBuff(funcnametmp));
                     }
-                    svtTreasureDeviceFuncArray = TmpList.ToArray();
-                    TDFuncstrArray = svtTreasureDeviceFuncArray;
+
+                    TmpList.Add(TranslateBuff(funcnametmp));
+                }
+
+                svtTreasureDeviceFuncArray = TmpList.ToArray();
+                TDFuncstrArray = svtTreasureDeviceFuncArray;
                 for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                 {
                     if ((TDFuncstrArray[i] == "なし" || TDFuncstrArray[i] == "" &&
@@ -1797,6 +1818,7 @@ namespace Altera
                         TDlv1OC1strArray[i]);
                     output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ")\r\n";
                 }
+
                 GC.Collect();
                 return output;
             }
@@ -1805,6 +1827,7 @@ namespace Altera
                 return "false";
             }
         }
+
         private static string TranslateTDAttackName(string TDFuncID)
         {
             try

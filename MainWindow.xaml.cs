@@ -1848,14 +1848,22 @@ namespace Altera
                 string[] svtClassPassiveArray;
                 var svtClassPassive = string.Empty;
                 svtClassPassiveIDArray = ClassPassiveID.Split(',');
-                svtClassPassiveArray = (from skilltmp in GlobalPathsAndDatas.mstSkillArray
-                    from classpassiveidtmp in svtClassPassiveIDArray
-                    where ((JObject) skilltmp)["id"].ToString() == classpassiveidtmp
-                    select JObject.Parse(skilltmp.ToString())
-                    into mstsvtPskillobjtmp
-                    select mstsvtPskillobjtmp["name"].ToString() != ""
-                        ? mstsvtPskillobjtmp["name"] + " (" + mstsvtPskillobjtmp["id"] + ")"
-                        : "未知技能???" + " (" + mstsvtPskillobjtmp["id"] + ")").ToArray();
+                var tmpList = new List<string>();
+                foreach (var classpassiveidtmp in svtClassPassiveIDArray)
+                foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
+                {
+                    if (((JObject) skilltmp)["id"].ToString() != classpassiveidtmp) continue;
+                    var mstsvtPskillobjtmp = JObject.Parse(skilltmp.ToString());
+                    var AddVals = SkillAddNameCheck(classpassiveidtmp);
+                    tmpList.Add(mstsvtPskillobjtmp["name"].ToString() != ""
+                        ? mstsvtPskillobjtmp["name"] + (AddVals == "" ? "" : "[满足特定条件后显示为\"" + AddVals + "\"]") + " (" +
+                          mstsvtPskillobjtmp["id"] + ")"
+                        : "未知技能???" + (AddVals == "" ? "" : "[满足特定条件后显示为\"" + AddVals + "\"]") + " (" +
+                          mstsvtPskillobjtmp["id"] + ")");
+                    break;
+                }
+
+                svtClassPassiveArray = tmpList.ToArray();
                 svtClassPassive = string.Join(", ", svtClassPassiveArray);
                 classskill.Dispatcher.Invoke(() => { classskill.Text = svtClassPassive; });
                 var SCPSSLC = new Task(() => { ServantClassPassiveSkillSvalListCheck(ClassPassiveID); });
@@ -1865,6 +1873,19 @@ namespace Altera
             {
                 // ignored
             }
+        }
+
+        private string SkillAddNameCheck(string skillid)
+        {
+            var result = "";
+            foreach (var mstSkillAddtmp in GlobalPathsAndDatas.mstSkillAddArray)
+            {
+                if (((JObject) mstSkillAddtmp)["skillId"].ToString() != skillid) continue;
+                result = ((JObject) mstSkillAddtmp)["name"].ToString();
+                break;
+            }
+
+            return result;
         }
 
         private void ServantClassPassiveSkillSvalListCheck(string ClassPassiveID)
@@ -2352,6 +2373,8 @@ namespace Altera
                 if (isStrengthed) skillName += " ▲";
             }
 
+            var AddVals = SkillAddNameCheck(SkillID);
+
             Dispatcher.Invoke(() =>
             {
                 foreach (var skillDetailtmp in GlobalPathsAndDatas.mstSkillDetailArray)
@@ -2360,12 +2383,15 @@ namespace Altera
                     var skillDetailobjtmp = JObject.Parse(skillDetailtmp.ToString());
                     if (ToggleDetailbr.IsChecked == true)
                         skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
-                            .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                            .Replace(@"＆", "\r\n ＋").Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
+                                          .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
+                                          .Replace(@"＆", "\r\n ＋").Replace(@"＋", "\r\n ＋")
+                                          .Replace("\r\n \r\n", "\r\n") +
+                                      (AddVals == "" ? "" : "\r\n(bot备注:满足特定条件后技能名称改变为\"" + AddVals + "\")");
                     else
                         skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
-                            .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                            .Replace(@"＆", " ＋");
+                                          .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
+                                          .Replace(@"＆", " ＋") +
+                                      (AddVals == "" ? "" : "\r\n(bot备注:满足特定条件后技能名称改变为\"" + AddVals + "\")");
                 }
             });
             Dispatcher.Invoke(() =>
