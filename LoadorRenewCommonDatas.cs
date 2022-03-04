@@ -102,6 +102,11 @@ namespace Altera
                 var mstSkillAdd =
                     File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
                                      "mstSkillAdd.json");
+                var mstSvtPassiveSkill =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
+                                     "mstSvtPassiveSkill.json");
+                GlobalPathsAndDatas.mstSvtPassiveSkillArray =
+                    (JArray) JsonConvert.DeserializeObject(mstSvtPassiveSkill);
                 GlobalPathsAndDatas.mstSkillAddArray =
                     (JArray) JsonConvert.DeserializeObject(mstSkillAdd);
                 GlobalPathsAndDatas.mstBuffArray =
@@ -183,6 +188,10 @@ namespace Altera
             {
                 switch (name)
                 {
+                    case "mstSvtPassiveSkill":
+                        GlobalPathsAndDatas.mstSvtPassiveSkillArray =
+                            (JArray) JsonConvert.DeserializeObject(data);
+                        break;
                     case "mstBuff":
                         GlobalPathsAndDatas.mstBuffArray =
                             (JArray) JsonConvert.DeserializeObject(data);

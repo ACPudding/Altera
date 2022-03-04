@@ -108,6 +108,7 @@ namespace Altera
                 case 141:
                 case 149:
                 case 163:
+                case 165:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
@@ -219,6 +220,23 @@ namespace Altera
                                 }
 
                             if (Tempsval[4].Contains("Hide"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            if (Tempsval[4].Contains("OnField"))
                                 try
                                 {
                                     output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -1231,6 +1249,21 @@ namespace Altera
                     }
 
                     break;
+                case "詛咒吸収":
+                    try
+                    {
+                        output =
+                            "∅" +
+                            (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+
+                    break;
                 case "灼傷無効":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3 || Funcsval.Contains("Individualty"))
@@ -1301,6 +1334,20 @@ namespace Altera
                     try
                     {
                         output = Tempsval[1] + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                            ? "HP"
+                            : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+
+                    break;
+                case "HP吸収":
+                    Tempsval = Funcsval.Split(',');
+                    try
+                    {
+                        output = Tempsval[3].Replace("]", "") + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                             ? "HP"
                             : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
                     }
@@ -1474,10 +1521,51 @@ namespace Altera
                     }
             }
 
+            if (Funcname == "永久睡眠")
+            {
+                Tempsval = Funcsval.Split(',');
+                switch (Tempsval.Length)
+                {
+                    case 3:
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 5:
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    default:
+                        output = Funcsval;
+                        break;
+                }
+            }
+
             if (Funcname == "強化解除" || Funcname == "防御強化解除" || Funcname == "攻撃強化解除" || Funcname == "攻撃弱体解除" ||
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
-                Funcname == "詛咒解除")
+                Funcname == "詛咒解除" || Funcname == "詛咒無効")
 
             {
                 Tempsval = Funcsval.Split(',');

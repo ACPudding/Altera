@@ -1847,7 +1847,9 @@ namespace Altera
                 string[] svtClassPassiveIDArray = null;
                 string[] svtClassPassiveArray;
                 var svtClassPassive = string.Empty;
-                svtClassPassiveIDArray = ClassPassiveID.Split(',');
+                var Extratmp = ServantClassPassiveSkillExtraCheck(JB.svtid);
+                var ClassPassiveIDTrue = ClassPassiveID + (Extratmp == "" ? "" : "," + Extratmp);
+                svtClassPassiveIDArray = ClassPassiveIDTrue.Split(',');
                 var tmpList = new List<string>();
                 foreach (var classpassiveidtmp in svtClassPassiveIDArray)
                 foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
@@ -1866,13 +1868,27 @@ namespace Altera
                 svtClassPassiveArray = tmpList.ToArray();
                 svtClassPassive = string.Join(", ", svtClassPassiveArray);
                 classskill.Dispatcher.Invoke(() => { classskill.Text = svtClassPassive; });
-                var SCPSSLC = new Task(() => { ServantClassPassiveSkillSvalListCheck(ClassPassiveID); });
+                var SCPSSLC = new Task(() => { ServantClassPassiveSkillSvalListCheck(ClassPassiveIDTrue); });
                 SCPSSLC.Start();
             }
             catch (Exception)
             {
                 // ignored
             }
+        }
+
+        private string ServantClassPassiveSkillExtraCheck(string svtID)
+        {
+            var ExtraList = (from skilltmp in GlobalPathsAndDatas.mstSvtPassiveSkillArray
+                where ((JObject) skilltmp)["svtId"].ToString() == svtID
+                where ((JObject) skilltmp)["skillId"].ToString().Substring(0, 1) != "9" ||
+                      ((JObject) skilltmp)["skillId"].ToString().Length != 6
+                select JObject.Parse(skilltmp.ToString())
+                into mstsvtPskillobjtmp
+                select mstsvtPskillobjtmp["skillId"].ToString()).ToList();
+            if (ExtraList.Count == 0) return "";
+            var result = string.Join(",", ExtraList);
+            return result;
         }
 
         private string SkillAddNameCheck(string skillid)
@@ -1907,8 +1923,10 @@ namespace Altera
                     {
                         if (((JObject) skilltmp)["id"].ToString() != svtClassPassiveIDListArray[i]) continue;
                         var skillobjtmp = JObject.Parse(skilltmp.ToString());
+                        var AddVals = SkillAddNameCheck(svtClassPassiveIDListArray[i]);
                         ClassPassiveSkillFuncName = NeedTranslate
-                            ? TranslateBuff(skillobjtmp["name"].ToString())
+                            ? TranslateBuff(skillobjtmp["name"].ToString()) +
+                              (AddVals == "" ? "" : "\r\n(" + AddVals + ")")
                             : skillobjtmp["name"].ToString();
                     }
 
@@ -2833,6 +2851,8 @@ namespace Altera
                 {
                     if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 1 &&
                         !lv1Array[i].Contains("Hide")) FuncArray[i] = "HP回復";
+                    if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 3 &&
+                        lv1Array[i].Contains("DependFuncId1")) FuncArray[i] = "HP吸収";
                     if (ToggleFuncDiffer.IsChecked == true)
                     {
                         lv1Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
