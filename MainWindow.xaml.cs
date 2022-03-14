@@ -856,7 +856,7 @@ namespace Altera
                         classData = int.Parse(svtClass);
                         GlobalPathsAndDatas.classid = 0;
                         GlobalPathsAndDatas.classid = classData;
-                        svtclass.Text = ClassName[classData] != null
+                        svtclass.Text = ClassName != null && ClassName[classData] != null
                             ? ClassName[classData]
                             : ReadClassName.ReadClassOriginName(classData);
                         var CheckShiZhuang = new Task(() => { CheckSvtIsFullinGame(classData); });
@@ -4632,12 +4632,11 @@ namespace Altera
 
         private string GetSvtName(string svtID, int Option)
         {
-            var svtName = "";
             foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
             {
                 if (((JObject) svtIDtmp)["id"].ToString() != svtID) continue;
                 var mstSvtobjtmp = JObject.Parse(svtIDtmp.ToString());
-                svtName = Option == 1 ? mstSvtobjtmp["battleName"].ToString() : mstSvtobjtmp["name"].ToString();
+                var svtName = Option == 1 ? mstSvtobjtmp["battleName"].ToString() : mstSvtobjtmp["name"].ToString();
                 return svtName;
             }
 

@@ -14,7 +14,7 @@ namespace Altera
         public static string ModifyFuncStr(string Funcname, string Funcsval)
         {
             var output = Funcsval;
-            string[] Tempsval = null;
+            string[] Tempsval;
             var ArrayNum = ReturnArrayNum(Funcname);
             switch (ArrayNum)
             {
@@ -136,6 +136,25 @@ namespace Altera
                                 try
                                 {
                                     output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            if (Tempsval[4].Contains("RatioHPLow"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "% + \r\n" +
+                                             Convert.ToDouble(Tempsval[4].Replace("RatioHPLow:", "")) / 10 +
+                                             "% * (1 - HP / MaxHP)\r\n" +
                                              (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -335,7 +354,7 @@ namespace Altera
                                     {
                                         output = Convert.ToDouble(Tempsval[3]) / 10 + "%" + " + " +
                                                  Convert.ToDouble(Tempsval[4].Replace("ParamAdd:", "")) / 10 +
-                                                 "% * (T-1) " + "最大值:" +
+                                                 "% * (T-1) " + "\r\n最大值:" +
                                                  Convert.ToDouble(Tempsval[5].Replace("ParamMax:", "")) / 10 +
                                                  "% \r\n注: T为持续第T回合\r\n" +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
@@ -584,8 +603,7 @@ namespace Altera
                             {
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                var Clockval = "";
-                                Clockval = FindClockBuff(Tempsval[3], Lv);
+                                var Clockval = FindClockBuff(Tempsval[3], Lv);
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
@@ -752,8 +770,7 @@ namespace Altera
                         {
                             var Lv = "1";
                             if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                            var Clockval = "";
-                            Clockval = FindClockBuff(Tempsval[3], Lv);
+                            var Clockval = FindClockBuff(Tempsval[3], Lv);
                             if (Tempsval.Length >= 6)
                                 if (Tempsval[5].Contains("UseRate"))
                                 {
@@ -1169,8 +1186,7 @@ namespace Altera
                             {
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                var Clockval = "";
-                                Clockval = FindClockBuff(Tempsval[3], Lv);
+                                var Clockval = FindClockBuff(Tempsval[3], Lv);
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
@@ -1426,8 +1442,7 @@ namespace Altera
                     {
                         var Lv = "1";
                         if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                        var Clockval = "";
-                        Clockval = FindClockBuff(Tempsval[3], Lv);
+                        var Clockval = FindClockBuff(Tempsval[3], Lv);
                         if (Tempsval.Length >= 6)
                         {
                             if (Tempsval[5].Contains("UseRate"))
@@ -1565,7 +1580,7 @@ namespace Altera
             if (Funcname == "強化解除" || Funcname == "防御強化解除" || Funcname == "攻撃強化解除" || Funcname == "攻撃弱体解除" ||
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
-                Funcname == "詛咒解除" || Funcname == "詛咒無効")
+                Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -1632,9 +1647,8 @@ namespace Altera
                 if (Tempsval.Length == 3)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "威力提升倍率: " +
-                                 Convert.ToDouble(Tempsval[2]) / 10 + "%" +
-                                 "\r\n注:最终倍率=基础倍率 + \r\n威力提升倍率 * \r\n(1-现在HP/最大HP)";
+                        output = Convert.ToDouble(Tempsval[1]) / 10 + "% +\r\n" + Convert.ToDouble(Tempsval[2]) / 10 +
+                                 "% * (1 - HP / MaxHP)";
                     }
                     catch (Exception)
                     {
@@ -1700,7 +1714,7 @@ namespace Altera
                     ((JObject) SKLTMP)["lv"].ToString() != lv) continue;
                 var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                 FuncSval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
-                    .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                    .Replace("[", "").Replace("]\"", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                 FuncSval = FuncSval.Substring(0, FuncSval.Length - 2);
                 FuncID = SKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
