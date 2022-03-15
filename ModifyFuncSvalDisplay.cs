@@ -1431,6 +1431,31 @@ namespace Altera
                         output = Funcsval;
                         break;
                     }
+                case "概率回避":
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4)
+                    {
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[3].Replace("UseRate:", "")) / 10 + "%" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
             }
 
             if (Funcname.Contains("追加効果") || Funcname.Contains("攻撃時発動"))

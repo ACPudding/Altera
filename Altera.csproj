@@ -386,7 +386,6 @@
     <Resource Include="images\ClassForeigner3.png" />
     <Resource Include="images\ClassLancer3.png" />
     <Resource Include="images\ClassRider3.png" />
-    <Resource Include="images\ClassRuler3.png" />
     <Resource Include="images\ClassSaber3.png" />
     <Resource Include="images\ClassShielder3.png" />
   </ItemGroup>
@@ -434,6 +433,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\ClassBeastIV3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassAlterego1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassAlterego2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassAvenger1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassForeigner2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassForeigner1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassPretender1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassRuler3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
