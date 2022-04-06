@@ -3564,18 +3564,42 @@ namespace Altera
                 worksheet.Cells["E21"].Value = SkillLvs.NPQ;
                 worksheet.Cells["E22"].Value = SkillLvs.NPEX;
                 worksheet.Cells["E23"].Value = SkillLvs.NPTD;
-                var sk1icon = BitmapImage2Bitmap((BitmapSource) sk1_icon.Source);
-                var sk2icon = BitmapImage2Bitmap((BitmapSource) sk2_icon.Source);
-                var sk3icon = BitmapImage2Bitmap((BitmapSource) sk3_icon.Source);
-                var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
-                var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
-                var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
-                sk1i.SetPosition(200, 850);
-                sk1i.SetSize(40, 40);
-                sk2i.SetPosition(465, 850);
-                sk2i.SetSize(40, 40);
-                sk3i.SetPosition(685, 850);
-                sk3i.SetSize(40, 40);
+                try
+                {
+                    var sk1icon = BitmapImage2Bitmap((BitmapSource) sk1_icon.Source);
+                    var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
+                    sk1i.SetPosition(200, 850);
+                    sk1i.SetSize(40, 40);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                try
+                {
+                    var sk2icon = BitmapImage2Bitmap((BitmapSource) sk2_icon.Source);
+                    var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
+                    sk2i.SetPosition(465, 850);
+                    sk2i.SetSize(40, 40);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
+                try
+                {
+                    var sk3icon = BitmapImage2Bitmap((BitmapSource) sk3_icon.Source);
+                    var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
+                    sk3i.SetPosition(685, 850);
+                    sk3i.SetSize(40, 40);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
                 switch (worksheet.Cells["E26"].Value.ToString())
                 {
                     case "Quick":
