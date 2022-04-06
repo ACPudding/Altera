@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Altera.Properties;
 using HandyControl.Controls;
@@ -20,8 +21,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Color = System.Drawing.Color;
+using FontFamily = System.Windows.Media.FontFamily;
 using MessageBox = HandyControl.Controls.MessageBox;
+using Point = System.Drawing.Point;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace Altera
@@ -2339,9 +2341,11 @@ namespace Altera
             {
                 case "true":
                     IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲"; });
+                    svtskill1_header.Dispatcher.Invoke(() => { svtskill1_header.Header += "▲"; });
                     break;
                 case "twice":
                     IsSk1Strengthened.Dispatcher.Invoke(() => { IsSk1Strengthened.Text = "▲▲"; });
+                    svtskill1_header.Dispatcher.Invoke(() => { svtskill1_header.Header += "▲▲"; });
                     break;
             }
 
@@ -2349,9 +2353,11 @@ namespace Altera
             {
                 case "true":
                     IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲"; });
+                    svtskill2_header.Dispatcher.Invoke(() => { svtskill2_header.Header += "▲"; });
                     break;
                 case "twice":
                     IsSk2Strengthened.Dispatcher.Invoke(() => { IsSk2Strengthened.Text = "▲▲"; });
+                    svtskill2_header.Dispatcher.Invoke(() => { svtskill2_header.Header += "▲▲"; });
                     break;
             }
 
@@ -2359,9 +2365,11 @@ namespace Altera
             {
                 case "true":
                     IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲"; });
+                    svtskill3_header.Dispatcher.Invoke(() => { svtskill3_header.Header += "▲"; });
                     break;
                 case "twice":
                     IsSk3Strengthened.Dispatcher.Invoke(() => { IsSk3Strengthened.Text = "▲▲"; });
+                    svtskill3_header.Dispatcher.Invoke(() => { svtskill3_header.Header += "▲▲"; });
                     break;
             }
 
@@ -2383,11 +2391,32 @@ namespace Altera
         {
             var skillName = "";
             var skillDetail = "";
+            var skillIconUri = "";
             foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
             {
                 if (((JObject) skilltmp)["id"].ToString() != SkillID) continue;
                 var skillobjtmp = JObject.Parse(skilltmp.ToString());
                 skillName = skillobjtmp["name"].ToString();
+                var iconid = skillobjtmp["iconId"].ToString();
+                switch (iconid.Length)
+                {
+                    case 3:
+                        skillIconUri = "skillicons\\skill_00" + iconid + ".png";
+                        break;
+                    case 4:
+                        skillIconUri = "skillicons\\skill_0" + iconid + ".png";
+                        break;
+                    case 5:
+                        skillIconUri = "skillicons\\skill_" + iconid + ".png";
+                        break;
+                    case 6:
+                        skillIconUri = "skillicons\\skill_" + iconid + ".png";
+                        break;
+                    default:
+                        skillIconUri = "skillicons\\skill_00000.png";
+                        break;
+                }
+
                 if (isStrengthed) skillName += " ▲";
             }
 
@@ -2419,18 +2448,45 @@ namespace Altera
                     case 1:
                         skill1name.Text = skillName;
                         skill1details.Text = skillDetail;
+                        try
+                        {
+                            sk1_icon.Source = new BitmapImage(new Uri(skillIconUri, UriKind.Relative));
+                        }
+                        catch (Exception)
+                        {
+                            sk1_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
+                        }
+
                         var SSC = new Task(() => { SkillSvalsCheck(SkillID, 1); });
                         SSC.Start();
                         break;
                     case 2:
                         skill2name.Text = skillName;
                         skill2details.Text = skillDetail;
+                        try
+                        {
+                            sk2_icon.Source = new BitmapImage(new Uri(skillIconUri, UriKind.Relative));
+                        }
+                        catch (Exception)
+                        {
+                            sk2_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
+                        }
+
                         var SSC2 = new Task(() => { SkillSvalsCheck(SkillID, 2); });
                         SSC2.Start();
                         break;
                     case 3:
                         skill3name.Text = skillName;
                         skill3details.Text = skillDetail;
+                        try
+                        {
+                            sk3_icon.Source = new BitmapImage(new Uri(skillIconUri, UriKind.Relative));
+                        }
+                        catch (Exception)
+                        {
+                            sk3_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
+                        }
+
                         var SSC3 = new Task(() => { SkillSvalsCheck(SkillID, 3); });
                         SSC3.Start();
                         break;
@@ -2546,6 +2602,12 @@ namespace Altera
                 ClassPassiveFuncList.Items.Clear();
                 AppendClassPassiveFuncList.Items.Clear();
                 Title = "Altera";
+                svtskill1_header.Header = "技能1";
+                svtskill2_header.Header = "技能2";
+                svtskill3_header.Header = "技能3";
+                sk1_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
+                sk2_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
+                sk3_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                 var Zeros = new int[121];
                 var levels = new int[120];
                 for (var i = 0; i <= 119; i++)
@@ -3417,11 +3479,21 @@ namespace Altera
             {
                 var path = Directory.GetCurrentDirectory();
                 var svtData = new DirectoryInfo(path + @"\ServantData\");
+                var mstData = new DirectoryInfo(path + @"\Android\masterdata\");
                 if (!Directory.Exists(svtData.FullName))
                     Directory.CreateDirectory(svtData.FullName);
-                var streamget = HttpRequest.GetXlsx();
+                Stream streamget;
+                if (!File.Exists(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx"))
+                {
+                    streamget = HttpRequest.GetXlsx();
+                    var fileStream = File.Create(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx");
+                    streamget.CopyTo(fileStream);
+                    fileStream.Close();
+                    streamget.Close();
+                }
+
                 var xlsx =
-                    new ExcelPackage(streamget);
+                    new ExcelPackage(new FileStream(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx", FileMode.Open));
                 var worksheet = xlsx.Workbook.Worksheets[0];
                 var Pickup = new ExcelAddress("E26");
                 worksheet.ConditionalFormatting.RemoveAll();
@@ -3492,6 +3564,18 @@ namespace Altera
                 worksheet.Cells["E21"].Value = SkillLvs.NPQ;
                 worksheet.Cells["E22"].Value = SkillLvs.NPEX;
                 worksheet.Cells["E23"].Value = SkillLvs.NPTD;
+                var sk1icon = BitmapImage2Bitmap((BitmapSource) sk1_icon.Source);
+                var sk2icon = BitmapImage2Bitmap((BitmapSource) sk2_icon.Source);
+                var sk3icon = BitmapImage2Bitmap((BitmapSource) sk3_icon.Source);
+                var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
+                var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
+                var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
+                sk1i.SetPosition(200, 850);
+                sk1i.SetSize(40, 40);
+                sk2i.SetPosition(465, 850);
+                sk2i.SetSize(40, 40);
+                sk3i.SetPosition(685, 850);
+                sk3i.SetSize(40, 40);
                 switch (worksheet.Cells["E26"].Value.ToString())
                 {
                     case "Quick":
@@ -3527,7 +3611,6 @@ namespace Altera
                 }
 
                 xlsx.SaveAs(new FileInfo(svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx"));
-                streamget.Close();
                 Dispatcher.Invoke(() =>
                 {
                     MessageBox.Show(
@@ -3551,6 +3634,18 @@ namespace Altera
                 });
                 if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK) ExcelFileOutput();
             }
+        }
+
+        private Bitmap BitmapImage2Bitmap(BitmapSource m)
+        {
+            var bmp = new Bitmap(m.PixelWidth, m.PixelHeight, PixelFormat.Format32bppPArgb);
+
+            var data = bmp.LockBits(
+                new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
+
+            m.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride);
+            bmp.UnlockBits(data);
+            return bmp;
         }
 
         private void VersionCheckEvent()

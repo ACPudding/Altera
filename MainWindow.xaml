@@ -785,7 +785,7 @@
             <TabItem Header="技能信息" x:Name="SkillInfoTI">
                 <Grid Margin="0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="0,10,0,0">
-                        <TabItem Header="技能1">
+                        <TabItem x:Name="svtskill1_header" Header="技能1">
                             <Grid x:Name="svtskill1" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
@@ -907,9 +907,11 @@
                                         </ListView>
                                     </Grid>
                                 </GroupBox>
+                                <Image x:Name="sk1_icon" HorizontalAlignment="Left" Height="40" Margin="10,85,0,0"
+                                       VerticalAlignment="Top" Width="40" Source="skillicons/skill_00000.png" />
                             </Grid>
                         </TabItem>
-                        <TabItem Header="技能2">
+                        <TabItem x:Name="svtskill2_header" Header="技能2">
                             <Grid x:Name="svtskill2" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
@@ -1031,9 +1033,11 @@
                                         </ListView>
                                     </Grid>
                                 </GroupBox>
+                                <Image x:Name="sk2_icon" HorizontalAlignment="Left" Height="40" Margin="10,85,0,0"
+                                       VerticalAlignment="Top" Width="40" Source="skillicons/skill_00000.png" />
                             </Grid>
                         </TabItem>
-                        <TabItem Header="技能3">
+                        <TabItem x:Name="svtskill3_header" Header="技能3">
                             <Grid x:Name="svtskill3" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
                                            Width="97"
@@ -1155,6 +1159,8 @@
                                         </ListView>
                                     </Grid>
                                 </GroupBox>
+                                <Image x:Name="sk3_icon" HorizontalAlignment="Left" Height="40" Margin="10,85,0,0"
+                                       VerticalAlignment="Top" Width="40" Source="skillicons/skill_00000.png" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="职介技能" x:Name="ClassPassiveInfo">
@@ -1761,11 +1767,11 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
+        <!--<ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
                       Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC"
                       Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
-        </ScrollViewer>
+        </ScrollViewer>-->
         <TextBlock Text="@TAKAGIMIWAKO @Altera" HorizontalAlignment="Left" Height="16"
                    Margin="734,554,-0.4,0" VerticalAlignment="Top" Width="160"
                    FontSize="11.5"
