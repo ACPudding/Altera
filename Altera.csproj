@@ -455,7 +455,9 @@
   <ItemGroup>
     <Resource Include="images\ClassRuler3.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00527.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="skillicons\skill_00000.png" />
     <Resource Include="skillicons\skill_00001.png" />

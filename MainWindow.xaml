@@ -1767,11 +1767,11 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <!--<ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
+        <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
                       Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC"
                       Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
-        </ScrollViewer>-->
+        </ScrollViewer>
         <TextBlock Text="@TAKAGIMIWAKO @Altera" HorizontalAlignment="Left" Height="16"
                    Margin="734,554,-0.4,0" VerticalAlignment="Top" Width="160"
                    FontSize="11.5"
