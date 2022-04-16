@@ -63,8 +63,8 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <TextBlock x:Name="DataVersionLabel" Text="已读取游戏数据版本:" HorizontalAlignment="Left" Height="27"
-                               Margin="5,543,0,0" VerticalAlignment="Top" Width="360"
+                    <TextBlock x:Name="DataVersionLabel" Text="游戏数据时间:" HorizontalAlignment="Left" Height="35"
+                               Margin="5,535,0,0" VerticalAlignment="Top" Width="360"
                                FontSize="11.5" Foreground="#FF333333" />
                     <hc:LoadingCircle x:Name="DataLoadingRing" Margin="381,255,387.8,275.4" Visibility="Collapsed" />
                     <Button hc:BorderElement.CornerRadius="15" x:Name="OutputIDs" Content="导出ID列表"
