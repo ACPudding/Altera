@@ -1398,6 +1398,8 @@ namespace Altera
                 return mstItemtmpobjtmp["name"].ToString();
             }
 
+            if (ID.ToString().Length == 7) return GetSvtName(ID.ToString(), 0) + "(礼装)";
+
             return "未知材料" + ID;
         }
 
@@ -3552,28 +3554,64 @@ namespace Altera
                 worksheet.Cells["E28"].Value = npruby.Text;
                 worksheet.Cells["E29"].Value = npname.Text;
                 worksheet.Cells["E30"].Value = npdetail.Text;
+                if (npdetail.Text.Length >= 240) worksheet.Cells["E30"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q3"].Value = skill1name.Text;
+                if (skill1name.Text.Length >= 15) worksheet.Cells["Q3"].Style.Font.Size = 9;
                 worksheet.Cells["V3"].Value = skill1cdlv1.Text;
                 worksheet.Cells["X3"].Value = skill1cdlv6.Text;
                 worksheet.Cells["Z3"].Value = skill1cdlv10.Text;
                 worksheet.Cells["Q4"].Value = skill1details.Text;
+                if (skill1details.Text.Length >= 150) worksheet.Cells["Q4"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q14"].Value = skill2name.Text;
+                if (skill2name.Text.Length >= 15) worksheet.Cells["Q14"].Style.Font.Size = 9;
                 worksheet.Cells["V14"].Value = skill2cdlv1.Text;
                 worksheet.Cells["X14"].Value = skill2cdlv6.Text;
                 worksheet.Cells["Z14"].Value = skill2cdlv10.Text;
                 worksheet.Cells["Q15"].Value = skill2details.Text;
+                if (skill2details.Text.Length >= 150) worksheet.Cells["Q15"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q25"].Value = skill3name.Text;
+                if (skill3name.Text.Length >= 15) worksheet.Cells["Q25"].Style.Font.Size = 9;
                 worksheet.Cells["V25"].Value = skill3cdlv1.Text;
                 worksheet.Cells["X25"].Value = skill3cdlv6.Text;
                 worksheet.Cells["Z25"].Value = skill3cdlv10.Text;
                 worksheet.Cells["Q26"].Value = skill3details.Text;
+                if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
                 worksheet.Cells["P42"].Value = svtIndividuality.Text;
                 worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
                 worksheet.Cells["K8"].Value = hpatkbalance.Text.Replace("(", "").Replace(")", "");
                 worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
+                if (SkillLvs.skill1forExcel.Length >= 300) worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
+                if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 6 &&
+                    Regex.Matches(SkillLvs.skill1forExcel, "【").Count < 7)
+                    worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
+                else if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 7 &&
+                         Regex.Matches(SkillLvs.skill1forExcel, "【").Count < 10)
+                    worksheet.Cells["Q8"].Style.Font.Size = 6.5f;
+                else if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 10)
+                    worksheet.Cells["Q8"].Style.Font.Size = 5.5f;
                 worksheet.Cells["Q19"].Value = SkillLvs.skill2forExcel;
+                if (SkillLvs.skill2forExcel.Length >= 300) worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
+                if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 6 &&
+                    Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 7)
+                    worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
+                else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 7 &&
+                         Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 10)
+                    worksheet.Cells["Q19"].Style.Font.Size = 6.5f;
+                else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 10)
+                    worksheet.Cells["Q19"].Style.Font.Size = 5.5f;
                 worksheet.Cells["Q30"].Value = SkillLvs.skill3forExcel;
+                if (SkillLvs.skill3forExcel.Length >= 300) worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
+                if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 6 &&
+                    Regex.Matches(SkillLvs.skill3forExcel, "【").Count < 7)
+                    worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
+                else if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 7 &&
+                         Regex.Matches(SkillLvs.skill3forExcel, "【").Count < 10)
+                    worksheet.Cells["Q30"].Style.Font.Size = 6.5f;
+                else if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 10)
+                    worksheet.Cells["Q30"].Style.Font.Size = 5.5f;
                 worksheet.Cells["E37"].Value = SkillLvs.TDforExcel;
+                if (Regex.Matches(SkillLvs.TDforExcel, "【").Count >= 7 || SkillLvs.TDforExcel.Length >= 400)
+                    worksheet.Cells["E37"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q36"].Value = GlobalPathsAndDatas.AS1N;
                 worksheet.Cells["Q38"].Value = GlobalPathsAndDatas.AS2N;
                 worksheet.Cells["Q40"].Value = GlobalPathsAndDatas.AS3N;
@@ -3907,8 +3945,10 @@ namespace Altera
                 var TempName = ((JObject)mstQuest)["name"].ToString();
                 if (TempName.Length > 14) TempName = TempName.Insert(14, "\r\n");
                 QuestName = "\r\n" + TempName + "\r\n\r\nAP消耗: " + ((JObject)mstQuest)["actConsume"] + "   等级推荐: lv." +
-                            ((JObject)mstQuest)["recommendLv"] + "\r\n从者: " + CharaID + " - " +
-                            GetSvtName(CharaID, 1) + "\r\n";
+                            ((JObject)mstQuest)["recommendLv"] + (CharaID != "0"
+                                ? "\r\n从者: " + CharaID + " - " +
+                                  GetSvtName(CharaID, 1)
+                                : "") + "\r\n";
                 if (((JObject)mstQuest)["giftId"].ToString() != "0")
                 {
                     var giftid = ((JObject)mstQuest)["giftId"].ToString();
