@@ -1178,6 +1178,33 @@ namespace Altera
                             break;
                         }
                     }
+                    else if (Tempsval.Length == 9)
+                    {
+                        if (Tempsval[4].Contains("SkillID"))
+                        {
+                            var Lv = "1";
+                            if (Tempsval[5].Contains("SkillLV")) Lv = Tempsval[5].Replace("SkillLV:", "");
+                            var Clockval = FindClockBuff(Tempsval[4].Replace("SkillID:", ""), Lv);
+                            output = "\r\n" + Clockval + "\r\n" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+
+                        var tmpstr = "";
+                        for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
+                        tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
+                        output = "[" + tmpstr + "]\r\n" +
+                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                     ? ""
+                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        break;
+                    }
                     else
                     {
                         if (Tempsval.Length > 4)
@@ -1735,8 +1762,8 @@ namespace Altera
             var FuncID = "";
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
             {
-                if (((JObject) SKLTMP)["skillId"].ToString() != id ||
-                    ((JObject) SKLTMP)["lv"].ToString() != lv) continue;
+                if (((JObject)SKLTMP)["skillId"].ToString() != id ||
+                    ((JObject)SKLTMP)["lv"].ToString() != lv) continue;
                 var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                 FuncSval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
                     .Replace("[", "").Replace("]\"", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
@@ -1751,7 +1778,7 @@ namespace Altera
             var FuncList = new List<string>();
             FuncList.AddRange(from skfuncidtmp in FuncIDArray
                 from functmp in GlobalPathsAndDatas.mstFuncArray
-                where ((JObject) functmp)["id"].ToString() == skfuncidtmp
+                where ((JObject)functmp)["id"].ToString() == skfuncidtmp
                 select JObject.Parse(functmp.ToString())
                 into mstFuncobjtmp
                 select MainWindow.TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
@@ -1886,8 +1913,8 @@ namespace Altera
             var output = "";
             foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
             {
-                if (((JObject) TDLVtmp)["treaureDeviceId"].ToString() != svtTDID ||
-                    ((JObject) TDLVtmp)["lv"].ToString() != Lv) continue;
+                if (((JObject)TDLVtmp)["treaureDeviceId"].ToString() != svtTDID ||
+                    ((JObject)TDLVtmp)["lv"].ToString() != Lv) continue;
                 var TDLVobjtmp = JObject.Parse(TDLVtmp.ToString());
                 var NPval1 = TDLVobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
                     .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
@@ -1907,7 +1934,7 @@ namespace Altera
                 {
                     foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                     {
-                        if (((JObject) functmp)["id"].ToString() != skfuncidtmp) continue;
+                        if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                         var mstFuncobjtmp = JObject.Parse(functmp.ToString());
                         funcnametmp = mstFuncobjtmp["popupText"].ToString();
                         if (funcnametmp != "") continue;
@@ -1915,8 +1942,8 @@ namespace Altera
                             .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                         foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
                         {
-                            if (((JObject) Bufftmp)["id"].ToString() != BuffVal) continue;
-                            funcnametmp = ((JObject) Bufftmp)["name"].ToString();
+                            if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                            funcnametmp = ((JObject)Bufftmp)["name"].ToString();
                             break;
                         }
                     }

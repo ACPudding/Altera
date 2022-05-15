@@ -103,6 +103,7 @@ namespace Altera
 
             var SA = new Task(StartAnalyze);
             SA.Start();
+            SkillLvs.ClassPassiveforExcel = "";
             FocusBasicInfo.IsSelected = true;
         }
 
@@ -1846,6 +1847,7 @@ namespace Altera
 
         private void ServantClassPassiveSkillCheck(string ClassPassiveID)
         {
+            SkillLvs.ClassPassiveforExcel = "";
             try
             {
                 string[] svtClassPassiveIDArray = null;
@@ -1934,6 +1936,15 @@ namespace Altera
                             : skillobjtmp["name"].ToString();
                     }
 
+                    var CPDetail = "";
+                    foreach (var skillDetailtmp in GlobalPathsAndDatas.mstSkillDetailArray)
+                    {
+                        if (((JObject)skillDetailtmp)["id"].ToString() != svtClassPassiveIDListArray[i]) continue;
+                        var skillobjtmp = JObject.Parse(skillDetailtmp.ToString());
+                        CPDetail = skillobjtmp["detail"].ToString();
+                        break;
+                    }
+
                     var SkillSquare = GetSvtClassPassiveSval(svtClassPassiveIDListArray[i]);
                     lv10svalArray = SkillSquare[0].Split('|');
                     var SKLFuncstrArray = SkillSquare[1].Replace(" ", "").Split(',');
@@ -1952,6 +1963,22 @@ namespace Altera
                         });
                     }
 
+                    var tmpexcelText = "";
+                    for (var k = 0; k <= SKLFuncstrArray.Length - 1; k++)
+                        tmpexcelText += SKLFuncstrArray[k] + "[" + lv10svalArray[k].Replace("\r\n", "") + "]" + " & ";
+                    try
+                    {
+                        tmpexcelText = tmpexcelText.Substring(0, tmpexcelText.Length - 3);
+                    }
+                    catch (Exception)
+                    {
+                        //ignore
+                    }
+
+                    SkillLvs.ClassPassiveforExcel +=
+                        i + 1 + "、" + ClassPassiveSkillFuncName.Replace("\r\n", "") + " |【描述】: " + CPDetail +
+                        " 【效果】: " + tmpexcelText +
+                        "\r\n";
                     var FuncStr = "\r\n" + string.Join("\r\n", SKLFuncstrArray) + "\r\n";
                     SvalStr = "\r\n" + string.Join("\r\n", lv10svalArray) + "\r\n";
                     ClassPassiveFuncList.Dispatcher.Invoke(() =>
@@ -1959,6 +1986,16 @@ namespace Altera
                         ClassPassiveFuncList.Items.Add(new ClassPassiveSvalList(ClassPassiveSkillFuncName,
                             svtClassPassiveIDListArray[i], FuncStr, SvalStr));
                     });
+                }
+
+                try
+                {
+                    SkillLvs.ClassPassiveforExcel =
+                        SkillLvs.ClassPassiveforExcel.Substring(0, SkillLvs.ClassPassiveforExcel.Length - 2);
+                }
+                catch (Exception)
+                {
+                    //ignore
                 }
             }
             catch (Exception)
@@ -3580,6 +3617,9 @@ namespace Altera
                 worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
                 worksheet.Cells["K8"].Value = hpatkbalance.Text.Replace("(", "").Replace(")", "");
                 worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
+                worksheet.Cells["C46"].Value = SkillLvs.ClassPassiveforExcel;
+                if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
+                    worksheet.Cells["C46"].Style.Font.Size = 7f;
                 if (SkillLvs.skill1forExcel.Length >= 300) worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
                 if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 6 &&
                     Regex.Matches(SkillLvs.skill1forExcel, "【").Count < 7)

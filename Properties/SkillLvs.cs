@@ -14,5 +14,6 @@
         public static string NPB;
         public static string NPEX;
         public static string NPTD;
+        public static string ClassPassiveforExcel;
     }
 }
