@@ -15,5 +15,6 @@
         public static string NPEX;
         public static string NPTD;
         public static string ClassPassiveforExcel;
+        public static string HpBalanceForExcel;
     }
 }

@@ -1264,87 +1264,104 @@
             </TabItem>
             <TabItem Header="羁绊文本">
                 <Grid x:Name="svttexts" Margin="0,0,0,0">
+                    <TabControl Style="{StaticResource TabControlCapsule}" Margin="10,35,10,100"
+                                TabStripPlacement="Bottom">
+                        <TabItem Header="文本1">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext1" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本2">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext2" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本3">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext3" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本4">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext4" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本5">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext5" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本6">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext6" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="文本7">
+                            <Grid Margin="0">
+                                <TextBox x:Name="jibantext7" HorizontalAlignment="Left" Height="370"
+                                         Margin="10,10,10,10"
+                                         TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
+                                         IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
+                                         FontFamily="Source Han Sans SC">
+                                    <TextBox.Background>
+                                        <SolidColorBrush Color="#FF484848" Opacity="0.15" />
+                                    </TextBox.Background>
+                                </TextBox>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                     <TextBlock Text="从者羁绊相关文本查看"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
                                Width="247" FontSize="16" Foreground="#FF333333"
                                Margin="10,10,0,0" FontWeight="Bold" />
-                    <TextBlock Text="文本1:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               FontWeight="Bold" Margin="10,61,0,0" />
-                    <TextBox x:Name="jibantext1" HorizontalAlignment="Left" Height="100" Margin="53,61,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本2:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="363,61,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext2" HorizontalAlignment="Left" Height="100" Margin="406,61,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本3:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="10,166,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext3" HorizontalAlignment="Left" Height="100" Margin="53,166,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本4:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="363,166,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext4" HorizontalAlignment="Left" Height="100" Margin="406,166,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本5:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="10,272,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext5" HorizontalAlignment="Left" Height="100" Margin="53,272,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本6:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="363,272,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext6" HorizontalAlignment="Left" Height="100" Margin="406,272,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
-                    <TextBlock Text="文本7:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Width="97"
-                               FontSize="12" Foreground="#FF333333"
-                               Margin="10,378,0,0" FontWeight="Bold" />
-                    <TextBox x:Name="jibantext7" HorizontalAlignment="Left" Height="100" Margin="53,378,0,0"
-                             TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"
-                             IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                             FontFamily="Source Han Sans SC">
-                        <TextBox.Background>
-                            <SolidColorBrush Color="#FF484848" Opacity="0.15" />
-                        </TextBox.Background>
-                    </TextBox>
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="JBOutput"
                             Content="导出文本" HorizontalAlignment="Left"
                             Margin="365,484,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"

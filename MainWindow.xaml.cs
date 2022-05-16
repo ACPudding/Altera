@@ -3164,7 +3164,7 @@ namespace Altera
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
             if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
                 Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
-            File.WriteAllText(gamedata.FullName + "raw.json", result);
+            File.WriteAllText(gamedata.FullName + "raw.json", res.ToString());
             File.WriteAllText(gamedata.FullName + "assetbundle.json",
                 res["response"][0]["success"]["assetbundle"].ToString());
             updatestatus.Dispatcher.Invoke(() =>
@@ -3615,7 +3615,7 @@ namespace Altera
                 if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
                 worksheet.Cells["P42"].Value = svtIndividuality.Text;
                 worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
-                worksheet.Cells["K8"].Value = hpatkbalance.Text.Replace("(", "").Replace(")", "");
+                worksheet.Cells["K8"].Value = SkillLvs.HpBalanceForExcel;
                 worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
                 worksheet.Cells["C46"].Value = SkillLvs.ClassPassiveforExcel;
                 if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
@@ -3663,6 +3663,18 @@ namespace Altera
                 worksheet.Cells["E21"].Value = SkillLvs.NPQ;
                 worksheet.Cells["E22"].Value = SkillLvs.NPEX;
                 worksheet.Cells["E23"].Value = SkillLvs.NPTD;
+                try
+                {
+                    var classicon = BitmapImage2Bitmap((BitmapSource)ClassPng.Source);
+                    var classi = worksheet.Drawings.AddPicture("ClassIcon", classicon);
+                    classi.SetPosition(0, 0);
+                    classi.SetSize(48, 48);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
                 try
                 {
                     var sk1icon = BitmapImage2Bitmap((BitmapSource)sk1_icon.Source);
@@ -4337,6 +4349,7 @@ namespace Altera
 
         private void ShowHPAtkBalance(string svtID, string rarity, string endurance, string basichp, string ClassID)
         {
+            SkillLvs.HpBalanceForExcel = "";
             Dispatcher.Invoke(() =>
             {
                 var endurancebase = new double[100];
@@ -4413,6 +4426,7 @@ namespace Altera
                 if (svtID == "100300")
                 {
                     hpatkbalance.Text = ShowString[6];
+                    SkillLvs.HpBalanceForExcel = ShowString[6].Replace("(", "").Replace(")", "");
                 }
                 else
                 {
@@ -4421,17 +4435,40 @@ namespace Altera
                                                     endurancebase[Convert.ToInt64(endurance)] *
                                                     ClassBasicBase[Convert.ToInt64(ClassID)]);
                     if (Math.Abs(resultHPBaseCheck - 1.10) <= 0.005)
+                    {
                         hpatkbalance.Text = ShowString[1];
+                        SkillLvs.HpBalanceForExcel = ShowString[1].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
+                                                     Math.Round(resultHPBaseCheck, 3);
+                    }
                     else if (Math.Abs(resultHPBaseCheck - 1.05) <= 0.005)
+                    {
                         hpatkbalance.Text = ShowString[2];
+                        SkillLvs.HpBalanceForExcel = ShowString[2].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
+                                                     Math.Round(resultHPBaseCheck, 3);
+                    }
                     else if (Math.Abs(resultHPBaseCheck - 1.00) <= 0.005)
+                    {
                         hpatkbalance.Text = ShowString[3];
+                        SkillLvs.HpBalanceForExcel = ShowString[3].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
+                                                     Math.Round(resultHPBaseCheck, 3);
+                    }
                     else if (Math.Abs(resultHPBaseCheck - 0.95) <= 0.005)
+                    {
                         hpatkbalance.Text = ShowString[4];
+                        SkillLvs.HpBalanceForExcel = ShowString[4].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
+                                                     Math.Round(resultHPBaseCheck, 3);
+                    }
                     else if (Math.Abs(resultHPBaseCheck - 0.90) <= 0.005)
+                    {
                         hpatkbalance.Text = ShowString[5];
+                        SkillLvs.HpBalanceForExcel = ShowString[5].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
+                                                     Math.Round(resultHPBaseCheck, 3);
+                    }
                     else
+                    {
                         hpatkbalance.Text = ShowString[7];
+                        SkillLvs.HpBalanceForExcel = ShowString[7].Replace("(", "").Replace(")", "");
+                    }
                 }
             });
         }

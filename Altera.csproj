@@ -424,7 +424,7 @@
       <Version>5.8.9</Version>
     </PackageReference>
     <PackageReference Include="Fody">
-      <Version>6.6.0</Version>
+      <Version>6.6.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
