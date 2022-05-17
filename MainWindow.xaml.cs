@@ -2621,6 +2621,13 @@ namespace Altera
                 foreach (UIElement ui2 in childrens7)
                     if (ui2 is TextBox box)
                         box.Text = "";
+                jibantext1.Text = "";
+                jibantext2.Text = "";
+                jibantext3.Text = "";
+                jibantext4.Text = "";
+                jibantext5.Text = "";
+                jibantext6.Text = "";
+                jibantext7.Text = "";
                 atkbalance1.Text = "( x 1.0 -)";
                 atkbalance2.Text = "( x 1.0 -)";
                 npcardtype.Text = "";
