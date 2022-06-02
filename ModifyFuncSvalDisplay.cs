@@ -132,7 +132,8 @@ namespace Altera
                     {
                         if (Tempsval.Length == 5)
                         {
-                            if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                            if (Tempsval[4].Contains("ShowQuestNoEffect") ||
+                                Tempsval[4].Contains("IncludePassiveIndividuality"))
                                 try
                                 {
                                     output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -582,6 +583,20 @@ namespace Altera
                                          Tempsval[2].Replace("ActSet:", "") + " - 发动概率: " +
                                          Convert.ToInt32(Tempsval[3].Replace("ActSetWeight:", "")) + "%";
                                 ;
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        if (Tempsval.Length == 3 && Tempsval[2].Contains("IncludePassiveIndividuality"))
+                            try
+                            {
+                                output = Tempsval[1] + "格" + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                                 break;
                             }
                             catch (Exception)
@@ -1279,6 +1294,30 @@ namespace Altera
                                 break;
                             }
 
+                    if (Tempsval.Length == 3)
+                        if (Tempsval[2].Contains("IncludePassiveIndividuality"))
+                            try
+                            {
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[1]) / 100 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                }
+
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                     try
                     {
                         output = Convert.ToDouble(Tempsval[1]) / 100 + "%" +
@@ -1572,6 +1611,7 @@ namespace Altera
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length == 3)
+                {
                     try
                     {
                         output =
@@ -1586,6 +1626,32 @@ namespace Altera
                     {
                         output = Funcsval;
                     }
+                }
+                else
+                {
+                    if (Tempsval.Length == 4)
+                    {
+                        if (Tempsval[3].Contains("IncludePassiveIndividuality"))
+                            try
+                            {
+                                output =
+                                    "∅" +
+                                    (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                        ? ""
+                                        : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                    (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                    (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                            }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                    }
+                }
             }
 
             if (Funcname == "永久睡眠")
