@@ -1222,44 +1222,66 @@
             </TabItem>
             <TabItem Header="培养素材">
                 <Grid Margin="0,0,0,0">
-                    <TextBlock Text="灵基再临材料"
-                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
-                               Width="515" FontSize="20" Foreground="#FF333333"
-                               FontWeight="Bold" Margin="10,10,0,0" />
-                    <ListView x:Name="LimitCombineItems" Margin="5,40,5,345" Foreground="#FF737373" FontSize="11">
-                        <ListView.Background>
-                            <SolidColorBrush Color="White" Opacity="0.4" />
-                        </ListView.Background>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="再临阶段" Width="100"
-                                                DisplayMemberBinding="{Binding Status}" />
-                                <GridViewColumn Header="材料名称与数量" Width="600"
-                                                DisplayMemberBinding="{Binding Items}" />
-                                <GridViewColumn Header="QP消耗" Width="90"
-                                                DisplayMemberBinding="{Binding QP}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <TextBlock Text="技能升级材料"
-                               HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
-                               Width="515" FontSize="20" Foreground="#FF333333"
-                               FontWeight="Bold" Margin="10,235,0,0" />
-                    <ListView x:Name="SkillCombineItems" Margin="5,268,4.8,2.4" Foreground="#FF737373" FontSize="11">
-                        <ListView.Background>
-                            <SolidColorBrush Color="White" Opacity="0.4" />
-                        </ListView.Background>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="技能等级" Width="100"
-                                                DisplayMemberBinding="{Binding Status}" />
-                                <GridViewColumn Header="材料名称与数量" Width="600"
-                                                DisplayMemberBinding="{Binding Items}" />
-                                <GridViewColumn Header="QP消耗" Width="90"
-                                                DisplayMemberBinding="{Binding QP}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <TabControl Style="{StaticResource TabControlCapsule}" Margin="5,10,5,5"
+                                TabStripPlacement="Top">
+                        <TabItem Header="灵基再临">
+                            <ListView x:Name="LimitCombineItems" Margin="0,0,0,0" Foreground="#FF737373" FontSize="11">
+                                <ListView.Background>
+                                    <SolidColorBrush Color="White" Opacity="0.4" />
+                                </ListView.Background>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="再临阶段" Width="100"
+                                                        DisplayMemberBinding="{Binding Status}" />
+                                        <GridViewColumn Header="材料名称与数量" Width="600"
+                                                        DisplayMemberBinding="{Binding Items}" />
+                                        <GridViewColumn Header="QP消耗" Width="90"
+                                                        DisplayMemberBinding="{Binding QP}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </TabItem>
+                        <TabItem Header="主动技能">
+                            <Grid>
+                                <ListView x:Name="SkillCombineItems" Margin="0,0,0,0" Foreground="#FF737373"
+                                          FontSize="11">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="技能等级" Width="100"
+                                                            DisplayMemberBinding="{Binding Status}" />
+                                            <GridViewColumn Header="材料名称与数量" Width="600"
+                                                            DisplayMemberBinding="{Binding Items}" />
+                                            <GridViewColumn Header="QP消耗" Width="90"
+                                                            DisplayMemberBinding="{Binding QP}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="附加技能">
+                            <Grid>
+                                <ListView x:Name="AppendSkillCombineItems" Margin="0,0,0,0" Foreground="#FF737373"
+                                          FontSize="11">
+                                    <ListView.Background>
+                                        <SolidColorBrush Color="White" Opacity="0.4" />
+                                    </ListView.Background>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="技能等级" Width="100"
+                                                            DisplayMemberBinding="{Binding Status}" />
+                                            <GridViewColumn Header="材料名称与数量" Width="600"
+                                                            DisplayMemberBinding="{Binding Items}" />
+                                            <GridViewColumn Header="QP消耗" Width="90"
+                                                            DisplayMemberBinding="{Binding QP}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
             <TabItem Header="羁绊文本">
@@ -1272,7 +1294,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1285,7 +1307,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1298,7 +1320,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1311,7 +1333,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1324,7 +1346,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1337,7 +1359,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>
@@ -1350,7 +1372,7 @@
                                          Margin="10,10,10,10"
                                          TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="770"
                                          IsReadOnly="True" VerticalContentAlignment="Center" Foreground="#FF333333"
-                                         FontFamily="Source Han Sans SC">
+                                         FontFamily="Source Han Sans SC" VerticalScrollBarVisibility="Auto">
                                     <TextBox.Background>
                                         <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                     </TextBox.Background>

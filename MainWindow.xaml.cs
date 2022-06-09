@@ -1166,6 +1166,43 @@ namespace Altera
             });
         }
 
+        private string GetCondType(string val)
+        {
+            var yu = val.Replace("[", "").Replace("]", "").Replace("\r\n", "").Replace(" ", "");
+            var yuarray = yu.Split(',');
+            if (yuarray.Length != 1) return $"[开放条件: 通关关卡 {yu}]\r\n";
+            switch (yuarray[0])
+            {
+                case "0":
+                    return "[开放条件: 羁绊Lv.0]\r\n";
+                case "1":
+                    return "[开放条件: 羁绊Lv.1]\r\n";
+                case "2":
+                    return "[开放条件: 羁绊Lv.2]\r\n";
+                case "3":
+                    return "[开放条件: 羁绊Lv.3]\r\n";
+                case "4":
+                    return "[开放条件: 羁绊Lv.4]\r\n";
+                case "5":
+                    return "[开放条件: 羁绊Lv.5]\r\n";
+                default:
+                    return $"[开放条件: 通关关卡 {yuarray[0]}]\r\n";
+            }
+        }
+
+        private string ParseScriptJson(string str)
+        {
+            try
+            {
+                var JObj = (JObject)JsonConvert.DeserializeObject(str);
+                return $"[额外条件: {JObj["condTitle"].ToString().Replace("(", "").Replace(")", "")}]\r\n\r\n";
+            }
+            catch (Exception)
+            {
+                return "\r\n";
+            }
+        }
+
         private void ServantJibanTextCheck()
         {
             var isJBChangeByCond = false;
@@ -1178,15 +1215,23 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext1.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB1 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext1.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB1 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (jibantext1.Text != "")
                             JBOutput.Dispatcher.Invoke(() => { JBOutput.IsEnabled = true; });
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext1.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB1 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext1.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB1 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1198,13 +1243,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext2.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB2 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext2.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB2 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext2.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB2 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext2.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB2 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1216,13 +1269,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext3.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB3 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext3.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB3 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext3.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB3 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext3.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB3 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1234,13 +1295,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext4.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB4 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext4.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB4 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext4.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB4 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext4.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB4 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1252,13 +1321,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext5.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB5 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext5.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB5 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext5.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB5 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext5.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB5 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1270,13 +1347,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext6.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB6 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext6.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB6 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext6.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB6 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext6.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB6 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1289,13 +1374,21 @@ namespace Altera
                     {
                         if (((JObject)SCTMP)["priority"].ToString() == "0")
                         {
-                            jibantext7.Text += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                            JB.JB7 += SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            jibantext7.Text += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB7 += GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext7.Text += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB7 += V + SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        jibantext7.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        JB.JB7 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         isJBChangeByCond = true;
                     });
                 }
@@ -1374,6 +1467,44 @@ namespace Altera
                             SkillCombineItems.Dispatcher.Invoke(() =>
                             {
                                 SkillCombineItems.Items.Add(
+                                    new ItemList(LimitID + " → " + (Convert.ToInt64(LimitID) + 1), itemDisplay,
+                                        qp));
+                            });
+                            break;
+                    }
+                }
+
+            foreach (var mstCombineAppendSkilltmp in GlobalPathsAndDatas.mstCombineAppendPassiveSkillArray)
+                if (((JObject)mstCombineAppendSkilltmp)["svtId"].ToString() == JB.svtid)
+                {
+                    var LimitID = ((JObject)mstCombineAppendSkilltmp)["skillLv"].ToString();
+                    switch (Convert.ToInt64(LimitID))
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                            var itemIds = ((JObject)mstCombineAppendSkilltmp)["itemIds"].ToString().Replace("\n", "")
+                                .Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            var itemNums = ((JObject)mstCombineAppendSkilltmp)["itemNums"].ToString().Replace("\n", "")
+                                .Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            var qp = ((JObject)mstCombineAppendSkilltmp)["qp"].ToString();
+                            var itemIdArray = itemIds.Split(',');
+                            var itemNumsArray = itemNums.Split(',');
+                            var itemDisplay = "";
+                            for (var i = 0; i < itemIdArray.Length; i++)
+                                itemDisplay += CheckItemName(itemIdArray[i]) + "(" + itemNumsArray[i] + "),";
+                            itemDisplay = itemDisplay.Substring(0, itemDisplay.Length - 1);
+                            AppendSkillCombineItems.Dispatcher.Invoke(() =>
+                            {
+                                AppendSkillCombineItems.Items.Add(
                                     new ItemList(LimitID + " → " + (Convert.ToInt64(LimitID) + 1), itemDisplay,
                                         qp));
                             });
@@ -2647,6 +2778,7 @@ namespace Altera
                 TDFuncList.Items.Clear();
                 ClassPassiveFuncList.Items.Clear();
                 AppendClassPassiveFuncList.Items.Clear();
+                AppendSkillCombineItems.Items.Clear();
                 Title = "Altera";
                 svtskill1_header.Header = "技能1";
                 svtskill2_header.Header = "技能2";
@@ -4591,6 +4723,7 @@ namespace Altera
             var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityCommons);
             if (SvtIndividualityAdd1 != "") Outputs += SvtIndividualityAdd1;
             if (SvtIndividualityAdd2 != "") Outputs += SvtIndividualityAdd2;
+            if (!Outputs.Contains("被EA特攻")) Outputs += "不被EA特攻,";
             try
             {
                 CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
