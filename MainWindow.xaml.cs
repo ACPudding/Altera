@@ -3507,6 +3507,7 @@ namespace Altera
                 else if (!tmp[4].Contains("Movie"))
                 {
                     assetName = tmp[tmp.Length - 1].Replace('/', '@') + ".unity3d";
+                    if (tmp.Length == 6) assetName = tmp[tmp.Length - 2].Replace('/', '@') + ".unity3d";
                     fileName = CatAndMouseGame.GetShaName(assetName);
                     AssetArray.Add(new JObject(new JProperty("assetName", assetName),
                         new JProperty("fileName", fileName)));
