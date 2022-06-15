@@ -1284,7 +1284,7 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="羁绊文本">
+            <TabItem Header="牵绊文本">
                 <Grid x:Name="svttexts" Margin="0,0,0,0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="10,35,10,100"
                                 TabStripPlacement="Bottom">
@@ -1380,7 +1380,7 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
-                    <TextBlock Text="从者羁绊相关文本查看"
+                    <TextBlock Text="从者牵绊相关文本查看"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
                                Width="247" FontSize="16" Foreground="#FF333333"
                                Margin="10,10,0,0" FontWeight="Bold" />
@@ -1396,7 +1396,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Label Content="注:若文本7为空,则该从者的羁绊文本暂未实装（游戏内提示的为&quot;???&quot;）"
+                    <Label Content="注:若文本7为空,则该从者的牵绊文本暂未实装（游戏内提示的为&quot;???&quot;）"
                            HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="429"
                            FontSize="12" Foreground="#FF333333"
                            Margin="0,505,0,0" FontWeight="Bold" BorderBrush="{x:Null}" Background="{x:Null}" />

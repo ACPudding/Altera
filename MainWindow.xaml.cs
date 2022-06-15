@@ -34,7 +34,7 @@ namespace Altera
     public partial class MainWindow
     {
         private const string V =
-            "\r\n--------------------------------------------------\r\n{注:以下文本为满足相应条件之后显示的新羁绊文本.}\r\n--------------------------------------------------\r\n";
+            "\r\n--------------------------------------------------\r\n{注:以下文本为满足相应条件之后显示的新牵绊文本.}\r\n--------------------------------------------------\r\n";
 
         private static string GameDataVersion;
 
@@ -259,7 +259,7 @@ namespace Altera
                             ExcelFileOutput();
                         break;
                     case 1001:
-                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
+                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
                         break;
                     default:
                         if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
@@ -1048,7 +1048,7 @@ namespace Altera
                         atkbalance2.Text = "( x 1.1 △)";
                         break;
                     case 1001:
-                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在羁绊文本的文本1处.");
+                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
                         break;
                     default:
                         atkbalance1.Text = "( x 1.0 -)";
@@ -1174,17 +1174,17 @@ namespace Altera
             switch (yuarray[0])
             {
                 case "0":
-                    return "[开放条件: 羁绊Lv.0]\r\n";
+                    return "[开放条件: 牵绊Lv.0]\r\n";
                 case "1":
-                    return "[开放条件: 羁绊Lv.1]\r\n";
+                    return "[开放条件: 牵绊Lv.1]\r\n";
                 case "2":
-                    return "[开放条件: 羁绊Lv.2]\r\n";
+                    return "[开放条件: 牵绊Lv.2]\r\n";
                 case "3":
-                    return "[开放条件: 羁绊Lv.3]\r\n";
+                    return "[开放条件: 牵绊Lv.3]\r\n";
                 case "4":
-                    return "[开放条件: 羁绊Lv.4]\r\n";
+                    return "[开放条件: 牵绊Lv.4]\r\n";
                 case "5":
-                    return "[开放条件: 羁绊Lv.5]\r\n";
+                    return "[开放条件: 牵绊Lv.5]\r\n";
                 default:
                     return $"[开放条件: 通关关卡 {yuarray[0]}]\r\n";
             }
@@ -1395,7 +1395,7 @@ namespace Altera
             }
 
             if (isJBChangeByCond)
-                Dispatcher.Invoke(() => { Growl.Info("注意,该从者的羁绊文本会随部分条件而发生改变，详情可查看各个文本框!"); });
+                Dispatcher.Invoke(() => { Growl.Info("注意,该从者的牵绊文本会随部分条件而发生改变，详情可查看各个文本框!"); });
         }
 
         private void ServantCombineLimitItemsCheck()
@@ -3506,11 +3506,26 @@ namespace Altera
                 }
                 else if (!tmp[4].Contains("Movie"))
                 {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@') + ".unity3d";
-                    if (tmp.Length == 6) assetName = tmp[tmp.Length - 2].Replace('/', '@') + ".unity3d";
+                    string keyId;
+                    switch (tmp.Length)
+                    {
+                        case 5:
+                            assetName = tmp[tmp.Length - 1].Replace('/', '@') + ".unity3d";
+                            keyId = "0";
+                            break;
+                        case 6:
+                            assetName = tmp[tmp.Length - 2].Replace('/', '@') + ".unity3d";
+                            keyId = tmp[tmp.Length - 1];
+                            break;
+                        default:
+                            assetName = tmp[4].Replace('/', '@') + ".unity3d";
+                            keyId = "0";
+                            break;
+                    }
+
                     fileName = CatAndMouseGame.GetShaName(assetName);
                     AssetArray.Add(new JObject(new JProperty("assetName", assetName),
-                        new JProperty("fileName", fileName)));
+                        new JProperty("fileName", fileName), new JProperty("keyId", keyId)));
                 }
             }
 
@@ -3545,16 +3560,16 @@ namespace Altera
                      "【文本7】:\n\r" + JB.JB7;
             if (!Directory.Exists(GlobalPathsAndDatas.outputdir.FullName))
                 Directory.CreateDirectory(GlobalPathsAndDatas.outputdir.FullName);
-            File.WriteAllText(GlobalPathsAndDatas.outputdir.FullName + "羁绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt",
+            File.WriteAllText(GlobalPathsAndDatas.outputdir.FullName + "牵绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt",
                 output);
             Dispatcher.Invoke(() =>
             {
                 MessageBox.Success("导出完成.\n\r文件名为: " + GlobalPathsAndDatas.outputdir.FullName +
-                                   "羁绊文本_" + JB.svtid + "_" + JB.svtnme +
+                                   "牵绊文本_" + JB.svtid + "_" + JB.svtnme +
                                    ".txt", "完成");
             });
 
-            Process.Start(GlobalPathsAndDatas.outputdir.FullName + "/" + "羁绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt");
+            Process.Start(GlobalPathsAndDatas.outputdir.FullName + "/" + "牵绊文本_" + JB.svtid + "_" + JB.svtnme + ".txt");
         }
 
         private void JBOutput_Click(object sender, RoutedEventArgs e)
