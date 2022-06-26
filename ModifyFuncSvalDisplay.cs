@@ -549,6 +549,33 @@ namespace Altera
                         output = Funcsval;
                         break;
                     }
+                case 161:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 5)
+                    {
+                        try
+                        {
+                            output = "指令卡變更: " +
+                                     Tempsval[3].Replace("1", "Arts").Replace("2", "Buster").Replace("3", "Quick") +
+                                     "\r\n(動作變更:" + Tempsval[4].Replace("MotionChange:", "") + ")" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
                 case 143:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4 || Tempsval.Length == 5 && Tempsval[4].Contains("ShowState"))
@@ -1541,6 +1568,7 @@ namespace Altera
                 case "呪厄":
                 case "蝕毒":
                 case "延焼":
+                case "死の淵":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
