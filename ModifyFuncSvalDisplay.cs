@@ -133,7 +133,8 @@ namespace Altera
                         if (Tempsval.Length == 5)
                         {
                             if (Tempsval[4].Contains("ShowQuestNoEffect") ||
-                                Tempsval[4].Contains("IncludePassiveIndividuality"))
+                                Tempsval[4].Contains("IncludePassiveIndividuality") ||
+                                Tempsval[4].Contains("CheckDuplicate"))
                                 try
                                 {
                                     output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
