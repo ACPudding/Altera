@@ -2136,15 +2136,13 @@ namespace Altera
                 if (FuncListArray[i] == "生贄")
                     FuncListArray[i] = "活祭";
                 if (FuncSvalArray[i].Contains("5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1")) continue;
-                /*result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
-                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";*/
                 result += FuncListArray[i] + "(" +
                           ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ") + \r\n";
             }
 
             try
             {
-                result = result.Substring(0, result.Length - 5);
+                result = result.Substring(0, result.Length - 5) + "\r\n";
             }
             catch (Exception e)
             {
@@ -2152,7 +2150,7 @@ namespace Altera
                 throw;
             }
 
-            result += ">\r\n";
+            result += "> ";
             return result;
         }
 
