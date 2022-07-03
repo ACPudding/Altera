@@ -478,11 +478,23 @@ namespace Altera
             else
             {
                 if (average - (int)(GlobalPathsAndDatas.notrealnprate * 1000000) > 0)
-                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 > 理论值."; });
+                    BeiZhu.Dispatcher.Invoke(() =>
+                    {
+                        BeiZhu.Text +=
+                            $"实际NP率({(double)average / 10000:f2}%) > 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                    });
                 else if (average - (int)(GlobalPathsAndDatas.notrealnprate * 1000000) == 0)
-                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 = 理论值."; });
+                    BeiZhu.Dispatcher.Invoke(() =>
+                    {
+                        BeiZhu.Text +=
+                            $"实际NP率({(double)average / 10000:f2}%) = 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                    });
                 else
-                    BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text += "实际NP率 < 理论值."; });
+                    BeiZhu.Dispatcher.Invoke(() =>
+                    {
+                        BeiZhu.Text +=
+                            $"实际NP率({(double)average / 10000:f2}%) < 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                    });
             }
 
             if (NPRateTD == 0.0 || NPRateArts == 0.0 || NPRateBuster == 0.0 || NPRateQuick == 0.0 || NPRateEX == 0.0 ||
@@ -1642,7 +1654,6 @@ namespace Altera
             string svtTreasureDeviceFuncID;
             string[] svtTreasureDeviceFuncIDArray = null;
             string[] svtTreasureDeviceFuncArray;
-            var svtTreasureDeviceFunc = string.Empty;
             string[] TDFuncstrArray = null;
             string[] TDlv1OC1strArray = null;
             string[] TDlv2OC2strArray = null;
@@ -1786,7 +1797,13 @@ namespace Altera
 
                     if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
                         !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
-                    ToggleFuncDiffer.Dispatcher.Invoke(() =>
+
+                    if (svtTreasureDeviceFuncIDArray[i] == "5826" || svtTreasureDeviceFuncIDArray[i] == "6323")
+                        TDFuncstrArray[i] = "特殊即死\r\n(无特效 ?)";
+
+                    if (svtTreasureDeviceFuncIDArray[i] == "5") continue;
+
+                    /*ToggleFuncDiffer.Dispatcher.Invoke(() =>
                     {
                         if (ToggleFuncDiffer.IsChecked != true) return;
                         TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
@@ -1799,7 +1816,81 @@ namespace Altera
                             TDlv4OC4strArray[i]);
                         TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
                             TDlv5OC5strArray[i]);
-                    });
+                    });*/
+                    if (isTDFunc(svtTreasureDeviceFuncIDArray[i]))
+                    {
+                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
+                        {
+                            if (ToggleFuncDiffer.IsChecked != true) return;
+                            TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv2OC2strArray[i]);
+                            TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv3OC3strArray[i]);
+                            TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv4OC4strArray[i]);
+                        });
+                        var tmp = ModifyFuncSvalDisplay.TDStrForExcel(svtTreasureDeviceFuncIDArray[i],
+                            TDlv1OC1strArray[i], TDlv5OC5strArray[i], TDFuncstrArray[i].Replace("\r\n", ""));
+                        if (tmp != "false")
+                        {
+                            SkillLvs.TDforExcel += tmp;
+                        }
+                        else
+                        {
+                            ToggleFuncDiffer.Dispatcher.Invoke(() =>
+                            {
+                                if (ToggleFuncDiffer.IsChecked != true) return;
+                                TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                    TDlv1OC1strArray[i]);
+                                TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                    TDlv5OC5strArray[i]);
+                            });
+                            SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                       ? TDFuncstrArray[i].Replace("\r\n", "")
+                                                       : "未知效果") +
+                                                   " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                            TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                       ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                       : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                         TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                        }
+
+                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
+                        {
+                            if (ToggleFuncDiffer.IsChecked != true) return;
+                            TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv1OC1strArray[i]);
+                            TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv5OC5strArray[i]);
+                        });
+                    }
+                    else
+                    {
+                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
+                        {
+                            if (ToggleFuncDiffer.IsChecked != true) return;
+                            TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv1OC1strArray[i]);
+                            TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv2OC2strArray[i]);
+                            TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv3OC3strArray[i]);
+                            TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv4OC4strArray[i]);
+                            TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                    TDlv5OC5strArray[i])
+                                ;
+                        });
+                        SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                   ? TDFuncstrArray[i].Replace("\r\n", "")
+                                                   : "未知效果") +
+                                               " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                        TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                   ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                   : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                     TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                    }
+
                     TDFuncList.Dispatcher.Invoke(() =>
                     {
                         TDFuncList.Items.Add(new TDlistSval(
@@ -1807,14 +1898,6 @@ namespace Altera
                             TDlv1OC1strArray[i], TDlv2OC2strArray[i], TDlv3OC3strArray[i],
                             TDlv4OC4strArray[i], TDlv5OC5strArray[i]));
                     });
-                    SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
-                                               ? TDFuncstrArray[i].Replace("\r\n", "")
-                                               : "未知效果") +
-                                           " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
-                                                    TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                               ? TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                               : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
-                                                 TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
                 }
 
                 try
@@ -1829,6 +1912,30 @@ namespace Altera
             catch (Exception)
             {
                 // ignored
+            }
+        }
+
+        private static bool isTDFunc(string funcid)
+        {
+            try
+            {
+                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
+                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
+                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
+                {
+                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
+                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
+                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
+                }
+
+                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
+                    if (TDTranslistFullArray[k][0] == funcid)
+                        return true;
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
@@ -3104,6 +3211,7 @@ namespace Altera
                                 lv10Array[i]);
                     }
 
+                    if (lv1Array[i] == "5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1") continue;
                     switch (SkillNum)
                     {
                         case 1:

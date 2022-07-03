@@ -1442,6 +1442,21 @@ namespace Altera
                     }
 
                     break;
+                case "特殊即死\r\n(无特效 ?)":
+                    try
+                    {
+                        output =
+                            "∅" +
+                            (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+
+                    break;
                 case "灼傷無効":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3 || Funcsval.Contains("Individualty"))
@@ -1844,6 +1859,21 @@ namespace Altera
                         }
 
                         break;
+                    case 3 when Funcsval.Contains("TargetIndiv"):
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
                     case 3:
                     case 4 when Tempsval[3].Contains("Hide"):
                         try
@@ -1947,6 +1977,123 @@ namespace Altera
             return output;
         }
 
+        public static string TDStrForExcel(string funcid, string lv1, string lv5, string TDStrName)
+        {
+            var output = "";
+            var lv1spl = lv1.Split(',');
+            var lv5spl = lv5.Split(',');
+            switch (Convert.ToInt32(funcid))
+            {
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    try
+                    {
+                        output = TDStrName + " 【{" + (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                            ? Convert.ToDouble(lv1spl[1]) / 10 + "% }】\r\n"
+                            : Convert.ToDouble(lv1spl[1]) / 10 + "% - " + Convert.ToDouble(lv5spl[1]) / 10 +
+                              "% }】\r\n");
+                    }
+                    catch (Exception)
+                    {
+                        output = "false";
+                    }
+
+                    break;
+                case 16:
+                case 17:
+                case 24:
+                case 25:
+                    if (lv1spl.Length == 4 || lv1spl.Length == 5)
+                        try
+                        {
+                            output = TDStrName + " 【{基础倍率: " +
+                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                     + " 特攻倍率: " +
+                                     (Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                         ? Convert.ToDouble(lv1spl[3]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[3]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[3]) / 10 + "% ") + "特攻对象:〔" +
+                                     SearchIndividualalityTDExcel(lv1spl[2]) + "〕}】\r\n";
+                        }
+                        catch (Exception)
+                        {
+                            output = "false";
+                        }
+                    else
+                        output = "false";
+
+                    break;
+                case 3853:
+                case 3854:
+                    if (lv1spl.Length == 5)
+                        try
+                        {
+                            output = TDStrName + " 【{基础倍率: " +
+                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ") + "特攻倍率: " +
+                                     (Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                         ? Convert.ToDouble(lv1spl[3]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[3]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[3]) / 10 + "% ") + "特攻稀有度: " +
+                                     lv1spl[4].Replace("TargetRarityList:", "").Replace("/", ",") + "}】\r\n";
+                        }
+                        catch (Exception)
+                        {
+                            output = "false";
+                        }
+                    else
+                        output = "false";
+
+                    break;
+                case 5336:
+                case 5337:
+                    if (lv1spl.Length == 7 || lv1spl.Length == 8)
+                        try
+                        {
+                            output = TDStrName + " 【{基础倍率: " +
+                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                     + "特攻倍率: " +
+                                     (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
+                                      Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
+                                      Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                         ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                           Convert.ToDouble(lv1spl[3]) / 10 + "% * N " + "(N≤" +
+                                           lv1spl[5].Replace("ParamAddMaxCount:", "") + ") "
+                                         : "<" + Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                           Convert.ToDouble(lv1spl[3]) / 10 + "% * N > - <" +
+                                           Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                           Convert.ToDouble(lv5spl[3]) / 10 + "% * N >" + "(N≤" +
+                                           lv1spl[5].Replace("ParamAddMaxCount:", "") + ")") +
+                                     "特攻对象:〔" +
+                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
+                                     "〕" + ")}】\r\n";
+                        }
+                        catch (Exception)
+                        {
+                            output = "false";
+                        }
+                    else
+                        output = "false";
+
+                    break;
+                default:
+                    output = "false";
+                    break;
+            }
+
+            return output;
+        }
+
         public static string FindClockBuff(string id, string lv)
         {
             var FuncSval = "";
@@ -1988,8 +2135,21 @@ namespace Altera
                     FuncListArray[i] = TranslateTDAttackNameForClock(FuncIDArray[i]);
                 if (FuncListArray[i] == "生贄")
                     FuncListArray[i] = "活祭";
-                result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
-                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";
+                if (FuncSvalArray[i].Contains("5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1")) continue;
+                /*result += "Buff" + (i + 1) + ": " + FuncListArray[i] + "(" +
+                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ")\r\n";*/
+                result += FuncListArray[i] + "(" +
+                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ") + \r\n";
+            }
+
+            try
+            {
+                result = result.Substring(0, result.Length - 5);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
             result += ">\r\n";
@@ -2061,6 +2221,37 @@ namespace Altera
             for (var k = 0; k < IndividualityCommons.Length; k++)
             {
                 if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1] + " ( " + Input + " ) ";
+
+                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
+                    return Input;
+            }
+
+
+            return Input;
+        }
+
+        public static string SearchIndividualalityTDExcel(string Input)
+        {
+            if (IndividualListStringTemp == null)
+            {
+                var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation
+                    .Split('|');
+                IndividualListStringTemp = TempSplit1;
+            }
+
+            var IndividualityCommons = new string[IndividualListStringTemp.Length][];
+            for (var i = 0; i < IndividualListStringTemp.Length; i++)
+            {
+                var TempSplit2 = IndividualListStringTemp[i].Split('+');
+                IndividualityCommons[i] = new string[TempSplit2.Length];
+                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
+            }
+
+            if (Input.Length >= 6) return Input;
+            if (Input == "5010" || Input == "5000") return Input;
+            for (var k = 0; k < IndividualityCommons.Length; k++)
+            {
+                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1];
 
                 if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
                     return Input;
