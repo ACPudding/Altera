@@ -1182,9 +1182,9 @@
                                                             DisplayMemberBinding="{Binding ClassPassiveName}" />
                                             <GridViewColumn Header="ID" Width="90"
                                                             DisplayMemberBinding="{Binding ClassPassiveID}" />
-                                            <GridViewColumn Header="效果名称" Width="300"
+                                            <GridViewColumn Header="效果描述" Width="300"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncName}" />
-                                            <GridViewColumn Header="数值" Width="200"
+                                            <GridViewColumn Header="效果数值" Width="200"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncSval}" />
                                         </GridView>
                                     </ListView.View>

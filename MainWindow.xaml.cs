@@ -2154,7 +2154,6 @@ namespace Altera
             {
                 var svtClassPassiveIDListArray = ClassPassiveID.Split(',');
                 var ClassPassiveSkillFuncName = "";
-                var SvalStr = "";
                 var NeedTranslate = false;
                 string[] lv10svalArray = null;
                 ToggleBuffFuncTranslate.Dispatcher.Invoke(() =>
@@ -2203,7 +2202,10 @@ namespace Altera
 
                     var tmpexcelText = "";
                     for (var k = 0; k <= SKLFuncstrArray.Length - 1; k++)
+                    {
+                        if (lv10svalArray[k].Contains("5000,-1,-1,OnFieldCount:-1,ShowState:-1")) continue;
                         tmpexcelText += SKLFuncstrArray[k] + "[" + lv10svalArray[k].Replace("\r\n", "") + "]" + " & ";
+                    }
                     try
                     {
                         tmpexcelText = tmpexcelText.Substring(0, tmpexcelText.Length - 3);
@@ -2218,11 +2220,18 @@ namespace Altera
                         " 【效果】: " + tmpexcelText +
                         "\r\n";
                     var FuncStr = "\r\n" + string.Join("\r\n", SKLFuncstrArray) + "\r\n";
-                    SvalStr = "\r\n" + string.Join("\r\n", lv10svalArray) + "\r\n";
+                    var SvalStr = "\r\n";
+                    for (var q = 0;q< lv10svalArray.Length;q++)
+                    {
+                        if (lv10svalArray[q].Contains("5000,-1,-1,OnFieldCount:-1,ShowState:-1")) continue;
+                        SvalStr += SKLFuncstrArray[q] + $"[{lv10svalArray[q]}]" + "\r\n";
+                    }
                     ClassPassiveFuncList.Dispatcher.Invoke(() =>
                     {
                         ClassPassiveFuncList.Items.Add(new ClassPassiveSvalList(ClassPassiveSkillFuncName,
-                            svtClassPassiveIDListArray[i], FuncStr, SvalStr));
+                            svtClassPassiveIDListArray[i], CPDetail.Length > 50 ? 
+                            CPDetail.Insert(24, "\r\n").Insert(49, "\r\n") 
+                            : CPDetail.Length > 25 ? CPDetail.Insert(24, "\r\n") : CPDetail, SvalStr));
                     });
                 }
 
@@ -2286,7 +2295,6 @@ namespace Altera
                                     break;
                                 }
                             }
-
                             svtSKFuncList.Add(TranslateBuff(funcnametmp));
                         }
                     }
@@ -2310,7 +2318,6 @@ namespace Altera
                                     break;
                                 }
                             }
-
                             svtSKFuncList.Add(funcnametmp);
                         }
                     }
