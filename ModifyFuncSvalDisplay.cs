@@ -1260,6 +1260,24 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[3].Contains("StarHigher"))
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴擊星 >= " +
+                                         Tempsval[3].Replace("StarHigher:", "") + " )";
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         try
                         {
                             output = "[" + Tempsval[3] + "]\r\n" +

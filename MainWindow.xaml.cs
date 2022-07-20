@@ -2893,6 +2893,7 @@ namespace Altera
                 ClassPassiveFuncList.Items.Clear();
                 AppendClassPassiveFuncList.Items.Clear();
                 AppendSkillCombineItems.Items.Clear();
+                Button1.IsEnabled = true;
                 Title = "Altera";
                 svtskill1_header.Header = "技能1";
                 svtskill2_header.Header = "技能2";
@@ -2901,19 +2902,21 @@ namespace Altera
                 sk2_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                 sk3_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                 var Zeros = new int[121];
-                var levels = new int[120];
-                for (var i = 0; i <= 119; i++)
+                var levels = new int[121];
+                for (var i = 0; i <= 120; i++)
                 {
                     Zeros[i] = 0;
-                    levels[i] = i + 1;
+                    levels[i] = i;
                 }
-
-                LabelX = new string[120];
+                XZhou.MaxValue = 120;
                 LineHP = Zeros;
                 LineATK = Zeros;
                 HPCurveX.Values = LineHP.AsChartValues();
                 ATKCurveX.Values = LineATK.AsChartValues();
-                for (var j = 0; j <= 119; j++) LabelX[j] = levels[j].ToString();
+                for (var j = 0; j <= 120; j++) LabelX[j] = levels[j].ToString();
+                LabelX = new string[121];
+                XZhou_Step.Step = 5;
+                HPAtkXCurve.Update();
                 TreasureDeviceID.Text = "";
                 hpatkbalance.Text = "( 攻防倾向: 均衡 )";
                 var QuickUri = "images\\Quick.png";
@@ -3761,19 +3764,18 @@ namespace Altera
             var Loading = new Task(() => { LoadingProgress(); });
             Loading.Start();
             var Zeros = new int[121];
-            var levels = new int[120];
-            for (var i = 0; i <= 119; i++)
+            var levels = new int[121];
+            for (var i = 0; i <= 120; i++)
             {
                 Zeros[i] = 0;
-                levels[i] = i + 1;
+                levels[i] = i;
             }
-
-            LabelX = new string[120];
+            LabelX = new string[121];
             LineHP = Zeros;
             LineATK = Zeros;
             HPCurveX.Values = LineHP.AsChartValues();
             ATKCurveX.Values = LineATK.AsChartValues();
-            for (var j = 0; j <= 119; j++) LabelX[j] = levels[j].ToString();
+            for (var j = 0; j <= 120; j++) LabelX[j] = levels[j].ToString();
             DataContext = this;
             GlobalPathsAndDatas.SvtIndividualityTranslation =
                 File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
@@ -4770,18 +4772,24 @@ namespace Altera
                 ymax = Math.Max(AdjustATKCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1],
                     AdjustHPCurve[GlobalPathsAndDatas.LvExpCurveLvCount - 1]);
                 GlobalPathsAndDatas.ymax = ymax;
-                LineHP = new int[120];
-                LineATK = new int[120];
-                for (var q = 1; q <= 120; q++)
+                XZhou.MaxValue = GlobalPathsAndDatas.LvExpCurveLvCount - 1;
+                LineHP = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
+                LineATK = new int[GlobalPathsAndDatas.LvExpCurveLvCount];
+                for (var q = 0; q <= GlobalPathsAndDatas.LvExpCurveLvCount - 1; q++)
                 {
-                    LineHP[q - 1] = Convert.ToInt32(AdjustHPCurve[q]);
-                    LineATK[q - 1] = Convert.ToInt32(AdjustATKCurve[q]);
+                    LineHP[q] = Convert.ToInt32(AdjustHPCurve[q]);
+                    LineATK[q] = Convert.ToInt32(AdjustATKCurve[q]);
                 }
-
                 HPCurveX.Values = LineHP.AsChartValues();
                 ATKCurveX.Values = LineATK.AsChartValues();
                 DataContext = this;
                 HPAtkXCurve.Update();
+                if (GlobalPathsAndDatas.LvExpCurveLvCount - 1 != 120)
+                {
+                    LabelX = new string[GlobalPathsAndDatas.LvExpCurveLvCount];
+                    for (var j = 0; j <= GlobalPathsAndDatas.LvExpCurveLvCount - 1; j++) LabelX[j] = j.ToString();
+                    XZhou_Step.Step = 10;
+                }
             });
             GlobalPathsAndDatas.CurveBaseData = Array;
         }
@@ -5240,8 +5248,8 @@ namespace Altera
 
         private void ResetZoomSettings(object sender, RoutedEventArgs e)
         {
-            XZhou.MinValue = 0.0;
-            XZhou.MaxValue = double.NaN;
+            XZhou.MinValue = 1.0;
+            XZhou.MaxValue = GlobalPathsAndDatas.LvExpCurveLvCount - 1;
             YZhou.MinValue = 0.0;
             YZhou.MaxValue = double.NaN;
         }

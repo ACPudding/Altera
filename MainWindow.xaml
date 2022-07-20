@@ -560,14 +560,14 @@
                                Width="248" FontSize="20" Foreground="#FF333333"
                                FontWeight="Bold" Margin="10,10,0,0" />
                     <TextBlock
-                        Text="注:&#xA;本页仅供显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线.可进行缩放与拖动查看.&#xA;小怪和敌方boss除外会发生显示错误."
+                        Text="注:&#xA;本页显示从者成长的曲线图形状,红色为ATK曲线,蓝色为HP曲线.可进行缩放与拖动查看.&#xA;小怪和敌方boss有概率会发生显示错误."
                         HorizontalAlignment="Left" Height="52" VerticalAlignment="Top"
                         Width="540" FontSize="11.5" Foreground="#FF333333"
                         FontWeight="Bold" Margin="10,461,0,0" />
                     <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
                             x:Name="ResetZoom"
-                            Content="重置视角" HorizontalAlignment="Left"
-                            Margin="243,530,0,0" VerticalAlignment="Top" Width="75"
+                            Content="重置表格位置" HorizontalAlignment="Left"
+                            Margin="230.5,530,0,0" VerticalAlignment="Top" Width="100"
                             Click="ResetZoomSettings"
                             Foreground="#FFFFFFFF">
                         <Button.Background>
@@ -602,9 +602,9 @@
                             </lvc:CartesianChart.AxisY>
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis x:Name="XZhou" Title="等级" Labels="{Binding LabelX}"
-                                          FontFamily="Source Han Sans SC" MinValue="0">
+                                          FontFamily="Source Han Sans SC" MinValue="1">
                                     <lvc:Axis.Separator>
-                                        <lvc:Separator Step="5" />
+                                        <lvc:Separator x:Name="XZhou_Step" Step="5" />
                                     </lvc:Axis.Separator>
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
@@ -1808,7 +1808,7 @@
         </TabControl>
         <ScrollViewer x:Name="GrowlSign" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
                       Margin="0,50,0,360" Width="350" FontFamily="Source Han Sans SC"
-                      Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}">
+                      Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=GrowlVisibility}" IsHitTestVisible="False">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,10,10,10" />
         </ScrollViewer>
         <TextBlock Text="@TAKAGIMIWAKO @Altera" HorizontalAlignment="Left" Height="16"
