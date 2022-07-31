@@ -1210,10 +1210,53 @@ namespace Altera
                         }
 
                     break;
+                case 166:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 7)
+                        try
+                        {
+                            output = "∅\r\n場景特性: " + Tempsval[3].Replace("FieldIndividuality:","") + (Tempsval[0] == "1000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次"); ;
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    break;
                 default:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3)
                     {
+                        if (Funcname.Contains("NP"))
+                        {
+                            if (Tempsval[2].Contains("IncludePassiveIndividuality") || Tempsval[2].Contains("ShowQuestNoEffect"))
+                                try
+                                {
+                                    try
+                                    {
+                                        output = Convert.ToDouble(Tempsval[1]) / 100 + "%" +
+                                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                     ? ""
+                                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                    }
+                                    catch (Exception)
+                                    {
+                                        output = Funcsval;
+                                    }
+
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+                        }
                         try
                         {
                             output =
@@ -1409,7 +1452,7 @@ namespace Altera
                             }
 
                     if (Tempsval.Length == 3)
-                        if (Tempsval[2].Contains("IncludePassiveIndividuality"))
+                        if (Tempsval[2].Contains("IncludePassiveIndividuality")|| Tempsval[2].Contains("ShowQuestNoEffect"))
                             try
                             {
                                 try
