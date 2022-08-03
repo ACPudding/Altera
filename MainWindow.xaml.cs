@@ -519,18 +519,9 @@ namespace Altera
                 if (((JObject)TDDtmp)["id"].ToString() == svtTDID.ToString())
                 {
                     var TDDobjtmp = JObject.Parse(TDDtmp.ToString());
-                    ToggleDetailbr.Dispatcher.Invoke(() =>
-                    {
-                        if (ToggleDetailbr.IsChecked == true)
-                            NPDetail = TDDobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.5]")
+                    NPDetail = TDDobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.5]")
                                 .Replace("[g]", "")
-                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "").Replace(@"＆", "\r\n ＋")
-                                .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
-                        else
-                            NPDetail = TDDobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.5]")
-                                .Replace("[g]", "")
-                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "").Replace(@"＆", " ＋");
-                    });
+                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "");
                     break;
                 }
 
@@ -599,20 +590,11 @@ namespace Altera
                                     if (((JObject)TDDtmp2)["id"].ToString() == FinTDID_TMP)
                                     {
                                         var TDDobjtmp2 = JObject.Parse(TDDtmp2.ToString());
-                                        if (ToggleDetailbr.IsChecked == true)
                                             NPDetail = TDDobjtmp2["detail"].ToString()
-                                                .Replace("[{0}]", "[Lv.1 - Lv.5]")
-                                                .Replace("[g]", "")
-                                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                .Replace(@"＆", "\r\n ＋")
-                                                .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
-                                        else
-                                            NPDetail = TDDobjtmp2["detail"].ToString()
-                                                .Replace("[{0}]", "[Lv.1 - Lv.5]")
-                                                .Replace("[g]", "")
-                                                .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                .Replace(@"＆", " ＋");
-                                    }
+                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]")
+                                                    .Replace("[g]", "")
+                                                    .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "");
+                                        }
 
                                 break;
                             }
@@ -627,18 +609,10 @@ namespace Altera
                                         if (((JObject)TDDtmp2)["id"].ToString() == FinTDID_TMP)
                                         {
                                             var TDDobjtmp2 = JObject.Parse(TDDtmp2.ToString());
-                                            if (ToggleDetailbr.IsChecked == true)
                                                 NPDetail = TDDobjtmp2["detail"].ToString()
-                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
-                                                    .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                    .Replace(@"＆", "\r\n ＋")
-                                                    .Replace(@"＋", "\r\n ＋").Replace("\r\n \r\n", "\r\n");
-                                            else
-                                                NPDetail = TDDobjtmp2["detail"].ToString()
-                                                    .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
-                                                    .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                                    .Replace(@"＆", " ＋");
-                                        }
+                                                        .Replace("[{0}]", "[Lv.1 - Lv.5]").Replace("[g]", "")
+                                                        .Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "");
+                                            }
                                 }
 
                                 break;
@@ -2712,16 +2686,8 @@ namespace Altera
                 {
                     if (((JObject)skillDetailtmp)["id"].ToString() != SkillID) continue;
                     var skillDetailobjtmp = JObject.Parse(skillDetailtmp.ToString());
-                    if (ToggleDetailbr.IsChecked == true)
-                        skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
-                                          .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                          .Replace(@"＆", "\r\n ＋").Replace(@"＋", "\r\n ＋")
-                                          .Replace("\r\n \r\n", "\r\n") +
-                                      (AddVals == "" ? "" : "\r\n(bot备注:满足特定条件后技能名称改变为\"" + AddVals + "\")");
-                    else
-                        skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
-                                          .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "")
-                                          .Replace(@"＆", " ＋") +
+                    skillDetail = skillDetailobjtmp["detail"].ToString().Replace("[{0}]", "[Lv.1 - Lv.10]")
+                                          .Replace("[g]", "").Replace("[o]", "").Replace("[/g]", "").Replace("[/o]", "") +
                                       (AddVals == "" ? "" : "\r\n(bot备注:满足特定条件后技能名称改变为\"" + AddVals + "\")");
                 }
             });
