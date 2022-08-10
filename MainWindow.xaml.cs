@@ -3186,7 +3186,7 @@ namespace Altera
                             ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
                                 lv10Array[i]);
                     }
-
+                    if (FuncArray[i] == "") continue;
                     if (lv1Array[i] == "5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1") continue;
                     switch (SkillNum)
                     {
