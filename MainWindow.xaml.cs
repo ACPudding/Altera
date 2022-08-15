@@ -424,12 +424,12 @@ namespace Altera
 
         private void DisplayNPRate(string svtTDID)
         {
-            var NPRateTD = 0.0;
-            var NPRateArts = 0.0;
-            var NPRateBuster = 0.0;
-            var NPRateQuick = 0.0;
-            var NPRateEX = 0.0;
-            var NPRateDef = 0.0;
+            var NPRateTD = 0.0M;
+            var NPRateArts = 0.0M;
+            var NPRateBuster = 0.0M;
+            var NPRateQuick = 0.0M;
+            var NPRateEX = 0.0M;
+            var NPRateDef = 0.0M;
             SkillLvs.NPA = "";
             SkillLvs.NPB = "";
             SkillLvs.NPQ = "";
@@ -439,12 +439,12 @@ namespace Altera
                 if (((JObject)TDlvtmp)["treaureDeviceId"].ToString() == svtTDID)
                 {
                     var TDlvobjtmp = JObject.Parse(TDlvtmp.ToString());
-                    NPRateTD = Convert.ToDouble(TDlvobjtmp["tdPoint"].ToString()) / 10000;
-                    NPRateArts = Convert.ToDouble(TDlvobjtmp["tdPointA"].ToString()) / 10000;
-                    NPRateBuster = Convert.ToDouble(TDlvobjtmp["tdPointB"].ToString()) / 10000;
-                    NPRateQuick = Convert.ToDouble(TDlvobjtmp["tdPointQ"].ToString()) / 10000;
-                    NPRateEX = Convert.ToDouble(TDlvobjtmp["tdPointEx"].ToString()) / 10000;
-                    NPRateDef = Convert.ToDouble(TDlvobjtmp["tdPointDef"].ToString()) / 10000;
+                    NPRateTD = Convert.ToDecimal(TDlvobjtmp["tdPoint"].ToString()) / 10000;
+                    NPRateArts = Convert.ToDecimal(TDlvobjtmp["tdPointA"].ToString()) / 10000;
+                    NPRateBuster = Convert.ToDecimal(TDlvobjtmp["tdPointB"].ToString()) / 10000;
+                    NPRateQuick = Convert.ToDecimal(TDlvobjtmp["tdPointQ"].ToString()) / 10000;
+                    NPRateEX = Convert.ToDecimal(TDlvobjtmp["tdPointEx"].ToString()) / 10000;
+                    NPRateDef = Convert.ToDecimal(TDlvobjtmp["tdPointDef"].ToString()) / 10000;
                     break;
                 }
 
@@ -467,7 +467,7 @@ namespace Altera
             SkillLvs.NPEX = NPRateEX.ToString("P");
             SkillLvs.NPTD = NPRateTD.ToString("P");
 
-            if (GlobalPathsAndDatas.notrealnprate == 0.0) return;
+            if (GlobalPathsAndDatas.notrealnprate == 0.0M) return;
 
             if (average - (int)(NPRateTD * 1000000) != 0 || average - (int)(NPRateArts * 1000000) != 0 ||
                 average - (int)(NPRateBuster * 1000000) != 0 || average - (int)(NPRateQuick * 1000000) != 0 ||
@@ -481,24 +481,24 @@ namespace Altera
                     BeiZhu.Dispatcher.Invoke(() =>
                     {
                         BeiZhu.Text +=
-                            $"实际NP率({(double)average / 10000:f2}%) > 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                            $"实际NP率({(decimal)average / 10000:f2}%) > 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
                     });
                 else if (average - (int)(GlobalPathsAndDatas.notrealnprate * 1000000) == 0)
                     BeiZhu.Dispatcher.Invoke(() =>
                     {
                         BeiZhu.Text +=
-                            $"实际NP率({(double)average / 10000:f2}%) = 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                            $"实际NP率({(decimal)average / 10000:f2}%) = 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
                     });
                 else
                     BeiZhu.Dispatcher.Invoke(() =>
                     {
                         BeiZhu.Text +=
-                            $"实际NP率({(double)average / 10000:f2}%) < 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
+                            $"实际NP率({(decimal)average / 10000:f2}%) < 理论值({GlobalPathsAndDatas.notrealnprate * 100:f2}%).";
                     });
             }
 
-            if (NPRateTD == 0.0 || NPRateArts == 0.0 || NPRateBuster == 0.0 || NPRateQuick == 0.0 || NPRateEX == 0.0 ||
-                NPRateDef == 0.0)
+            if (NPRateTD == 0.0M || NPRateArts == 0.0M || NPRateBuster == 0.0M || NPRateQuick == 0.0M || NPRateEX == 0.0M ||
+                NPRateDef == 0.0M)
                 BeiZhu.Dispatcher.Invoke(() => { BeiZhu.Text = "实际NP率为0,为尚未实装的从者(敌方BOSS/NPC)或小怪."; });
         }
 
@@ -700,75 +700,75 @@ namespace Altera
                 gender[1] = "男";
                 gender[2] = "女";
                 gender[3] = "其他";
-                var nprateclassbase = new double[150];
-                nprateclassbase[1] = 1.5;
-                nprateclassbase[2] = 1.55;
-                nprateclassbase[3] = 1.45;
-                nprateclassbase[4] = 1.55;
-                nprateclassbase[5] = 1.6;
-                nprateclassbase[6] = 1.45;
-                nprateclassbase[7] = 1.4;
-                nprateclassbase[8] = 1.5;
-                nprateclassbase[9] = 1.5;
-                nprateclassbase[10] = 1.55;
-                nprateclassbase[11] = 1.45;
-                nprateclassbase[23] = 1.6;
-                nprateclassbase[25] = 1.5;
-                nprateclassbase[28] = 1.55;
-                nprateclassbase[20] = 0.0;
-                nprateclassbase[22] = 0.0;
-                nprateclassbase[24] = 0.0;
-                nprateclassbase[26] = 0.0;
-                nprateclassbase[27] = 0.0;
-                nprateclassbase[29] = 0.0;
-                nprateclassbase[97] = 0.0;
-                nprateclassbase[107] = 0.0;
-                nprateclassbase[21] = 0.0;
-                nprateclassbase[19] = 0.0;
-                nprateclassbase[18] = 0.0;
-                nprateclassbase[17] = 1.6;
-                nprateclassbase[16] = 0.0;
-                nprateclassbase[15] = 0.0;
-                nprateclassbase[14] = 0.0;
-                nprateclassbase[13] = 0.0;
-                nprateclassbase[12] = 0.0;
-                var nprateartscount = new double[4];
-                nprateartscount[1] = 1.5;
-                nprateartscount[2] = 1.125;
-                nprateartscount[3] = 1;
-                var npratemagicbase = new double[100];
-                npratemagicbase[11] = 1.02;
-                npratemagicbase[12] = 1.025;
-                npratemagicbase[13] = 1.03;
-                npratemagicbase[14] = 1.015;
-                npratemagicbase[15] = 1.035;
-                npratemagicbase[21] = 1;
-                npratemagicbase[22] = 1.005;
-                npratemagicbase[23] = 1.01;
-                npratemagicbase[24] = 0.995;
-                npratemagicbase[25] = 1.015;
-                npratemagicbase[31] = 0.99;
-                npratemagicbase[32] = 0.9925;
-                npratemagicbase[33] = 0.995;
-                npratemagicbase[34] = 0.985;
-                npratemagicbase[35] = 0.9975;
-                npratemagicbase[41] = 0.98;
-                npratemagicbase[42] = 0.9825;
-                npratemagicbase[43] = 0.985;
-                npratemagicbase[44] = 0.975;
-                npratemagicbase[45] = 0.9875;
-                npratemagicbase[51] = 0.97;
-                npratemagicbase[52] = 0.9725;
-                npratemagicbase[53] = 0.975;
-                npratemagicbase[54] = 0.965;
-                npratemagicbase[55] = 0.9775;
-                npratemagicbase[61] = 1.04;
-                npratemagicbase[0] = 0.0;
-                npratemagicbase[99] = 0.0;
-                npratemagicbase[98] = 0.0;
-                npratemagicbase[97] = 0.0;
+                var nprateclassbase = new decimal[150];
+                nprateclassbase[1] = 1.5M;
+                nprateclassbase[2] = 1.55M;
+                nprateclassbase[3] = 1.45M;
+                nprateclassbase[4] = 1.55M;
+                nprateclassbase[5] = 1.6M;
+                nprateclassbase[6] = 1.45M;
+                nprateclassbase[7] = 1.4M;
+                nprateclassbase[8] = 1.5M;
+                nprateclassbase[9] = 1.5M;
+                nprateclassbase[10] = 1.55M;
+                nprateclassbase[11] = 1.45M;
+                nprateclassbase[23] = 1.6M;
+                nprateclassbase[25] = 1.5M;
+                nprateclassbase[28] = 1.55M;
+                nprateclassbase[20] = 0.0M;
+                nprateclassbase[22] = 0.0M;
+                nprateclassbase[24] = 0.0M;
+                nprateclassbase[26] = 0.0M;
+                nprateclassbase[27] = 0.0M;
+                nprateclassbase[29] = 0.0M;
+                nprateclassbase[97] = 0.0M;
+                nprateclassbase[107] = 0.0M;
+                nprateclassbase[21] = 0.0M;
+                nprateclassbase[19] = 0.0M;
+                nprateclassbase[18] = 0.0M;
+                nprateclassbase[17] = 1.6M;
+                nprateclassbase[16] = 0.0M;
+                nprateclassbase[15] = 0.0M;
+                nprateclassbase[14] = 0.0M;
+                nprateclassbase[13] = 0.0M;
+                nprateclassbase[12] = 0.0M;
+                var nprateartscount = new decimal[4];
+                nprateartscount[1] = 1.5M;
+                nprateartscount[2] = 1.125M;
+                nprateartscount[3] = 1M;
+                var npratemagicbase = new decimal[100];
+                npratemagicbase[11] = 1.02M;
+                npratemagicbase[12] = 1.025M;
+                npratemagicbase[13] = 1.03M;
+                npratemagicbase[14] = 1.015M;
+                npratemagicbase[15] = 1.035M;
+                npratemagicbase[21] = 1M;
+                npratemagicbase[22] = 1.005M;
+                npratemagicbase[23] = 1.01M;
+                npratemagicbase[24] = 0.995M;
+                npratemagicbase[25] = 1.015M;
+                npratemagicbase[31] = 0.99M;
+                npratemagicbase[32] = 0.9925M;
+                npratemagicbase[33] = 0.995M;
+                npratemagicbase[34] = 0.985M;
+                npratemagicbase[35] = 0.9975M;
+                npratemagicbase[41] = 0.98M;
+                npratemagicbase[42] = 0.9825M;
+                npratemagicbase[43] = 0.985M;
+                npratemagicbase[44] = 0.975M;
+                npratemagicbase[45] = 0.9875M;
+                npratemagicbase[51] = 0.97M;
+                npratemagicbase[52] = 0.9725M;
+                npratemagicbase[53] = 0.975M;
+                npratemagicbase[54] = 0.965M;
+                npratemagicbase[55] = 0.9775M;
+                npratemagicbase[61] = 1.04M;
+                npratemagicbase[0] = 0.0M;
+                npratemagicbase[99] = 0.0M;
+                npratemagicbase[98] = 0.0M;
+                npratemagicbase[97] = 0.0M;
                 var svtstarrate = "";
-                double NPrate = 0;
+                decimal NPrate = 0;
                 float starrate = 0;
                 float deathrate = 0;
                 var svtdeathrate = "";
@@ -803,7 +803,7 @@ namespace Altera
                 var CardArrange = "[Q,Q,Q,Q,Q]";
                 var svtIndividualityInput = "";
                 GlobalPathsAndDatas.askxlsx = true;
-                GlobalPathsAndDatas.notrealnprate = 0.0;
+                GlobalPathsAndDatas.notrealnprate = 0.0M;
                 foreach (var svtIDtmp in GlobalPathsAndDatas.mstSvtArray)
                     if (((JObject)svtIDtmp)["id"].ToString() == JB.svtid)
                     {
@@ -990,8 +990,8 @@ namespace Altera
                 else
                 {
                     NPrate = nprateclassbase[classData] * nprateartscount[svtArtsCardQuantity] *
-                        npratemagicbase[magicData] / GlobalPathsAndDatas.svtArtsCardhit / 100;
-                    NPrate = Math.Floor(NPrate * 10000) / 10000;
+                        npratemagicbase[magicData] / GlobalPathsAndDatas.svtArtsCardhit / 100M;
+                    NPrate = Math.Floor(NPrate * 10000M) / 10000M;
                     GlobalPathsAndDatas.notrealnprate = NPrate;
                     notrealnprate.Text = NPrate.ToString("P");
                     //notrealnprate.Text = Math.Round(NPrate * 100,4) + "%";
@@ -4590,60 +4590,60 @@ namespace Altera
             SkillLvs.HpBalanceForExcel = "";
             Dispatcher.Invoke(() =>
             {
-                var endurancebase = new double[100];
-                endurancebase[11] = 1.02;
-                endurancebase[12] = 1.025;
-                endurancebase[13] = 1.03;
-                endurancebase[14] = 1.015;
-                endurancebase[15] = 1.035;
-                endurancebase[21] = 1;
-                endurancebase[22] = 1.005;
-                endurancebase[23] = 1.01;
-                endurancebase[24] = 0.995;
-                endurancebase[25] = 1.015;
-                endurancebase[31] = 0.99;
-                endurancebase[32] = 0.9925;
-                endurancebase[33] = 0.995;
-                endurancebase[34] = 0.985;
-                endurancebase[35] = 0.9975;
-                endurancebase[41] = 0.98;
-                endurancebase[42] = 0.9825;
-                endurancebase[43] = 0.985;
-                endurancebase[44] = 0.975;
-                endurancebase[45] = 0.9875;
-                endurancebase[51] = 0.97;
-                endurancebase[52] = 0.9725;
-                endurancebase[53] = 0.975;
-                endurancebase[54] = 0.965;
-                endurancebase[55] = 0.9775;
-                endurancebase[61] = 1.04;
-                endurancebase[0] = 0.0;
-                endurancebase[99] = 0.0;
-                endurancebase[98] = 0.0;
-                endurancebase[97] = 0.0;
-                var HPBasicWithRarity = new double[6];
-                HPBasicWithRarity[0] = 1600;
-                HPBasicWithRarity[1] = 1500;
-                HPBasicWithRarity[2] = 1600;
-                HPBasicWithRarity[3] = 1800;
-                HPBasicWithRarity[4] = 2000;
-                HPBasicWithRarity[5] = 2200;
-                var ClassBasicBase = new double[30];
-                ClassBasicBase[1] = 1.01;
-                ClassBasicBase[2] = 0.98;
-                ClassBasicBase[3] = 1.02;
-                ClassBasicBase[4] = 0.96;
-                ClassBasicBase[5] = 0.98;
-                ClassBasicBase[6] = 0.95;
-                ClassBasicBase[7] = 0.90;
-                ClassBasicBase[8] = 1.01;
-                ClassBasicBase[9] = 1.00;
-                ClassBasicBase[10] = 0.95;
-                ClassBasicBase[11] = 0.88;
-                ClassBasicBase[17] = 0.98;
-                ClassBasicBase[23] = 1.05;
-                ClassBasicBase[25] = 1.00;
-                ClassBasicBase[28] = 0.95;
+                var endurancebase = new decimal[100];
+                endurancebase[11] = 1.02M;
+                endurancebase[12] = 1.025M;
+                endurancebase[13] = 1.03M;
+                endurancebase[14] = 1.015M;
+                endurancebase[15] = 1.035M;
+                endurancebase[21] = 1M;
+                endurancebase[22] = 1.005M;
+                endurancebase[23] = 1.01M;
+                endurancebase[24] = 0.995M;
+                endurancebase[25] = 1.015M;
+                endurancebase[31] = 0.99M;
+                endurancebase[32] = 0.9925M;
+                endurancebase[33] = 0.995M;
+                endurancebase[34] = 0.985M;
+                endurancebase[35] = 0.9975M;
+                endurancebase[41] = 0.98M;
+                endurancebase[42] = 0.9825M;
+                endurancebase[43] = 0.985M;
+                endurancebase[44] = 0.975M;
+                endurancebase[45] = 0.9875M;
+                endurancebase[51] = 0.97M;
+                endurancebase[52] = 0.9725M;
+                endurancebase[53] = 0.975M;
+                endurancebase[54] = 0.965M;
+                endurancebase[55] = 0.9775M;
+                endurancebase[61] = 1.04M;
+                endurancebase[0] = 0.0M;
+                endurancebase[99] = 0.0M;
+                endurancebase[98] = 0.0M;
+                endurancebase[97] = 0.0M;
+                var HPBasicWithRarity = new decimal[6];
+                HPBasicWithRarity[0] = 1600M;
+                HPBasicWithRarity[1] = 1500M;
+                HPBasicWithRarity[2] = 1600M;
+                HPBasicWithRarity[3] = 1800M;
+                HPBasicWithRarity[4] = 2000M;
+                HPBasicWithRarity[5] = 2200M;
+                var ClassBasicBase = new decimal[30];
+                ClassBasicBase[1] = 1.01M;
+                ClassBasicBase[2] = 0.98M;
+                ClassBasicBase[3] = 1.02M;
+                ClassBasicBase[4] = 0.96M;
+                ClassBasicBase[5] = 0.98M;
+                ClassBasicBase[6] = 0.95M;
+                ClassBasicBase[7] = 0.90M;
+                ClassBasicBase[8] = 1.01M;
+                ClassBasicBase[9] = 1.00M;
+                ClassBasicBase[10] = 0.95M;
+                ClassBasicBase[11] = 0.88M;
+                ClassBasicBase[17] = 0.98M;
+                ClassBasicBase[23] = 1.05M;
+                ClassBasicBase[25] = 1.00M;
+                ClassBasicBase[28] = 0.95M;
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -4652,7 +4652,7 @@ namespace Altera
                 ShowString[5] = "( 攻防倾向: 全ATK )";
                 ShowString[6] = "( 攻防倾向: 特殊 )";
                 ShowString[7] = "( 攻防倾向: - )";
-                double resultHPBaseCheck;
+                decimal resultHPBaseCheck;
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
                     ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28")
@@ -4668,35 +4668,35 @@ namespace Altera
                 }
                 else
                 {
-                    var inserthp = Convert.ToDouble(basichp);
+                    var inserthp = Convert.ToDecimal(basichp);
                     resultHPBaseCheck = inserthp / (HPBasicWithRarity[Convert.ToInt64(rarity)] *
                                                     endurancebase[Convert.ToInt64(endurance)] *
                                                     ClassBasicBase[Convert.ToInt64(ClassID)]);
-                    if (Math.Abs(resultHPBaseCheck - 1.10) <= 0.005)
+                    if (Math.Abs(resultHPBaseCheck - 1.10M) <= 0.005M)
                     {
                         hpatkbalance.Text = ShowString[1];
                         SkillLvs.HpBalanceForExcel = ShowString[1].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
                                                      Math.Round(resultHPBaseCheck, 3);
                     }
-                    else if (Math.Abs(resultHPBaseCheck - 1.05) <= 0.005)
+                    else if (Math.Abs(resultHPBaseCheck - 1.05M) <= 0.005M)
                     {
                         hpatkbalance.Text = ShowString[2];
                         SkillLvs.HpBalanceForExcel = ShowString[2].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
                                                      Math.Round(resultHPBaseCheck, 3);
                     }
-                    else if (Math.Abs(resultHPBaseCheck - 1.00) <= 0.005)
+                    else if (Math.Abs(resultHPBaseCheck - 1.00M) <= 0.005M)
                     {
                         hpatkbalance.Text = ShowString[3];
                         SkillLvs.HpBalanceForExcel = ShowString[3].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
                                                      Math.Round(resultHPBaseCheck, 3);
                     }
-                    else if (Math.Abs(resultHPBaseCheck - 0.95) <= 0.005)
+                    else if (Math.Abs(resultHPBaseCheck - 0.95M) <= 0.005M)
                     {
                         hpatkbalance.Text = ShowString[4];
                         SkillLvs.HpBalanceForExcel = ShowString[4].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
                                                      Math.Round(resultHPBaseCheck, 3);
                     }
-                    else if (Math.Abs(resultHPBaseCheck - 0.90) <= 0.005)
+                    else if (Math.Abs(resultHPBaseCheck - 0.90M) <= 0.005M)
                     {
                         hpatkbalance.Text = ShowString[5];
                         SkillLvs.HpBalanceForExcel = ShowString[5].Replace("(", "").Replace(")", "") + "\r\nHP补正: " +
@@ -4714,14 +4714,14 @@ namespace Altera
         private void AddChart(int[] Array)
         {
             GlobalPathsAndDatas.CurveBaseData = null;
-            GlobalPathsAndDatas.ymax = 0.0;
+            GlobalPathsAndDatas.ymax = 0.0M;
             Dispatcher.Invoke(() =>
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
-                var xmax = Convert.ToDouble(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
-                var ymax = 0.0;
-                var AdjustHPCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
-                var AdjustATKCurve = new double[GlobalPathsAndDatas.LvExpCurveLvCount];
+                var xmax = Convert.ToDecimal(GlobalPathsAndDatas.LvExpCurveLvCount - 1);
+                var ymax = 0.0M;
+                var AdjustHPCurve = new decimal[GlobalPathsAndDatas.LvExpCurveLvCount];
+                var AdjustATKCurve = new decimal[GlobalPathsAndDatas.LvExpCurveLvCount];
                 for (var lv = 0; lv < GlobalPathsAndDatas.LvExpCurveLvCount; lv++)
                 {
                     AdjustHPCurve[lv] = GlobalPathsAndDatas.basichp +
