@@ -3039,6 +3039,9 @@ namespace Altera
             var svtSKFuncList = new List<string>();
             string[] svtSKFuncArray;
             var svtSKFunc = string.Empty;
+            var svtSKTargetList = new List<string>();
+            string[] svtSKTargetArray;
+            var svtSKTarget = string.Empty;
             var NeedTranslate = false;
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
@@ -3076,6 +3079,9 @@ namespace Altera
                     if (NeedTranslate)
                     {
                         var funcnametmp = "";
+                        var targettmp = "";
+                        var targetstr = "";
+                        var tvalstr = "";
                         foreach (var skfuncidtmp in svtSKFuncIDArray)
                         {
                             foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
@@ -3083,6 +3089,40 @@ namespace Altera
                                 if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                                 var mstFuncobjtmp = JObject.Parse(functmp.ToString());
                                 funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                targettmp = mstFuncobjtmp["targetType"].ToString();
+                                tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                switch (targettmp)
+                                {
+                                    case "0":
+                                        targetstr = "自身";
+                                        break;
+                                    case "1":
+                                        targetstr = "己·单体";
+                                        break;
+                                    case "3":
+                                        targetstr = "己·全体";
+                                        break;
+                                    case "4":
+                                        targetstr = "敌·单体";
+                                        break;
+                                    case "6":
+                                        targetstr = "敌·全体";
+                                        break;
+                                    case "10":
+                                        targetstr = "己·单体反选";
+                                        break;
+                                    case "29":
+                                        targetstr = "己·HP比率最少";
+                                        break;
+                                    default:
+                                        targetstr = $"目标类型:{targettmp}";
+                                        break;
+                                }
+                                if (tvalstr != "")
+                                {
+                                    targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
+                                }
                                 if (funcnametmp != "") continue;
                                 var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
@@ -3095,11 +3135,15 @@ namespace Altera
                             }
 
                             svtSKFuncList.Add(TranslateBuff(funcnametmp));
+                            svtSKTargetList.Add(targetstr);
                         }
                     }
                     else
                     {
                         var funcnametmp = "";
+                        var targettmp = "";
+                        var targetstr = "";
+                        var tvalstr = "";
                         foreach (var skfuncidtmp in svtSKFuncIDArray)
                         {
                             foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
@@ -3107,6 +3151,40 @@ namespace Altera
                                 if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                                 var mstFuncobjtmp = JObject.Parse(functmp.ToString());
                                 funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                targettmp = mstFuncobjtmp["targetType"].ToString();
+                                tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                switch (targettmp)
+                                {
+                                    case "0":
+                                        targetstr = "自身";
+                                        break;
+                                    case "1":
+                                        targetstr = "己·单体";
+                                        break;
+                                    case "3":
+                                        targetstr = "己·全体";
+                                        break;
+                                    case "4":
+                                        targetstr = "敌·单体";
+                                        break;
+                                    case "6":
+                                        targetstr = "敌·全体";
+                                        break;
+                                    case "10":
+                                        targetstr = "己·单体反选";
+                                        break;
+                                    case "29":
+                                        targetstr = "己·HP比率最少";
+                                        break;
+                                    default:
+                                        targetstr = $"目标类型:{targettmp}";
+                                        break;
+                                }
+                                if (tvalstr != "")
+                                {
+                                    targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
+                                }
                                 if (funcnametmp != "") continue;
                                 var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
@@ -3117,13 +3195,14 @@ namespace Altera
                                     break;
                                 }
                             }
-
                             svtSKFuncList.Add(funcnametmp);
+                            svtSKTargetList.Add(targetstr);
                         }
                     }
                 }
             }
-
+            svtSKTargetArray = svtSKTargetList.ToArray();
+            svtSKTarget = string.Join(",", svtSKTargetArray);
             switch (SkillNum)
             {
                 case 1:
@@ -3156,12 +3235,56 @@ namespace Altera
             svtSKFunc = string.Join(", ", svtSKFuncArray);
             var SSD = new Task(() =>
             {
-                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum);
+                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget);
             });
             SSD.Start();
         }
 
-        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum)
+        public string CheckUniqueIndividuality(string id)
+        {
+            var idList = id.Split(',');
+            var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation.Split('|');
+            var IndividualityCommons = new string[TempSplit1.Length][];
+            for (var i = 0; i < TempSplit1.Length; i++)
+            {
+                var TempSplit2 = TempSplit1[i].Split('+');
+                IndividualityCommons[i] = new string[TempSplit2.Length];
+                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
+            }
+            var Outputs = new List<string>{};
+            foreach (var ids in idList)
+            {
+                for (var k = 0; k < IndividualityCommons.Length; k++)
+                {
+                    if (!ids.Contains("-"))
+                    {
+                        if (ids == IndividualityCommons[k][0])
+                        {
+                            Outputs.Add($"[{IndividualityCommons[k][1]}]");
+                            break;
+                        }
+
+                        if (k == IndividualityCommons.Length - 1 && ids != IndividualityCommons[k][0])
+                            Outputs.Add($"[特性/从者{ids}]");
+                    }
+                    else
+                    {
+                        if (ids.Replace("-", "") == IndividualityCommons[k][0])
+                        {
+                            Outputs.Add($"非[{IndividualityCommons[k][1]}]");
+                            break;
+                        }
+
+                        if (k == IndividualityCommons.Length - 1 && ids.Replace("-", "") != IndividualityCommons[k][0])
+                            Outputs.Add($"非[特性/从者{ids.Replace("-","")}]");
+                    }
+                }
+            }
+            var outputArray = Outputs.ToArray();
+            var strout = string.Join("+", outputArray);
+            return strout;
+        }
+        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum,string target)
         {
             Dispatcher.Invoke(() =>
             {
@@ -3170,6 +3293,7 @@ namespace Altera
                 var lv6Array = lv6.Split('|');
                 var lv10Array = lv10.Split('|');
                 var FuncArray = FuncName.Replace(" ", "").Split(',');
+                var targetlistArray = target.Split(',');
                 for (var i = 0; i <= FuncArray.Length - 1; i++)
                 {
                     if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 1 &&
@@ -3192,8 +3316,8 @@ namespace Altera
                     {
                         case 1:
                             Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i]));
-                            SkillLvs.skill1forExcel += FuncArray[i] + " 【{" +
+                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            SkillLvs.skill1forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
                                                            ? lv10Array[i].Replace("\r\n", " ")
@@ -3202,8 +3326,8 @@ namespace Altera
                             break;
                         case 2:
                             Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i]));
-                            SkillLvs.skill2forExcel += FuncArray[i] + " 【{" +
+                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            SkillLvs.skill2forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
                                                            ? lv10Array[i].Replace("\r\n", " ")
@@ -3212,8 +3336,8 @@ namespace Altera
                             break;
                         case 3:
                             Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i]));
-                            SkillLvs.skill3forExcel += FuncArray[i] + " 【{" +
+                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            SkillLvs.skill3forExcel += FuncArray[i].Replace("\r\n","") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
                                                            ? lv10Array[i].Replace("\r\n", " ")
@@ -5080,31 +5204,31 @@ namespace Altera
                 skill1cdlv1.Text = "7";
                 skill1cdlv6.Text = "6";
                 skill1cdlv10.Text = "5";
-                Skill1FuncList.Items.Add(new SkillListSval("防御强化解除", "1000", "1000", "1000"));
-                Skill1FuncList.Items.Add(new SkillListSval("防御力下降", "1000,3,-1,400", "1000,3,-1,500", "1000,3,-1,600"));
-                Skill1FuncList.Items.Add(new SkillListSval("Arts性能提升", "1000,3,5,200", "1000,3,5,300", "1000,3,5,400"));
+                Skill1FuncList.Items.Add(new SkillListSval("防御强化解除", "1000", "1000", "1000", "全体"));
+                Skill1FuncList.Items.Add(new SkillListSval("防御力下降", "1000,3,-1,400", "1000,3,-1,500", "1000,3,-1,600", "全体"));
+                Skill1FuncList.Items.Add(new SkillListSval("Arts性能提升", "1000,3,5,200", "1000,3,5,300", "1000,3,5,400", "自身"));
                 skill2name.Text = "危险代码注入 EX";
                 skill2details.Text = "己方单体的NP增加[lv.1-lv.10] + 宝具威力超绝提升(1次·1回合)[lv.1-lv.10] + 付与〔1回合后必定即死〕效果";
                 skill2cdlv1.Text = "12";
                 skill2cdlv6.Text = "11";
                 skill2cdlv10.Text = "10";
-                Skill2FuncList.Items.Add(new SkillListSval("NP增加", "1000,8000", "1000,9000", "1000,10000"));
-                Skill2FuncList.Items.Add(new SkillListSval("宝具威力提升", "1000,1,1,600", "1000,1,1,700", "1000,1,1,800"));
-                Skill2FuncList.Items.Add(new SkillListSval("〔1回合后必定即死〕效果", "1000,3,-1", "1000,3,-1", "1000,3,-1"));
+                Skill2FuncList.Items.Add(new SkillListSval("NP增加", "1000,8000", "1000,9000", "1000,10000", "单体"));
+                Skill2FuncList.Items.Add(new SkillListSval("宝具威力提升", "1000,1,1,600", "1000,1,1,700", "1000,1,1,800", "单体"));
+                Skill2FuncList.Items.Add(new SkillListSval("〔1回合后必定即死〕效果", "1000,3,-1", "1000,3,-1", "1000,3,-1", "单体"));
                 skill3name.Text = "共享安乐 B+";
                 skill3details.Text =
                     "敌方全体攻击力下降(3回合)[lv.1-lv.10] + 除自身以外的己方攻击力下降(3回合)【负面效果】+ 己方全体强化解除耐性提升(1次·3回合)[lv.1-lv.10] + 己方全体每回合最大HP提升状态(3回合)[lv.1-lv.10] + 自身暴击威力提升(3次·3回合)[lv.1-lv.10] + 己方随机单体获得弱体无效状态(1次·3回合)";
                 skill3cdlv1.Text = "8";
                 skill3cdlv6.Text = "7";
                 skill3cdlv10.Text = "6";
-                Skill3FuncList.Items.Add(new SkillListSval("攻击力下降", "1000,3,-1,100", "1000,3,-1,200", "1000,3,-1,300"));
-                Skill3FuncList.Items.Add(new SkillListSval("攻击力下降", "1000,3,-1,300", "1000,3,-1,300", "1000,3,-1,300"));
+                Skill3FuncList.Items.Add(new SkillListSval("攻击力下降", "1000,3,-1,100", "1000,3,-1,200", "1000,3,-1,300", "敌方"));
+                Skill3FuncList.Items.Add(new SkillListSval("攻击力下降", "1000,3,-1,300", "1000,3,-1,300", "1000,3,-1,300", "自身之外的己方全体"));
                 Skill3FuncList.Items.Add(new SkillListSval("强化解除耐性提升", "1000,3,1,600", "1000,3,1,800",
-                    "1000,3,1,1000"));
+                    "1000,3,1,1000", "全体"));
                 Skill3FuncList.Items.Add(new SkillListSval("最大HP提升", "1000,3,-1,1000", "1000,3,-1,1500",
-                    "1000,3,-1,2000"));
-                Skill3FuncList.Items.Add(new SkillListSval("暴击威力提升", "1000,3,3,200", "1000,3,3,250", "1000,3,3,300"));
-                Skill3FuncList.Items.Add(new SkillListSval("弱化无效状态", "1000,3,1", "1000,3,1", "1000,3,1"));
+                    "1000,3,-1,2000", "全体"));
+                Skill3FuncList.Items.Add(new SkillListSval("暴击威力提升", "1000,3,3,200", "1000,3,3,250", "1000,3,3,300", "自身"));
+                Skill3FuncList.Items.Add(new SkillListSval("弱化无效状态", "1000,3,1", "1000,3,1", "1000,3,1", "己方随机"));
                 TDFuncList.Items.Add(new TDlistSval("攻击强化解除", "1000", "1000", "1000", "1000", "1000"));
                 TDFuncList.Items.Add(new TDlistSval("攻击力提升", "1000,3,-1,100", "1000,3,-1,150", "1000,3,-1,200",
                     "1000,3,-1,250", "1000,3,-1,300"));
@@ -5249,13 +5373,15 @@ namespace Altera
             public string SkillSvallv1 { get; }
             public string SkillSvallv6 { get; }
             public string SkillSvallv10 { get; }
+            public string SkillTarget { get; }
 
-            public SkillListSval(string v1, string v2, string v3, string v4) : this()
+            public SkillListSval(string v1, string v2, string v3, string v4, string v5) : this()
             {
                 SkillName = v1;
                 SkillSvallv1 = v2;
                 SkillSvallv6 = v3;
                 SkillSvallv10 = v4;
+                SkillTarget = v5;
             }
         }
 

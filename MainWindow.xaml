@@ -895,6 +895,8 @@
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
                                                     <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                                    DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
@@ -1021,6 +1023,8 @@
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
                                                     <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                                    DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
@@ -1147,6 +1151,8 @@
                                                                     DisplayMemberBinding="{Binding SkillSvallv6}" />
                                                     <GridViewColumn Header="Lv.10 数值" Width="230"
                                                                     DisplayMemberBinding="{Binding SkillSvallv10}" />
+                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                                    DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
