@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Altera.Properties;
 using HandyControl.Controls;
@@ -1634,6 +1635,16 @@ namespace Altera
             string[] TDlv3OC3strArray = null;
             string[] TDlv4OC4strArray = null;
             string[] TDlv5OC5strArray = null;
+            var targettmp = "";
+            var targetstr = "";
+            var tvalstr = "";
+            var popupIcon = "";
+            var svtTDTargetList = new List<string>();
+            string[] svtTDTargetArray;
+            var svtTDTarget = string.Empty;
+            var svtTDbufficonList = new List<string>();
+            string[] svtTDbufficonArray;
+            var svtTDbufficon = string.Empty;
             SkillLvs.TDforExcel = "";
             foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
             {
@@ -1693,69 +1704,70 @@ namespace Altera
 
             try
             {
+                Dispatcher.Invoke(() =>
+                {
                 var NeedTranslate = false;
-                ToggleBuffFuncTranslate.Dispatcher.Invoke(() =>
+                if (ToggleBuffFuncTranslate.IsChecked == true) NeedTranslate = true;
+                var funcnametmp = "";
+                var TmpList = new List<string>();
+                TmpList.Clear();
+                foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
                 {
-                    if (ToggleBuffFuncTranslate.IsChecked == true) NeedTranslate = true;
-                });
-                if (NeedTranslate)
-                {
-                    var funcnametmp = "";
-                    var TmpList = new List<string>();
-                    TmpList.Clear();
-                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                    foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                     {
-                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
+                        var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                        funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                        targettmp = mstFuncobjtmp["targetType"].ToString();
+                        popupIcon = mstFuncobjtmp["popupIconId"].ToString();
+                        tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        targetstr = FuncTargetStr(targettmp);
+                        if (tvalstr != "")
                         {
-                            if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
-                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
-                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                            if (funcnametmp != "") continue;
-                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
-                            {
-                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
-                                funcnametmp = ((JObject)Bufftmp)["name"].ToString();
-                                break;
-                            }
+                            targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
                         }
-
+                        if (funcnametmp != "") continue;
+                        var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                        {
+                            if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                            funcnametmp = ((JObject)Bufftmp)["name"].ToString();
+                            break;
+                        }
+                    }
+                    svtTDTargetList.Add(targetstr);
+                    svtTDbufficonList.Add(popupIcon);
+                    if (NeedTranslate)
+                    {
                         TmpList.Add(TranslateBuff(funcnametmp));
                     }
-
-                    svtTreasureDeviceFuncArray = TmpList.ToArray();
-                }
-                else
-                {
-                    var funcnametmp = "";
-                    var TmpList = new List<string>();
-                    TmpList.Clear();
-                    foreach (var skfuncidtmp in svtTreasureDeviceFuncIDArray)
+                    else
                     {
-                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
-                        {
-                            if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
-                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
-                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                            if (funcnametmp != "") continue;
-                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
-                            {
-                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
-                                funcnametmp = ((JObject)Bufftmp)["name"].ToString();
-                                break;
-                            }
-                        }
-
                         TmpList.Add(funcnametmp);
                     }
+                }
+                svtTreasureDeviceFuncArray = TmpList.ToArray();
+                
+                TDFuncstrArray = svtTreasureDeviceFuncArray;
 
-                    svtTreasureDeviceFuncArray = TmpList.ToArray();
+                svtTDbufficonArray = svtTDbufficonList.ToArray();
+                svtTDTargetArray = svtTDTargetList.ToArray();
+                var bufficonBitmaps = new BitmapImage[svtTDbufficonArray.Length];
+                for (var m = 0; m <= svtTDbufficonArray.Length - 1; m++)
+                {
+                    bufficonBitmaps[m] = new BitmapImage(new Uri($"bufficons\\bufficon_0.png", UriKind.Relative));
+                    try
+                    {
+                        bufficonBitmaps[m] = new BitmapImage(new Uri($"bufficons\\bufficon_{svtTDbufficonArray[m]}.png", UriKind.Relative));
+                    }
+                    catch (Exception)
+                    {
+                        //ignore
+                    }
                 }
 
-                TDFuncstrArray = svtTreasureDeviceFuncArray;
                 for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                 {
                     if ((TDFuncstrArray[i] == "なし" || TDFuncstrArray[i] == "" &&
@@ -1777,7 +1789,44 @@ namespace Altera
 
                     if (svtTreasureDeviceFuncIDArray[i] == "5") continue;
 
-                    /*ToggleFuncDiffer.Dispatcher.Invoke(() =>
+                    if (isTDFunc(svtTreasureDeviceFuncIDArray[i]))
+                    {
+                        if (ToggleFuncDiffer.IsChecked != true) return;
+                        TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                            TDlv2OC2strArray[i]);
+                        TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                            TDlv3OC3strArray[i]);
+                        TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                            TDlv4OC4strArray[i]);
+                        var tmp = ModifyFuncSvalDisplay.TDStrForExcel(svtTreasureDeviceFuncIDArray[i],
+                            TDlv1OC1strArray[i], TDlv5OC5strArray[i], TDFuncstrArray[i].Replace("\r\n", ""));
+                        if (tmp != "false")
+                        {
+                            SkillLvs.TDforExcel += tmp;
+                        }
+                        else
+                        {
+                            if (ToggleFuncDiffer.IsChecked != true) return;
+                            TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv1OC1strArray[i]);
+                            TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                                TDlv5OC5strArray[i]);
+                            SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                       ? TDFuncstrArray[i].Replace("\r\n", "")
+                                                       : "未知效果") +
+                                                   " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                            TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                       ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                       : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                         TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                        }
+                        if (ToggleFuncDiffer.IsChecked != true) return;
+                        TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                            TDlv1OC1strArray[i]);
+                        TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
+                            TDlv5OC5strArray[i]);
+                    }
+                    else
                     {
                         if (ToggleFuncDiffer.IsChecked != true) return;
                         TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
@@ -1790,71 +1839,7 @@ namespace Altera
                             TDlv4OC4strArray[i]);
                         TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
                             TDlv5OC5strArray[i]);
-                    });*/
-                    if (isTDFunc(svtTreasureDeviceFuncIDArray[i]))
-                    {
-                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
-                        {
-                            if (ToggleFuncDiffer.IsChecked != true) return;
-                            TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv2OC2strArray[i]);
-                            TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv3OC3strArray[i]);
-                            TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv4OC4strArray[i]);
-                        });
-                        var tmp = ModifyFuncSvalDisplay.TDStrForExcel(svtTreasureDeviceFuncIDArray[i],
-                            TDlv1OC1strArray[i], TDlv5OC5strArray[i], TDFuncstrArray[i].Replace("\r\n", ""));
-                        if (tmp != "false")
-                        {
-                            SkillLvs.TDforExcel += tmp;
-                        }
-                        else
-                        {
-                            ToggleFuncDiffer.Dispatcher.Invoke(() =>
-                            {
-                                if (ToggleFuncDiffer.IsChecked != true) return;
-                                TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                    TDlv1OC1strArray[i]);
-                                TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                    TDlv5OC5strArray[i]);
-                            });
-                            SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
-                                                       ? TDFuncstrArray[i].Replace("\r\n", "")
-                                                       : "未知效果") +
-                                                   " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
-                                                            TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       ? TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
-                                                         TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
-                        }
-
-                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
-                        {
-                            if (ToggleFuncDiffer.IsChecked != true) return;
-                            TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv1OC1strArray[i]);
-                            TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv5OC5strArray[i]);
-                        });
-                    }
-                    else
-                    {
-                        ToggleFuncDiffer.Dispatcher.Invoke(() =>
-                        {
-                            if (ToggleFuncDiffer.IsChecked != true) return;
-                            TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv1OC1strArray[i]);
-                            TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv2OC2strArray[i]);
-                            TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv3OC3strArray[i]);
-                            TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv4OC4strArray[i]);
-                            TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                    TDlv5OC5strArray[i])
-                                ;
-                        });
+                            
                         SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                    ? TDFuncstrArray[i].Replace("\r\n", "")
                                                    : "未知效果") +
@@ -1865,13 +1850,8 @@ namespace Altera
                                                      TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
                     }
 
-                    TDFuncList.Dispatcher.Invoke(() =>
-                    {
-                        TDFuncList.Items.Add(new TDlistSval(
-                            TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果",
-                            TDlv1OC1strArray[i], TDlv2OC2strArray[i], TDlv3OC3strArray[i],
-                            TDlv4OC4strArray[i], TDlv5OC5strArray[i]));
-                    });
+                    var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i] ? $"固定: {TDlv5OC5strArray[i]}" : $"Lv.1/OC1: {TDlv1OC1strArray[i]}\r\nLv.2/OC2: {TDlv2OC2strArray[i]}\r\nLv.3/OC3: {TDlv3OC3strArray[i]}\r\nLv.4/OC4: {TDlv4OC4strArray[i]}\r\nLv.5/OC5: {TDlv5OC5strArray[i]}";
+                    TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果", DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
                 }
 
                 try
@@ -1882,6 +1862,7 @@ namespace Altera
                 {
                     // ignored
                 }
+                });
             }
             catch (Exception)
             {
@@ -3042,6 +3023,9 @@ namespace Altera
             var svtSKTargetList = new List<string>();
             string[] svtSKTargetArray;
             var svtSKTarget = string.Empty;
+            var svtSKbufficonList = new List<string>();
+            string[] svtSKbufficonArray;
+            var svtSKbufficon = string.Empty;
             var NeedTranslate = false;
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
@@ -3076,131 +3060,52 @@ namespace Altera
                         .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                     svtSKFuncIDList = new List<string>(svtSKFuncID.Split(','));
                     svtSKFuncIDArray = svtSKFuncIDList.ToArray();
-                    if (NeedTranslate)
+                    var funcnametmp = "";
+                    var targettmp = "";
+                    var targetstr = "";
+                    var tvalstr = "";
+                    var popupIcon = "";
+                    foreach (var skfuncidtmp in svtSKFuncIDArray)
                     {
-                        var funcnametmp = "";
-                        var targettmp = "";
-                        var targetstr = "";
-                        var tvalstr = "";
-                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                         {
-                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                            targettmp = mstFuncobjtmp["targetType"].ToString();
+                            popupIcon = mstFuncobjtmp["popupIconId"].ToString();
+                            tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            targetstr = FuncTargetStr(targettmp);
+                            if (tvalstr != "")
                             {
-                                if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
-                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
-                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                                targettmp = mstFuncobjtmp["targetType"].ToString();
-                                tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
-                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                                switch (targettmp)
-                                {
-                                    case "0":
-                                        targetstr = "自身";
-                                        break;
-                                    case "1":
-                                        targetstr = "己·单体";
-                                        break;
-                                    case "3":
-                                        targetstr = "己·全体";
-                                        break;
-                                    case "4":
-                                        targetstr = "敌·单体";
-                                        break;
-                                    case "6":
-                                        targetstr = "敌·全体";
-                                        break;
-                                    case "10":
-                                        targetstr = "己·单体反选";
-                                        break;
-                                    case "29":
-                                        targetstr = "己·HP比率最少";
-                                        break;
-                                    default:
-                                        targetstr = $"目标类型:{targettmp}";
-                                        break;
-                                }
-                                if (tvalstr != "")
-                                {
-                                    targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
-                                }
-                                if (funcnametmp != "") continue;
-                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
-                                {
-                                    if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
-                                    funcnametmp = ((JObject)Bufftmp)["name"].ToString();
-                                    break;
-                                }
+                                targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
                             }
-
-                            svtSKFuncList.Add(TranslateBuff(funcnametmp));
-                            svtSKTargetList.Add(targetstr);
+                            if (funcnametmp != "") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                funcnametmp = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
                         }
-                    }
-                    else
-                    {
-                        var funcnametmp = "";
-                        var targettmp = "";
-                        var targetstr = "";
-                        var tvalstr = "";
-                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        svtSKTargetList.Add(targetstr);
+                        svtSKbufficonList.Add(popupIcon);
+                        if (NeedTranslate)
                         {
-                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
-                            {
-                                if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
-                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
-                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                                targettmp = mstFuncobjtmp["targetType"].ToString();
-                                tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
-                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                                switch (targettmp)
-                                {
-                                    case "0":
-                                        targetstr = "自身";
-                                        break;
-                                    case "1":
-                                        targetstr = "己·单体";
-                                        break;
-                                    case "3":
-                                        targetstr = "己·全体";
-                                        break;
-                                    case "4":
-                                        targetstr = "敌·单体";
-                                        break;
-                                    case "6":
-                                        targetstr = "敌·全体";
-                                        break;
-                                    case "10":
-                                        targetstr = "己·单体反选";
-                                        break;
-                                    case "29":
-                                        targetstr = "己·HP比率最少";
-                                        break;
-                                    default:
-                                        targetstr = $"目标类型:{targettmp}";
-                                        break;
-                                }
-                                if (tvalstr != "")
-                                {
-                                    targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
-                                }
-                                if (funcnametmp != "") continue;
-                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
-                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
-                                {
-                                    if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
-                                    funcnametmp = ((JObject)Bufftmp)["name"].ToString();
-                                    break;
-                                }
-                            }
+                            svtSKFuncList.Add(TranslateBuff(funcnametmp));
+                        }
+                        else
+                        {
                             svtSKFuncList.Add(funcnametmp);
-                            svtSKTargetList.Add(targetstr);
                         }
                     }
                 }
             }
+            svtSKbufficonArray = svtSKbufficonList.ToArray();
+            svtSKbufficon = string.Join(",", svtSKbufficonArray);
             svtSKTargetArray = svtSKTargetList.ToArray();
             svtSKTarget = string.Join(",", svtSKTargetArray);
             switch (SkillNum)
@@ -3235,11 +3140,112 @@ namespace Altera
             svtSKFunc = string.Join(", ", svtSKFuncArray);
             var SSD = new Task(() =>
             {
-                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget);
+                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget, svtSKbufficon);
             });
             SSD.Start();
         }
 
+        public string FuncTargetStr(string targetType)
+        {
+            string targetstr = null;
+            switch (targetType)
+            {
+                case "0":
+                    targetstr = "自身";
+                    break;
+                case "1":
+                    targetstr = "己方·单体";
+                    break;
+                case "2":
+                    targetstr = "己方·ANOTHER";
+                    break;
+                case "3":
+                    targetstr = "己方·全体";
+                    break;
+                case "4":
+                    targetstr = "敌方·单体";
+                    break;
+                case "5":
+                    targetstr = "敌方·ANOTHER";
+                    break;
+                case "6":
+                    targetstr = "敌方·全体";
+                    break;
+                case "7":
+                    targetstr = "己方·FULL";
+                    break;
+                case "8":
+                    targetstr = "敌方·FULL";
+                    break;
+                case "9":
+                    targetstr = "己方·全体\r\n(自身除外)";
+                    break;
+                case "10":
+                    targetstr = "己方·单体反选";
+                    break;
+                case "11":
+                    targetstr = "己方·随机";
+                    break;
+                case "12":
+                    targetstr = "敌方·OTHER";
+                    break;
+                case "13":
+                    targetstr = "敌方·随机";
+                    break;
+                case "14":
+                    targetstr = "己方·OTHER_FULL";
+                    break;
+                case "15":
+                    targetstr = "敌方·OTHER_FULL";
+                    break;
+                case "16":
+                    targetstr = "己方·SELECT_ONE_SUB";
+                    break;
+                case "17":
+                    targetstr = "己方·SELECT_SUB";
+                    break;
+                case "18":
+                    targetstr = "己方·ONE_ANOTHER_RANDOM";
+                    break;
+                case "19":
+                    targetstr = "己方·SELF_ANOTHER_RANDOM";
+                    break;
+                case "20":
+                    targetstr = "敌方·ONE_ANOTHER_RANDOM";
+                    break;
+                case "21":
+                    targetstr = "己方·SELF_ANOTHER_FIRST";
+                    break;
+                case "22":
+                    targetstr = "己方·SELF_BEFORE";
+                    break;
+                case "23":
+                    targetstr = "己方·SELF_AFTER";
+                    break;
+                case "24":
+                    targetstr = "己方·SELF_ANOTHER_LAST";
+                    break;
+                case "25":
+                    targetstr = "COMMAND_TYPE_SELF_TREASURE_DEVICE";
+                    break;
+                case "26":
+                    targetstr = "FIELD_OTHER";
+                    break;
+                case "27":
+                    targetstr = "敌方·ONE_NO_TARGET_NO_ACTION";
+                    break;
+                case "28":
+                    targetstr = "己方·HP最少";
+                    break;
+                case "29":
+                    targetstr = "己方·HP比率最少";
+                    break;
+                default:
+                    targetstr = $"目标类型:{targetstr}\r\n(请参考宝具/技能描述)";
+                    break;
+            }
+            return targetstr;
+        }
         public string CheckUniqueIndividuality(string id)
         {
             var idList = id.Split(',');
@@ -3284,7 +3290,7 @@ namespace Altera
             var strout = string.Join("+", outputArray);
             return strout;
         }
-        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum,string target)
+        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum, string target, string bufficon)
         {
             Dispatcher.Invoke(() =>
             {
@@ -3294,6 +3300,20 @@ namespace Altera
                 var lv10Array = lv10.Split('|');
                 var FuncArray = FuncName.Replace(" ", "").Split(',');
                 var targetlistArray = target.Split(',');
+                var bufficonidArray = bufficon.Split(',');
+                var bufficonBitmaps = new BitmapImage[bufficonidArray.Length];
+                for (var m = 0; m <= bufficonidArray.Length - 1; m++)
+                {
+                    bufficonBitmaps[m] = new BitmapImage(new Uri($"bufficons\\bufficon_0.png", UriKind.Relative));
+                    try
+                    {
+                        bufficonBitmaps[m] = new BitmapImage(new Uri($"bufficons\\bufficon_{bufficonidArray[m]}.png", UriKind.Relative));
+                    }
+                    catch (Exception)
+                    {
+                       //ignore
+                    }
+                }
                 for (var i = 0; i <= FuncArray.Length - 1; i++)
                 {
                     if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 1 &&
@@ -3306,17 +3326,17 @@ namespace Altera
                             lv1Array[i]);
                         lv6Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
                             lv6Array[i]);
-                        lv10Array[i] =
-                            ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
+                        lv10Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
                                 lv10Array[i]);
                     }
                     if (FuncArray[i] == "") continue;
                     if (lv1Array[i] == "5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1") continue;
+                    //var DisplaySval = lv1Array[i] == lv10Array[i] ? $"固定: {lv10Array[i].Replace("\r\n", " ")}" : $"Lv.1: {lv1Array[i].Replace("\r\n"," ")}\r\nLv.6: {lv6Array[i].Replace("\r\n", " ")}\r\nLv.10: {lv10Array[i].Replace("\r\n", " ")}";
+                    var DisplaySval = lv1Array[i] == lv10Array[i] ? $"固定: {lv10Array[i]}" : $"Lv.1: {lv1Array[i]}\r\nLv.6: {lv6Array[i]}\r\nLv.10: {lv10Array[i]}";
                     switch (SkillNum)
                     {
                         case 1:
-                            Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i], $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill1forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -3325,8 +3345,7 @@ namespace Altera
                                                              lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
                             break;
                         case 2:
-                            Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i], $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill2forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -3335,8 +3354,7 @@ namespace Altera
                                                              lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
                             break;
                         case 3:
-                            Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i],
-                                lv1Array[i], lv6Array[i], lv10Array[i], targetlistArray[i]));
+                            Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i], $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill3forExcel += FuncArray[i].Replace("\r\n","") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -4079,31 +4097,31 @@ namespace Altera
                         var GreenExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
                         GreenExp.Formula = "E26=\"Quick\"";
                         GreenExp.Style.Font.Bold = true;
-                        GreenExp.Style.Font.Color.Color = Color.LightGreen;
+                        GreenExp.Style.Font.Color.Color = System.Drawing.Color.LightGreen;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(169, 208, 142));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(169, 208, 142));
                         break;
                     case "Arts":
                         var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
                         BlueExp.Formula = "E26=\"Arts\"";
                         BlueExp.Style.Font.Bold = true;
-                        BlueExp.Style.Font.Color.Color = Color.Blue;
+                        BlueExp.Style.Font.Color.Color = System.Drawing.Color.Blue;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(155, 194, 230));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(155, 194, 230));
                         break;
                     case "Buster":
                         var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
                         RedExp.Formula = "E26=\"Buster\"";
                         RedExp.Style.Font.Bold = true;
-                        RedExp.Style.Font.Color.Color = Color.Red;
+                        RedExp.Style.Font.Color.Color = System.Drawing.Color.Red;
                         worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
+                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(255, 150, 137));
                         worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
+                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(255, 150, 137));
                         break;
                 }
 
@@ -4135,10 +4153,10 @@ namespace Altera
 
         private Bitmap BitmapImage2Bitmap(BitmapSource m)
         {
-            var bmp = new Bitmap(m.PixelWidth, m.PixelHeight, PixelFormat.Format32bppPArgb);
+            var bmp = new Bitmap(m.PixelWidth, m.PixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 
             var data = bmp.LockBits(
-                new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppPArgb);
+                new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 
             m.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride);
             bmp.UnlockBits(data);
@@ -5152,7 +5170,7 @@ namespace Altera
 
         private void EasternEggSvt()
         {
-            Dispatcher.Invoke(() =>
+            /*Dispatcher.Invoke(() =>
             {
                 Svtname.Text = "ACPudding";
                 SvtBattlename.Text = "ACPudding";
@@ -5246,7 +5264,7 @@ namespace Altera
                 jibantext5.Text = "兜率天·極楽曼荼羅 (トゥシタ·ヘブンズフィールド):\r\n自己比较喜欢杀生院的宝具名,于是查了Wiki随便按样式编了一个名字.(好中二啊orz)";
                 jibantext6.Text = "为什么选择Foreigner是因为感觉逼格比较高(WinForm版程序的一设是Caster).\r\n或许可以给自己设置一个3破改变宝具名称x.";
                 jibantext7.Text = "希望有缘人能够重写本烂程序.\r\n                           ---作者记";
-            });
+            });*/
         }
 
         private void Button_Click_Event(object sender, RoutedEventArgs e)
@@ -5370,18 +5388,16 @@ namespace Altera
         private struct SkillListSval
         {
             public string SkillName { get; }
-            public string SkillSvallv1 { get; }
-            public string SkillSvallv6 { get; }
-            public string SkillSvallv10 { get; }
             public string SkillTarget { get; }
+            public string SkillSvals { get; }
+            public ImageSource Bufficons { get; set; }
 
-            public SkillListSval(string v1, string v2, string v3, string v4, string v5) : this()
+            public SkillListSval(string v1, string v2, string v3, ImageSource v4) : this()
             {
                 SkillName = v1;
-                SkillSvallv1 = v2;
-                SkillSvallv6 = v3;
-                SkillSvallv10 = v4;
-                SkillTarget = v5;
+                SkillTarget = v2;
+                SkillSvals = v3;
+                Bufficons = v4;
             }
         }
 
@@ -5418,20 +5434,17 @@ namespace Altera
         private struct TDlistSval
         {
             public string TDFuncName { get; }
-            public string TDSvalOC1lv1 { get; }
-            public string TDSvalOC2lv2 { get; }
-            public string TDSvalOC3lv3 { get; }
-            public string TDSvalOC4lv4 { get; }
-            public string TDSvalOC5lv5 { get; }
+            public string TDSvals { get; }
+            public string TDBuffTarget { get; }
+            public ImageSource Bufficons { get; }
 
-            public TDlistSval(string v1, string v2, string v3, string v4, string v5, string v6) : this()
+
+            public TDlistSval(string v1, string v2, string v3, ImageSource v4) : this()
             {
                 TDFuncName = v1;
-                TDSvalOC1lv1 = v2;
-                TDSvalOC2lv2 = v3;
-                TDSvalOC3lv3 = v4;
-                TDSvalOC4lv4 = v5;
-                TDSvalOC5lv5 = v6;
+                TDSvals = v2;
+                TDBuffTarget = v3;
+                Bufficons = v4;
             }
         }
 

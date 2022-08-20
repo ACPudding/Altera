@@ -279,7 +279,7 @@ namespace Altera
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                                 var Clockval = FindClockBuff(Tempsval[3], Lv);
-                                output = "\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -360,7 +360,7 @@ namespace Altera
                                         output = Convert.ToDouble(Tempsval[5].Replace("RatioHPHigh:", "")) / 10 +
                                                  "% ~ " +
                                                  Convert.ToDouble(Tempsval[4].Replace("RatioHPLow:", "")) / 10 +
-                                                 "%\r\n" + "(HP越少数值越高)" +
+                                                 "%" + " (HP越少数值越高)" +
                                                  "\r\n生效HP范围: " +
                                                  Convert.ToDouble(Tempsval[6].Replace("RatioHPRangeLow:", "")) / 10 +
                                                  "% ~ " +
@@ -447,7 +447,7 @@ namespace Altera
                                         var Lv = "1";
                                         if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                                         var Clockval = FindClockBuff(Tempsval[3], Lv);
-                                        output = "\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + " " +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -513,7 +513,7 @@ namespace Altera
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                             tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                            output = "[" + tmpstr + "]\r\n" +
+                            output = "[" + tmpstr + "] " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -558,7 +558,7 @@ namespace Altera
                         {
                             output = "指令卡變更: " +
                                      Tempsval[3].Replace("1", "Arts").Replace("2", "Buster").Replace("3", "Quick") +
-                                     "\r\n(動作變更:" + Tempsval[4].Replace("MotionChange:", "") + ")" +
+                                     " (動作變更:" + Tempsval[4].Replace("MotionChange:", "") + ")" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -675,7 +675,7 @@ namespace Altera
                             {
                                 output = Tempsval[1] + "格" + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
-                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") + "\r\n动作Set:" +
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") + " 动作Set:" +
                                          Tempsval[2].Replace("ActSet:", "") + " - 发动概率: " +
                                          Convert.ToInt32(Tempsval[3].Replace("ActSetWeight:", "")) + "%";
                                 ;
@@ -718,20 +718,20 @@ namespace Altera
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
-                                        output = "\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + " " +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                                  (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                                  (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") +
-                                                 "\r\nBuff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
+                                                 " Buff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
                                                      ? ""
                                                      : Convert.ToDouble(Tempsval[5].Replace("UseRate:", "")) / 10 +
                                                        "%");
                                         break;
                                     }
 
-                                output = "\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -743,7 +743,7 @@ namespace Altera
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                             tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                            output = "[" + tmpstr + "]\r\n" +
+                            output = "[" + tmpstr + "] " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -781,7 +781,7 @@ namespace Altera
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                             tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                            output = "[" + tmpstr + "]\r\n" +
+                            output = "[" + tmpstr + "] " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -885,20 +885,20 @@ namespace Altera
                             if (Tempsval.Length >= 6)
                                 if (Tempsval[5].Contains("UseRate"))
                                 {
-                                    output = "\r\n" + Clockval + "\r\n" +
+                                    output = "\r\n" + Clockval + " " +
                                              (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                              (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                              (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") +
-                                             "\r\nBuff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
+                                             " Buff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
                                                  ? ""
                                                  : Convert.ToDouble(Tempsval[5].Replace("UseRate:", "")) / 10 +
                                                    "%");
                                     break;
                                 }
 
-                            output = "\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1191,7 +1191,7 @@ namespace Altera
                             var result = ServantTreasureDeviceSvalCheckForCounter(CounterTDID, CounterTDLv);
                             if (result != "false")
                             {
-                                output = "<\r\n" + result + ">" +
+                                output = "\r\n<" + result + ">" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1357,7 +1357,7 @@ namespace Altera
 
                         try
                         {
-                            output = "[" + Tempsval[3] + "]\r\n" +
+                            output = "[" + Tempsval[3] + "] " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1391,7 +1391,7 @@ namespace Altera
                             var Lv = "1";
                             if (Tempsval[5].Contains("SkillLV")) Lv = Tempsval[5].Replace("SkillLV:", "");
                             var Clockval = FindClockBuff(Tempsval[4].Replace("SkillID:", ""), Lv);
-                            output = "\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1403,7 +1403,7 @@ namespace Altera
                         var tmpstr = "";
                         for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                         tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                        output = "[" + tmpstr + "]\r\n" +
+                        output = "[" + tmpstr + "] " +
                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                      ? ""
                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1423,20 +1423,20 @@ namespace Altera
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
-                                        output = "\r\n" + Clockval + "\r\n" +
+                                        output = "\r\n" + Clockval + " " +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
                                                      : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                                  (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                                  (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") +
-                                                 "\r\nBuff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
+                                                 " Buff成功率:" + (Tempsval[5].Replace("UseRate:", "") == "1000"
                                                      ? ""
                                                      : Convert.ToDouble(Tempsval[5].Replace("UseRate:", "")) / 10 +
                                                        "%");
                                         break;
                                     }
 
-                                output = "\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1448,7 +1448,7 @@ namespace Altera
                             var tmpstr = "";
                             for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
                             tmpstr = tmpstr.Substring(0, tmpstr.Length - 1);
-                            output = "[" + tmpstr + "]\r\n" +
+                            output = "[" + tmpstr + "] " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1831,7 +1831,7 @@ namespace Altera
                         if (Tempsval.Length >= 6)
                         {
                             if (Tempsval[5].Contains("UseRate"))
-                                output = "\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1841,7 +1841,7 @@ namespace Altera
                                              ? ""
                                              : Convert.ToDouble(Tempsval[5].Replace("UseRate:", "")) / 10 + "%");
                             else
-                                output = "\r\n" + Clockval + "\r\n" +
+                                output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1850,7 +1850,7 @@ namespace Altera
                         }
                         else
                         {
-                            output = "\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1865,7 +1865,7 @@ namespace Altera
                             var Lv = "1";
                             if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
                             var Clockval = FindClockBuff(Tempsval[3], Lv);
-                            output = "\r\n" + Clockval + "\r\n" +
+                            output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -2055,10 +2055,7 @@ namespace Altera
                 if (Tempsval.Length == 4 || Tempsval.Length == 5)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻对象(ID):\r\n〔" +
-                                 SearchIndividualality(Tempsval[2]) +
-                                 "〕\r\n特攻倍率: " +
-                                 Convert.ToDouble(Tempsval[3]) / 10 + "%";
+                        output = $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻倍率: {Convert.ToDouble(Tempsval[3]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[2])}〕";
                     }
                     catch (Exception)
                     {
@@ -2074,7 +2071,7 @@ namespace Altera
                 if (Tempsval.Length == 3)
                     try
                     {
-                        output = Convert.ToDouble(Tempsval[1]) / 10 + "% +\r\n" + Convert.ToDouble(Tempsval[2]) / 10 +
+                        output = "\r\n" + Convert.ToDouble(Tempsval[1]) / 10 + "% + " + Convert.ToDouble(Tempsval[2]) / 10 +
                                  "% * (1 - HP / MaxHP)";
                     }
                     catch (Exception)
@@ -2091,9 +2088,7 @@ namespace Altera
                 if (Tempsval.Length == 5)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻倍率: " +
-                                 Convert.ToDouble(Tempsval[3]) / 10 + "%\r\n特攻稀有度: " +
-                                 Tempsval[4].Replace("TargetRarityList:", "").Replace("/", ",");
+                        output = $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻倍率: {Convert.ToDouble(Tempsval[3]) / 10}% 特攻稀有度: {Tempsval[4].Replace("TargetRarityList:", "").Replace("/", ",")}";
                     }
                     catch (Exception)
                     {
@@ -2109,12 +2104,8 @@ namespace Altera
                 if (Tempsval.Length == 7 || Tempsval.Length == 8)
                     try
                     {
-                        output = "基础倍率: " + Convert.ToDouble(Tempsval[1]) / 10 + "%" + "\r\n" + "特攻关联Buff(ID):\r\n〔" +
-                                 SearchIndividualality(Tempsval[4].Replace("TargetList:", "")) +
-                                 "〕\r\n" + "特攻倍率:\r\n" +
-                                 Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10 + "% + " +
-                                 Convert.ToDouble(Tempsval[3]) / 10 + "% * N " + "(N≤" +
-                                 Tempsval[5].Replace("ParamAddMaxCount:", "") + ")\r\n注:N为特攻关联Buff数量.";
+                        output = $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("TargetList:", ""))}〕\r\n" +
+                            $"特攻倍率: {Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10}% + {Convert.ToDouble(Tempsval[3]) / 10}% * N (N≤{Tempsval[5].Replace("ParamAddMaxCount:", "")})";
                     }
                     catch (Exception)
                     {
@@ -2133,9 +2124,9 @@ namespace Altera
 
         public static string TDStrForExcel(string funcid, string lv1, string lv5, string TDStrName)
         {
-            var output = "";
             var lv1spl = lv1.Split(',');
             var lv5spl = lv5.Split(',');
+            string output;
             switch (Convert.ToInt32(funcid))
             {
                 case 12:
@@ -2276,7 +2267,7 @@ namespace Altera
                 select MainWindow.TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
             var FuncListArray = FuncList.ToArray();
             var FuncSvalArray = FuncSval.Split('|');
-            var result = "<\r\n";
+            var result = "<";
             for (var i = 0; i < FuncListArray.Length; i++)
             {
                 if (FuncListArray[i] == "" &&
@@ -2291,12 +2282,12 @@ namespace Altera
                     FuncListArray[i] = "活祭";
                 if (FuncSvalArray[i].Contains("5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1")) continue;
                 result += FuncListArray[i] + "(" +
-                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ") + \r\n";
+                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ") + ";
             }
 
             try
             {
-                result = result.Substring(0, result.Length - 5) + "\r\n";
+                result = result.Substring(0, result.Length - 3) + " ";
             }
             catch (Exception e)
             {
@@ -2504,7 +2495,7 @@ namespace Altera
                         !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
                     TDlv1OC1strArray[i] = ModifyFuncStr(TDFuncstrArray[i],
                         TDlv1OC1strArray[i]);
-                    output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ")\r\n";
+                    output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ") ";
                 }
 
                 GC.Collect();

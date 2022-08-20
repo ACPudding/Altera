@@ -636,24 +636,30 @@
                             <TextBlock Text="具体数值" FontWeight="Bold" />
                         </GroupBox.Header>
                         <Grid>
-                            <ListView x:Name="TDFuncList" Margin="2,2,2,2" Foreground="#FF737373" FontSize="10">
+                            <ListView x:Name="TDFuncList" Margin="2,2,2,2" Foreground="#FF737373" FontSize="11">
                                 <ListView.Background>
                                     <SolidColorBrush Color="White" Opacity="0.4" />
                                 </ListView.Background>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="效果" Width="100"
-                                                        DisplayMemberBinding="{Binding TDFuncName}" />
-                                        <GridViewColumn Header="Lv.1/OC1" Width="138"
-                                                        DisplayMemberBinding="{Binding TDSvalOC1lv1}" />
-                                        <GridViewColumn Header="Lv.2/OC2" Width="138"
-                                                        DisplayMemberBinding="{Binding TDSvalOC2lv2}" />
-                                        <GridViewColumn Header="Lv.3/OC3" Width="138"
-                                                        DisplayMemberBinding="{Binding TDSvalOC3lv3}" />
-                                        <GridViewColumn Header="Lv.4/OC4" Width="138"
-                                                        DisplayMemberBinding="{Binding TDSvalOC4lv4}" />
-                                        <GridViewColumn Header="Lv.5/OC5" Width="138"
-                                                        DisplayMemberBinding="{Binding TDSvalOC5lv5}" />
+                                        <GridViewColumn Header="效果" Width="200">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="24" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Image Grid.Column="0" Source="{Binding Bufficons}" Height="16" Width="16"/>
+                                                        <TextBlock Grid.Column="1" Width="Auto" Text="{Binding TDFuncName}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="数值(Lv.1/OC1 - Lv.5/OC5)" Width="440"
+                                                        DisplayMemberBinding="{Binding TDSvals}" />
+                                        <GridViewColumn Header="作用目标" Width="150"
+                                                        DisplayMemberBinding="{Binding TDBuffTarget}" />
                                     </GridView>
                                 </ListView.View>
                             </ListView>
@@ -881,21 +887,29 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill1FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="10.5">
+                                                  FontSize="11">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
                                             <ListView.View>
                                                 <GridView>
-                                                    <GridViewColumn Header="效果" Width="100"
-                                                                    DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
-                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                    <GridViewColumn Header="效果" Width="200">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="24" />
+                                                                        <ColumnDefinition Width="*" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Image Grid.Column="0" Source="{Binding Bufficons}" Height="16" Width="16"/>
+                                                                    <TextBlock Grid.Column="1" Width="Auto" Text="{Binding SkillName}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Lv.1/Lv.6/Lv.10 数值" Width="440"
+                                                                    DisplayMemberBinding="{Binding SkillSvals}" />
+                                                    <GridViewColumn Header="作用目标" Width="150"
                                                                     DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
@@ -1009,21 +1023,29 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill2FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="10.5">
+                                                  FontSize="11">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
                                             <ListView.View>
                                                 <GridView>
-                                                    <GridViewColumn Header="效果" Width="100"
-                                                                    DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
-                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                    <GridViewColumn Header="效果" Width="200">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="24" />
+                                                                        <ColumnDefinition Width="*" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Image Grid.Column="0" Source="{Binding Bufficons}" Height="16" Width="16"/>
+                                                                    <TextBlock Grid.Column="1" Width="Auto" Text="{Binding SkillName}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Lv.1/Lv.6/Lv.10 数值" Width="440"
+                                                                    DisplayMemberBinding="{Binding SkillSvals}" />
+                                                    <GridViewColumn Header="作用目标" Width="150"
                                                                     DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
@@ -1137,21 +1159,29 @@
                                     </GroupBox.Header>
                                     <Grid Margin="2,2,2,2">
                                         <ListView x:Name="Skill3FuncList" Margin="0,0,0,0" Foreground="#FF737373"
-                                                  FontSize="10.5">
+                                                  FontSize="11">
                                             <ListView.Background>
                                                 <SolidColorBrush Color="White" Opacity="0.4" />
                                             </ListView.Background>
                                             <ListView.View>
                                                 <GridView>
-                                                    <GridViewColumn Header="效果" Width="100"
-                                                                    DisplayMemberBinding="{Binding SkillName}" />
-                                                    <GridViewColumn Header="Lv.1 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv1}" />
-                                                    <GridViewColumn Header="Lv.6 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv6}" />
-                                                    <GridViewColumn Header="Lv.10 数值" Width="230"
-                                                                    DisplayMemberBinding="{Binding SkillSvallv10}" />
-                                                    <GridViewColumn Header="作用目标" Width="300"
+                                                    <GridViewColumn Header="效果" Width="200">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="24" />
+                                                                        <ColumnDefinition Width="*" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Image Grid.Column="0" Source="{Binding Bufficons}" Height="16" Width="16"/>
+                                                                    <TextBlock Grid.Column="1" Width="Auto" Text="{Binding SkillName}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Lv.1/Lv.6/Lv.10 数值" Width="440"
+                                                                    DisplayMemberBinding="{Binding SkillSvals}" />
+                                                    <GridViewColumn Header="作用目标" Width="150"
                                                                     DisplayMemberBinding="{Binding SkillTarget}" />
                                                 </GridView>
                                             </ListView.View>
@@ -1190,9 +1220,9 @@
                                 </ListView>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="附加技能" x:Name="AppendClassPassiveInfo">
+                        <TabItem Header="追加技能" x:Name="AppendClassPassiveInfo">
                             <Grid Margin="0,0,0,0">
-                                <TextBlock Text="注:&#xA;此处显示从者的附加技能(Append Skill).仅显示lv1与lv10的数值."
+                                <TextBlock Text="注:&#xA;此处显示从者的追加技能(Append Skill).仅显示lv1与lv10的数值."
                                            HorizontalAlignment="Left"
                                            Height="52" VerticalAlignment="Top"
                                            Width="485"
@@ -1224,7 +1254,7 @@
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="5,10,5,5"
                                 TabStripPlacement="Top">
                         <TabItem Header="灵基再临">
-                            <ListView x:Name="LimitCombineItems" Margin="0,0,0,0" Foreground="#FF737373" FontSize="11">
+                            <ListView x:Name="LimitCombineItems" Margin="0,0,0,0" Foreground="#FF737373" FontSize="12">
                                 <ListView.Background>
                                     <SolidColorBrush Color="White" Opacity="0.4" />
                                 </ListView.Background>
@@ -1243,7 +1273,7 @@
                         <TabItem Header="主动技能">
                             <Grid>
                                 <ListView x:Name="SkillCombineItems" Margin="0,0,0,0" Foreground="#FF737373"
-                                          FontSize="11">
+                                          FontSize="12">
                                     <ListView.Background>
                                         <SolidColorBrush Color="White" Opacity="0.4" />
                                     </ListView.Background>
@@ -1260,10 +1290,10 @@
                                 </ListView>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="附加技能">
+                        <TabItem Header="追加技能">
                             <Grid>
                                 <ListView x:Name="AppendSkillCombineItems" Margin="0,0,0,0" Foreground="#FF737373"
-                                          FontSize="11">
+                                          FontSize="12">
                                     <ListView.Background>
                                         <SolidColorBrush Color="White" Opacity="0.4" />
                                     </ListView.Background>
