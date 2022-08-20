@@ -117,6 +117,14 @@
                         <TextBlock Text="宝具特效字体选用(勾选为&quot;FOT-Matisse&quot;)" HorizontalAlignment="Left" Height="25"
                                    Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
+                        <CheckBox x:Name="ToggleDisplayEnemyFunc" Content="" HorizontalAlignment="Left" Height="20"
+                            Margin="17,175,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                            FontSize="9"
+                            ToolTip="勾选此项时,技能与宝具的效果会显示敌方特定的效果如暴击发生率提升.&#xA;注: 职介技能不会筛选."
+                            IsChecked="False" />
+                        <TextBlock Text="显示敌方限定效果(如:暴击发生率提升、充能增加等等)" HorizontalAlignment="Left" Height="25"
+                            Margin="47,177,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
+                            FontSize="10" FontFamily="Source Han Sans SC" />
                     </Grid>
                 </Grid>
             </TabItem>

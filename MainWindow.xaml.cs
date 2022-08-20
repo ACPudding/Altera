@@ -1639,12 +1639,18 @@ namespace Altera
             var targetstr = "";
             var tvalstr = "";
             var popupIcon = "";
+            var applyTarget = "";
             var svtTDTargetList = new List<string>();
             string[] svtTDTargetArray;
             var svtTDTarget = string.Empty;
+            var svtTDTargetRawList = new List<string>();
+            string[] svtTDTargetRawArray;
             var svtTDbufficonList = new List<string>();
             string[] svtTDbufficonArray;
             var svtTDbufficon = string.Empty;
+            var svtTDapplyTargetList = new List<string>();
+            string[] svtTDapplyTargetArray;
+            var svtTDapplyTarget = string.Empty;
             SkillLvs.TDforExcel = "";
             foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
             {
@@ -1720,6 +1726,7 @@ namespace Altera
                         funcnametmp = mstFuncobjtmp["popupText"].ToString();
                         targettmp = mstFuncobjtmp["targetType"].ToString();
                         popupIcon = mstFuncobjtmp["popupIconId"].ToString();
+                        applyTarget = mstFuncobjtmp["applyTarget"].ToString();
                         tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                             .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                         targetstr = FuncTargetStr(targettmp);
@@ -1739,6 +1746,8 @@ namespace Altera
                     }
                     svtTDTargetList.Add(targetstr);
                     svtTDbufficonList.Add(popupIcon);
+                    svtTDapplyTargetList.Add(applyTarget);
+                    svtTDTargetRawList.Add(targettmp);
                     if (NeedTranslate)
                     {
                         TmpList.Add(TranslateBuff(funcnametmp));
@@ -1754,6 +1763,8 @@ namespace Altera
 
                 svtTDbufficonArray = svtTDbufficonList.ToArray();
                 svtTDTargetArray = svtTDTargetList.ToArray();
+                svtTDTargetRawArray = svtTDTargetRawList.ToArray();
+                svtTDapplyTargetArray = svtTDapplyTargetList.ToArray();
                 var bufficonBitmaps = new BitmapImage[svtTDbufficonArray.Length];
                 for (var m = 0; m <= svtTDbufficonArray.Length - 1; m++)
                 {
@@ -1793,11 +1804,11 @@ namespace Altera
                     {
                         if (ToggleFuncDiffer.IsChecked != true) return;
                         TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv2OC2strArray[i]);
+                            TDlv2OC2strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv3OC3strArray[i]);
+                            TDlv3OC3strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv4OC4strArray[i]);
+                            TDlv4OC4strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         var tmp = ModifyFuncSvalDisplay.TDStrForExcel(svtTreasureDeviceFuncIDArray[i],
                             TDlv1OC1strArray[i], TDlv5OC5strArray[i], TDFuncstrArray[i].Replace("\r\n", ""));
                         if (tmp != "false")
@@ -1808,9 +1819,9 @@ namespace Altera
                         {
                             if (ToggleFuncDiffer.IsChecked != true) return;
                             TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv1OC1strArray[i]);
+                                TDlv1OC1strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                             TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                                TDlv5OC5strArray[i]);
+                                TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                             SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                        ? TDFuncstrArray[i].Replace("\r\n", "")
                                                        : "未知效果") +
@@ -1822,23 +1833,23 @@ namespace Altera
                         }
                         if (ToggleFuncDiffer.IsChecked != true) return;
                         TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv1OC1strArray[i]);
+                            TDlv1OC1strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv5OC5strArray[i]);
+                            TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                     }
                     else
                     {
                         if (ToggleFuncDiffer.IsChecked != true) return;
                         TDlv1OC1strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv1OC1strArray[i]);
+                            TDlv1OC1strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv2OC2strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv2OC2strArray[i]);
+                            TDlv2OC2strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv3OC3strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv3OC3strArray[i]);
+                            TDlv3OC3strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv4OC4strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv4OC4strArray[i]);
+                            TDlv4OC4strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
-                            TDlv5OC5strArray[i]);
+                            TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                             
                         SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                    ? TDFuncstrArray[i].Replace("\r\n", "")
@@ -1851,7 +1862,58 @@ namespace Altera
                     }
 
                     var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i] ? $"固定: {TDlv5OC5strArray[i]}" : $"Lv.1/OC1: {TDlv1OC1strArray[i]}\r\nLv.2/OC2: {TDlv2OC2strArray[i]}\r\nLv.3/OC3: {TDlv3OC3strArray[i]}\r\nLv.4/OC4: {TDlv4OC4strArray[i]}\r\nLv.5/OC5: {TDlv5OC5strArray[i]}";
-                    TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果", DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
+                    //if (ToggleDisplayEnemyFunc.IsChecked == false) { if (svtTDapplyTargetArray[i] == "2") continue; }
+                        if (ToggleDisplayEnemyFunc.IsChecked == false)
+                        {
+                            if (svtTDapplyTargetArray[i] == "2")
+                            {
+                                if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") || TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴擊発生率"))
+                                {
+                                    switch (Convert.ToInt32(svtTDTargetRawArray[i]))
+                                    {
+                                        case 0:
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 7:
+                                        case 9:
+                                        case 10:
+                                        case 11:
+                                        case 14:
+                                        case 16:
+                                        case 17:
+                                        case 18:
+                                            continue;
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+
+                            if (svtTDapplyTargetArray[i] == "1")
+                            {
+                                if (TDFuncstrArray[i].Contains("NP増加") || TDFuncstrArray[i].Contains("スター発生") || TDFuncstrArray[i].Contains("暴擊星掉落率"))
+                                {
+                                    switch (Convert.ToInt32(svtTDTargetRawArray[i]))
+                                    {
+                                        case 4:
+                                        case 5:
+                                        case 6:
+                                        case 7:
+                                        case 12:
+                                        case 13:
+                                        case 15:
+                                        case 20:
+                                        case 27:
+                                            continue;
+                                    }
+                                }
+                            }
+
+                        }
+                        TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果", DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
                 }
 
                 try
@@ -2151,7 +2213,7 @@ namespace Altera
                             if (ToggleFuncDiffer.IsChecked == true)
                                 lv10svalArray[j] =
                                     ModifyFuncSvalDisplay.ModifyFuncStr(SKLFuncstrArray[j],
-                                        lv10svalArray[j]);
+                                        lv10svalArray[j], ToggleDisplayEnemyFunc.IsChecked == false);
                         });
                     }
 
@@ -3023,9 +3085,15 @@ namespace Altera
             var svtSKTargetList = new List<string>();
             string[] svtSKTargetArray;
             var svtSKTarget = string.Empty;
+            var svtSKTargetRawList = new List<string>();
+            string[] svtSKTargetRawArray;
+            var svtSKTargetRaw = string.Empty;
             var svtSKbufficonList = new List<string>();
             string[] svtSKbufficonArray;
             var svtSKbufficon = string.Empty;
+            var svtSKapplyTargetList = new List<string>();
+            string[] svtSKapplyTargetArray;
+            var svtSKapplyTarget = string.Empty;
             var NeedTranslate = false;
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
@@ -3065,6 +3133,7 @@ namespace Altera
                     var targetstr = "";
                     var tvalstr = "";
                     var popupIcon = "";
+                    var applyTarget = "";
                     foreach (var skfuncidtmp in svtSKFuncIDArray)
                     {
                         foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
@@ -3074,6 +3143,7 @@ namespace Altera
                             funcnametmp = mstFuncobjtmp["popupText"].ToString();
                             targettmp = mstFuncobjtmp["targetType"].ToString();
                             popupIcon = mstFuncobjtmp["popupIconId"].ToString();
+                            applyTarget = mstFuncobjtmp["applyTarget"].ToString();
                             tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             targetstr = FuncTargetStr(targettmp);
@@ -3093,6 +3163,8 @@ namespace Altera
                         }
                         svtSKTargetList.Add(targetstr);
                         svtSKbufficonList.Add(popupIcon);
+                        svtSKapplyTargetList.Add(applyTarget);
+                        svtSKTargetRawList.Add(targettmp);
                         if (NeedTranslate)
                         {
                             svtSKFuncList.Add(TranslateBuff(funcnametmp));
@@ -3108,6 +3180,10 @@ namespace Altera
             svtSKbufficon = string.Join(",", svtSKbufficonArray);
             svtSKTargetArray = svtSKTargetList.ToArray();
             svtSKTarget = string.Join(",", svtSKTargetArray);
+            svtSKTargetRawArray = svtSKTargetRawList.ToArray();
+            svtSKTargetRaw = string.Join(",", svtSKTargetRawArray);
+            svtSKapplyTargetArray = svtSKapplyTargetList.ToArray();
+            svtSKapplyTarget = string.Join(",", svtSKapplyTargetArray);
             switch (SkillNum)
             {
                 case 1:
@@ -3140,7 +3216,7 @@ namespace Altera
             svtSKFunc = string.Join(", ", svtSKFuncArray);
             var SSD = new Task(() =>
             {
-                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget, svtSKbufficon);
+                SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget, svtSKbufficon, svtSKapplyTarget, svtSKTargetRaw);
             });
             SSD.Start();
         }
@@ -3290,7 +3366,7 @@ namespace Altera
             var strout = string.Join("+", outputArray);
             return strout;
         }
-        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum, string target, string bufficon)
+        private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum, string target, string bufficon, string applyTarget, string targetraw)
         {
             Dispatcher.Invoke(() =>
             {
@@ -3300,8 +3376,10 @@ namespace Altera
                 var lv10Array = lv10.Split('|');
                 var FuncArray = FuncName.Replace(" ", "").Split(',');
                 var targetlistArray = target.Split(',');
+                var targetrawArray = targetraw.Split(',');
                 var bufficonidArray = bufficon.Split(',');
                 var bufficonBitmaps = new BitmapImage[bufficonidArray.Length];
+                var applyTargetArray = applyTarget.Split(',');
                 for (var m = 0; m <= bufficonidArray.Length - 1; m++)
                 {
                     bufficonBitmaps[m] = new BitmapImage(new Uri($"bufficons\\bufficon_0.png", UriKind.Relative));
@@ -3323,15 +3401,64 @@ namespace Altera
                     if (ToggleFuncDiffer.IsChecked == true)
                     {
                         lv1Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
-                            lv1Array[i]);
+                            lv1Array[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         lv6Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
-                            lv6Array[i]);
+                            lv6Array[i], ToggleDisplayEnemyFunc.IsChecked == false);
                         lv10Array[i] = ModifyFuncSvalDisplay.ModifyFuncStr(FuncArray[i],
-                                lv10Array[i]);
+                                lv10Array[i], ToggleDisplayEnemyFunc.IsChecked == false);
                     }
                     if (FuncArray[i] == "") continue;
                     if (lv1Array[i] == "5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1") continue;
-                    //var DisplaySval = lv1Array[i] == lv10Array[i] ? $"固定: {lv10Array[i].Replace("\r\n", " ")}" : $"Lv.1: {lv1Array[i].Replace("\r\n"," ")}\r\nLv.6: {lv6Array[i].Replace("\r\n", " ")}\r\nLv.10: {lv10Array[i].Replace("\r\n", " ")}";
+                    if (ToggleDisplayEnemyFunc.IsChecked == false) 
+                    { 
+                        if (applyTargetArray[i] == "2")
+                        {
+                            if (FuncArray[i].Contains("チャージ増加") || FuncArray[i].Contains("充能增加") || FuncArray[i].Contains("クリティカル発生") || FuncArray[i].Contains("暴擊発生率") || FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能減少"))
+                            {
+                                switch (Convert.ToInt32(targetrawArray[i]))
+                                {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 7:
+                                    case 9:
+                                    case 10:
+                                    case 11:
+                                    case 14:
+                                    case 16:
+                                    case 17:
+                                    case 18:
+                                        continue;
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
+                        if (applyTargetArray[i] == "1")
+                        {
+                            if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") || FuncArray[i].Contains("暴擊星掉落率") || FuncArray[i].Contains("NP減少"))
+                            {
+                                switch (Convert.ToInt32(targetrawArray[i]))
+                                {
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 12:
+                                    case 13:
+                                    case 15:
+                                    case 20:
+                                    case 27:
+                                        continue;
+                                }
+                            }
+                        }
+
+                    }
                     var DisplaySval = lv1Array[i] == lv10Array[i] ? $"固定: {lv10Array[i]}" : $"Lv.1: {lv1Array[i]}\r\nLv.6: {lv6Array[i]}\r\nLv.10: {lv10Array[i]}";
                     switch (SkillNum)
                     {

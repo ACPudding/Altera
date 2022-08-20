@@ -11,7 +11,7 @@ namespace Altera
     {
         public static string[] IndividualListStringTemp;
 
-        public static string ModifyFuncStr(string Funcname, string Funcsval)
+        public static string ModifyFuncStr(string Funcname, string Funcsval, bool ignoreEnemyFunc)
         {
             var output = Funcsval;
             string[] Tempsval;
@@ -109,6 +109,7 @@ namespace Altera
                 case 149:
                 case 163:
                 case 165:
+                case 169:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
@@ -278,7 +279,7 @@ namespace Altera
                             {
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                var Clockval = FindClockBuff(Tempsval[3], Lv);
+                                var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                                 output = "\r\n" + Clockval + " " +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
@@ -446,7 +447,7 @@ namespace Altera
                                     {
                                         var Lv = "1";
                                         if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                        var Clockval = FindClockBuff(Tempsval[3], Lv);
+                                        var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                                         output = "\r\n" + Clockval + " " +
                                                  (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                      ? ""
@@ -714,7 +715,7 @@ namespace Altera
                             {
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                var Clockval = FindClockBuff(Tempsval[3], Lv);
+                                var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
@@ -881,7 +882,7 @@ namespace Altera
                         {
                             var Lv = "1";
                             if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                            var Clockval = FindClockBuff(Tempsval[3], Lv);
+                            var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                             if (Tempsval.Length >= 6)
                                 if (Tempsval[5].Contains("UseRate"))
                                 {
@@ -1188,7 +1189,7 @@ namespace Altera
                         {
                             var CounterTDID = Tempsval[3].Replace("CounterId:", "");
                             var CounterTDLv = Tempsval[4].Replace("CounterLv:", "");
-                            var result = ServantTreasureDeviceSvalCheckForCounter(CounterTDID, CounterTDLv);
+                            var result = ServantTreasureDeviceSvalCheckForCounter(CounterTDID, CounterTDLv, ignoreEnemyFunc);
                             if (result != "false")
                             {
                                 output = "\r\n<" + result + ">" +
@@ -1355,6 +1356,25 @@ namespace Altera
                                 break;
                             }
 
+                        if (Funcname.Contains("必中") && Tempsval[3].Contains("ShowQuestNoEffect"))
+                        {
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+                        }
+
                         try
                         {
                             output = "[" + Tempsval[3] + "] " +
@@ -1390,7 +1410,7 @@ namespace Altera
                         {
                             var Lv = "1";
                             if (Tempsval[5].Contains("SkillLV")) Lv = Tempsval[5].Replace("SkillLV:", "");
-                            var Clockval = FindClockBuff(Tempsval[4].Replace("SkillID:", ""), Lv);
+                            var Clockval = FindClockBuff(Tempsval[4].Replace("SkillID:", ""), Lv, ignoreEnemyFunc);
                             output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
@@ -1419,7 +1439,7 @@ namespace Altera
                             {
                                 var Lv = "1";
                                 if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                                var Clockval = FindClockBuff(Tempsval[3], Lv);
+                                var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                                 if (Tempsval.Length >= 6)
                                     if (Tempsval[5].Contains("UseRate"))
                                     {
@@ -1680,6 +1700,7 @@ namespace Altera
                 case "蝕毒":
                 case "延焼":
                 case "死の淵":
+                case "NiceShot!":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
@@ -1758,7 +1779,7 @@ namespace Altera
                         break;
                     }
                 default:
-                    if (Funcname.Contains("NP") && !Funcname.Contains("獲得"))
+                    if (Funcname.Contains("NP") && !Funcname.Contains("獲得") && !Funcname.Contains("每回合") && !Funcname.Contains("每ターン") && !Funcname.Contains("発動"))
                     {
                         Tempsval = Funcsval.Split(',');
                         if (Tempsval.Length == 4)
@@ -1827,7 +1848,7 @@ namespace Altera
                     {
                         var Lv = "1";
                         if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                        var Clockval = FindClockBuff(Tempsval[3], Lv);
+                        var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                         if (Tempsval.Length >= 6)
                         {
                             if (Tempsval[5].Contains("UseRate"))
@@ -1864,7 +1885,7 @@ namespace Altera
                         {
                             var Lv = "1";
                             if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
-                            var Clockval = FindClockBuff(Tempsval[3], Lv);
+                            var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
                             output = "\r\n" + Clockval + " " +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
@@ -2239,7 +2260,7 @@ namespace Altera
             return output;
         }
 
-        public static string FindClockBuff(string id, string lv)
+        public static string FindClockBuff(string id, string lv, bool ignoreEnemyFunc)
         {
             var FuncSval = "";
             var FuncID = "";
@@ -2259,14 +2280,30 @@ namespace Altera
             var FuncIDList = new List<string>(FuncID.Split(','));
             var FuncIDArray = FuncIDList.ToArray();
             var FuncList = new List<string>();
+            var applyTargetList = new List<string>();
+            var targetRawList = new List<string>();
             FuncList.AddRange(from skfuncidtmp in FuncIDArray
                 from functmp in GlobalPathsAndDatas.mstFuncArray
                 where ((JObject)functmp)["id"].ToString() == skfuncidtmp
                 select JObject.Parse(functmp.ToString())
                 into mstFuncobjtmp
                 select MainWindow.TranslateBuff(mstFuncobjtmp["popupText"].ToString()));
+            applyTargetList.AddRange(from skfuncidtmp in FuncIDArray
+                from functmp in GlobalPathsAndDatas.mstFuncArray
+                where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                select JObject.Parse(functmp.ToString())
+                into mstFuncobjtmp
+                select MainWindow.TranslateBuff(mstFuncobjtmp["applyTarget"].ToString()));
+            targetRawList.AddRange(from skfuncidtmp in FuncIDArray
+                from functmp in GlobalPathsAndDatas.mstFuncArray
+                where ((JObject)functmp)["id"].ToString() == skfuncidtmp
+                select JObject.Parse(functmp.ToString())
+                into mstFuncobjtmp
+                select MainWindow.TranslateBuff(mstFuncobjtmp["targetType"].ToString()));
+            var applyTargetListArray = applyTargetList.ToArray();
             var FuncListArray = FuncList.ToArray();
             var FuncSvalArray = FuncSval.Split('|');
+            var targetrawArray = targetRawList.ToArray();
             var result = "<";
             for (var i = 0; i < FuncListArray.Length; i++)
             {
@@ -2281,8 +2318,57 @@ namespace Altera
                 if (FuncListArray[i] == "生贄")
                     FuncListArray[i] = "活祭";
                 if (FuncSvalArray[i].Contains("5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1")) continue;
+                if (ignoreEnemyFunc)
+                {
+                    if (applyTargetListArray[i] == "2")
+                    {
+                        if (FuncListArray[i].Contains("チャージ増加") || FuncListArray[i].Contains("充能增加") || FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴擊発生率"))
+                        {
+                            switch (Convert.ToInt32(targetrawArray[i]))
+                            {
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 7:
+                                case 9:
+                                case 10:
+                                case 11:
+                                case 14:
+                                case 16:
+                                case 17:
+                                case 18:
+                                    continue;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (applyTargetListArray[i] == "1")
+                    {
+                        if (FuncListArray[i].Contains("NP増加") || FuncListArray[i].Contains("スター発生") || FuncListArray[i].Contains("暴擊星掉落率"))
+                        {
+                            switch (Convert.ToInt32(targetrawArray[i]))
+                            {
+                                case 4:
+                                case 5:
+                                case 6:
+                                case 7:
+                                case 12:
+                                case 13:
+                                case 15:
+                                case 20:
+                                case 27:
+                                    continue;
+                            }
+                        }
+                    }
+                }
                 result += FuncListArray[i] + "(" +
-                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i]) + ") + ";
+                          ModifyFuncStr(FuncListArray[i], FuncSvalArray[i], ignoreEnemyFunc) + ") + ";
             }
 
             try
@@ -2428,7 +2514,7 @@ namespace Altera
             }
         }
 
-        private static string ServantTreasureDeviceSvalCheckForCounter(string svtTDID, string Lv)
+        private static string ServantTreasureDeviceSvalCheckForCounter(string svtTDID, string Lv, bool ignoreEnemyFunc)
         {
             string svtTreasureDeviceFuncID;
             string[] svtTreasureDeviceFuncIDArray = null;
@@ -2494,7 +2580,7 @@ namespace Altera
                     if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
                         !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
                     TDlv1OC1strArray[i] = ModifyFuncStr(TDFuncstrArray[i],
-                        TDlv1OC1strArray[i]);
+                        TDlv1OC1strArray[i], ignoreEnemyFunc);
                     output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ") ";
                 }
 
