@@ -1774,7 +1774,7 @@
                                VerticalAlignment="Top" Width="259" FontSize="11.5"
                                Foreground="#FF333333" />
                     <TextBlock
-                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera。&#xA;本程序所有涉及数据解密的部分均使用了nishuoshenme的FGOAssetsModifyTool的代码。感谢他的付出。&#xA;本程序为练手之作，代码和UI写的都很差。因此不会长期更新，望见谅。"
+                        Text="&#xA;此程序前身为FGOServantBasicInformationAnalyzer，现进行ui更改之后改名为Altera。&#xA;本程序所有涉及数据解密的部分均使用了hexstr的FGOAssetsModifyTool的代码。感谢他的付出。&#xA;本程序为练手之作，代码和UI写的都很差。因此不会长期更新，望见谅。"
                         HorizontalAlignment="Left" Height="76" Margin="10,165,0,0" VerticalAlignment="Top"
                         Width="588" Foreground="#FF333333" FontWeight="Bold" />
                     <TextBlock Text="b站ID: TAKAGIMIWAKO      Github: TAKAGIMIWAKO" HorizontalAlignment="Left"

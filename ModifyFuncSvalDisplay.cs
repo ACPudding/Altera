@@ -2010,10 +2010,36 @@ namespace Altera
                 }
             }
 
+            if (Funcname == "鎮国武成王")
+            {
+                Tempsval = Funcsval.Split(',');
+                switch (Tempsval.Length)
+                {
+                    case 7:
+                        try
+                        {
+                            output =
+                                "∅" +
+                            (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                            (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                            (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+                        break;
+                    default:
+                        output = Funcsval;
+                        break;
+                }
+            }
             if (Funcname == "強化解除" || Funcname == "防御強化解除" || Funcname == "攻撃強化解除" || Funcname == "攻撃弱体解除" ||
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
-                Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効")
+                Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効" || Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効")
 
             {
                 Tempsval = Funcsval.Split(',');
