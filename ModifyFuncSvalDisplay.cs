@@ -2471,18 +2471,44 @@ namespace Altera
                 for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
             }
 
-            if (Input.Length >= 6) return Input;
-            if (Input == "5010" || Input == "5000") return Input;
-            for (var k = 0; k < IndividualityCommons.Length; k++)
+            if (Input.Contains(@"/"))
             {
-                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1] + " ( " + Input + " ) ";
+                var InputArray = Input.Split('/');
+                var output = "";
+                foreach (var item in InputArray)
+                {
+                    if (item.Length >= 6) output += item + "/";
+                    if (item == "5010" || item == "5000") continue;
+                    for (var k = 0; k < IndividualityCommons.Length; k++)
+                    {
+                        if (item == IndividualityCommons[k][0]) output += IndividualityCommons[k][1] + "(" + item + ")/";
 
-                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
-                    return Input;
+                        if (k == IndividualityCommons.Length - 1 && item != IndividualityCommons[k][0])
+                           continue;
+                    }
+                }
+                if (output.Length > 1)
+                {
+                    output = output.Substring(0,output.Length - 1);
+                }
+                return output;
             }
+            else
+            {
+
+                if (Input.Length >= 6) return Input;
+                if (Input == "5010" || Input == "5000") return Input;
+                for (var k = 0; k < IndividualityCommons.Length; k++)
+                {
+                    if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1] + " ( " + Input + " ) ";
+
+                    if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
+                        return Input;
+                }
 
 
-            return Input;
+                return Input;
+            }
         }
 
         public static string SearchIndividualalityTDExcel(string Input)
@@ -2501,19 +2527,44 @@ namespace Altera
                 IndividualityCommons[i] = new string[TempSplit2.Length];
                 for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
             }
-
-            if (Input.Length >= 6) return Input;
-            if (Input == "5010" || Input == "5000") return Input;
-            for (var k = 0; k < IndividualityCommons.Length; k++)
+            if (Input.Contains(@"/"))
             {
-                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1];
+                var InputArray = Input.Split('/');
+                var output = "";
+                foreach (var item in InputArray)
+                {
+                    if (item.Length >= 6) output += item + "/";
+                    if (item == "5010" || item == "5000") continue;
+                    for (var k = 0; k < IndividualityCommons.Length; k++)
+                    {
+                        if (item == IndividualityCommons[k][0]) output += IndividualityCommons[k][1] + "/";
 
-                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
-                    return Input;
+                        if (k == IndividualityCommons.Length - 1 && item != IndividualityCommons[k][0])
+                            continue;
+                    }
+                }
+                if (output.Length > 1)
+                {
+                    output = output.Substring(0, output.Length - 1);
+                }
+                return output;
             }
+            else
+            {
+
+                if (Input.Length >= 6) return Input;
+                if (Input == "5010" || Input == "5000") return Input;
+                for (var k = 0; k < IndividualityCommons.Length; k++)
+                {
+                    if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1];
+
+                    if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
+                        return Input;
+                }
 
 
-            return Input;
+                return Input;
+            }
         }
 
         public static string TranslateBuff(string buffname)
