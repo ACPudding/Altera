@@ -982,6 +982,69 @@ namespace Altera
                             break;
                         }
 
+                if (svtrarity == "")
+                    foreach (var svtLimittmp in GlobalPathsAndDatas.mstSvtLimitArray)
+                        if (((JObject)svtLimittmp)["svtId"].ToString() == JB.svtid &&
+                            ((JObject)svtLimittmp)["limitCount"].ToString() == "0")
+                        {
+                            var mstsvtLimitobjtmp = JObject.Parse(svtLimittmp.ToString());
+                            svtrarity = mstsvtLimitobjtmp["rarity"].ToString();
+                            svthpBase = mstsvtLimitobjtmp["hpBase"].ToString();
+                            svthpMax = mstsvtLimitobjtmp["hpMax"].ToString();
+                            svtatkBase = mstsvtLimitobjtmp["atkBase"].ToString();
+                            svtatkMax = mstsvtLimitobjtmp["atkMax"].ToString();
+                            rarity.Text = svtrarity + " ☆";
+                            var DSR = new Task(() => { DisplaySvtRarity(Convert.ToInt32(svtrarity)); });
+                            DSR.Start();
+                            var DSC = new Task(() => { DisplaySvtClassPng(classData, Convert.ToInt32(svtrarity)); });
+                            DSC.Start();
+                            maxhp.Text = svthpMax;
+                            basichp.Text = svthpBase;
+                            basicatk.Text = svtatkBase;
+                            maxatk.Text = svtatkMax;
+                            if (JB.svtid == "800100")
+                            {
+                                maxhp.Text = "12877";
+                                maxatk.Text = "8730";
+                            }
+
+                            GlobalPathsAndDatas.basicatk = Convert.ToInt32(svtatkBase);
+                            GlobalPathsAndDatas.basichp = Convert.ToInt32(svthpBase);
+                            GlobalPathsAndDatas.maxatk = Convert.ToInt32(svtatkMax);
+                            GlobalPathsAndDatas.maxhp = Convert.ToInt32(svthpMax);
+                            var DSSCL = new Task(() =>
+                            {
+                                DrawServantStrengthenCurveLine(GlobalPathsAndDatas.CurveType);
+                            });
+                            DSSCL.Start();
+                            svtcriticalWeight = mstsvtLimitobjtmp["criticalWeight"].ToString();
+                            jixing.Text = svtcriticalWeight;
+                            svtpower = mstsvtLimitobjtmp["power"].ToString();
+                            svtdefense = mstsvtLimitobjtmp["defense"].ToString();
+                            svtagility = mstsvtLimitobjtmp["agility"].ToString();
+                            svtmagic = mstsvtLimitobjtmp["magic"].ToString();
+                            svtluck = mstsvtLimitobjtmp["luck"].ToString();
+                            svttreasureDevice = mstsvtLimitobjtmp["treasureDevice"].ToString();
+                            var SHAB = new Task(() =>
+                            {
+                                ShowHPAtkBalance(JB.svtid, svtrarity, svtdefense, svthpBase, svtClass);
+                            });
+                            SHAB.Start();
+                            powerData = int.Parse(svtpower);
+                            defenseData = int.Parse(svtdefense);
+                            agilityData = int.Parse(svtagility);
+                            magicData = int.Parse(svtmagic);
+                            luckData = int.Parse(svtluck);
+                            TreasureData = int.Parse(svttreasureDevice);
+                            sixwei.Text = "筋力: " + RankString[powerData] + "    耐久: " + RankString[defenseData] +
+                                          "    敏捷: " +
+                                          RankString[agilityData] +
+                                          "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
+                                          "    宝具: " +
+                                          RankString[TreasureData];
+                            break;
+                        }
+
                 var svtArtsCardQuantity = CardArrange.Count(c => c == 'A');
                 if (svtArtsCardQuantity == 0)
                 {
