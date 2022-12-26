@@ -683,6 +683,8 @@ namespace Altera
                 ClassName[27] = "Beast ?";
                 ClassName[28] = "Pretender";
                 ClassName[29] = "Beast IV";
+                ClassName[31] = "?";
+                ClassName[32] = "?";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -1132,6 +1134,8 @@ namespace Altera
             ClassName[27] = "Beast？";
             ClassName[28] = "Pretender";
             ClassName[29] = "BeastIV";
+            ClassName[31] = "？(31)";
+            ClassName[32] = "？(32)";
             var pngArr = 0;
             switch (rarity)
             {

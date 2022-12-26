@@ -110,6 +110,7 @@ namespace Altera
                 case 163:
                 case 165:
                 case 169:
+                case 170:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {

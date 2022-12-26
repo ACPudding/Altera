@@ -760,5 +760,17 @@
   <ItemGroup>
     <Resource Include="bufficons\bufficon_0.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2831%292.png" />
+    <Resource Include="images\Class？%2832%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2831%291.png" />
+    <Resource Include="images\Class？%2832%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2831%293.png" />
+    <Resource Include="images\Class？%2832%293.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
