@@ -5161,7 +5161,7 @@ namespace Altera
             }
 
             var SvtIndividualityAdd1 = SvtIndiSpec1(JB.svtid, IndividualityCommons);
-            var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityCommons);
+            var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityCommons, IndividualityStringArray);
             if (SvtIndividualityAdd1 != "") Outputs += SvtIndividualityAdd1;
             if (SvtIndividualityAdd2 != "") Outputs += SvtIndividualityAdd2;
             if (!Outputs.Contains("被EA特攻")) Outputs += "不被EA特攻,";
@@ -5209,7 +5209,7 @@ namespace Altera
             return CheckedName;
         }
 
-        private string SvtIndiSpec2(string SvtID, string[][] CheckList)
+        private string SvtIndiSpec2(string SvtID, string[][] CheckList, string[] originList)
         {
             var Limitindi0 = "";
             var Limitindi1 = "";
@@ -5275,6 +5275,7 @@ namespace Altera
                 foreach (var Cases in LimitindiOtherArray)
                 {
                     if (Cases == "5010" || Cases == "5000") continue;
+                    if (originList.Contains(Cases)) continue;
                     foreach (var t in CheckList)
                     {
                         if (Cases != t[0]) continue;
@@ -5309,6 +5310,7 @@ namespace Altera
                 foreach (var Cases in SpIndiList)
                 {
                     if (Cases == "5010" || Cases == "5000") continue;
+                    if (originList.Contains(Cases)) continue;
                     foreach (var t in CheckList)
                     {
                         if (Cases != t[0]) continue;
