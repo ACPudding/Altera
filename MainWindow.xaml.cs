@@ -1627,15 +1627,53 @@ namespace Altera
         {
             var svtArtsCardhit = 1;
             var svtArtsCardhitDamage = "unknown";
+            var svtArtsCardAttckType = "";
             var svtBustersCardhit = 1;
             var svtBustersCardhitDamage = "unknown";
+            var svtBustersCardAttckType = "";
             var svtQuicksCardhit = 1;
             var svtQuicksCardhitDamage = "unknown";
+            var svtQuicksCardAttckType = "";
             var svtExtraCardhit = 1;
             var svtExtraCardhitDamage = "unknown";
+            var svtExtraCardAttckType = "";
             GlobalPathsAndDatas.svtArtsCardhit = 1;
+            var svtEnemyCommonCardhit = 1;
+            var svtEnemyCommonCardhitDamage = "unknown";
+            var svtEnemyCommonCardAttckType = "";
+            var svtEnemyCriticalCardhit = 1;
+            var svtEnemyCriticalCardhitDamage = "unknown";
+            var svtEnemyCriticalCardAttckType = "";
             foreach (var svtCardtmp in GlobalPathsAndDatas.mstSvtCardArray)
             {
+                if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
+                    ((JObject)svtCardtmp)["cardId"].ToString() == "10")
+                {
+                    var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
+                    svtEnemyCommonCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
+                        .Replace("\t", "").Replace("\r", "").Replace(" ", "");
+                    svtEnemyCommonCardhit += svtEnemyCommonCardhitDamage.Count(c => c == ',');
+                    svtEnemyCommonCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
+                    bustercard.Dispatcher.Invoke(() =>
+                    {
+                        bustercard.Text = "敌方通常攻击(弱): " + svtEnemyCommonCardhit + " hit " + svtEnemyCommonCardhitDamage + (svtEnemyCriticalCardAttckType == "2" ? " (群体攻击)" : "");
+                    });
+                }
+
+                if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
+                    ((JObject)svtCardtmp)["cardId"].ToString() == "11")
+                {
+                    var mstSvtCardobjtmp = JObject.Parse(svtCardtmp.ToString());
+                    svtEnemyCriticalCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
+                        .Replace("\t", "").Replace("\r", "").Replace(" ", "");
+                    svtEnemyCriticalCardhit += svtEnemyCriticalCardhitDamage.Count(c => c == ',');
+                    svtEnemyCriticalCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
+                    artscard.Dispatcher.Invoke(() =>
+                    {
+                        artscard.Text = "敌方通常攻击(强): " + svtEnemyCriticalCardhit + " hit " + svtEnemyCriticalCardhitDamage + (svtEnemyCriticalCardAttckType == "2" ? " (群体攻击)" : "");
+                    });
+                }
+
                 if (((JObject)svtCardtmp)["svtId"].ToString() == JB.svtid &&
                     ((JObject)svtCardtmp)["cardId"].ToString() == "1")
                 {
@@ -1643,10 +1681,11 @@ namespace Altera
                     svtArtsCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
                         .Replace("\t", "").Replace("\r", "").Replace(" ", "");
                     svtArtsCardhit += svtArtsCardhitDamage.Count(c => c == ',');
+                    svtArtsCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
                     GlobalPathsAndDatas.svtArtsCardhit = svtArtsCardhit;
                     artscard.Dispatcher.Invoke(() =>
                     {
-                        artscard.Text = svtArtsCardhit + " hit " + svtArtsCardhitDamage;
+                        artscard.Text = svtArtsCardhit + " hit " + svtArtsCardhitDamage + (svtArtsCardAttckType == "2" ? " (群体攻击)" : "");
                     });
                 }
 
@@ -1657,9 +1696,10 @@ namespace Altera
                     svtBustersCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
                         .Replace("\t", "").Replace("\r", "").Replace(" ", "");
                     svtBustersCardhit += svtBustersCardhitDamage.Count(c => c == ',');
+                    svtBustersCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
                     bustercard.Dispatcher.Invoke(() =>
                     {
-                        bustercard.Text = svtBustersCardhit + " hit " + svtBustersCardhitDamage;
+                        bustercard.Text = svtBustersCardhit + " hit " + svtBustersCardhitDamage + (svtBustersCardAttckType == "2" ? " (群体攻击)" : "");
                     });
                 }
 
@@ -1670,9 +1710,10 @@ namespace Altera
                     svtQuicksCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
                         .Replace("\t", "").Replace("\r", "").Replace(" ", "");
                     svtQuicksCardhit += svtQuicksCardhitDamage.Count(c => c == ',');
+                    svtQuicksCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
                     quickcard.Dispatcher.Invoke(() =>
                     {
-                        quickcard.Text = svtQuicksCardhit + " hit " + svtQuicksCardhitDamage;
+                        quickcard.Text = svtQuicksCardhit + " hit " + svtQuicksCardhitDamage + (svtQuicksCardAttckType == "2" ? " (群体攻击)" : "");
                     });
                 }
 
@@ -1683,9 +1724,10 @@ namespace Altera
                     svtExtraCardhitDamage = mstSvtCardobjtmp["normalDamage"].ToString().Replace("\n", "")
                         .Replace("\t", "").Replace("\r", "").Replace(" ", "");
                     svtExtraCardhit += svtExtraCardhitDamage.Count(c => c == ',');
+                    svtExtraCardAttckType = mstSvtCardobjtmp["attackType"].ToString();
                     extracard.Dispatcher.Invoke(() =>
                     {
-                        extracard.Text = svtExtraCardhit + " hit " + svtExtraCardhitDamage;
+                        extracard.Text = svtExtraCardhit + " hit " + svtExtraCardhitDamage + (svtExtraCardAttckType == "2" ? " (群体攻击)" : "");
                     });
                 }
             }
@@ -5357,7 +5399,7 @@ namespace Altera
             for (var j = 0; j < ListDisplayAfter.Length; j++)
             {
                 if (UniqueIndiStringArray[j] == "") continue;
-                OutputString += UniqueIndiStringArray[j] + "(再临" + ListDisplayAfter[j] + "),";
+                OutputString += UniqueIndiStringArray[j] + "(再临阶段" + ListDisplayAfter[j].Replace("0", "Ⅰ").Replace("1,2", "Ⅱ").Replace("3,4", "Ⅲ") + "),";
             }
 
             OutputString += OutputSpecialOther;
