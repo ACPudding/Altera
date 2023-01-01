@@ -28,7 +28,7 @@ namespace Altera
             request.ServicePoint.Expect100Continue = false;
             request.Accept = "gzip, identity";
             request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = "fategrandorder/2.38.0 CFNetword/1312 Darwin/21.0.0";
+            request.UserAgent = "fategrandorder/2.66.5 CFNetword/1312 Darwin/21.0.0";
             request.Timeout = 10000;
             return request;
         }
@@ -67,9 +67,9 @@ namespace Altera
 
         public static Stream GetXlsx()
         {
-            var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfoBotNew.xlsx";
+            var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfoBotNewer.xlsx";
             var xlsxurl2 =
-                "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtBasicInfoBotNew.xlsx";
+                "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtBasicInfoBotNewer.xlsx";
             var httpWebRequest =
                 (HttpWebRequest) WebRequest.Create(xlsxurl2);
             httpWebRequest.Method = "GET";

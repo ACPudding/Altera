@@ -74,5 +74,11 @@ namespace Altera.Properties
         public static string AS3D;
         public static string TDAttackNameTranslation;
         public static string SvtIndividualityTranslation;
+        public static decimal lv100hp;
+        public static decimal lv100atk;
+        public static decimal lv120hp;
+        public static decimal lv120atk;
+        public static decimal lv150hp;
+        public static decimal lv150atk;
     }
 }

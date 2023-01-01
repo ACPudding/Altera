@@ -1909,6 +1909,57 @@ namespace Altera
 
                     if (svtTreasureDeviceFuncIDArray[i] == "5") continue;
 
+                    if (ToggleDisplayEnemyFunc.IsChecked == false)
+                    {
+                        if (svtTDapplyTargetArray[i] == "2")
+                        {
+                            if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") || TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴擊発生率"))
+                            {
+                                switch (Convert.ToInt32(svtTDTargetRawArray[i]))
+                                {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 7:
+                                    case 9:
+                                    case 10:
+                                    case 11:
+                                    case 14:
+                                    case 16:
+                                    case 17:
+                                    case 18:
+                                        continue;
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
+                        if (svtTDapplyTargetArray[i] == "1")
+                        {
+                            if (TDFuncstrArray[i].Contains("NP増加") || TDFuncstrArray[i].Contains("スター発生") || TDFuncstrArray[i].Contains("暴擊星掉落率"))
+                            {
+                                switch (Convert.ToInt32(svtTDTargetRawArray[i]))
+                                {
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 12:
+                                    case 13:
+                                    case 15:
+                                    case 20:
+                                    case 27:
+                                        continue;
+                                }
+                            }
+                        }
+
+                        }
+
                     if (isTDFunc(svtTreasureDeviceFuncIDArray[i]))
                     {
                         if (ToggleFuncDiffer.IsChecked != true) return;
@@ -1971,58 +2022,7 @@ namespace Altera
                     }
 
                     var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i] ? $"固定: {TDlv5OC5strArray[i]}" : $"Lv.1/OC1: {TDlv1OC1strArray[i]}\r\nLv.2/OC2: {TDlv2OC2strArray[i]}\r\nLv.3/OC3: {TDlv3OC3strArray[i]}\r\nLv.4/OC4: {TDlv4OC4strArray[i]}\r\nLv.5/OC5: {TDlv5OC5strArray[i]}";
-                    //if (ToggleDisplayEnemyFunc.IsChecked == false) { if (svtTDapplyTargetArray[i] == "2") continue; }
-                        if (ToggleDisplayEnemyFunc.IsChecked == false)
-                        {
-                            if (svtTDapplyTargetArray[i] == "2")
-                            {
-                                if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") || TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴擊発生率"))
-                                {
-                                    switch (Convert.ToInt32(svtTDTargetRawArray[i]))
-                                    {
-                                        case 0:
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 7:
-                                        case 9:
-                                        case 10:
-                                        case 11:
-                                        case 14:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                            continue;
-                                    }
-                                }
-                                else
-                                {
-                                    continue;
-                                }
-                            }
-
-                            if (svtTDapplyTargetArray[i] == "1")
-                            {
-                                if (TDFuncstrArray[i].Contains("NP増加") || TDFuncstrArray[i].Contains("スター発生") || TDFuncstrArray[i].Contains("暴擊星掉落率"))
-                                {
-                                    switch (Convert.ToInt32(svtTDTargetRawArray[i]))
-                                    {
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 12:
-                                        case 13:
-                                        case 15:
-                                        case 20:
-                                        case 27:
-                                            continue;
-                                    }
-                                }
-                            }
-
-                        }
-                        TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果", DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
+                    TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果", DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
                 }
 
                 try
@@ -2342,7 +2342,7 @@ namespace Altera
                     }
 
                     SkillLvs.ClassPassiveforExcel +=
-                        i + 1 + "、" + ClassPassiveSkillFuncName.Replace("\r\n", "") + " |【描述】: " + CPDetail +
+                        i + 1 + "、" + ClassPassiveSkillFuncName.Replace("\r\n", "") + " (" + svtClassPassiveIDListArray[i] + ")" + " |【描述】: " + CPDetail +
                         " 【效果】: " + tmpexcelText +
                         "\r\n";
                     var FuncStr = "\r\n" + string.Join("\r\n", SKLFuncstrArray) + "\r\n";
@@ -4159,17 +4159,17 @@ namespace Altera
                 if (!Directory.Exists(svtData.FullName))
                     Directory.CreateDirectory(svtData.FullName);
                 Stream streamget;
-                if (!File.Exists(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx"))
+                if (!File.Exists(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx"))
                 {
                     streamget = HttpRequest.GetXlsx();
-                    var fileStream = File.Create(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx");
+                    var fileStream = File.Create(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx");
                     streamget.CopyTo(fileStream);
                     fileStream.Close();
                     streamget.Close();
                 }
 
                 var xlsx =
-                    new ExcelPackage(new FileStream(mstData.FullName + @"\SvtBasicInfoBotNew.xlsx", FileMode.Open));
+                    new ExcelPackage(new FileStream(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx", FileMode.Open));
                 var worksheet = xlsx.Workbook.Worksheets[0];
                 var Pickup = new ExcelAddress("E26");
                 worksheet.ConditionalFormatting.RemoveAll();
@@ -4177,7 +4177,7 @@ namespace Altera
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
                 worksheet.Cells["E3"].Value = Svtname.Text;
                 worksheet.Cells["E4"].Value = IndividualalityClean.Text;
-                worksheet.Cells["E14"].Value = BeiZhu.Text;
+                worksheet.Cells["E16"].Value = BeiZhu.Text;
                 worksheet.Cells["L3"].Value = svtclass.Text;
                 worksheet.Cells["H4"].Value = rarity.Text;
                 worksheet.Cells["J4"].Value = gendle.Text;
@@ -4188,19 +4188,22 @@ namespace Altera
                 worksheet.Cells["E7"].Value = ssvtstarrate.Text;
                 worksheet.Cells["I7"].Value = ssvtdeathrate.Text;
                 worksheet.Cells["L7"].Value = jixing.Text;
-                worksheet.Cells["G11"].Value = notrealnprate.Text;
-                worksheet.Cells["E12"].Value = nprate.Text;
-                worksheet.Cells["C24"].Value = classskill.Text;
+                worksheet.Cells["G13"].Value = notrealnprate.Text;
+                worksheet.Cells["E14"].Value = nprate.Text;
                 worksheet.Cells["E8"].Value = basichp.Text;
                 worksheet.Cells["I8"].Value = basicatk.Text;
                 worksheet.Cells["E9"].Value = maxhp.Text;
                 worksheet.Cells["I9"].Value = maxatk.Text;
-                worksheet.Cells["E16"].Value = cards.Text;
-                worksheet.Cells["G19"].Value = bustercard.Text;
-                worksheet.Cells["G20"].Value = artscard.Text;
-                worksheet.Cells["G21"].Value = quickcard.Text;
-                worksheet.Cells["G22"].Value = extracard.Text;
-                worksheet.Cells["G23"].Value = treasuredevicescard.Text;
+                worksheet.Cells["E10"].Value = GlobalPathsAndDatas.lv100hp;
+                worksheet.Cells["I10"].Value = GlobalPathsAndDatas.lv100atk;
+                worksheet.Cells["E11"].Value = GlobalPathsAndDatas.lv120hp;
+                worksheet.Cells["I11"].Value = GlobalPathsAndDatas.lv120atk;
+                worksheet.Cells["E18"].Value = cards.Text;
+                worksheet.Cells["G21"].Value = bustercard.Text;
+                worksheet.Cells["G22"].Value = artscard.Text;
+                worksheet.Cells["G23"].Value = quickcard.Text;
+                worksheet.Cells["G24"].Value = extracard.Text;
+                worksheet.Cells["G25"].Value = treasuredevicescard.Text;
                 worksheet.Cells["E26"].Value = npcardtype.Text;
                 worksheet.Cells["I26"].Value = nptype.Text;
                 worksheet.Cells["E27"].Value = nprank.Text;
@@ -4209,28 +4212,22 @@ namespace Altera
                 worksheet.Cells["E30"].Value = npdetail.Text;
                 if (npdetail.Text.Length >= 240) worksheet.Cells["E30"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q3"].Value = skill1name.Text;
-                if (skill1name.Text.Length >= 15) worksheet.Cells["Q3"].Style.Font.Size = 9;
-                worksheet.Cells["V3"].Value = skill1cdlv1.Text;
-                worksheet.Cells["X3"].Value = skill1cdlv6.Text;
-                worksheet.Cells["Z3"].Value = skill1cdlv10.Text;
+                if (skill1name.Text.Length >= 25) worksheet.Cells["Q3"].Style.Font.Size = 9;
+                worksheet.Cells["X3"].Value = skill1cdlv1.Text + " → " + skill1cdlv6.Text + " → " + skill1cdlv10.Text;
                 worksheet.Cells["Q4"].Value = skill1details.Text;
                 if (skill1details.Text.Length >= 150) worksheet.Cells["Q4"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q14"].Value = skill2name.Text;
                 if (skill2name.Text.Length >= 15) worksheet.Cells["Q14"].Style.Font.Size = 9;
-                worksheet.Cells["V14"].Value = skill2cdlv1.Text;
-                worksheet.Cells["X14"].Value = skill2cdlv6.Text;
-                worksheet.Cells["Z14"].Value = skill2cdlv10.Text;
+                worksheet.Cells["X14"].Value = skill2cdlv1.Text + " → " + skill2cdlv6.Text + " → " + skill2cdlv10.Text;
                 worksheet.Cells["Q15"].Value = skill2details.Text;
                 if (skill2details.Text.Length >= 150) worksheet.Cells["Q15"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q25"].Value = skill3name.Text;
                 if (skill3name.Text.Length >= 15) worksheet.Cells["Q25"].Style.Font.Size = 9;
-                worksheet.Cells["V25"].Value = skill3cdlv1.Text;
-                worksheet.Cells["X25"].Value = skill3cdlv6.Text;
-                worksheet.Cells["Z25"].Value = skill3cdlv10.Text;
+                worksheet.Cells["X25"].Value = skill3cdlv1.Text + " → " + skill3cdlv6.Text + " → " + skill3cdlv10.Text;
                 worksheet.Cells["Q26"].Value = skill3details.Text;
                 if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
                 worksheet.Cells["P42"].Value = svtIndividuality.Text;
-                worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
+                worksheet.Cells["C12"].Value = Convert.ToString(sixwei.Text);
                 worksheet.Cells["K8"].Value = SkillLvs.HpBalanceForExcel;
                 worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
                 worksheet.Cells["C46"].Value = SkillLvs.ClassPassiveforExcel;
@@ -4274,11 +4271,22 @@ namespace Altera
                 worksheet.Cells["T36"].Value = GlobalPathsAndDatas.AS1D;
                 worksheet.Cells["T38"].Value = GlobalPathsAndDatas.AS2D;
                 worksheet.Cells["T40"].Value = GlobalPathsAndDatas.AS3D;
-                worksheet.Cells["E19"].Value = SkillLvs.NPB;
-                worksheet.Cells["E20"].Value = SkillLvs.NPA;
-                worksheet.Cells["E21"].Value = SkillLvs.NPQ;
-                worksheet.Cells["E22"].Value = SkillLvs.NPEX;
-                worksheet.Cells["E23"].Value = SkillLvs.NPTD;
+                worksheet.Cells["E21"].Value = SkillLvs.NPB;
+                worksheet.Cells["E22"].Value = SkillLvs.NPA;
+                worksheet.Cells["E23"].Value = SkillLvs.NPQ;
+                worksheet.Cells["E24"].Value = SkillLvs.NPEX;
+                worksheet.Cells["E25"].Value = SkillLvs.NPTD;
+                if (GlobalPathsAndDatas.lv150atk != 0.0M)
+                {
+                    var txtOut = "Lv.150 HP/ATK:\r\n" + GlobalPathsAndDatas.lv150hp + "/" + GlobalPathsAndDatas.lv150atk;
+                    worksheet.Cells["K10"].Value = txtOut;
+                    worksheet.Cells["K10"].Style.WrapText = true;
+                }
+                else
+                {
+                    worksheet.Cells["K10"].Value = "";
+                    worksheet.Cells["K10"].Style.WrapText = true;
+                }
                 try
                 {
                     var classicon = BitmapImage2Bitmap((BitmapSource)ClassPng.Source);
@@ -4307,7 +4315,7 @@ namespace Altera
                 {
                     var sk2icon = BitmapImage2Bitmap((BitmapSource)sk2_icon.Source);
                     var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
-                    sk2i.SetPosition(465, 850);
+                    sk2i.SetPosition(475, 850);
                     sk2i.SetSize(40, 40);
                 }
                 catch (Exception)
@@ -4319,7 +4327,7 @@ namespace Altera
                 {
                     var sk3icon = BitmapImage2Bitmap((BitmapSource)sk3_icon.Source);
                     var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
-                    sk3i.SetPosition(685, 850);
+                    sk3i.SetPosition(695, 850);
                     sk3i.SetSize(40, 40);
                 }
                 catch (Exception)
@@ -4962,7 +4970,6 @@ namespace Altera
 
             GC.Collect();
         }
-
         private void ShowHPAtkBalance(string svtID, string rarity, string endurance, string basichp, string ClassID)
         {
             SkillLvs.HpBalanceForExcel = "";
@@ -5093,6 +5100,12 @@ namespace Altera
         {
             GlobalPathsAndDatas.CurveBaseData = null;
             GlobalPathsAndDatas.ymax = 0.0M;
+            GlobalPathsAndDatas.lv100atk = 0.0M;
+            GlobalPathsAndDatas.lv100hp = 0.0M;
+            GlobalPathsAndDatas.lv120atk = 0.0M;
+            GlobalPathsAndDatas.lv120hp = 0.0M;
+            GlobalPathsAndDatas.lv150atk = 0.0M;
+            GlobalPathsAndDatas.lv150hp = 0.0M;
             Dispatcher.Invoke(() =>
             {
                 if (Array == null) throw new ArgumentNullException(nameof(Array));
@@ -5109,6 +5122,21 @@ namespace Altera
                                          Array[lv] * (GlobalPathsAndDatas.maxatk - GlobalPathsAndDatas.basicatk) /
                                          1000;
                     if (lv == 0) continue;
+                    if (lv == 100)
+                    {
+                        GlobalPathsAndDatas.lv100atk = AdjustATKCurve[lv];
+                        GlobalPathsAndDatas.lv100hp = AdjustHPCurve[lv];
+                    }
+                    if (lv == 120)
+                    {
+                        GlobalPathsAndDatas.lv120atk = AdjustATKCurve[lv];
+                        GlobalPathsAndDatas.lv120hp = AdjustHPCurve[lv];
+                    }
+                    if (lv == 150 && GlobalPathsAndDatas.LvExpCurveLvCount == 151)
+                    {
+                        GlobalPathsAndDatas.lv150atk = AdjustATKCurve[lv];
+                        GlobalPathsAndDatas.lv150hp = AdjustHPCurve[lv];
+                    }
                     HpAtkListView.Items.Add(new HpAtkList(lv.ToString(), Convert.ToInt32(AdjustHPCurve[lv]).ToString(),
                         AdjustATKCurve[lv].ToString()));
                 }

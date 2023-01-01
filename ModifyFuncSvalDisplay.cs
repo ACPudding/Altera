@@ -879,6 +879,25 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[4].Contains("UseRate"))
+                            try
+                            {
+                                output = Tempsval[3] + "HP" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + 
+                                         " Buff成功率:" + (Tempsval[4].Replace("UseRate:", "") == "1000" ? "" 
+                                         : Convert.ToDouble(Tempsval[4].Replace("UseRate:", "")) / 10 + "%"); ;
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         if (Tempsval[3].Length == 6 && Tempsval[3][0] == '9')
                         {
                             var Lv = "1";
