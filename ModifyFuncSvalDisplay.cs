@@ -111,6 +111,7 @@ namespace Altera
                 case 165:
                 case 169:
                 case 170:
+                case 171:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                     {
@@ -234,6 +235,23 @@ namespace Altera
                                              (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                              (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴擊星 >= " +
                                              Tempsval[4].Replace("StarHigher:", "") + " )";
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            if (Tempsval[4].Contains("ActSelectIndex"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " (可选释放)";
                                     break;
                                 }
                                 catch (Exception)
@@ -385,6 +403,23 @@ namespace Altera
                             if (Tempsval.Length == 6)
                             {
                                 if (Tempsval[4].Contains("Hide") || Tempsval[4].Contains("ShowState"))
+                                    try
+                                    {
+                                        output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                     ? ""
+                                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                        break;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        output = Funcsval;
+                                        break;
+                                    }
+
+                                if (Tempsval[4].Contains("TriggeredFuncPosition") && Tempsval[5].Contains("DisplayLastFuncInvalidType"))
                                     try
                                     {
                                         output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -586,6 +621,31 @@ namespace Altera
                         try
                         {
                             output = "場地特性附加: " + Convert.ToDouble(Tempsval[3]) + "\r\n" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        output = Funcsval;
+                        break;
+                    }
+                case 172:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4 || Tempsval.Length == 5 && Tempsval[4].Contains("ShowState"))
+                    {
+                        try
+                        {
+                            output = "場地特性打消: " + Tempsval[3].Replace("TargetList:","") + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1191,6 +1251,21 @@ namespace Altera
                                     break;
                                 }
                             }
+                            else if (Tempsval[2].Contains("ActSelectIndex"))
+                            {
+                                try
+                                {
+                                    output = Tempsval[1] + "個" + (Tempsval[0] == "1000"
+                                        ? ""
+                                        : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)" + " (可选释放)");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+                            }
                             else
                             {
                                 output = Funcsval;
@@ -1386,6 +1461,44 @@ namespace Altera
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                          (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                          (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+                        }
+
+                        if (Funcname.Contains("必中") && Tempsval[3].Contains("ActSelectIndex"))
+                        {
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " (可选释放)";
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+                        }
+
+                        if (Funcname.Contains("回避") && Tempsval[3].Contains("ActSelectIndex"))
+                        {
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " (可选释放)";
                                 break;
                             }
                             catch (Exception)
@@ -2203,9 +2316,9 @@ namespace Altera
                     try
                     {
                         output = TDStrName + " 【{" + (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
-                            ? Convert.ToDouble(lv1spl[1]) / 10 + "% }】\r\n"
+                            ? Convert.ToDouble(lv1spl[1]) / 10 + "%}】\r\n"
                             : Convert.ToDouble(lv1spl[1]) / 10 + "% - " + Convert.ToDouble(lv5spl[1]) / 10 +
-                              "% }】\r\n");
+                              "%}】\r\n");
                     }
                     catch (Exception)
                     {

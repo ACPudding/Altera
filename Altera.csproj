@@ -772,5 +772,39 @@
     <Resource Include="images\Class？%2831%293.png" />
     <Resource Include="images\Class？%2832%293.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2830%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2830%292.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Class？%2830%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Class？%2830%293.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_562.png" />
+    <Resource Include="bufficons\bufficon_563.png" />
+    <Resource Include="bufficons\bufficon_564.png" />
+    <Resource Include="bufficons\bufficon_565.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_373.png" />
+    <Resource Include="bufficons\bufficon_374.png" />
+    <Resource Include="bufficons\bufficon_375.png" />
+    <Resource Include="bufficons\bufficon_376.png" />
+    <Resource Include="bufficons\bufficon_377.png" />
+    <Resource Include="bufficons\bufficon_381.png" />
+    <Resource Include="bufficons\bufficon_384.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00708.png" />
+    <Resource Include="skillicons\skill_00805.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00332.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

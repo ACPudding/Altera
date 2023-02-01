@@ -316,6 +316,12 @@ namespace Altera
                                 svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
                                 break;
                             }
+                            case "3":
+                            {
+                                var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
+                                svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
+                                break;
+                            }
                         }
 
                     if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
@@ -1134,6 +1140,7 @@ namespace Altera
             ClassName[27] = "Beast？";
             ClassName[28] = "Pretender";
             ClassName[29] = "BeastIV";
+            ClassName[30] = "？(30)";
             ClassName[31] = "？(31)";
             ClassName[32] = "？(32)";
             var pngArr = 0;
@@ -4214,16 +4221,19 @@ namespace Altera
                 worksheet.Cells["Q3"].Value = skill1name.Text;
                 if (skill1name.Text.Length >= 25) worksheet.Cells["Q3"].Style.Font.Size = 9;
                 worksheet.Cells["X3"].Value = skill1cdlv1.Text + " → " + skill1cdlv6.Text + " → " + skill1cdlv10.Text;
+                if (skill1cdlv1.Text == "") worksheet.Cells["X3"].Value = "";
                 worksheet.Cells["Q4"].Value = skill1details.Text;
                 if (skill1details.Text.Length >= 150) worksheet.Cells["Q4"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q14"].Value = skill2name.Text;
                 if (skill2name.Text.Length >= 15) worksheet.Cells["Q14"].Style.Font.Size = 9;
                 worksheet.Cells["X14"].Value = skill2cdlv1.Text + " → " + skill2cdlv6.Text + " → " + skill2cdlv10.Text;
+                if (skill2cdlv1.Text == "") worksheet.Cells["X14"].Value = "";
                 worksheet.Cells["Q15"].Value = skill2details.Text;
                 if (skill2details.Text.Length >= 150) worksheet.Cells["Q15"].Style.Font.Size = 7.5f;
                 worksheet.Cells["Q25"].Value = skill3name.Text;
                 if (skill3name.Text.Length >= 15) worksheet.Cells["Q25"].Style.Font.Size = 9;
                 worksheet.Cells["X25"].Value = skill3cdlv1.Text + " → " + skill3cdlv6.Text + " → " + skill3cdlv10.Text;
+                if (skill3cdlv1.Text == "") worksheet.Cells["X25"].Value = "";
                 worksheet.Cells["Q26"].Value = skill3details.Text;
                 if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
                 worksheet.Cells["P42"].Value = svtIndividuality.Text;
