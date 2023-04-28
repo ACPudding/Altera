@@ -694,6 +694,7 @@ namespace Altera
                 ClassName[29] = "Beast IV";
                 ClassName[31] = "?";
                 ClassName[32] = "?";
+                ClassName[33] = "Beast";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -727,6 +728,7 @@ namespace Altera
                 nprateclassbase[23] = 1.6M;
                 nprateclassbase[25] = 1.5M;
                 nprateclassbase[28] = 1.55M;
+                nprateclassbase[33] = 1.5M;
                 nprateclassbase[20] = 0.0M;
                 nprateclassbase[22] = 0.0M;
                 nprateclassbase[24] = 0.0M;
@@ -1086,6 +1088,7 @@ namespace Altera
                     case 25:
                     case 17:
                     case 28:
+                    case 33:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         break;
@@ -1146,6 +1149,7 @@ namespace Altera
             ClassName[30] = "？(30)";
             ClassName[31] = "？(31)";
             ClassName[32] = "？(32)";
+            ClassName[33] = "Beast";
             var pngArr = 0;
             switch (rarity)
             {
@@ -4869,6 +4873,9 @@ namespace Altera
                 case 29:
                     ClassName = "Beast IV";
                     break;
+                case 33:
+                    ClassName = "Beast";
+                    break;
                 default:
                     foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
                     {
@@ -5057,6 +5064,7 @@ namespace Altera
                 ClassBasicBase[23] = 1.05M;
                 ClassBasicBase[25] = 1.00M;
                 ClassBasicBase[28] = 0.95M;
+                ClassBasicBase[28] = 0.97M;
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -5068,7 +5076,7 @@ namespace Altera
                 decimal resultHPBaseCheck;
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
-                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28")
+                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28" && ClassID != "33")
                 {
                     hpatkbalance.Text = ShowString[7];
                     return;

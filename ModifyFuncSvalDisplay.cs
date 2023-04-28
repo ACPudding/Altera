@@ -112,6 +112,7 @@ namespace Altera
                 case 169:
                 case 170:
                 case 171:
+                case 173:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                         try
@@ -1452,6 +1453,23 @@ namespace Altera
                                 break;
                             }
 
+                        if (Funcname.Contains("〔毒〕回復化") && Tempsval[3].Contains("HpReduce"))
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         if (Funcname.Contains("必中") && Tempsval[3].Contains("ActSelectIndex"))
                             try
                             {
@@ -2157,7 +2175,7 @@ namespace Altera
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
                 Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効" ||
-                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効")
+                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効" || Funcname == "弱体耐性無視")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -2204,6 +2222,20 @@ namespace Altera
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "Buff/次");
                             ;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 4 when Funcname == "弱体耐性無視":
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                         }
                         catch (Exception)
                         {

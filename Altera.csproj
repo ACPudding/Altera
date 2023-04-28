@@ -813,5 +813,18 @@
     <Resource Include="skillicons\skill_00809.png" />
     <Resource Include="skillicons\skill_00810.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00544.png" />
+    <Resource Include="skillicons\skill_00811.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_385.png" />
+    <Resource Include="bufficons\bufficon_389.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassBeast1.png" />
+    <Resource Include="images\ClassBeast2.png" />
+    <Resource Include="images\ClassBeast3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
