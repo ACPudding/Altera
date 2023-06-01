@@ -108,6 +108,10 @@ namespace Altera
                 var mstCombineAppendPassiveSkill =
                     File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
                                      "mstCombineAppendPassiveSkill.json");
+                var funcListDebugger =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json");
+                GlobalPathsAndDatas.funcListDebuggerArray =
+                    (JArray)JsonConvert.DeserializeObject(funcListDebugger);
                 GlobalPathsAndDatas.mstCombineAppendPassiveSkillArray =
                     (JArray)JsonConvert.DeserializeObject(mstCombineAppendPassiveSkill);
                 GlobalPathsAndDatas.mstSvtPassiveSkillArray =

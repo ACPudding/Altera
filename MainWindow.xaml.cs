@@ -59,6 +59,12 @@ namespace Altera
         private static readonly string TDAttackNameTranslationListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
 
+        private static readonly string FuncListLinkA =
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/FuncList.json";
+
+        private static readonly string FuncListLinkB =
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/FuncList.json";
+
         public MainWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -136,6 +142,13 @@ namespace Altera
             JB.JB5 = "";
             JB.JB6 = "";
             JB.JB7 = "";
+            JB.JB1tmp = "";
+            JB.JB2tmp = "";
+            JB.JB3tmp = "";
+            JB.JB4tmp = "";
+            JB.JB5tmp = "";
+            JB.JB6tmp = "";
+            JB.JB7tmp = "";
             ClearTexts();
             RefreshTranslationsList();
             var TDStringBar = GetSvtTDID(svtID);
@@ -695,6 +708,8 @@ namespace Altera
                 ClassName[31] = "?";
                 ClassName[32] = "?";
                 ClassName[33] = "Beast";
+                ClassName[34] = "Beast VI";
+                ClassName[35] = "Beast VI";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -1150,6 +1165,8 @@ namespace Altera
             ClassName[31] = "？(31)";
             ClassName[32] = "？(32)";
             ClassName[33] = "Beast";
+            ClassName[34] = "BeastVI";
+            ClassName[35] = "BeastVI";
             var pngArr = 0;
             switch (rarity)
             {
@@ -1289,17 +1306,36 @@ namespace Altera
                             JB.JB1 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB1tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (jibantext1.Text != "")
                             JBOutput.Dispatcher.Invoke(() => { JBOutput.IsEnabled = true; });
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext1.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB1 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext1.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB1tmp)
+                        {
+                            var c = jibantext1.Text.IndexOf(']') + 1;
+                            jibantext1.Text = jibantext1.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB1 = JB.JB1.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext1.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB1 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1317,15 +1353,34 @@ namespace Altera
                             JB.JB2 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB2tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext2.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB2 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext2.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB2tmp)
+                        {
+                            var c = jibantext2.Text.IndexOf(']') + 1;
+                            jibantext2.Text = jibantext2.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB2 = JB.JB2.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext2.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB2 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1343,15 +1398,34 @@ namespace Altera
                             JB.JB3 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB3tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext3.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB3 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext3.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB3tmp)
+                        {
+                            var c = jibantext3.Text.IndexOf(']') + 1;
+                            jibantext3.Text = jibantext3.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB3 = JB.JB3.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext3.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB3 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1369,15 +1443,34 @@ namespace Altera
                             JB.JB4 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB4tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext4.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB4 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext4.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB4tmp)
+                        {
+                            var c = jibantext4.Text.IndexOf(']') + 1;
+                            jibantext4.Text = jibantext4.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB4 = JB.JB4.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext4.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB4 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1395,15 +1488,34 @@ namespace Altera
                             JB.JB5 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB5tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext5.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB5 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext5.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB5tmp)
+                        {
+                            var c = jibantext5.Text.IndexOf(']') + 1;
+                            jibantext5.Text = jibantext5.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB5 = JB.JB5.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext5.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB5 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1421,15 +1533,34 @@ namespace Altera
                             JB.JB6 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB6tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext6.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB6 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext6.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB6tmp)
+                        {
+                            var c = jibantext6.Text.IndexOf(']') + 1;
+                            jibantext6.Text = jibantext6.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB6 = JB.JB6.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext6.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB6 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1448,15 +1579,34 @@ namespace Altera
                             JB.JB7 += GetCondType(SCobjtmp["condValues"].ToString()) +
                                       ParseScriptJson(SCobjtmp["script"].ToString()) +
                                       SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB7tmp = SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
                         }
 
                         if (((JObject)SCTMP)["priority"].ToString() != "1") return;
-                        jibantext7.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                           ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                           SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
-                        JB.JB7 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
-                                  ParseScriptJson(SCobjtmp["script"].ToString()) +
-                                  SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        var compareStr = GetCondType(SCobjtmp["condValues"].ToString()) +
+                                         ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                         SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        if (jibantext7.Text == compareStr) return;
+                        if (SCobjtmp["comment"].ToString().Replace("\n", "\r\n") == JB.JB7tmp)
+                        {
+                            var c = jibantext7.Text.IndexOf(']') + 1;
+                            jibantext7.Text = jibantext7.Text.Insert(c,
+                                " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                ParseScriptJson(SCobjtmp["script"].ToString())).Replace("\r\n\r\n", "\r\n");
+                            JB.JB7 = JB.JB7.Insert(c, " 或 " + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                                      ParseScriptJson(SCobjtmp["script"].ToString()))
+                                .Replace("\r\n\r\n", "\r\n");
+                        }
+                        else
+                        {
+                            jibantext7.Text += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                               ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                               SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                            JB.JB7 += V + GetCondType(SCobjtmp["condValues"].ToString()) +
+                                      ParseScriptJson(SCobjtmp["script"].ToString()) +
+                                      SCobjtmp["comment"].ToString().Replace("\n", "\r\n");
+                        }
+
                         isJBChangeByCond = true;
                     });
                 }
@@ -1672,7 +1822,7 @@ namespace Altera
                     {
                         bustercard.Text = "敌方通常攻击(弱): " + svtEnemyCommonCardhit + " hit " +
                                           svtEnemyCommonCardhitDamage +
-                                          (svtEnemyCriticalCardAttckType == "2" ? " (群体攻击)" : "");
+                                          (svtEnemyCommonCardAttckType == "2" ? " (群体攻击)" : "");
                     });
                 }
 
@@ -1771,6 +1921,7 @@ namespace Altera
             var tvalstr = "";
             var popupIcon = "";
             var applyTarget = "";
+            var funcType = "";
             var svtTDTargetList = new List<string>();
             string[] svtTDTargetArray;
             var svtTDTarget = string.Empty;
@@ -1782,6 +1933,9 @@ namespace Altera
             var svtTDapplyTargetList = new List<string>();
             string[] svtTDapplyTargetArray;
             var svtTDapplyTarget = string.Empty;
+            var svtTDfuncTypeList = new List<string>();
+            string[] svtTDfuncTypeArray;
+            var svtTDfuncType = string.Empty;
             SkillLvs.TDforExcel = "";
             foreach (var TDLVtmp in GlobalPathsAndDatas.mstTreasureDeviceLvArray)
             {
@@ -1858,11 +2012,12 @@ namespace Altera
                             targettmp = mstFuncobjtmp["targetType"].ToString();
                             popupIcon = mstFuncobjtmp["popupIconId"].ToString();
                             applyTarget = mstFuncobjtmp["applyTarget"].ToString();
+                            funcType = mstFuncobjtmp["funcType"].ToString();
                             tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             targetstr = FuncTargetStr(targettmp);
                             if (tvalstr != "") targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
-                            if (funcnametmp != "") continue;
+                            if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                             var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
@@ -1877,6 +2032,7 @@ namespace Altera
                         svtTDbufficonList.Add(popupIcon);
                         svtTDapplyTargetList.Add(applyTarget);
                         svtTDTargetRawList.Add(targettmp);
+                        svtTDfuncTypeList.Add(funcType);
                         if (NeedTranslate)
                             TmpList.Add(TranslateBuff(funcnametmp));
                         else
@@ -1891,6 +2047,7 @@ namespace Altera
                     svtTDTargetArray = svtTDTargetList.ToArray();
                     svtTDTargetRawArray = svtTDTargetRawList.ToArray();
                     svtTDapplyTargetArray = svtTDapplyTargetList.ToArray();
+                    svtTDfuncTypeArray = svtTDfuncTypeList.ToArray();
                     var bufficonBitmaps = new BitmapImage[svtTDbufficonArray.Length];
                     for (var m = 0; m <= svtTDbufficonArray.Length - 1; m++)
                     {
@@ -2037,8 +2194,15 @@ namespace Altera
                         var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i]
                             ? $"固定: {TDlv5OC5strArray[i]}"
                             : $"Lv.1/OC1: {TDlv1OC1strArray[i]}\r\nLv.2/OC2: {TDlv2OC2strArray[i]}\r\nLv.3/OC3: {TDlv3OC3strArray[i]}\r\nLv.4/OC4: {TDlv4OC4strArray[i]}\r\nLv.5/OC5: {TDlv5OC5strArray[i]}";
-                        TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果",
-                            DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
+                        if (isDisplayFuncType.IsChecked == true)
+                            TDFuncList.Items.Add(new TDlistSval(
+                                TDFuncstrArray[i] != ""
+                                    ? TDFuncstrArray[i] + $"\r\n({FindFuncTypeNameDebugger(svtTDfuncTypeArray[i])})"
+                                    : "未知效果",
+                                DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
+                        else
+                            TDFuncList.Items.Add(new TDlistSval(TDFuncstrArray[i] != "" ? TDFuncstrArray[i] : "未知效果",
+                                DisplaySval, svtTDTargetArray[i], bufficonBitmaps[i]));
                     }
 
                     try
@@ -2094,6 +2258,11 @@ namespace Altera
                     : HttpRequest
                         .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
                         .Replace("+", Environment.NewLine);
+            var tmpFuncTypeData = File.Exists(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
+                ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
+                : HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
+            GlobalPathsAndDatas.funcListDebuggerArray =
+                (JArray)JsonConvert.DeserializeObject(tmpFuncTypeData);
             if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
             {
                 GlobalPathsAndDatas.TranslationList =
@@ -2125,6 +2294,9 @@ namespace Altera
                 HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "");
             GlobalPathsAndDatas.TranslationList =
                 HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
+            var tmpFuncTypeData = HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
+            GlobalPathsAndDatas.funcListDebuggerArray =
+                (JArray)JsonConvert.DeserializeObject(tmpFuncTypeData);
             GlobalPathsAndDatas.TranslationListArray =
                 GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
                     .Split('|');
@@ -2134,6 +2306,8 @@ namespace Altera
                 GlobalPathsAndDatas.TDAttackNameTranslation);
             File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data",
                 GlobalPathsAndDatas.TranslationList);
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json",
+                tmpFuncTypeData);
             Dispatcher.Invoke(() => { Growl.Info("翻译列表更新完成."); });
             GC.Collect();
         }
@@ -2432,7 +2606,7 @@ namespace Altera
                                 if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                                 var mstFuncobjtmp = JObject.Parse(functmp.ToString());
                                 funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                                if (funcnametmp != "") continue;
+                                if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                                 var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                                 foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
@@ -2456,7 +2630,7 @@ namespace Altera
                                 if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                                 var mstFuncobjtmp = JObject.Parse(functmp.ToString());
                                 funcnametmp = mstFuncobjtmp["popupText"].ToString();
-                                if (funcnametmp != "") continue;
+                                if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                                 var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                     .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                                 foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
@@ -3227,6 +3401,9 @@ namespace Altera
             var svtSKapplyTargetList = new List<string>();
             string[] svtSKapplyTargetArray;
             var svtSKapplyTarget = string.Empty;
+            var svtSKfuncTypeList = new List<string>();
+            string[] svtSKfuncTypeArray;
+            var svtSKfuncType = string.Empty;
             var NeedTranslate = false;
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
@@ -3267,6 +3444,7 @@ namespace Altera
                     var tvalstr = "";
                     var popupIcon = "";
                     var applyTarget = "";
+                    var funcType = "";
                     foreach (var skfuncidtmp in svtSKFuncIDArray)
                     {
                         foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
@@ -3277,11 +3455,12 @@ namespace Altera
                             targettmp = mstFuncobjtmp["targetType"].ToString();
                             popupIcon = mstFuncobjtmp["popupIconId"].ToString();
                             applyTarget = mstFuncobjtmp["applyTarget"].ToString();
+                            funcType = mstFuncobjtmp["funcType"].ToString();
                             tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             targetstr = FuncTargetStr(targettmp);
                             if (tvalstr != "") targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
-                            if (funcnametmp != "") continue;
+                            if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                             var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
@@ -3296,6 +3475,8 @@ namespace Altera
                         svtSKbufficonList.Add(popupIcon);
                         svtSKapplyTargetList.Add(applyTarget);
                         svtSKTargetRawList.Add(targettmp);
+                        svtSKfuncTypeList.Add(funcType);
+
                         if (NeedTranslate)
                             svtSKFuncList.Add(TranslateBuff(funcnametmp));
                         else
@@ -3312,6 +3493,8 @@ namespace Altera
             svtSKTargetRaw = string.Join(",", svtSKTargetRawArray);
             svtSKapplyTargetArray = svtSKapplyTargetList.ToArray();
             svtSKapplyTarget = string.Join(",", svtSKapplyTargetArray);
+            svtSKfuncTypeArray = svtSKfuncTypeList.ToArray();
+            svtSKfuncType = string.Join(",", svtSKfuncTypeArray);
             switch (SkillNum)
             {
                 case 1:
@@ -3345,7 +3528,7 @@ namespace Altera
             var SSD = new Task(() =>
             {
                 SkillSvalsDisplay(skilllv1sval, skilllv6sval, skilllv10sval, svtSKFunc, SkillNum, svtSKTarget,
-                    svtSKbufficon, svtSKapplyTarget, svtSKTargetRaw);
+                    svtSKbufficon, svtSKapplyTarget, svtSKTargetRaw, svtSKfuncType);
             });
             SSD.Start();
         }
@@ -3497,7 +3680,7 @@ namespace Altera
         }
 
         private void SkillSvalsDisplay(string lv1, string lv6, string lv10, string FuncName, int SkillNum,
-            string target, string bufficon, string applyTarget, string targetraw)
+            string target, string bufficon, string applyTarget, string targetraw, string funcTypeList)
         {
             Dispatcher.Invoke(() =>
             {
@@ -3511,6 +3694,7 @@ namespace Altera
                 var bufficonidArray = bufficon.Split(',');
                 var bufficonBitmaps = new BitmapImage[bufficonidArray.Length];
                 var applyTargetArray = applyTarget.Split(',');
+                var funcTypeListArray = funcTypeList.Split(',');
                 for (var m = 0; m <= bufficonidArray.Length - 1; m++)
                 {
                     bufficonBitmaps[m] = new BitmapImage(new Uri("bufficons\\bufficon_0.png", UriKind.Relative));
@@ -3549,7 +3733,8 @@ namespace Altera
                         {
                             if (FuncArray[i].Contains("チャージ増加") || FuncArray[i].Contains("充能增加") ||
                                 FuncArray[i].Contains("クリティカル発生") || FuncArray[i].Contains("暴擊発生率") ||
-                                FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能減少"))
+                                FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能減少") ||
+                                FuncArray[i].Contains("ハッピーハロウィン"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
                                     case 0:
@@ -3572,7 +3757,8 @@ namespace Altera
 
                         if (applyTargetArray[i] == "1")
                             if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") ||
-                                FuncArray[i].Contains("暴擊星掉落率") || FuncArray[i].Contains("NP減少"))
+                                FuncArray[i].Contains("暴擊星掉落率") || FuncArray[i].Contains("NP減少") ||
+                                FuncArray[i].Contains("ハッピーハロウィン"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
                                     case 4:
@@ -3594,8 +3780,14 @@ namespace Altera
                     switch (SkillNum)
                     {
                         case 1:
-                            Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
-                                $"{DisplaySval}", bufficonBitmaps[i]));
+                            if (isDisplayFuncType.IsChecked == true)
+                                Skill1FuncList.Items.Add(new SkillListSval(
+                                    FuncArray[i] + $"\r\n({FindFuncTypeNameDebugger(funcTypeListArray[i])})",
+                                    targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
+                            else
+                                Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill1forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -3604,8 +3796,14 @@ namespace Altera
                                                              lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
                             break;
                         case 2:
-                            Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
-                                $"{DisplaySval}", bufficonBitmaps[i]));
+                            if (isDisplayFuncType.IsChecked == true)
+                                Skill2FuncList.Items.Add(new SkillListSval(
+                                    FuncArray[i] + $"\r\n({FindFuncTypeNameDebugger(funcTypeListArray[i])})",
+                                    targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
+                            else
+                                Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill2forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -3614,8 +3812,14 @@ namespace Altera
                                                              lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
                             break;
                         case 3:
-                            Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
-                                $"{DisplaySval}", bufficonBitmaps[i]));
+                            if (isDisplayFuncType.IsChecked == true)
+                                Skill3FuncList.Items.Add(new SkillListSval(
+                                    FuncArray[i] + $"\r\n({FindFuncTypeNameDebugger(funcTypeListArray[i])})",
+                                    targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
+                            else
+                                Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
+                                    $"{DisplaySval}", bufficonBitmaps[i]));
                             SkillLvs.skill3forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -3651,6 +3855,13 @@ namespace Altera
             });
         }
 
+        private string FindFuncTypeNameDebugger(string funcTypeId)
+        {
+            foreach (var funcListObjectDebugger in GlobalPathsAndDatas.funcListDebuggerArray)
+                if (((JObject)funcListObjectDebugger)["funcTypeId"].ToString() == funcTypeId)
+                    return funcListObjectDebugger["typeName"].ToString();
+            return funcTypeId + "(未知)";
+        }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
@@ -4876,6 +5087,12 @@ namespace Altera
                 case 33:
                     ClassName = "Beast";
                     break;
+                case 34:
+                    ClassName = "Beast VI";
+                    break;
+                case 35:
+                    ClassName = "Beast VI";
+                    break;
                 default:
                     foreach (var mstClasstmp in GlobalPathsAndDatas.mstClassArray)
                     {
@@ -5076,7 +5293,8 @@ namespace Altera
                 decimal resultHPBaseCheck;
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
-                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28" && ClassID != "33")
+                    ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28" &&
+                    ClassID != "33")
                 {
                     hpatkbalance.Text = ShowString[7];
                     return;

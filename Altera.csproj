@@ -779,9 +779,6 @@
     <Resource Include="images\Class？%2830%292.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Class？%2830%291.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\Class？%2830%293.png" />
   </ItemGroup>
   <ItemGroup>
@@ -825,6 +822,20 @@
     <Resource Include="images\ClassBeast1.png" />
     <Resource Include="images\ClassBeast2.png" />
     <Resource Include="images\ClassBeast3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassBeastVI1.png" />
+    <Resource Include="images\ClassBeastVI2.png" />
+    <Resource Include="images\ClassBeastVI3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00806.png" />
+    <Resource Include="skillicons\skill_00807.png" />
+    <Resource Include="skillicons\skill_00808.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_566.png" />
+    <Resource Include="bufficons\bufficon_568.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

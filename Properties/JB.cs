@@ -11,5 +11,12 @@
         public static string JB7;
         public static string svtid;
         public static string svtnme;
+        public static string JB1tmp;
+        public static string JB2tmp;
+        public static string JB3tmp;
+        public static string JB4tmp;
+        public static string JB5tmp;
+        public static string JB6tmp;
+        public static string JB7tmp;
     }
 }

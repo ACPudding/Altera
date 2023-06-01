@@ -125,6 +125,14 @@
                         <TextBlock Text="显示敌方限定效果(如:暴击发生率提升、充能增加等等)" HorizontalAlignment="Left" Height="25"
                                    Margin="47,177,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
+                        <CheckBox x:Name="isDisplayFuncType" Content="" HorizontalAlignment="Left" Height="20"
+                                  Margin="17,198,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  FontSize="9"
+                                  ToolTip="勾选此项时,会显示游戏内具体FuncType&#xA;注: Debug用,平时不建议开启."
+                                  IsChecked="False" />
+                        <TextBlock Text="显示funcType(Beta/Debug用)" HorizontalAlignment="Left" Height="25"
+                                   Margin="47,200,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
+                                   FontSize="10" FontFamily="Source Han Sans SC" />
                     </Grid>
                 </Grid>
             </TabItem>
