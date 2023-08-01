@@ -21,14 +21,12 @@ namespace Altera
 
         private static HttpWebRequest SetupRequest(string url)
         {
-            var request = (HttpWebRequest) WebRequest.Create(url);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
             request.AllowAutoRedirect = true;
             request.KeepAlive = true;
-            request.ServicePoint.Expect100Continue = false;
-            request.Accept = "gzip, identity";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.UserAgent = "fategrandorder/2.66.5 CFNetword/1312 Darwin/21.0.0";
+            request.UserAgent =
+                "Mozilla/5.0 (Linux; Android 10; JNY-AL10 Build/HUAWEIJNY-AL10; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/76.0.3809.89 Mobile Safari/537.36 T7/11.20 SP-engine/2.16.0";
             request.Timeout = 10000;
             return request;
         }
@@ -67,11 +65,12 @@ namespace Altera
 
         public static Stream GetXlsx()
         {
-            var xlsxurl1 = "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfoBotNewer.xlsx";
+            var xlsxurl1 =
+                "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtBasicInfoBotNewer.xlsx";
             var xlsxurl2 =
                 "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtBasicInfoBotNewer.xlsx";
             var httpWebRequest =
-                (HttpWebRequest) WebRequest.Create(xlsxurl2);
+                (HttpWebRequest)WebRequest.Create(xlsxurl2);
             httpWebRequest.Method = "GET";
             try
             {
@@ -82,7 +81,7 @@ namespace Altera
             catch (Exception)
             {
                 httpWebRequest =
-                    (HttpWebRequest) WebRequest.Create(xlsxurl1);
+                    (HttpWebRequest)WebRequest.Create(xlsxurl1);
                 httpWebRequest.Method = "GET";
                 try
                 {
@@ -102,7 +101,7 @@ namespace Altera
         public static string GetList(string ALink, string Blink)
         {
             var httpWebRequest =
-                (HttpWebRequest) WebRequest.Create(ALink);
+                (HttpWebRequest)WebRequest.Create(ALink);
             httpWebRequest.Method = "GET";
             try
             {
@@ -114,7 +113,7 @@ namespace Altera
             catch (Exception)
             {
                 httpWebRequest =
-                    (HttpWebRequest) WebRequest.Create(Blink);
+                    (HttpWebRequest)WebRequest.Create(Blink);
                 httpWebRequest.Method = "GET";
                 try
                 {
@@ -135,7 +134,7 @@ namespace Altera
         public static string GetApplicationUpdateJson()
         {
             var api = "https://api.github.com/repos/ACPudding/Altera/releases/latest";
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType) 3072; //TLS1.2=3702
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; //TLS1.2=3702
             var result = "";
             var req = WebRequest.Create(api) as HttpWebRequest;
             HttpWebResponse res = null;
@@ -155,7 +154,7 @@ namespace Altera
                 outputStream.Close();
                 try
                 {
-                    res = (HttpWebResponse) req.GetResponse();
+                    res = (HttpWebResponse)req.GetResponse();
                     var InputStream = res.GetResponseStream();
                     var encoding = Encoding.GetEncoding("UTF-8");
                     var sr = new StreamReader(InputStream, encoding);
@@ -171,7 +170,7 @@ namespace Altera
             {
                 try
                 {
-                    res = (HttpWebResponse) req.GetResponse();
+                    res = (HttpWebResponse)req.GetResponse();
                     var InputStream = res.GetResponseStream();
                     var encoding = Encoding.GetEncoding("UTF-8");
                     var sr = new StreamReader(InputStream, encoding);
@@ -190,7 +189,7 @@ namespace Altera
 
         public static string ReadableFilesize(double size)
         {
-            string[] units = {"B", "KB", "MB", "GB", "TB", "PB"};
+            string[] units = { "B", "KB", "MB", "GB", "TB", "PB" };
             var mod = 1024.0;
             var i = 0;
             while (size >= mod)

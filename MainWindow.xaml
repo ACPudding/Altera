@@ -1246,7 +1246,7 @@
                         </TabItem>
                         <TabItem Header="追加技能" x:Name="AppendClassPassiveInfo">
                             <Grid Margin="0,0,0,0">
-                                <TextBlock Text="注:&#xA;此处显示从者的追加技能(Append Skill).仅显示lv1与lv10的数值."
+                                <TextBlock Text="注:&#xA;此处显示从者的追加技能(Append Skill)."
                                            HorizontalAlignment="Left"
                                            Height="52" VerticalAlignment="Top"
                                            Width="485"
@@ -1480,7 +1480,7 @@
                                                             DisplayMemberBinding="{Binding EventNumber}" />
                                             <GridViewColumn Header="卡池名称" Width="400"
                                                             DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="结束时间" Width="200"
+                                            <GridViewColumn Header="持续时间" Width="275"
                                                             DisplayMemberBinding="{Binding EventEndTime}" />
                                         </GridView>
                                     </ListView.View>
@@ -1512,7 +1512,7 @@
                                                             DisplayMemberBinding="{Binding EventNumber}" />
                                             <GridViewColumn Header="卡池名称" Width="400"
                                                             DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="结束时间" Width="200"
+                                            <GridViewColumn Header="持续时间" Width="275"
                                                             DisplayMemberBinding="{Binding EventEndTime}" />
                                         </GridView>
                                     </ListView.View>
@@ -1536,7 +1536,7 @@
                                                             DisplayMemberBinding="{Binding EventNumber}" />
                                             <GridViewColumn Header="活动名称" Width="400"
                                                             DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="结束时间(非兑换截止时间)" Width="200"
+                                            <GridViewColumn Header="持续时间(结束时间非兑换截止时间)" Width="275"
                                                             DisplayMemberBinding="{Binding EventEndTime}" />
                                         </GridView>
                                     </ListView.View>
@@ -1568,7 +1568,7 @@
                                                             DisplayMemberBinding="{Binding EventNumber}" />
                                             <GridViewColumn Header="活动名称" Width="400"
                                                             DisplayMemberBinding="{Binding EventName}" />
-                                            <GridViewColumn Header="结束时间(非兑换截止时间)" Width="200"
+                                            <GridViewColumn Header="持续时间(结束时间非兑换截止时间)" Width="275"
                                                             DisplayMemberBinding="{Binding EventEndTime}" />
                                         </GridView>
                                     </ListView.View>

@@ -2085,6 +2085,8 @@ namespace Altera
 
                         if (svtTreasureDeviceFuncIDArray[i] == "5") continue;
 
+                        if (svtTreasureDeviceFuncIDArray[i] == "21039") continue;
+
                         if (ToggleDisplayEnemyFunc.IsChecked == false)
                         {
                             if (svtTDapplyTargetArray[i] == "2")
@@ -2663,12 +2665,9 @@ namespace Altera
             var AS1NME = "";
             var AS2NME = "";
             var AS3NME = "";
-            var AS1DTL1 = "";
-            var AS2DTL1 = "";
-            var AS3DTL1 = "";
-            var AS1DTL10 = "";
-            var AS2DTL10 = "";
-            var AS3DTL10 = "";
+            var AS1DTL = "";
+            var AS2DTL = "";
+            var AS3DTL = "";
             GlobalPathsAndDatas.AS1D = "";
             GlobalPathsAndDatas.AS1N = "";
             GlobalPathsAndDatas.AS2D = "";
@@ -2726,46 +2725,165 @@ namespace Altera
                 if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID1)
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS1DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
-                }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID1.Substring(0, ASID1.Length - 1) + "9")
-                {
-                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS1DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
-                    GlobalPathsAndDatas.AS1D = AS1DTL10;
+                    AS1DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
                 else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID2)
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS2DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
-                }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID2.Substring(0, ASID2.Length - 1) + "9")
-                {
-                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS2DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
-                    GlobalPathsAndDatas.AS2D = AS2DTL10;
+                    AS2DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
                 else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID3)
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS3DTL1 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.1]");
+                    AS3DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID3.Substring(0, ASID3.Length - 1) + "9")
+
+            var AS1Fid = "";
+            var AS2Fid = "";
+            var AS3Fid = "";
+            var AS1sval_1 = "";
+            var AS2sval_1 = "";
+            var AS3sval_1 = "";
+            var AS1sval_10 = "";
+            var AS2sval_10 = "";
+            var AS3sval_10 = "";
+            var AS1Fnme = "";
+            var AS2Fnme = "";
+            var AS3Fnme = "";
+
+            foreach (var ASSKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
+            {
+                var ASSKLobjtmp = JObject.Parse(ASSKLTMP.ToString());
+                if (ASSKLobjtmp["skillId"].ToString() == ASID1)
                 {
-                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
-                    AS3DTL10 = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "[Lv.10]");
-                    GlobalPathsAndDatas.AS3D = AS3DTL10;
+                    if (ASSKLobjtmp["lv"].ToString() == "1")
+                    {
+                        AS1sval_1 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS1sval_1 = AS1sval_1.Substring(0, AS1sval_1.Length - 2);
+                        AS1Fid = ASSKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != AS1Fid) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            AS1Fnme = mstFuncobjtmp["popupText"].ToString();
+                            if (AS1Fnme != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                AS1Fnme = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (ASSKLobjtmp["lv"].ToString() == "10")
+                    {
+                        AS1sval_10 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS1sval_10 = AS1sval_10.Substring(0, AS1sval_10.Length - 2);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
+
+                if (ASSKLobjtmp["skillId"].ToString() == ASID2)
+                {
+                    if (ASSKLobjtmp["lv"].ToString() == "1")
+                    {
+                        AS2sval_1 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS2sval_1 = AS2sval_1.Substring(0, AS2sval_1.Length - 2);
+                        AS2Fid = ASSKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != AS2Fid) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            AS2Fnme = mstFuncobjtmp["popupText"].ToString();
+                            if (AS2Fnme != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                AS2Fnme = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (ASSKLobjtmp["lv"].ToString() == "10")
+                    {
+                        AS2sval_10 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS2sval_10 = AS2sval_10.Substring(0, AS2sval_10.Length - 2);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (ASSKLobjtmp["skillId"].ToString() == ASID3)
+                {
+                    if (ASSKLobjtmp["lv"].ToString() == "1")
+                    {
+                        AS3sval_1 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS3sval_1 = AS3sval_1.Substring(0, AS3sval_1.Length - 2);
+                        AS3Fid = ASSKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != AS3Fid) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            AS3Fnme = mstFuncobjtmp["popupText"].ToString();
+                            if (AS3Fnme != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                AS3Fnme = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (ASSKLobjtmp["lv"].ToString() == "10")
+                    {
+                        AS3sval_10 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS3sval_10 = AS3sval_10.Substring(0, AS3sval_10.Length - 2);
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+
+            AS1DTL = AS1DTL.Replace("{{1:Value:m}}%",
+                $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS1Fnme, AS1sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS1Fnme, AS1sval_10, true)}]");
+            GlobalPathsAndDatas.AS1D = AS1DTL;
+            AS2DTL = AS2DTL.Replace("{{1:Value:y}}%",
+                $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS2Fnme, AS2sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS2Fnme, AS2sval_10, true)}]");
+            GlobalPathsAndDatas.AS2D = AS2DTL;
+            AS3DTL = AS3DTL.Replace("{{1:Value:m}}%",
+                $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS3Fnme, AS3sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS3Fnme, AS3sval_10, true)}]");
+            GlobalPathsAndDatas.AS3D = AS3DTL;
 
             Dispatcher.Invoke(() =>
             {
                 AppendClassPassiveFuncList.Items.Clear();
                 AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS1NME, ASID1,
-                    AS1DTL1 + "\r\n" + AS1DTL10));
+                    AS1DTL));
                 AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS2NME, ASID2,
-                    AS2DTL1 + "\r\n" + AS2DTL10));
+                    AS2DTL));
                 AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS3NME, ASID3,
-                    AS3DTL1 + "\r\n" + AS3DTL10));
+                    AS3DTL));
             });
         }
 
@@ -3447,6 +3565,7 @@ namespace Altera
                     var funcType = "";
                     foreach (var skfuncidtmp in svtSKFuncIDArray)
                     {
+                        if (skfuncidtmp == "21039") continue;
                         foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                         {
                             if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
@@ -3916,12 +4035,39 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
-                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.38.0");
+                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.76.0");
                 result = resulttmp.ToString();
                 res = resulttmp.ToJson();
                 if (res["response"][0]["fail"]["action"] != null)
                     switch (res["response"][0]["fail"]["action"].ToString())
                     {
+                        case "reconnection":
+                        {
+                            var tmp = res["response"][0]["fail"]["detail"].ToString();
+                            Dispatcher.Invoke(() =>
+                            {
+                                GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                    Application.Current.MainWindow,
+                                    $"Debug Mode: 检测到游戏服务器发送的重定向.\r\n重定向地址:\r\n\r\n【sandboxWebviewDomain】: {res["response"][0]["fail"]["sandboxWebviewDomain"]}\r\n【sandboxDomain】: {res["response"][0]["fail"]["sandboxDomain"]}\r\n【sandboxAssetsDomain】: {res["response"][0]["fail"]["sandboxAssetsDomain"]}",
+                                    "重定向", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                            });
+                            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
+                            updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
+                            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
+                            progressbar.Dispatcher.Invoke(() =>
+                            {
+                                progressbar.Visibility = Visibility.Hidden;
+                                updatedatabutton.IsEnabled = true;
+                            });
+                            progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                            progressloading.Dispatcher.Invoke(() =>
+                            {
+                                progressloading.Visibility = Visibility.Hidden;
+                            });
+                            Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
+                            OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
+                            return;
+                        }
                         case "app_version_up":
                         {
                             var tmp = res["response"][0]["fail"]["detail"].ToString();
@@ -3933,6 +4079,36 @@ namespace Altera
                             if (!Directory.Exists(gamedata.FullName))
                                 Directory.CreateDirectory(gamedata.FullName);
                             break;
+                        }
+                        case "goto_title":
+                        case "retry":
+                        {
+                            var tmp = res["response"][0]["fail"]["detail"].ToString();
+                            Dispatcher.Invoke(() =>
+                            {
+                                GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
+                                    Application.Current.MainWindow,
+                                    "游戏服务器内部错误，请稍后尝试下载/更新数据. \r\n以下为服务器公告内容:\r\n\r\n『" +
+                                    tmp.Replace("[00FFFF]", "").Replace("[url=", "")
+                                        .Replace("][u]公式サイト お知らせ[/u][/url][-]", "") + "』\r\n\r\n",
+                                    "错误", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                            });
+                            updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
+                            updatestatus.Dispatcher.Invoke(() => { updatesign.Text = ""; });
+                            AlteraGif.Dispatcher.Invoke(() => { AlteraGif.Visibility = Visibility.Hidden; });
+                            progressbar.Dispatcher.Invoke(() =>
+                            {
+                                progressbar.Visibility = Visibility.Hidden;
+                                updatedatabutton.IsEnabled = true;
+                            });
+                            progressring.Dispatcher.Invoke(() => { progressring.Visibility = Visibility.Hidden; });
+                            progressloading.Dispatcher.Invoke(() =>
+                            {
+                                progressloading.Visibility = Visibility.Hidden;
+                            });
+                            Button1.Dispatcher.Invoke(() => { Button1.IsEnabled = true; });
+                            OutputIDs.Dispatcher.Invoke(() => { OutputIDs.IsEnabled = true; });
+                            return;
                         }
                         case "maint":
                         {
@@ -4001,9 +4177,17 @@ namespace Altera
             progressbar.Dispatcher.Invoke(() => { progressbar.Value += 1250; });
             if (!Directory.Exists(gamedata.FullName + "decrypted_masterdata"))
                 Directory.CreateDirectory(gamedata.FullName + "decrypted_masterdata");
-            File.WriteAllText(gamedata.FullName + "raw.json", res.ToString());
-            File.WriteAllText(gamedata.FullName + "assetbundle.json",
-                res["response"][0]["success"]["assetbundle"].ToString());
+            try
+            {
+                File.WriteAllText(gamedata.FullName + "raw.json", res.ToString());
+                File.WriteAllText(gamedata.FullName + "assetbundle.json",
+                    res["response"][0]["success"]["assetbundle"].ToString());
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
             updatestatus.Dispatcher.Invoke(() =>
             {
                 updatestatus.Text = "写入: " + gamedata.FullName + "assetbundle.json";
@@ -5121,12 +5305,15 @@ namespace Altera
                 foreach (var mstEventtmp in GlobalPathsAndDatas.mstEventArray)
                 {
                     var EventEndTimeStamp = Convert.ToInt32(((JObject)mstEventtmp)["endedAt"]);
+                    var EventStartTimeStamp = Convert.ToInt32(((JObject)mstEventtmp)["startedAt"]);
                     var TimeMinus = (DateTime.Now.Ticks - dateTimeStart.Ticks) / 10000000;
                     EventName = ((JObject)mstEventtmp)["name"].ToString();
                     if (EventName.Length > 40) EventName = EventName.Insert(40, "\r\n");
                     Eventid = ((JObject)mstEventtmp)["id"].ToString();
                     var EventEndTime = new TimeSpan(long.Parse(EventEndTimeStamp + "0000000"));
+                    var EventStartTime = new TimeSpan(long.Parse(EventStartTimeStamp + "0000000"));
                     var EndStr = Convert.ToString(dateTimeStart + EventEndTime);
+                    var StartStr = Convert.ToString(dateTimeStart + EventStartTime);
                     if (EventEndTimeStamp == 1893423600)
                     {
                         PickupEndedEventList.Dispatcher.Invoke(() =>
@@ -5140,12 +5327,13 @@ namespace Altera
                     if (TimeMinus > EventEndTimeStamp)
                         PickupEndedEventList.Dispatcher.Invoke(() =>
                         {
-                            PickupEndedEventList.Items.Add(new EventList(Eventid, EventName, EndStr));
+                            PickupEndedEventList.Items.Add(new EventList(Eventid, EventName,
+                                StartStr + " ~ " + EndStr));
                         });
                     else
                         PickupEventList.Dispatcher.Invoke(() =>
                         {
-                            PickupEventList.Items.Add(new EventList(Eventid, EventName, EndStr));
+                            PickupEventList.Items.Add(new EventList(Eventid, EventName, StartStr + " ~ " + EndStr));
                         });
                 }
 
@@ -5182,12 +5370,15 @@ namespace Altera
                 foreach (var mstGachatmp in GlobalPathsAndDatas.mstGachaArray)
                 {
                     var EventEndTimeStamp = Convert.ToInt32(((JObject)mstGachatmp)["closedAt"]);
+                    var EventStartTimeStamp = Convert.ToInt32(((JObject)mstGachatmp)["openedAt"]);
                     var TimeMinus = (DateTime.Now.Ticks - dateTimeStart.Ticks) / 10000000;
                     EventName = ((JObject)mstGachatmp)["name"].ToString();
                     if (EventName.Length > 40) EventName = EventName.Insert(40, "\r\n");
                     Eventid = ((JObject)mstGachatmp)["id"].ToString();
                     var EventEndTime = new TimeSpan(long.Parse(EventEndTimeStamp + "0000000"));
+                    var EventStartTime = new TimeSpan(long.Parse(EventStartTimeStamp + "0000000"));
                     var EndStr = Convert.ToString(dateTimeStart + EventEndTime);
+                    var StartStr = Convert.ToString(dateTimeStart + EventStartTime);
                     if (EventEndTimeStamp == 1911653999)
                     {
                         PickupEndedEventList.Dispatcher.Invoke(() =>
@@ -5201,12 +5392,13 @@ namespace Altera
                     if (TimeMinus > EventEndTimeStamp)
                         PickupEndedEventList.Dispatcher.Invoke(() =>
                         {
-                            PickupEndedGachaList.Items.Add(new EventList(Eventid, EventName, EndStr));
+                            PickupEndedGachaList.Items.Add(new EventList(Eventid, EventName,
+                                StartStr + " ~ " + EndStr));
                         });
                     else
                         PickupEventList.Dispatcher.Invoke(() =>
                         {
-                            PickupGachaList.Items.Add(new EventList(Eventid, EventName, EndStr));
+                            PickupGachaList.Items.Add(new EventList(Eventid, EventName, StartStr + " ~ " + EndStr));
                         });
                 }
 

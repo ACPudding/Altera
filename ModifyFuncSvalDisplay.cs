@@ -113,6 +113,7 @@ namespace Altera
                 case 170:
                 case 171:
                 case 173:
+                case 174:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                         try
@@ -1074,6 +1075,42 @@ namespace Altera
 
                     output = Funcsval;
                     break;
+                case 62:
+                {
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 2)
+                        try
+                        {
+                            output = $"减少{Tempsval[1]}回合" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+
+                    if (Tempsval.Length == 3)
+                        try
+                        {
+                            output = $"减少{Tempsval[1]}回合 (技能{Tempsval[2]})" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+
+                    output = Funcsval;
+                    break;
+                }
                 case 33:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
@@ -1087,6 +1124,21 @@ namespace Altera
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") + "\r\n动作Set:" +
                                          Tempsval[2].Replace("ActSet:", "") + " - 发动概率: " +
                                          Convert.ToInt32(Tempsval[3].Replace("ActSetWeight:", "")) + "%";
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        if (Tempsval[2].Contains("TriggeredFuncPositionAll"))
+                            try
+                            {
+                                output = Tempsval[1] + "個" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                                 break;
                             }
                             catch (Exception)
@@ -1239,6 +1291,24 @@ namespace Altera
 
                             output = Funcsval;
                             break;
+                        case 4:
+                            if (Tempsval[2].Contains("TriggeredFuncPositionAll"))
+                                try
+                                {
+                                    output = Tempsval[1] + "個" +
+                                             (Tempsval[0] == "1000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            output = Funcsval;
+                            break;
                         default:
                             output = Funcsval;
                             break;
@@ -1291,7 +1361,6 @@ namespace Altera
                         catch (Exception)
                         {
                             output = Funcsval;
-                            break;
                         }
 
                     break;
@@ -1310,7 +1379,6 @@ namespace Altera
                         catch (Exception)
                         {
                             output = Funcsval;
-                            break;
                         }
 
                     break;
@@ -1326,7 +1394,6 @@ namespace Altera
                         catch (Exception)
                         {
                             output = Funcsval;
-                            break;
                         }
 
                     break;
@@ -2306,9 +2373,16 @@ namespace Altera
                 if (Tempsval.Length == 7 || Tempsval.Length == 8)
                     try
                     {
-                        output =
-                            $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("TargetList:", ""))}〕\r\n" +
-                            $"特攻倍率: {Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10}% + {Convert.ToDouble(Tempsval[3]) / 10}% * N (N≤{Tempsval[5].Replace("ParamAddMaxCount:", "")})";
+                        var N_count = Convert.ToInt32(Tempsval[5].Replace("ParamAddMaxCount:", ""));
+                        var N_Value = Convert.ToDecimal(Tempsval[3]) / 10;
+                        if (N_count == 0 && N_Value == 0.0M)
+                            output =
+                                $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("TargetList:", ""))}〕\r\n" +
+                                $"特攻倍率: {Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10}%";
+                        else
+                            output =
+                                $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("TargetList:", ""))}〕\r\n" +
+                                $"特攻倍率: {Convert.ToDouble(Tempsval[6].Replace("Value2:", "")) / 10}% + {N_Value}% * N (N≤{N_count})";
                     }
                     catch (Exception)
                     {
@@ -2497,6 +2571,7 @@ namespace Altera
             var result = "<";
             for (var i = 0; i < FuncListArray.Length; i++)
             {
+                if (FuncIDList[i] == "21039") continue;
                 if (FuncListArray[i] == "" &&
                     FuncSvalArray[i].Count(c => c == ',') == 1 &&
                     !FuncSvalArray[i].Contains("Hide"))
