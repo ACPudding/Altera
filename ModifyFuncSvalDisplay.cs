@@ -116,6 +116,23 @@ namespace Altera
                 case 174:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
+                    {
+                        if ((Funcname.Contains("延长") || Funcname.Contains("延長")) && Tempsval[3].Contains("TargetList"))
+                            try
+                            {
+                                output =
+                                    $"延长{Tempsval[1]}回合\r\n作用目标:{SearchIndividualality(Tempsval[3].Replace("TargetList:", ""))}" +
+                                    (Tempsval[0] == "1000"
+                                        ? ""
+                                        : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         try
                         {
                             output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -131,6 +148,7 @@ namespace Altera
                             output = Funcsval;
                             break;
                         }
+                    }
 
                     if (Tempsval.Length == 5)
                     {
@@ -548,6 +566,7 @@ namespace Altera
                         }
 
                         if (Tempsval.Length == 9)
+                        {
                             if (Tempsval[4].Contains("ShowState") && Tempsval[6].Contains("Linkage"))
                                 try
                                 {
@@ -564,6 +583,25 @@ namespace Altera
                                     output = Funcsval;
                                     break;
                                 }
+
+                            if (Tempsval[7].Contains("HideMiss") && Tempsval[8].Contains("HideNoEffect"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+                        }
+
 
                         var tmpstr = "";
                         for (var Q = 3; Q < Tempsval.Length; Q++) tmpstr += Tempsval[Q] + ",";
@@ -1397,6 +1435,23 @@ namespace Altera
                         }
 
                     break;
+                case 175:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 4)
+                        try
+                        {
+                            output =
+                                $"延长{Tempsval[1]}回合\r\n作用目标:{SearchIndividualality(Tempsval[3].Replace("TargetList:", ""))}" +
+                                (Tempsval[0] == "1000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
                 default:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3)
@@ -1725,6 +1780,7 @@ namespace Altera
 
                     break;
                 case "詛咒吸収":
+                case "原稿完成解除":
                     try
                     {
                         output =
@@ -2585,6 +2641,12 @@ namespace Altera
                 if (FuncSvalArray[i].Contains("5000,-1,-1,ShowState:-1,HideMiss:1,HideNoEffect:1")) continue;
                 if (FuncSvalArray[i].Contains("5000,1,1,ShowState:-1,HideNoEffect:1")) continue;
                 if (FuncListArray[i] == "" && funcTypeArray[i] == "2") continue;
+                if (FuncIDList[i] == "0" && id == "970409")
+                {
+                    FuncListArray[i] = "自身撤退为替补";
+                    FuncSvalArray[i] = "∅";
+                }
+
                 if (ignoreEnemyFunc)
                 {
                     if (applyTargetListArray[i] == "2")
@@ -2671,6 +2733,19 @@ namespace Altera
                 for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
                     if (TDTranslistFullArray[k][0] == TDFuncID)
                         return TDTranslistFullArray[k][1];
+                foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                {
+                    if (((JObject)functmp)["id"].ToString() != TDFuncID) continue;
+                    var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                    var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                        .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                    foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                    {
+                        if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                        return ((JObject)Bufftmp)["name"].ToString();
+                    }
+                }
+
                 return "暫無翻譯";
             }
             catch (Exception)
@@ -2726,10 +2801,13 @@ namespace Altera
                     for (var k = 0; k < IndividualityCommons.Length; k++)
                     {
                         if (item == IndividualityCommons[k][0])
+                        {
                             output += IndividualityCommons[k][1] + "(" + item + ")/";
+                            break;
+                        }
 
                         if (k == IndividualityCommons.Length - 1 && item != IndividualityCommons[k][0])
-                            continue;
+                            output += "特性" + item + "/";
                     }
                 }
 

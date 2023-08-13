@@ -2859,9 +2859,6 @@ namespace Altera
                             .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                         AS3sval_10 = AS3sval_10.Substring(0, AS3sval_10.Length - 2);
                     }
-                    else
-                    {
-                    }
                 }
             }
 
@@ -5457,7 +5454,7 @@ namespace Altera
                 HPBasicWithRarity[3] = 1800M;
                 HPBasicWithRarity[4] = 2000M;
                 HPBasicWithRarity[5] = 2200M;
-                var ClassBasicBase = new decimal[30];
+                var ClassBasicBase = new decimal[100];
                 ClassBasicBase[1] = 1.01M;
                 ClassBasicBase[2] = 0.98M;
                 ClassBasicBase[3] = 1.02M;
@@ -5473,7 +5470,7 @@ namespace Altera
                 ClassBasicBase[23] = 1.05M;
                 ClassBasicBase[25] = 1.00M;
                 ClassBasicBase[28] = 0.95M;
-                ClassBasicBase[28] = 0.97M;
+                ClassBasicBase[33] = 0.97M;
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -5489,6 +5486,7 @@ namespace Altera
                     ClassID != "33")
                 {
                     hpatkbalance.Text = ShowString[7];
+                    SkillLvs.HpBalanceForExcel = ShowString[7].Replace("(", "").Replace(")", "");
                     return;
                 }
 
