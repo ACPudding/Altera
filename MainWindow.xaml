@@ -429,7 +429,7 @@
                                        VerticalAlignment="Top"
                                        Width="414" FontSize="12" Foreground="#FF333333"
                                        Margin="68,116,0,0" FontWeight="Bold" />
-                            <TextBlock x:Name="hpatkbalance" Text="( 攻防倾向: 均衡 )" HorizontalAlignment="Left" Height="27"
+                            <TextBlock x:Name="hpatkbalance" Text="( 攻防倾向: 均衡 )" HorizontalAlignment="Left" Height="46"
                                        VerticalAlignment="Top" Width="173" FontSize="14"
                                        Foreground="#FF333333" Margin="495,314,0,0" FontWeight="Bold" />
                             <TextBox x:Name="collection" HorizontalAlignment="Left" Height="17" Margin="691,308,0,0"

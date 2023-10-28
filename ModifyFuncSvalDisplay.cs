@@ -855,7 +855,7 @@ namespace Altera
                         {
                             var PossibleCount = (Tempsval[2] + "," + Tempsval[3]).Replace("DependFuncVals1:", "")
                                 .Replace("]", "").Split(',');
-                            output = "最大 " + PossibleCount[1] + " 格/単体" +
+                            output = "最大 " + PossibleCount[1] + " 格/单体" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -887,7 +887,7 @@ namespace Altera
                         {
                             var PossibleCount = (Tempsval[2] + "," + Tempsval[3] + "," + Tempsval[4])
                                 .Replace("DependFuncVals1:", "").Replace("]", "").Replace("Value2:", "").Split(',');
-                            output = "减少敌方最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/単体, \r\n增加 " +
+                            output = "减少敌方最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/单体, \r\n增加 " +
                                      Convert.ToDouble(PossibleCount[2]) / 100 + "格 充能(按成功数叠加)" + (Tempsval[0] == "1000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1156,7 +1156,7 @@ namespace Altera
                         if (Tempsval[2].Contains("Act") && Tempsval[3].Contains("Act"))
                             try
                             {
-                                output = Tempsval[1] + "個" +
+                                output = Tempsval[1] + "个" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") + "\r\n动作Set:" +
@@ -1173,7 +1173,7 @@ namespace Altera
                         if (Tempsval[2].Contains("TriggeredFuncPositionAll"))
                             try
                             {
-                                output = Tempsval[1] + "個" +
+                                output = Tempsval[1] + "个" +
                                          (Tempsval[0] == "1000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1185,9 +1185,23 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[3].Contains("MultipleGainStar"))
+                            try
+                            {
+                                output = Tempsval[1] + "个/满足条件的对象" + (Tempsval[0] == "1000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         try
                         {
-                            output = Tempsval[3] + "個" +
+                            output = Tempsval[3] + "个" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1205,7 +1219,7 @@ namespace Altera
                     if (Tempsval.Length == 2)
                         try
                         {
-                            output = Tempsval[1] + "個" + (Tempsval[0] == "1000"
+                            output = Tempsval[1] + "个" + (Tempsval[0] == "1000"
                                 ? ""
                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                             break;
@@ -1221,7 +1235,7 @@ namespace Altera
                         if (Tempsval[2].Contains("MultipleGainStar"))
                             try
                             {
-                                output = Tempsval[1] + "個/滿足條件的對象" + (Tempsval[0] == "1000"
+                                output = Tempsval[1] + "个/满足条件的对象" + (Tempsval[0] == "1000"
                                     ? ""
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                                 break;
@@ -1241,7 +1255,7 @@ namespace Altera
                         if (Tempsval[4].Contains("ShowQuestNoEffect"))
                             try
                             {
-                                output = Tempsval[3] + "個" +
+                                output = Tempsval[3] + "个" +
                                          (Tempsval[0] == "1000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1258,7 +1272,7 @@ namespace Altera
                         if (Tempsval[4].Contains("UseRate"))
                             try
                             {
-                                output = Tempsval[3] + "個 (" +
+                                output = Tempsval[3] + "个 (" +
                                          Convert.ToDouble(Tempsval[4].Replace("UseRate:", "")) / 10 + "%概率生效)" +
                                          (Tempsval[0] == "1000"
                                              ? ""
@@ -1277,6 +1291,24 @@ namespace Altera
                         break;
                     }
 
+                    if (Tempsval.Length == 6)
+                        if (Tempsval[4].Contains("TriggeredFuncPosition"))
+                            try
+                            {
+                                output = Tempsval[3] + "个" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                     output = Funcsval;
                     break;
                 case 57:
@@ -1287,7 +1319,7 @@ namespace Altera
                         case 2:
                             try
                             {
-                                output = Tempsval[1] + "個" + (Tempsval[0] == "1000"
+                                output = Tempsval[1] + "个" + (Tempsval[0] == "1000"
                                     ? ""
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                                 break;
@@ -1301,7 +1333,7 @@ namespace Altera
                             if (Tempsval[2].Contains("MultipleGainStar"))
                                 try
                                 {
-                                    output = Tempsval[1] + "個/满足条件的对象" +
+                                    output = Tempsval[1] + "个/满足条件的对象" +
                                              (Tempsval[0] == "1000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1316,7 +1348,7 @@ namespace Altera
                             if (Tempsval[2].Contains("ActSelectIndex"))
                                 try
                                 {
-                                    output = Tempsval[1] + "個" + (Tempsval[0] == "1000"
+                                    output = Tempsval[1] + "个" + (Tempsval[0] == "1000"
                                         ? ""
                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)" + " (可选释放)");
                                     break;
@@ -1333,7 +1365,22 @@ namespace Altera
                             if (Tempsval[2].Contains("TriggeredFuncPositionAll"))
                                 try
                                 {
-                                    output = Tempsval[1] + "個" +
+                                    output = Tempsval[1] + "个" +
+                                             (Tempsval[0] == "1000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            if (Tempsval[3].Contains("MultipleGainStar"))
+                                try
+                                {
+                                    output = Tempsval[1] + "个/满足条件的对象" +
                                              (Tempsval[0] == "1000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1452,6 +1499,23 @@ namespace Altera
                         }
 
                     break;
+                case 176:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 5)
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
                 default:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3)
@@ -1513,12 +1577,25 @@ namespace Altera
                             break;
                         }
 
+                    if (Tempsval.Length == 5)
+                        if (Tempsval[1] == "205000")
+                            try
+                            {
+                                output = "第" + Tempsval[3] + "再临\r\n宝具变化";
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                     if (Tempsval.Length == 4)
                     {
                         if (Tempsval[1] == "304800")
                             try
                             {
-                                output = "第" + Tempsval[3] + "再臨\r\n宝具换装";
+                                output = "第" + Tempsval[3] + "再临\r\n宝具换装";
                                 break;
                             }
                             catch (Exception)
@@ -1837,7 +1914,7 @@ namespace Altera
                         {
                             var PossibleCount = (Tempsval[2] + "," + Tempsval[3]).Replace("DependFuncVals1:", "")
                                 .Replace("]", "").Split(',');
-                            output = "最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/単体" +
+                            output = "最大 " + Convert.ToDouble(PossibleCount[1]) / 100 + "% NP/单体" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1854,7 +1931,7 @@ namespace Altera
                         {
                             var PossibleCount = (Tempsval[2] + "," + Tempsval[3] + "," + Tempsval[4])
                                 .Replace("DependFuncVals1:", "").Replace("]", "").Replace("Value2:", "").Split(',');
-                            output = "减少敌方最大 " + PossibleCount[1] + "格充能/単体, \r\n增加 " +
+                            output = "减少敌方最大 " + PossibleCount[1] + "格充能/单体, \r\n增加 " +
                                      Convert.ToDouble(PossibleCount[2]) / 100 + "% NP(按成功数叠加)" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
@@ -2300,7 +2377,9 @@ namespace Altera
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
                 Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効" ||
-                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効" || Funcname == "弱体耐性無視")
+                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
+                Funcname == "灼傷＆延焼解除" ||
+                Funcname == "やけど＆延焼無効" || Funcname == "灼傷＆延焼無効")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -2746,7 +2825,7 @@ namespace Altera
                     }
                 }
 
-                return "暫無翻譯";
+                return "未知Func";
             }
             catch (Exception)
             {
@@ -3000,7 +3079,7 @@ namespace Altera
                 for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
                     if (TDTranslistFullArray[k][0] == TDFuncID)
                         return TDTranslistFullArray[k][1];
-                return "暫無翻譯\r\nID: " + TDFuncID;
+                return "未知Func\r\nID: " + TDFuncID;
             }
             catch (Exception)
             {
