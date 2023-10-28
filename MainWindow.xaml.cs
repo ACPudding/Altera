@@ -2174,7 +2174,7 @@ namespace Altera
                                                              TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";*/
                                 SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                            ? TDFuncstrArray[i].Replace("\r\n", "")
-                                                           : svtTDtargetIconArray[i] + "未知效果") +
+                                                           : "未知效果") +
                                                        " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
                                                                 TDlv5OC5strArray[i].Replace("\r\n", " ")
                                                            ? TDlv5OC5strArray[i].Replace("\r\n", " ")
@@ -2214,7 +2214,7 @@ namespace Altera
                                                          TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";*/
                             SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                        ? TDFuncstrArray[i].Replace("\r\n", "")
-                                                       : svtTDtargetIconArray[i] + "未知效果") +
+                                                       : "未知效果") +
                                                    " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
                                                             TDlv5OC5strArray[i].Replace("\r\n", " ")
                                                        ? TDlv5OC5strArray[i].Replace("\r\n", " ")
