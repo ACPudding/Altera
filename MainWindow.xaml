@@ -9,11 +9,11 @@
            Title="Altera" Height="600" Width="900" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
            Icon="icon.ico" ContentRendered="Form_Load">
     <Grid>
-        <TabControl Margin="0,0,0,0" TabStripPlacement="Left" FontFamily="Source Han Sans SC">
+        <TabControl Margin="0,0,0,0" TabStripPlacement="Left" FontFamily="Source Han Sans SC" BorderThickness="0">
             <TabControl.Background>
                 <SolidColorBrush Color="White" Opacity="1" />
             </TabControl.Background>
-            <TabItem x:Name="StarterItemTab">
+            <TabItem x:Name="StarterItemTab" BorderThickness="1">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image x:Name="img" Height="64" Width="64" Source="icon.ico" />
@@ -74,7 +74,7 @@
                     <Button hc:BorderElement.CornerRadius="15" Content="清空" HorizontalAlignment="Left" Height="30"
                             Margin="362,330,0,0" VerticalAlignment="Top"
                             Width="81" Foreground="#FF333333" Click="Button_Click_2" FontFamily="Source Han Sans SC" />
-                    <ToggleButton Style="{StaticResource ToggleButtonSwitch}" Content="显示高级选项" Margin="0,360,9.8,161.4"
+                    <ToggleButton Style="{StaticResource ToggleButtonSwitch}" Content="高级选项" Margin="350,360,350,161.4"
                                   x:Name="ButtonVisibilitySwitch" FontFamily="Source Han Sans SC" />
                     <Grid
                         Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=ButtonVisibilitySwitch}"
@@ -136,12 +136,12 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem IsEnabled="False" IsHitTestVisible="False">
+            <TabItem IsEnabled="False" IsHitTestVisible="False" BorderThickness="1" Height="30">
                 <TabItem.Header>
                     <TextBlock Text="-从者信息-" />
                 </TabItem.Header>
             </TabItem>
-            <TabItem Header="基本信息" x:Name="FocusBasicInfo">
+            <TabItem Header="基本信息" x:Name="FocusBasicInfo" BorderThickness="1" Height="30">
                 <Grid Margin="0">
                     <GroupBox HorizontalAlignment="Left" Height="570" Margin="0,0,0,0" VerticalAlignment="Top"
                               Width="810" BorderThickness="0">
@@ -562,7 +562,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="成长曲线">
+            <TabItem Header="成长曲线" BorderThickness="1" Height="30">
                 <Grid Margin="0,0,0,0">
                     <TextBlock Text="从者ATK/HP成长曲线"
                                HorizontalAlignment="Left" Height="31" VerticalAlignment="Top"
@@ -642,9 +642,9 @@
                     </ListView>
                 </Grid>
             </TabItem>
-            <TabItem Header="宝具信息">
+            <TabItem Header="宝具信息" BorderThickness="1" Height="30">
                 <Grid x:Name="svtTDs" Margin="0,0,0,0">
-                    <GroupBox Margin="0,225,0,0" BorderThickness="0">
+                    <GroupBox Margin="2,225,2,0" BorderThickness="0">
                         <GroupBox.Background>
                             <SolidColorBrush Color="#FFF9F9F9" Opacity="0.4" />
                         </GroupBox.Background>
@@ -683,7 +683,7 @@
                             </ListView>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Margin="0,0,0,350" Background="{x:Null}" x:Name="svtTreasureInfo">
+                    <GroupBox Margin="2,0,2,350" Background="{x:Null}" x:Name="svtTreasureInfo">
                         <GroupBox.Header>
                             <TextBlock Text="宝具基本信息" FontWeight="Bold" />
                         </GroupBox.Header>
@@ -799,9 +799,9 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="技能信息" x:Name="SkillInfoTI">
+            <TabItem Header="技能信息" x:Name="SkillInfoTI" BorderThickness="1" Height="30">
                 <Grid Margin="0">
-                    <TabControl Style="{StaticResource TabControlCapsule}" Margin="0,10,0,0">
+                    <TabControl Style="{StaticResource TabControlCapsule}" Margin="2,10,2,0" BorderThickness="0">
                         <TabItem x:Name="svtskill1_header" Header="技能1">
                             <Grid x:Name="svtskill1" Margin="0,0,0,0">
                                 <TextBlock Text="技能名称:" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top"
@@ -1273,8 +1273,8 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="培养素材">
-                <Grid Margin="0,0,0,0">
+            <TabItem Header="培养素材" BorderThickness="1" Height="30">
+                <Grid Margin="2,0,2,0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="5,10,5,5"
                                 TabStripPlacement="Top">
                         <TabItem Header="灵基再临">
@@ -1337,10 +1337,10 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="牵绊文本">
+            <TabItem Header="牵绊文本" BorderThickness="1" Height="30">
                 <Grid x:Name="svttexts" Margin="0,0,0,0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="10,35,10,100"
-                                TabStripPlacement="Bottom">
+                                TabStripPlacement="Bottom" BorderThickness="0">
                         <TabItem Header="文本1">
                             <Grid Margin="0">
                                 <TextBox x:Name="jibantext1" HorizontalAlignment="Left" Height="370"
@@ -1455,12 +1455,12 @@
                            Margin="0,505,0,0" FontWeight="Bold" BorderBrush="{x:Null}" Background="{x:Null}" />
                 </Grid>
             </TabItem>
-            <TabItem IsEnabled="False" IsHitTestVisible="False">
+            <TabItem IsEnabled="False" IsHitTestVisible="False" BorderThickness="1" Height="30">
                 <TabItem.Header>
                     <TextBlock Text="-其他功能-" />
                 </TabItem.Header>
             </TabItem>
-            <TabItem Header="活动列表">
+            <TabItem Header="活动列表" BorderThickness="1" Height="30">
                 <Grid Margin="0,0,0,0">
                     <TabControl Style="{StaticResource TabControlCapsule}" Margin="0,10,0,0">
                         <TabItem Header="卡池列表">
@@ -1579,7 +1579,7 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="关卡列表">
+            <TabItem Header="关卡列表" BorderThickness="1" Height="30">
                 <Grid Margin="0,0,0,0">
                     <TextBlock Text="强化活动/幕间PickUp关卡快速检索表"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
@@ -1618,7 +1618,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="职介一览">
+            <TabItem Header="职介一览" BorderThickness="1" Height="30">
                 <Grid Margin="0,0,0,0">
                     <TextBlock Text="职介克制关系显示"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
@@ -1661,7 +1661,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="加成从者">
+            <TabItem Header="加成从者" BorderThickness="1" Height="30">
                 <Grid>
                     <TextBlock Text="下次活动预告加成从者列表"
                                HorizontalAlignment="Left" Height="44" VerticalAlignment="Top"
@@ -1699,12 +1699,12 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem IsEnabled="False" IsHitTestVisible="False">
+            <TabItem IsEnabled="False" IsHitTestVisible="False" BorderThickness="1" Height="30">
                 <TabItem.Header>
                     <TextBlock Text="-数据解析-" />
                 </TabItem.Header>
             </TabItem>
-            <TabItem Header="数据更新" x:Name="DataUpdate">
+            <TabItem Header="数据更新" x:Name="DataUpdate" BorderThickness="1" Height="30">
                 <Grid>
                     <Label Content="游戏数据更新/下载" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0"
                            VerticalAlignment="Top" Width="789" FontSize="20"
@@ -1752,7 +1752,7 @@
                                  Visibility="Hidden" Uri="images/AlteraDancing.gif" />
                 </Grid>
             </TabItem>
-            <TabItem Header="附加工具">
+            <TabItem Header="附加工具" BorderThickness="1" Height="30">
                 <Grid>
                     <Label Content="附加工具" HorizontalAlignment="Left" Height="45" Margin="10,10,0,0"
                            VerticalAlignment="Top" Width="789" FontSize="20"
@@ -1776,7 +1776,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="关于">
+            <TabItem Header="关于" BorderThickness="1" Height="30">
                 <Grid Margin="0,0,0,0">
                     <TextBlock Text="Altera" HorizontalAlignment="Left" Height="40"
                                Margin="10,10,0,0" VerticalAlignment="Top" Width="383"

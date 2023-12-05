@@ -250,7 +250,7 @@ namespace Altera
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                          (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴擊星 >= " +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴击星 >= " +
                                          Tempsval[4].Replace("StarHigher:", "") + " )";
                                 break;
                             }
@@ -643,9 +643,9 @@ namespace Altera
                     if (Tempsval.Length == 5)
                         try
                         {
-                            output = "指令卡變更: " +
+                            output = "指令卡变更: " +
                                      Tempsval[3].Replace("1", "Arts").Replace("2", "Buster").Replace("3", "Quick") +
-                                     " (動作變更:" + Tempsval[4].Replace("MotionChange:", "") + ")" +
+                                     " (动作变更:" + Tempsval[4].Replace("MotionChange:", "") + ")" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -666,7 +666,7 @@ namespace Altera
                     if (Tempsval.Length == 4 || (Tempsval.Length == 5 && Tempsval[4].Contains("ShowState")))
                         try
                         {
-                            output = "場地特性附加: " + Convert.ToDouble(Tempsval[3]) + "\r\n" +
+                            output = "场地特性附加: " + Convert.ToDouble(Tempsval[3]) + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -687,7 +687,7 @@ namespace Altera
                     if (Tempsval.Length == 4 || (Tempsval.Length == 5 && Tempsval[4].Contains("ShowState")))
                         try
                         {
-                            output = "場地特性打消: " + Tempsval[3].Replace("TargetList:", "") + "\r\n" +
+                            output = "场地特性打消: " + Tempsval[3].Replace("TargetList:", "") + "\r\n" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1076,7 +1076,7 @@ namespace Altera
                     if (Tempsval.Length == 4)
                         try
                         {
-                            output = Tempsval[3] + "段階" +
+                            output = Tempsval[3] + "OC" +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1435,7 +1435,7 @@ namespace Altera
                     if (Tempsval.Length == 7)
                         try
                         {
-                            output = "∅\r\n場景特性: " + Tempsval[3].Replace("FieldIndividuality:", "") +
+                            output = "∅\r\n场景特性: " + Tempsval[3].Replace("FieldIndividuality:", "") +
                                      (Tempsval[0] == "1000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1612,7 +1612,7 @@ namespace Altera
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                          (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴擊星 >= " +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次") + " ( 暴击星 >= " +
                                          Tempsval[3].Replace("StarHigher:", "") + " )";
                                 break;
                             }
@@ -1856,7 +1856,7 @@ namespace Altera
                     }
 
                     break;
-                case "詛咒吸収":
+                case "诅咒吸収":
                 case "原稿完成解除":
                     try
                     {
@@ -1872,7 +1872,7 @@ namespace Altera
                     }
 
                     break;
-                case "特殊即死\r\n(无特效 ?)":
+                case "无特效特殊(快速)即死":
                     try
                     {
                         output =
@@ -1887,7 +1887,7 @@ namespace Altera
                     }
 
                     break;
-                case "灼傷無効":
+                case "灼伤無効":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 3 || Funcsval.Contains("Individualty"))
                         try
@@ -1948,6 +1948,8 @@ namespace Altera
                     break;
                 case "HP減少":
                 case "HP回復":
+                case "HP减少":
+                case "HP回复":
                     Tempsval = Funcsval.Split(',');
                     try
                     {
@@ -1977,10 +1979,10 @@ namespace Altera
                     break;
                 case "毒":
                 case "やけど":
-                case "灼傷":
+                case "灼伤":
                 case "呪い":
-                case "詛咒":
-                case "每回合回復HP":
+                case "诅咒":
+                case "每回合回复HP":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4 || (Tempsval.Length == 6 && Tempsval[4].Contains("Individualty")))
                         try
@@ -2096,8 +2098,9 @@ namespace Altera
                     output = Funcsval;
                     break;
                 default:
-                    if (Funcname.Contains("NP") && !Funcname.Contains("獲得") && !Funcname.Contains("每回合") &&
-                        !Funcname.Contains("每ターン") && !Funcname.Contains("発動"))
+                    if (Funcname.Contains("NP") && !Funcname.Contains("獲得") && !Funcname.Contains("获得") &&
+                        !Funcname.Contains("每回合") &&
+                        !Funcname.Contains("每ターン") && !Funcname.Contains("発動") && !Funcname.Contains("发动"))
                     {
                         Tempsval = Funcsval.Split(',');
                         if (Tempsval.Length == 4)
@@ -2159,7 +2162,7 @@ namespace Altera
                     break;
             }
 
-            if (Funcname.Contains("追加効果") || Funcname.Contains("攻撃時発動"))
+            if (Funcname.Contains("追加効果") || Funcname.Contains("攻击时发动"))
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length > 4)
@@ -2229,7 +2232,7 @@ namespace Altera
                 }
             }
 
-            if (Funcname.Contains("強力攻撃") || Funcname.Contains("防御無視攻撃") || Funcname.Contains("被傷害反射"))
+            if (Funcname.Contains("强力攻击") || Funcname.Contains("防御无视攻击") || Funcname.Contains("被伤害反射"))
             {
                 Tempsval = Funcsval.Split(',');
                 try
@@ -2242,7 +2245,7 @@ namespace Altera
                 }
             }
 
-            if (Funcname == "宝具封印" || Funcname == "魅了")
+            if (Funcname == "宝具封印" || Funcname == "魅了" || Funcname == "魅惑")
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length == 3)
@@ -2376,10 +2379,10 @@ namespace Altera
             if (Funcname == "強化解除" || Funcname == "防御強化解除" || Funcname == "攻撃強化解除" || Funcname == "攻撃弱体解除" ||
                 Funcname == "防御弱体解除" || Funcname == "弱体解除" || Funcname == "必中解除" || Funcname == "回避状態解除" ||
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
-                Funcname == "詛咒解除" || Funcname == "詛咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆詛咒無効" ||
-                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼傷無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
+                Funcname == "诅咒解除" || Funcname == "诅咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆诅咒無効" ||
+                Funcname == "毒＆やけど無効" || Funcname == "毒＆灼伤無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
                 Funcname == "灼傷＆延焼解除" ||
-                Funcname == "やけど＆延焼無効" || Funcname == "灼傷＆延焼無効")
+                Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -2450,7 +2453,7 @@ namespace Altera
                 }
             }
 
-            if (Funcname.Contains("對特性") || Funcname.Contains("對Buff"))
+            if (Funcname.Contains("特攻攻击") && !Funcname.Contains("特殊"))
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length == 4 || Tempsval.Length == 5)
@@ -2485,7 +2488,7 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname.Contains("對稀有度"))
+            if (Funcname.Contains("稀有度"))
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length == 5)
@@ -2502,7 +2505,7 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname.Contains("特殊特攻攻撃"))
+            if (Funcname.Contains("特殊)特攻攻击"))
             {
                 Tempsval = Funcsval.Split(',');
                 if (Tempsval.Length == 7 || Tempsval.Length == 8)
@@ -2527,7 +2530,7 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname == "人格交換" || Funcname.Contains("暫無翻譯")) output = Funcsval;
+            if (Funcname == "人格交换" || Funcname.Contains("暫無翻譯")) output = Funcsval;
             if (Funcname != "即死") return output;
             output = Convert.ToDouble(Funcsval) / 10 + "%";
             IndividualListStringTemp = null;
@@ -2710,7 +2713,7 @@ namespace Altera
                 if (FuncListArray[i] == "" &&
                     FuncSvalArray[i].Count(c => c == ',') == 1 &&
                     !FuncSvalArray[i].Contains("Hide"))
-                    FuncListArray[i] = "HP回復";
+                    FuncListArray[i] = "HP回复";
                 if ((FuncListArray[i] == "なし" || (FuncListArray[i] == "" &&
                                                   FuncSvalArray[i].Contains("Hide"))) &&
                     FuncSvalArray[i].Count(c => c == ',') > 0)
@@ -2731,7 +2734,7 @@ namespace Altera
                     if (applyTargetListArray[i] == "2")
                     {
                         if (FuncListArray[i].Contains("チャージ増加") || FuncListArray[i].Contains("充能增加") ||
-                            FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴擊発生率"))
+                            FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴击发生率"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 0:
@@ -2754,7 +2757,7 @@ namespace Altera
 
                     if (applyTargetListArray[i] == "1")
                         if (FuncListArray[i].Contains("NP増加") || FuncListArray[i].Contains("スター発生") ||
-                            FuncListArray[i].Contains("暴擊星掉落率"))
+                            FuncListArray[i].Contains("暴击星掉落率"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 4:
@@ -2800,18 +2803,13 @@ namespace Altera
         {
             try
             {
-                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
-                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
-                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
+                foreach (var TdAttackNmeTmp in GlobalPathsAndDatas.TDAttackNameTranslation)
                 {
-                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
-                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
+                    if (((JObject)TdAttackNmeTmp)["id"].ToString() != TDFuncID) continue;
+                    var tdFuncName = JObject.Parse(TdAttackNmeTmp.ToString());
+                    return tdFuncName["tdFuncname"].ToString();
                 }
 
-                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
-                    if (TDTranslistFullArray[k][0] == TDFuncID)
-                        return TDTranslistFullArray[k][1];
                 foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                 {
                     if (((JObject)functmp)["id"].ToString() != TDFuncID) continue;
@@ -2835,59 +2833,43 @@ namespace Altera
 
         private static int ReturnArrayNum(string str)
         {
-            var TranslationListFullArray = new string[GlobalPathsAndDatas.TranslationListArray.Length][];
-            for (var i = 0; i < GlobalPathsAndDatas.TranslationListArray.Length; i++)
+            foreach (var buffNmeTmp in GlobalPathsAndDatas.TranslationList)
             {
-                var TempSplit2 = GlobalPathsAndDatas.TranslationListArray[i].Split(',');
-                TranslationListFullArray[i] = new string[TempSplit2.Length];
-                for (var j = 0; j < TempSplit2.Length; j++) TranslationListFullArray[i][j] = TempSplit2[j];
+                if (!((JObject)buffNmeTmp)["buffStr"].ToString().Contains(str) &&
+                    !((JObject)buffNmeTmp)["buffTrans"].ToString().Contains(str)) continue;
+                var buffNameObj = JObject.Parse(buffNmeTmp.ToString());
+                return Convert.ToInt32(buffNameObj["id"].ToString()) + 1;
             }
 
-            for (var i = 0; i < GlobalPathsAndDatas.TranslationListArray.Length - 1; i++)
-                if (GlobalPathsAndDatas.TranslationListArray[i].Contains(str))
-                    return i + 1;
-            for (var j = 0; j < GlobalPathsAndDatas.TranslationListArray.Length; j++)
-                if (str.Contains(TranslationListFullArray[j][0]) || str.Contains(TranslationListFullArray[j][1]))
-                    return j + 1;
-            return 0;
+            return (from buffNmeTmp in GlobalPathsAndDatas.TranslationList
+                where str.Contains(((JObject)buffNmeTmp)["buffStr"].ToString()) ||
+                      str.Contains(((JObject)buffNmeTmp)["buffTrans"].ToString())
+                select JObject.Parse(buffNmeTmp.ToString())
+                into buffNameObj
+                select Convert.ToInt32(buffNameObj["id"].ToString()) + 1).FirstOrDefault();
         }
 
         public static string SearchIndividualality(string Input)
         {
-            if (IndividualListStringTemp == null)
-            {
-                var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation
-                    .Split('|');
-                IndividualListStringTemp = TempSplit1;
-            }
-
-            var IndividualityCommons = new string[IndividualListStringTemp.Length][];
-            for (var i = 0; i < IndividualListStringTemp.Length; i++)
-            {
-                var TempSplit2 = IndividualListStringTemp[i].Split('+');
-                IndividualityCommons[i] = new string[TempSplit2.Length];
-                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
-            }
-
             if (Input.Contains(@"/"))
             {
                 var InputArray = Input.Split('/');
                 var output = "";
+                var trigger1 = true;
                 foreach (var item in InputArray)
                 {
                     if (item.Length >= 6) output += item + "/";
                     if (item == "5010" || item == "5000") continue;
-                    for (var k = 0; k < IndividualityCommons.Length; k++)
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
                     {
-                        if (item == IndividualityCommons[k][0])
-                        {
-                            output += IndividualityCommons[k][1] + "(" + item + ")/";
-                            break;
-                        }
-
-                        if (k == IndividualityCommons.Length - 1 && item != IndividualityCommons[k][0])
-                            output += "特性" + item + "/";
+                        if (((JObject)svtInditmp)["id"].ToString() != item) continue;
+                        var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                        output += svtIndiObj["individualityName"] + "(" + item + ")/";
+                        trigger1 = false;
+                        break;
                     }
+
+                    if (trigger1) output += "特性" + item + "/";
                 }
 
                 if (output.Length > 1) output = output.Substring(0, output.Length - 1);
@@ -2896,50 +2878,37 @@ namespace Altera
 
             if (Input.Length >= 6) return Input;
             if (Input == "5010" || Input == "5000") return Input;
-            for (var k = 0; k < IndividualityCommons.Length; k++)
+            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
             {
-                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1] + " ( " + Input + " ) ";
-
-                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
-                    return Input;
+                if (((JObject)svtInditmp)["id"].ToString() != Input) continue;
+                var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                return svtIndiObj["individualityName"] + " ( " + Input + " ) ";
             }
-
 
             return Input;
         }
 
         public static string SearchIndividualalityTDExcel(string Input)
         {
-            if (IndividualListStringTemp == null)
-            {
-                var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation
-                    .Split('|');
-                IndividualListStringTemp = TempSplit1;
-            }
-
-            var IndividualityCommons = new string[IndividualListStringTemp.Length][];
-            for (var i = 0; i < IndividualListStringTemp.Length; i++)
-            {
-                var TempSplit2 = IndividualListStringTemp[i].Split('+');
-                IndividualityCommons[i] = new string[TempSplit2.Length];
-                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
-            }
-
             if (Input.Contains(@"/"))
             {
                 var InputArray = Input.Split('/');
                 var output = "";
+                var trigger1 = true;
                 foreach (var item in InputArray)
                 {
                     if (item.Length >= 6) output += item + "/";
                     if (item == "5010" || item == "5000") continue;
-                    for (var k = 0; k < IndividualityCommons.Length; k++)
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
                     {
-                        if (item == IndividualityCommons[k][0]) output += IndividualityCommons[k][1] + "/";
-
-                        if (k == IndividualityCommons.Length - 1 && item != IndividualityCommons[k][0])
-                            continue;
+                        if (((JObject)svtInditmp)["id"].ToString() != item) continue;
+                        var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                        output += svtIndiObj["individualityName"] + "/";
+                        trigger1 = false;
+                        break;
                     }
+
+                    if (trigger1) output += item + "/";
                 }
 
                 if (output.Length > 1) output = output.Substring(0, output.Length - 1);
@@ -2948,14 +2917,12 @@ namespace Altera
 
             if (Input.Length >= 6) return Input;
             if (Input == "5010" || Input == "5000") return Input;
-            for (var k = 0; k < IndividualityCommons.Length; k++)
+            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
             {
-                if (Input == IndividualityCommons[k][0]) return IndividualityCommons[k][1];
-
-                if (k == IndividualityCommons.Length - 1 && Input != IndividualityCommons[k][0])
-                    return Input;
+                if (((JObject)svtInditmp)["id"].ToString() != Input) continue;
+                var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                return svtIndiObj["individualityName"].ToString();
             }
-
 
             return Input;
         }
@@ -2964,18 +2931,13 @@ namespace Altera
         {
             try
             {
-                var TranslationListArray = GlobalPathsAndDatas.TranslationList.Replace("\r\n", "").Split('|');
-                var TranslationListFullArray = new string[TranslationListArray.Length][];
-                for (var i = 0; i < TranslationListArray.Length; i++)
+                foreach (var buffNmeTmp in GlobalPathsAndDatas.TranslationList)
                 {
-                    var TempSplit2 = TranslationListArray[i].Split(',');
-                    TranslationListFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TranslationListFullArray[i][j] = TempSplit2[j];
+                    if (((JObject)buffNmeTmp)["buffStr"].ToString() != buffname) continue;
+                    var buffNameObj = JObject.Parse(buffNmeTmp.ToString());
+                    return buffNameObj["buffTrans"].ToString();
                 }
 
-                for (var k = 0; k < TranslationListArray.Length; k++)
-                    if (buffname.Contains(TranslationListFullArray[k][0]))
-                        buffname = buffname.Replace(TranslationListFullArray[k][0], TranslationListFullArray[k][1]);
                 return buffname;
             }
             catch (Exception)
@@ -3048,7 +3010,7 @@ namespace Altera
                         TDFuncstrArray[i] = "从者位置变更";
 
                     if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
-                        !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
+                        !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回复";
                     TDlv1OC1strArray[i] = ModifyFuncStr(TDFuncstrArray[i],
                         TDlv1OC1strArray[i], ignoreEnemyFunc);
                     output += TDFuncstrArray[i] + "(" + TDlv1OC1strArray[i] + ") ";
@@ -3067,18 +3029,13 @@ namespace Altera
         {
             try
             {
-                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
-                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
-                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
-                {
-                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
-                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
-                }
+                foreach (var TdAttackNmeTmp in GlobalPathsAndDatas.TDAttackNameTranslation)
+                    if (((JObject)TdAttackNmeTmp)["id"].ToString() == TDFuncID)
+                    {
+                        var tdFuncName = JObject.Parse(TdAttackNmeTmp.ToString());
+                        return tdFuncName["tdFuncname"].ToString();
+                    }
 
-                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
-                    if (TDTranslistFullArray[k][0] == TDFuncID)
-                        return TDTranslistFullArray[k][1];
                 return "未知Func\r\nID: " + TDFuncID;
             }
             catch (Exception)

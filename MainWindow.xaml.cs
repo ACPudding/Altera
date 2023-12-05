@@ -42,22 +42,22 @@ namespace Altera
         private static string GameDataVersion;
 
         private static readonly string BuffTranslationListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation";
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/BuffTranslation.json";
 
         private static readonly string BuffTranslationListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation";
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/BuffTranslation.json";
 
         private static readonly string IndividualListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/IndividualityList";
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/SvtIndividualityTranslation.json";
 
         private static readonly string IndividualListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/IndividualityList";
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/SvtIndividualityTranslation.json";
 
         private static readonly string TDAttackNameTranslationListLinkA =
-            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/TDAttackName";
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/TDAttackNameTranslation.json";
 
         private static readonly string TDAttackNameTranslationListLinkB =
-            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackName";
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/TDAttackNameTranslation.json";
 
         private static readonly string FuncListLinkA =
             "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/FuncList.json";
@@ -2087,10 +2087,10 @@ namespace Altera
                             TDFuncstrArray[i] = "从者位置变更";
 
                         if (TDFuncstrArray[i] == "" && TDlv1OC1strArray[i].Count(c => c == ',') == 1 &&
-                            !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回復";
+                            !TDlv1OC1strArray[i].Contains("Hide")) TDFuncstrArray[i] = "HP回复";
 
                         if (svtTreasureDeviceFuncIDArray[i] == "5826" || svtTreasureDeviceFuncIDArray[i] == "6323")
-                            TDFuncstrArray[i] = "特殊即死\r\n(无特效 ?)";
+                            TDFuncstrArray[i] = "无特效特殊(快速)即死";
 
                         if (svtTreasureDeviceFuncIDArray[i] == "5") continue;
 
@@ -2101,7 +2101,7 @@ namespace Altera
                             if (svtTDapplyTargetArray[i] == "2")
                             {
                                 if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") ||
-                                    TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴擊発生率"))
+                                    TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴击发生率"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
                                         case 0:
@@ -2124,7 +2124,7 @@ namespace Altera
 
                             if (svtTDapplyTargetArray[i] == "1")
                                 if (TDFuncstrArray[i].Contains("NP増加") || TDFuncstrArray[i].Contains("スター発生") ||
-                                    TDFuncstrArray[i].Contains("暴擊星掉落率"))
+                                    TDFuncstrArray[i].Contains("暴击星掉落率"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
                                         case 4:
@@ -2256,18 +2256,13 @@ namespace Altera
         {
             try
             {
-                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
-                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
-                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
-                {
-                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
-                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
-                }
-
-                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
-                    if (TDTranslistFullArray[k][0] == funcid)
+                foreach (var TdAttackNmeTmp in GlobalPathsAndDatas.TDAttackNameTranslation)
+                    if (((JObject)TdAttackNmeTmp)["id"].ToString() == funcid)
+                    {
+                        var tdFuncName = JObject.Parse(TdAttackNmeTmp.ToString());
                         return true;
+                    }
+
                 return false;
             }
             catch (Exception)
@@ -2279,36 +2274,31 @@ namespace Altera
         private void RefreshTranslationsList()
         {
             GlobalPathsAndDatas.SvtIndividualityTranslation =
-                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
-                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
-                    : HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "");
-            ;
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName +
+                                                                             "SvtIndividualityTranslation.json"))
+                    : (JArray)JsonConvert.DeserializeObject(File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName +
+                                                                             "SvtIndividualityTranslation.json"));
+
             GlobalPathsAndDatas.TDAttackNameTranslation =
-                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
-                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
-                    : HttpRequest
-                        .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
-                        .Replace("+", Environment.NewLine);
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json"))
+                    : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(IndividualListLinkA,
+                        IndividualListLinkB));
             var tmpFuncTypeData = File.Exists(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 : HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
             GlobalPathsAndDatas.funcListDebuggerArray =
                 (JArray)JsonConvert.DeserializeObject(tmpFuncTypeData);
-            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
-            {
+            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"))
                 GlobalPathsAndDatas.TranslationList =
-                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data");
-                GlobalPathsAndDatas.TranslationListArray =
-                    GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
-                        .Split('|');
-            }
+                    (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"));
             else
-            {
                 GlobalPathsAndDatas.TranslationList =
-                    HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
-                GlobalPathsAndDatas.TranslationListArray = GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
-                    .Split('|');
-            }
+                    (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(BuffTranslationListLinkA,
+                        BuffTranslationListLinkB));
         }
 
         private void UpdateTranslationData(object sender, RoutedEventArgs e)
@@ -2318,25 +2308,23 @@ namespace Altera
 
         private void UTD()
         {
-            GlobalPathsAndDatas.TDAttackNameTranslation = HttpRequest
-                .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB).Replace("\r\n", "")
-                .Replace("+", Environment.NewLine);
+            GlobalPathsAndDatas.TDAttackNameTranslation = (JArray)JsonConvert.DeserializeObject(HttpRequest
+                .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB));
             GlobalPathsAndDatas.SvtIndividualityTranslation =
-                HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB).Replace("\r\n", "");
+                (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB));
             GlobalPathsAndDatas.TranslationList =
-                HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB);
+                (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(BuffTranslationListLinkA,
+                    BuffTranslationListLinkB));
             var tmpFuncTypeData = HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
             GlobalPathsAndDatas.funcListDebuggerArray =
                 (JArray)JsonConvert.DeserializeObject(tmpFuncTypeData);
-            GlobalPathsAndDatas.TranslationListArray =
-                GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
-                    .Split('|');
-            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data",
-                GlobalPathsAndDatas.SvtIndividualityTranslation);
-            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data",
-                GlobalPathsAndDatas.TDAttackNameTranslation);
-            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data",
-                GlobalPathsAndDatas.TranslationList);
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json",
+                HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB));
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json",
+                HttpRequest
+                    .GetList(TDAttackNameTranslationListLinkA, TDAttackNameTranslationListLinkB));
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json",
+                HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB));
             File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json",
                 tmpFuncTypeData);
             Dispatcher.Invoke(() => { Growl.Info("翻译列表更新完成."); });
@@ -2347,18 +2335,13 @@ namespace Altera
         {
             try
             {
-                var GetTDFuncTranslationListArray = GlobalPathsAndDatas.TDAttackNameTranslation.Split('|');
-                var TDTranslistFullArray = new string[GetTDFuncTranslationListArray.Length][];
-                for (var i = 0; i < GetTDFuncTranslationListArray.Length; i++)
-                {
-                    var TempSplit2 = GetTDFuncTranslationListArray[i].Split(',');
-                    TDTranslistFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TDTranslistFullArray[i][j] = TempSplit2[j];
-                }
+                foreach (var TdAttackNmeTmp in GlobalPathsAndDatas.TDAttackNameTranslation)
+                    if (((JObject)TdAttackNmeTmp)["id"].ToString() == TDFuncID)
+                    {
+                        var tdFuncName = JObject.Parse(TdAttackNmeTmp.ToString());
+                        return tdFuncName["tdFuncname"].ToString();
+                    }
 
-                for (var k = 0; k < GetTDFuncTranslationListArray.Length; k++)
-                    if (TDTranslistFullArray[k][0] == TDFuncID)
-                        return TDTranslistFullArray[k][1];
                 return "未知Func\r\nID: " + TDFuncID;
             }
             catch (Exception e)
@@ -2377,18 +2360,14 @@ namespace Altera
         {
             try
             {
-                var TranslationListArray = GlobalPathsAndDatas.TranslationList.Replace("\r\n", "").Split('|');
-                var TranslationListFullArray = new string[TranslationListArray.Length][];
-                for (var i = 0; i < TranslationListArray.Length; i++)
-                {
-                    var TempSplit2 = TranslationListArray[i].Split(',');
-                    TranslationListFullArray[i] = new string[TempSplit2.Length];
-                    for (var j = 0; j < TempSplit2.Length; j++) TranslationListFullArray[i][j] = TempSplit2[j];
-                }
+                foreach (var buffNmeTmp in GlobalPathsAndDatas.TranslationList)
+                    if (buffname.Contains(((JObject)buffNmeTmp)["buffStr"].ToString()))
+                    {
+                        var buffNameObj = JObject.Parse(buffNmeTmp.ToString());
+                        buffname = buffname.Replace(((JObject)buffNmeTmp)["buffStr"].ToString(),
+                            ((JObject)buffNmeTmp)["buffTrans"].ToString());
+                    }
 
-                for (var k = 0; k < TranslationListArray.Length; k++)
-                    if (buffname.Contains(TranslationListFullArray[k][0]))
-                        buffname = buffname.Replace(TranslationListFullArray[k][0], TranslationListFullArray[k][1]);
                 return buffname;
             }
             catch (Exception e)
@@ -2537,7 +2516,7 @@ namespace Altera
                         if (SKLFuncstrArray[j] == "" &&
                             lv10svalArray[j].Count(c => c == ',') == 1 &&
                             !lv10svalArray[j].Contains("Hide"))
-                            SKLFuncstrArray[j] = "HP回復";
+                            SKLFuncstrArray[j] = "HP回复";
                         ToggleFuncDiffer.Dispatcher.Invoke(() =>
                         {
                             if (ToggleFuncDiffer.IsChecked == true)
@@ -3292,7 +3271,6 @@ namespace Altera
             Dispatcher.Invoke(() =>
             {
                 var g = Content as Grid;
-                GlobalPathsAndDatas.TranslationListArray = null;
                 var childrensX = Starter.Children;
                 foreach (UIElement ui in childrensX)
                     if (ui is TextBox box)
@@ -3828,40 +3806,37 @@ namespace Altera
         public string CheckUniqueIndividuality(string id)
         {
             var idList = id.Split(',');
-            var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation.Split('|');
-            var IndividualityCommons = new string[TempSplit1.Length][];
-            for (var i = 0; i < TempSplit1.Length; i++)
-            {
-                var TempSplit2 = TempSplit1[i].Split('+');
-                IndividualityCommons[i] = new string[TempSplit2.Length];
-                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
-            }
-
             var Outputs = new List<string>();
             foreach (var ids in idList)
-                for (var k = 0; k < IndividualityCommons.Length; k++)
-                    if (!ids.Contains("-"))
-                    {
-                        if (ids == IndividualityCommons[k][0])
+            {
+                var trigger1 = true;
+                if (!ids.Contains("-"))
+                {
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                        if (((JObject)svtInditmp)["id"].ToString() == ids)
                         {
-                            Outputs.Add($"[{IndividualityCommons[k][1]}]");
+                            var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                            Outputs.Add($"[{svtIndiObj["individualityName"]}]");
+                            trigger1 = false;
                             break;
                         }
 
-                        if (k == IndividualityCommons.Length - 1 && ids != IndividualityCommons[k][0])
-                            Outputs.Add($"[特性/从者{ids}]");
-                    }
-                    else
-                    {
-                        if (ids.Replace("-", "") == IndividualityCommons[k][0])
+                    if (trigger1) Outputs.Add($"[特性/从者{ids}]");
+                }
+                else
+                {
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                        if (((JObject)svtInditmp)["id"].ToString() == ids.Replace("-", ""))
                         {
-                            Outputs.Add($"非[{IndividualityCommons[k][1]}]");
+                            var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                            Outputs.Add($"非[{svtIndiObj["individualityName"]}]");
+                            trigger1 = false;
                             break;
                         }
 
-                        if (k == IndividualityCommons.Length - 1 && ids.Replace("-", "") != IndividualityCommons[k][0])
-                            Outputs.Add($"非[特性/从者{ids.Replace("-", "")}]");
-                    }
+                    if (trigger1) Outputs.Add($"非[特性/从者{ids.Replace("-", "")}]");
+                }
+            }
 
             var outputArray = Outputs.ToArray();
             var strout = string.Join("+", outputArray);
@@ -3886,6 +3861,7 @@ namespace Altera
                 var applyTargetArray = applyTarget.Split(',');
                 var funcTypeListArray = funcTypeList.Split(',');
                 var xlsSvalIcon = specialIconXls.Split(',');
+                var specialTmp = "";
                 for (var m = 0; m <= bufficonidArray.Length - 1; m++)
                 {
                     bufficonBitmaps[m] = new BitmapImage(new Uri("bufficons\\bufficon_0.png", UriKind.Relative));
@@ -3903,7 +3879,7 @@ namespace Altera
                 for (var i = 0; i <= FuncArray.Length - 1; i++)
                 {
                     if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 1 &&
-                        !lv1Array[i].Contains("Hide")) FuncArray[i] = "HP回復";
+                        !lv1Array[i].Contains("Hide")) FuncArray[i] = "HP回复";
                     if (FuncArray[i] == "" && lv1Array[i].Count(c => c == ',') == 3 &&
                         lv1Array[i].Contains("DependFuncId1")) FuncArray[i] = "HP吸収";
                     if (ToggleFuncDiffer.IsChecked == true)
@@ -3923,8 +3899,8 @@ namespace Altera
                         if (applyTargetArray[i] == "2")
                         {
                             if (FuncArray[i].Contains("チャージ増加") || FuncArray[i].Contains("充能增加") ||
-                                FuncArray[i].Contains("クリティカル発生") || FuncArray[i].Contains("暴擊発生率") ||
-                                FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能減少") ||
+                                FuncArray[i].Contains("クリティカル発生") || FuncArray[i].Contains("暴击发生率") ||
+                                FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能减少") ||
                                 FuncArray[i].Contains("ハッピーハロウィン"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
@@ -3948,7 +3924,7 @@ namespace Altera
 
                         if (applyTargetArray[i] == "1")
                             if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") ||
-                                FuncArray[i].Contains("暴擊星掉落率") || FuncArray[i].Contains("NP減少") ||
+                                FuncArray[i].Contains("暴击星掉落率") || FuncArray[i].Contains("NP减少") ||
                                 FuncArray[i].Contains("ハッピーハロウィン"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
@@ -3979,14 +3955,20 @@ namespace Altera
                             else
                                 Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            /*SkillLvs.skill1forExcel +=
-                                xlsSvalIcon[i] + (targetlistArray[i].Contains("[") ? "·◑ " : " ") +
-                                FuncArray[i].Replace("\r\n", "") + " 【{" +
-                                (lv1Array[i].Replace("\r\n", " ") ==
-                                 lv10Array[i].Replace("\r\n", " ")
-                                    ? lv10Array[i].Replace("\r\n", " ")
-                                    : lv1Array[i].Replace("\r\n", " ") + "} - {" +
-                                      lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
+                            if (skill1details.Text == "")
+                            {
+                                SkillLvs.skill1forExcel +=
+                                    xlsSvalIcon[i] + (targetlistArray[i].Contains("[") ? "·◑ " : " ") +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
+
+                                break;
+                            }
+
                             SkillLvs.skill1forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -4003,14 +3985,20 @@ namespace Altera
                             else
                                 Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            /*SkillLvs.skill2forExcel +=
-                                xlsSvalIcon[i] + (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
-                                FuncArray[i].Replace("\r\n", "") + " 【{" +
-                                (lv1Array[i].Replace("\r\n", " ") ==
-                                 lv10Array[i].Replace("\r\n", " ")
-                                    ? lv10Array[i].Replace("\r\n", " ")
-                                    : lv1Array[i].Replace("\r\n", " ") + "} - {" +
-                                      lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
+                            if (skill2details.Text == "")
+                            {
+                                SkillLvs.skill2forExcel +=
+                                    xlsSvalIcon[i] +
+                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
+                                break;
+                            }
+
                             SkillLvs.skill2forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -4027,14 +4015,20 @@ namespace Altera
                             else
                                 Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            /*SkillLvs.skill3forExcel +=
-                                xlsSvalIcon[i] + (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
-                                FuncArray[i].Replace("\r\n", "") + " 【{" +
-                                (lv1Array[i].Replace("\r\n", " ") ==
-                                 lv10Array[i].Replace("\r\n", " ")
-                                    ? lv10Array[i].Replace("\r\n", " ")
-                                    : lv1Array[i].Replace("\r\n", " ") + "} - {" +
-                                      lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
+                            if (skill3details.Text == "")
+                            {
+                                SkillLvs.skill3forExcel +=
+                                    xlsSvalIcon[i] +
+                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
+                                break;
+                            }
+
                             SkillLvs.skill3forExcel += FuncArray[i].Replace("\r\n", "") + " 【{" +
                                                        (lv1Array[i].Replace("\r\n", " ") ==
                                                         lv10Array[i].Replace("\r\n", " ")
@@ -4131,7 +4125,7 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
-                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.76.0");
+                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.83.0");
                 result = resulttmp.ToString();
                 res = resulttmp.ToJson();
                 if (res["response"][0]["fail"]["action"] != null)
@@ -4639,30 +4633,25 @@ namespace Altera
             for (var j = 0; j <= 120; j++) LabelX[j] = levels[j].ToString();
             DataContext = this;
             GlobalPathsAndDatas.SvtIndividualityTranslation =
-                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
-                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data")
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName +
+                                                                             "SvtIndividualityTranslation.json"))
                     : null;
             GlobalPathsAndDatas.TDAttackNameTranslation =
-                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
-                    ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data")
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json"))
                     : null;
-            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
-            {
+            if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"))
                 GlobalPathsAndDatas.TranslationList =
-                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data");
-                GlobalPathsAndDatas.TranslationListArray =
-                    GlobalPathsAndDatas.TranslationList.Replace("\r\n", "")
-                        .Split('|');
-            }
+                    (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"));
             else
-            {
                 GlobalPathsAndDatas.TranslationList = null;
-                GlobalPathsAndDatas.TranslationListArray = null;
-            }
 
-            if (!File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.data") ||
-                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.data") ||
-                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.data"))
+            if (!File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json") ||
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json") ||
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"))
                 Dispatcher.Invoke(() => { Growl.Info("翻译列表缺失,建议先前往数据更新选项卡更新."); });
         }
 
@@ -5750,39 +5739,30 @@ namespace Altera
         public void CheckSvtIndividuality(object Input)
         {
             var IndividualityStringArray = Input.ToString().Split(',');
-            var TempSplit1 = GlobalPathsAndDatas.SvtIndividualityTranslation.Split('|');
-            var IndividualityCommons = new string[TempSplit1.Length][];
-            for (var i = 0; i < TempSplit1.Length; i++)
-            {
-                var TempSplit2 = TempSplit1[i].Split('+');
-                IndividualityCommons[i] = new string[TempSplit2.Length];
-                for (var j = 0; j < TempSplit2.Length; j++) IndividualityCommons[i][j] = TempSplit2[j];
-            }
-
             var CleanIndi = "";
             var Outputs = "";
+            var trigger1 = true;
             foreach (var Cases in IndividualityStringArray)
             {
                 if (Cases.Length >= 6) continue;
                 if (Cases == "5010" || Cases == "5000") continue;
-                for (var k = 0; k < IndividualityCommons.Length; k++)
-                {
-                    if (Cases == IndividualityCommons[k][0])
+                foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                    if (((JObject)svtInditmp)["id"].ToString() == Cases)
                     {
+                        var svtIndiObj = JObject.Parse(svtInditmp.ToString());
                         if (Cases.Substring(0, 1) == "3" && Cases.Length == 3)
-                            CleanIndi += IndividualityCommons[k][1] + "·";
+                            CleanIndi += svtIndiObj["individualityName"] + "·";
                         if (Cases.Length != 3 && Cases.Length != 1)
-                            Outputs += IndividualityCommons[k][1] + ",";
+                            Outputs += svtIndiObj["individualityName"] + ",";
+                        trigger1 = false;
                         break;
                     }
 
-                    if (k == IndividualityCommons.Length - 1 && Cases != IndividualityCommons[k][0])
-                        Outputs += "未知特性(" + Cases + "),";
-                }
+                if (trigger1) Outputs += "未知特性(" + Cases + "),";
             }
 
-            var SvtIndividualityAdd1 = SvtIndiSpec1(JB.svtid, IndividualityCommons);
-            var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityCommons, IndividualityStringArray);
+            var SvtIndividualityAdd1 = SvtIndiSpec1(JB.svtid);
+            var SvtIndividualityAdd2 = SvtIndiSpec2(JB.svtid, IndividualityStringArray);
             if (SvtIndividualityAdd1 != "") Outputs += SvtIndividualityAdd1;
             if (SvtIndividualityAdd2 != "") Outputs += SvtIndividualityAdd2;
             if (!Outputs.Contains("被EA特攻")) Outputs += "不被EA特攻,";
@@ -5800,7 +5780,7 @@ namespace Altera
             IndividualalityClean.Dispatcher.Invoke(() => { IndividualalityClean.Text = CleanIndi; });
         }
 
-        private string SvtIndiSpec1(string SvtID, string[][] CheckList)
+        private string SvtIndiSpec1(string SvtID)
         {
             var resultstring = "";
             foreach (var mstSvtIndividualitytmp in GlobalPathsAndDatas.mstSvtIndividualityArray)
@@ -5819,10 +5799,11 @@ namespace Altera
             foreach (var Cases in SpIndiList)
             {
                 if (Cases == "5010" || Cases == "5000") continue;
-                for (var k = 0; k < CheckList.Length; k++)
-                    if (Cases == CheckList[k][0])
+                foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                    if (((JObject)svtInditmp)["id"].ToString() == Cases)
                     {
-                        CheckedName += CheckList[k][1] + ",";
+                        var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                        CheckedName += svtIndiObj["individualityName"] + ",";
                         break;
                     }
             }
@@ -5830,7 +5811,7 @@ namespace Altera
             return CheckedName;
         }
 
-        private string SvtIndiSpec2(string SvtID, string[][] CheckList, string[] originList)
+        private string SvtIndiSpec2(string SvtID, string[] originList)
         {
             var Limitindi0 = "";
             var Limitindi1 = "";
@@ -5897,12 +5878,13 @@ namespace Altera
                 {
                     if (Cases == "5010" || Cases == "5000") continue;
                     if (originList.Contains(Cases)) continue;
-                    foreach (var t in CheckList)
-                    {
-                        if (Cases != t[0]) continue;
-                        Othertmp += t[1] + "、";
-                        break;
-                    }
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                        if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                        {
+                            var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                            Othertmp += svtIndiObj["individualityName"] + "、";
+                            break;
+                        }
                 }
 
                 try
@@ -5932,12 +5914,13 @@ namespace Altera
                 {
                     if (Cases == "5010" || Cases == "5000") continue;
                     if (originList.Contains(Cases)) continue;
-                    foreach (var t in CheckList)
-                    {
-                        if (Cases != t[0]) continue;
-                        CheckedName += t[1] + "、";
-                        break;
-                    }
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                        if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                        {
+                            var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                            CheckedName += svtIndiObj["individualityName"] + "、";
+                            break;
+                        }
                 }
 
                 try

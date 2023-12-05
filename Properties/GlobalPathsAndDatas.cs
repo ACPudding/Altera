@@ -53,8 +53,7 @@ namespace Altera.Properties
         public static DateTime StartTime;
         public static string NewerVersion;
         public static MessageBoxResult SuperMsgBoxRes;
-        public static string TranslationList;
-        public static string[] TranslationListArray = null;
+        public static JArray TranslationList;
         public static int basichp;
         public static int basicatk;
         public static int maxhp;
@@ -73,8 +72,8 @@ namespace Altera.Properties
         public static string AS2D;
         public static string AS3N;
         public static string AS3D;
-        public static string TDAttackNameTranslation;
-        public static string SvtIndividualityTranslation;
+        public static JArray TDAttackNameTranslation;
+        public static JArray SvtIndividualityTranslation;
         public static decimal lv100hp;
         public static decimal lv100atk;
         public static decimal lv120hp;
