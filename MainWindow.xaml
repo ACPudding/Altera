@@ -23,7 +23,7 @@
                     <TextBox x:Name="textbox1" HorizontalAlignment="Left" Height="14" Margin="260,214,0,0"
                              TextWrapping="Wrap"
                              VerticalAlignment="Top" Width="295" MaxLength="7" MaxLines="1"
-                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" />
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" KeyDown="TextBox_Press_Enter" />
                     <TextBlock x:Name="SvtIDHelper" HorizontalAlignment="Left" Height="16" Margin="560,228,0,0"
                                TextWrapping="Wrap"
                                Text=""
@@ -1231,13 +1231,13 @@
                                     </ListView.Background>
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="职介技能" Width="200"
+                                            <GridViewColumn Header="职介技能" Width="125"
                                                             DisplayMemberBinding="{Binding ClassPassiveName}" />
                                             <GridViewColumn Header="ID" Width="90"
                                                             DisplayMemberBinding="{Binding ClassPassiveID}" />
-                                            <GridViewColumn Header="效果描述" Width="300"
+                                            <GridViewColumn Header="效果描述" Width="325"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncName}" />
-                                            <GridViewColumn Header="效果数值" Width="200"
+                                            <GridViewColumn Header="效果数值" Width="255"
                                                             DisplayMemberBinding="{Binding ClassPassiveFuncSval}" />
                                         </GridView>
                                     </ListView.View>

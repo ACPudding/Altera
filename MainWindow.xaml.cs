@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Altera.Properties;
@@ -658,26 +659,31 @@ namespace Altera
                 RankString[13] = "A++";
                 RankString[14] = "A-";
                 RankString[15] = "A+++";
+                RankString[16] = "A?";
                 RankString[21] = "B";
                 RankString[22] = "B+";
                 RankString[23] = "B++";
                 RankString[24] = "B-";
                 RankString[25] = "B+++";
+                RankString[26] = "B?";
                 RankString[31] = "C";
                 RankString[32] = "C+";
                 RankString[33] = "C++";
                 RankString[34] = "C-";
                 RankString[35] = "C+++";
+                RankString[36] = "C?";
                 RankString[41] = "D";
                 RankString[42] = "D+";
                 RankString[43] = "D++";
                 RankString[44] = "D-";
                 RankString[45] = "D+++";
+                RankString[46] = "D?";
                 RankString[51] = "E";
                 RankString[52] = "E+";
                 RankString[53] = "E++";
                 RankString[54] = "E-";
                 RankString[55] = "E+++";
+                RankString[56] = "E?";
                 RankString[61] = "EX";
                 RankString[98] = "?";
                 RankString[0] = "-";
@@ -771,26 +777,31 @@ namespace Altera
                 npratemagicbase[13] = 1.03M;
                 npratemagicbase[14] = 1.015M;
                 npratemagicbase[15] = 1.035M;
+                npratemagicbase[16] = 0.0M;
                 npratemagicbase[21] = 1M;
                 npratemagicbase[22] = 1.005M;
                 npratemagicbase[23] = 1.01M;
                 npratemagicbase[24] = 0.995M;
                 npratemagicbase[25] = 1.015M;
+                npratemagicbase[26] = 0.0M;
                 npratemagicbase[31] = 0.99M;
                 npratemagicbase[32] = 0.9925M;
                 npratemagicbase[33] = 0.995M;
                 npratemagicbase[34] = 0.985M;
                 npratemagicbase[35] = 0.9975M;
+                npratemagicbase[36] = 0.0M;
                 npratemagicbase[41] = 0.98M;
                 npratemagicbase[42] = 0.9825M;
                 npratemagicbase[43] = 0.985M;
                 npratemagicbase[44] = 0.975M;
                 npratemagicbase[45] = 0.9875M;
+                npratemagicbase[46] = 0.0M;
                 npratemagicbase[51] = 0.97M;
                 npratemagicbase[52] = 0.9725M;
                 npratemagicbase[53] = 0.975M;
                 npratemagicbase[54] = 0.965M;
                 npratemagicbase[55] = 0.9775M;
+                npratemagicbase[56] = 0.0M;
                 npratemagicbase[61] = 1.04M;
                 npratemagicbase[0] = 0.0M;
                 npratemagicbase[99] = 0.0M;
@@ -2277,15 +2288,14 @@ namespace Altera
                 File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json")
                     ? (JArray)JsonConvert.DeserializeObject(File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName +
                                                                              "SvtIndividualityTranslation.json"))
-                    : (JArray)JsonConvert.DeserializeObject(File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName +
-                                                                             "SvtIndividualityTranslation.json"));
-
+                    : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(IndividualListLinkA,
+                        IndividualListLinkB));
             GlobalPathsAndDatas.TDAttackNameTranslation =
                 File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json")
                     ? (JArray)JsonConvert.DeserializeObject(
                         File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json"))
-                    : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(IndividualListLinkA,
-                        IndividualListLinkB));
+                    : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(TDAttackNameTranslationListLinkA,
+                        TDAttackNameTranslationListLinkB));
             var tmpFuncTypeData = File.Exists(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 : HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
@@ -2517,6 +2527,12 @@ namespace Altera
                             lv10svalArray[j].Count(c => c == ',') == 1 &&
                             !lv10svalArray[j].Contains("Hide"))
                             SKLFuncstrArray[j] = "HP回复";
+                        if (SKLFuncstrArray[j] == "" &&
+                            (lv10svalArray[j].Contains("ShowQuestNoEffect") || lv10svalArray[j].Contains("1000,-1,-1")))
+                            SKLFuncstrArray[j] = "∅";
+                        if (SKLFuncstrArray[j] == "" &&
+                            lv10svalArray[j].Contains("ShowState") && lv10svalArray[j].Contains("5000,-1,-1"))
+                            SKLFuncstrArray[j] = "∅";
                         ToggleFuncDiffer.Dispatcher.Invoke(() =>
                         {
                             if (ToggleFuncDiffer.IsChecked == true)
@@ -2557,12 +2573,18 @@ namespace Altera
 
                     ClassPassiveFuncList.Dispatcher.Invoke(() =>
                     {
+                        var fixedIndex = (CPDetail.Length - CPDetail.Length % 24) / 24;
+                        var fixedDetail = CPDetail;
+                        if (fixedIndex > 0)
+                            for (var j = 1; j <= fixedIndex; j++)
+                                fixedDetail = fixedDetail.Insert(24 * j - 1, "\r\n");
+                        /*var fixedDetail = CPDetail.Length > 100 ? CPDetail.Insert(24, "\r\n").Insert(49, "\r\n").Insert(74, "\r\n").Insert(99, "\r\n") : CPDetail.Length > 75 ? CPDetail.Insert(24, "\r\n").Insert(49, "\r\n").Insert(74, "\r\n") : CPDetail.Length > 50
+                            ? CPDetail.Insert(24, "\r\n").Insert(49, "\r\n")
+                            : CPDetail.Length > 25
+                                ? CPDetail.Insert(24, "\r\n")
+                                : CPDetail;*/
                         ClassPassiveFuncList.Items.Add(new ClassPassiveSvalList(ClassPassiveSkillFuncName,
-                            svtClassPassiveIDListArray[i], CPDetail.Length > 50
-                                ? CPDetail.Insert(24, "\r\n").Insert(49, "\r\n")
-                                : CPDetail.Length > 25
-                                    ? CPDetail.Insert(24, "\r\n")
-                                    : CPDetail, SvalStr));
+                            svtClassPassiveIDListArray[i], fixedDetail, SvalStr));
                     });
                 }
 
@@ -5510,26 +5532,31 @@ namespace Altera
                 endurancebase[13] = 1.03M;
                 endurancebase[14] = 1.015M;
                 endurancebase[15] = 1.035M;
+                endurancebase[16] = 0.0M;
                 endurancebase[21] = 1M;
                 endurancebase[22] = 1.005M;
                 endurancebase[23] = 1.01M;
                 endurancebase[24] = 0.995M;
                 endurancebase[25] = 1.015M;
+                endurancebase[26] = 0.0M;
                 endurancebase[31] = 0.99M;
                 endurancebase[32] = 0.9925M;
                 endurancebase[33] = 0.995M;
                 endurancebase[34] = 0.985M;
                 endurancebase[35] = 0.9975M;
+                endurancebase[36] = 0.0M;
                 endurancebase[41] = 0.98M;
                 endurancebase[42] = 0.9825M;
                 endurancebase[43] = 0.985M;
                 endurancebase[44] = 0.975M;
                 endurancebase[45] = 0.9875M;
+                endurancebase[46] = 0.0M;
                 endurancebase[51] = 0.97M;
                 endurancebase[52] = 0.9725M;
                 endurancebase[53] = 0.975M;
                 endurancebase[54] = 0.965M;
                 endurancebase[55] = 0.9775M;
+                endurancebase[56] = 0.0M;
                 endurancebase[61] = 1.04M;
                 endurancebase[0] = 0.0M;
                 endurancebase[99] = 0.0M;
@@ -5770,6 +5797,7 @@ namespace Altera
             {
                 CleanIndi = CleanIndi.Substring(0, CleanIndi.Length - 1);
                 Outputs = Outputs.Substring(0, Outputs.Length - 1);
+                if (Outputs[Outputs.Length - 1] == ',') Outputs = Outputs.Substring(0, Outputs.Length - 1);
             }
             catch (Exception)
             {
@@ -5782,23 +5810,65 @@ namespace Altera
 
         private string SvtIndiSpec1(string SvtID)
         {
-            var resultstring = "";
+            var resultstring = new string[4];
             foreach (var mstSvtIndividualitytmp in GlobalPathsAndDatas.mstSvtIndividualityArray)
             {
                 if (((JObject)mstSvtIndividualitytmp)["svtId"].ToString() != SvtID) continue;
-                if (((JObject)mstSvtIndividualitytmp)["idx"].ToString() != "1") continue;
-                if (((JObject)mstSvtIndividualitytmp)["limitCount"].ToString() != "-1") continue;
-                resultstring = ((JObject)mstSvtIndividualitytmp)["individuality"].ToString().Replace("\n", "")
-                    .Replace("\t", "")
-                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                if (((JObject)mstSvtIndividualitytmp)["eventId"].ToString() != "0") continue;
+                switch (((JObject)mstSvtIndividualitytmp)["limitCount"].ToString())
+                {
+                    case "-1":
+                        resultstring[0] = ((JObject)mstSvtIndividualitytmp)["individuality"].ToString()
+                            .Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "0":
+                        resultstring[1] = ((JObject)mstSvtIndividualitytmp)["individuality"].ToString()
+                            .Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "1":
+                        resultstring[2] = ((JObject)mstSvtIndividualitytmp)["individuality"].ToString()
+                            .Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                    case "3":
+                        resultstring[3] = ((JObject)mstSvtIndividualitytmp)["individuality"].ToString()
+                            .Replace("\n", "")
+                            .Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        break;
+                }
             }
 
-            if (resultstring == "") return "";
-            var SpIndiList = resultstring.Split(',');
-            var CheckedName = "";
-            foreach (var Cases in SpIndiList)
+            var tmpIndiList = new List<string>();
+
+            for (var i = 1; i <= 3; i++)
+                if (!string.IsNullOrEmpty(resultstring[i]))
+                {
+                    var tmpIndiSplitItems = resultstring[i].Split(',');
+                    foreach (var k in tmpIndiSplitItems) tmpIndiList.Add(k);
+                }
+
+            if (resultstring[0] == "" && tmpIndiList.Count == 0) return "";
+            string[] SpIndiList1 = null;
+            try
             {
-                if (Cases == "5010" || Cases == "5000") continue;
+                SpIndiList1 = resultstring[0].Split(',');
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+
+            var CheckedName = "";
+            foreach (var Cases in SpIndiList1)
+            {
+                if (Cases == "5010" || Cases == "5000" || Cases == "400" || Cases == "401" || Cases == "402" ||
+                    Cases == "403" || Cases == "404" || Cases == "405") continue;
                 foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
                     if (((JObject)svtInditmp)["id"].ToString() == Cases)
                     {
@@ -5806,6 +5876,232 @@ namespace Altera
                         CheckedName += svtIndiObj["individualityName"] + ",";
                         break;
                     }
+            }
+
+            var hashArray = new HashSet<string>(tmpIndiList).ToArray();
+            var selectionSumArray = new int[hashArray.Length];
+            for (var zeroValue = 0; zeroValue < selectionSumArray.Length; zeroValue++) selectionSumArray[zeroValue] = 0;
+
+            var additionVal = new int[4];
+            additionVal[1] = 1;
+            additionVal[2] = 2;
+            additionVal[3] = 4;
+            foreach (var items in hashArray)
+                for (var i = 1; i <= 3; i++)
+                    if (!string.IsNullOrEmpty(resultstring[i]))
+                        foreach (var key in resultstring[i].Split(','))
+                            if (items == key)
+                                selectionSumArray[Array.IndexOf(hashArray, items)] += additionVal[i];
+
+            for (var selectionIndex = 1; selectionIndex <= 7; selectionIndex++)
+            {
+                var dispList = new List<string>();
+                var tmpOutputStr = "";
+                switch (selectionIndex)
+                {
+                    case 1:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 1)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅰ),";
+                        break;
+                    case 2:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 2)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅱ),";
+                        break;
+                    case 3:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 3)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅰ,Ⅱ),";
+                        break;
+                    case 4:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 4)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅲ),";
+                        break;
+                    case 5:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 5)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅰ,Ⅲ),";
+                        break;
+                    case 6:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 6)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        tmpOutputStr += "[";
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + "(再临阶段Ⅱ,Ⅲ),";
+                        break;
+                    case 7:
+                        for (var ii = 0; ii < hashArray.Length; ii++)
+                            if (selectionSumArray[ii] == 7)
+                                dispList.Add(hashArray[ii]);
+                        if (dispList.Count == 0) break;
+                        foreach (var Cases in dispList.ToArray())
+                        {
+                            if (Cases == "5010" || Cases == "5000") continue;
+                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                                {
+                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                                    tmpOutputStr += svtIndiObj["individualityName"] + ",";
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1);
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                        CheckedName += tmpOutputStr + ",";
+                        break;
+                }
             }
 
             return CheckedName;
@@ -6089,6 +6385,14 @@ namespace Altera
             {
                 Dispatcher.Invoke(() => { MessageBox.Error("未找到相关模块,请检查.", "错误"); });
             }
+        }
+
+        private void TextBox_Press_Enter(object sender, KeyEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (e.Key == Key.Enter && Button1.IsEnabled) Button_Click(sender, e);
+            });
         }
 
 

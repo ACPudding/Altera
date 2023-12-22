@@ -116,6 +116,23 @@ namespace Altera
                 case 174:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+
+                    if (Tempsval.Length == 5)
                     {
                         if ((Funcname.Contains("延长") || Funcname.Contains("延長")) && Tempsval[3].Contains("TargetList"))
                             try
@@ -133,25 +150,6 @@ namespace Altera
                                 break;
                             }
 
-                        try
-                        {
-                            output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
-                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
-                                         ? ""
-                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
-                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
-                            break;
-                        }
-                        catch (Exception)
-                        {
-                            output = Funcsval;
-                            break;
-                        }
-                    }
-
-                    if (Tempsval.Length == 5)
-                    {
                         if (Tempsval[4].Contains("ShowQuestNoEffect") ||
                             Tempsval[4].Contains("IncludePassiveIndividuality") ||
                             Tempsval[4].Contains("CheckDuplicate"))
@@ -1484,7 +1482,7 @@ namespace Altera
                     break;
                 case 175:
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length == 4)
+                    if (Tempsval.Length == 5)
                         try
                         {
                             output =
@@ -2009,6 +2007,7 @@ namespace Altera
                 case "延焼":
                 case "死の淵":
                 case "NiceShot!":
+                case "祭神の怒り":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                         try
@@ -2160,6 +2159,73 @@ namespace Altera
                     }
 
                     break;
+            }
+
+            if (Funcname == "∅" && Funcsval.Contains("ShowQuestNoEffect"))
+            {
+                Tempsval = Funcsval.Split(',');
+                if (Tempsval.Length == 5)
+                    try
+                    {
+                        output =
+                            $"场地{Tempsval[3]}" +
+                            (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                            (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                            (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+                else
+                    output = Funcsval;
+            }
+
+            if (Funcname == "∅")
+            {
+                Tempsval = Funcsval.Split(',');
+                switch (Tempsval.Length)
+                {
+                    case 3:
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 6 when Tempsval[4].Contains("ShowState"):
+                        try
+                        {
+                            output =
+                                $"场地{Tempsval[3]}" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    default:
+                        output = Funcsval;
+                        break;
+                }
             }
 
             if (Funcname.Contains("追加効果") || Funcname.Contains("攻击时发动"))
