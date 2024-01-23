@@ -152,7 +152,8 @@ namespace Altera
 
                         if (Tempsval[4].Contains("ShowQuestNoEffect") ||
                             Tempsval[4].Contains("IncludePassiveIndividuality") ||
-                            Tempsval[4].Contains("CheckDuplicate"))
+                            Tempsval[4].Contains("CheckDuplicate") ||
+                            Tempsval[4].Contains("ExcludeUnSubStateIndiv"))
                             try
                             {
                                 output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
@@ -2183,7 +2184,7 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname == "∅")
+            if (Funcname == "∅" && !Funcsval.Contains("ShowQuestNoEffect"))
             {
                 Tempsval = Funcsval.Split(',');
                 switch (Tempsval.Length)

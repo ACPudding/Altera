@@ -2173,16 +2173,6 @@ namespace Altera
                                     TDlv1OC1strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                                 TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
                                     TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
-                                /*SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
-                                                           ? svtTDtargetIconArray[i] +
-                                                             (svtTDTargetArray[i].Contains("[") && !svtTDtargetIconArray[i].Contains("◑") ?  "·◑ " : " ") +
-                                                             TDFuncstrArray[i].Replace("\r\n", "")
-                                                           : svtTDtargetIconArray[i] + "未知效果") +
-                                                       " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
-                                                                TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                           ? TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                           : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
-                                                             TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";*/
                                 SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                            ? TDFuncstrArray[i].Replace("\r\n", "")
                                                            : "未知效果") +
@@ -2191,6 +2181,30 @@ namespace Altera
                                                            ? TDlv5OC5strArray[i].Replace("\r\n", " ")
                                                            : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
                                                              TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                                /*if (npdetail.Text == "" || npdetail.Text == "unknown" || npdetail.Text == "该宝具暂时没有描述.")
+                                {
+                                    SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                               ? svtTDtargetIconArray[i] +
+                                                                 (svtTDTargetArray[i].Contains("[") && !svtTDtargetIconArray[i].Contains("<特殊·参考实际情况>") ? "·<特殊·参考实际情况> " : " ") +
+                                                                 TDFuncstrArray[i].Replace("\r\n", "")
+                                                               : svtTDtargetIconArray[i] + "未知效果") +
+                                                           " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                                    TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                               ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                               : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                                 TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                                }
+                                else
+                                {
+                                    SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                               ? TDFuncstrArray[i].Replace("\r\n", "")
+                                                               : "未知效果") +
+                                                           " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                                    TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                               ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                               : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                                 TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                                }*/
                             }
 
                             if (ToggleFuncDiffer.IsChecked != true) return;
@@ -2212,25 +2226,29 @@ namespace Altera
                                 TDlv4OC4strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                             TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
                                 TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
-
-                            /*SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
-                                                       ? svtTDtargetIconArray[i] +
-                                                         (svtTDTargetArray[i].Contains("[") && !svtTDtargetIconArray[i].Contains("◑") ? "·◑ " : " ") +
-                                                         TDFuncstrArray[i].Replace("\r\n", "")
-                                                       : svtTDtargetIconArray[i] + "未知效果") +
-                                                   " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
-                                                            TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       ? TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
-                                                         TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";*/
-                            SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
-                                                       ? TDFuncstrArray[i].Replace("\r\n", "")
-                                                       : "未知效果") +
-                                                   " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
-                                                            TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       ? TDlv5OC5strArray[i].Replace("\r\n", " ")
-                                                       : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
-                                                         TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                            if (npdetail.Text == "" || npdetail.Text == "unknown" || npdetail.Text == "该宝具暂时没有描述.")
+                                SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                           ? svtTDtargetIconArray[i] +
+                                                             (svtTDTargetArray[i].Contains("[") &&
+                                                              !svtTDtargetIconArray[i].Contains("<特殊·参考实际情况>")
+                                                                 ? "·<特殊·参考实际情况> "
+                                                                 : " ") +
+                                                             TDFuncstrArray[i].Replace("\r\n", "")
+                                                           : svtTDtargetIconArray[i] + "未知效果") +
+                                                       " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                                TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                           ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                           : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                             TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
+                            else
+                                SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
+                                                           ? TDFuncstrArray[i].Replace("\r\n", "")
+                                                           : "未知效果") +
+                                                       " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
+                                                                TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                           ? TDlv5OC5strArray[i].Replace("\r\n", " ")
+                                                           : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
+                                                             TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
                         }
 
                         var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i]
@@ -3606,6 +3624,8 @@ namespace Altera
                             }
                         }
 
+                        if (skfuncidtmp == "21302" || skfuncidtmp == "21303") funcnametmp = "血塗れの皇子(条件满足时)";
+
                         svtSKTargetList.Add(targetstr);
                         svtSKbufficonList.Add(popupIcon);
                         svtSKapplyTargetList.Add(applyTarget);
@@ -3697,7 +3717,7 @@ namespace Altera
         public string FuncTargetDisplayIconStr(string targetType)
         {
             string targetstr = null;
-            switch (targetType)
+            /*switch (targetType)
             {
                 case "0":
                     targetstr = "☺";
@@ -3716,6 +3736,28 @@ namespace Altera
                     break;
                 default:
                     targetstr = "◑";
+                    break;
+            }
+            */
+            switch (targetType)
+            {
+                case "0":
+                    targetstr = "<自身>";
+                    break;
+                case "1":
+                    targetstr = "<己方·单体>";
+                    break;
+                case "3":
+                    targetstr = "<己方·全体>";
+                    break;
+                case "4":
+                    targetstr = "<敌方·单体>";
+                    break;
+                case "6":
+                    targetstr = "<敌方·全体>";
+                    break;
+                default:
+                    targetstr = "<特殊·参考实际情况>";
                     break;
             }
 
@@ -3980,7 +4022,10 @@ namespace Altera
                             if (skill1details.Text == "")
                             {
                                 SkillLvs.skill1forExcel +=
-                                    xlsSvalIcon[i] + (targetlistArray[i].Contains("[") ? "·◑ " : " ") +
+                                    xlsSvalIcon[i] +
+                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
+                                        ? "·<特殊·参考实际情况> "
+                                        : " ") +
                                     FuncArray[i].Replace("\r\n", "") + " 【{" +
                                     (lv1Array[i].Replace("\r\n", " ") ==
                                      lv10Array[i].Replace("\r\n", " ")
@@ -4011,7 +4056,9 @@ namespace Altera
                             {
                                 SkillLvs.skill2forExcel +=
                                     xlsSvalIcon[i] +
-                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
+                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
+                                        ? "·<特殊·参考实际情况> "
+                                        : " ") +
                                     FuncArray[i].Replace("\r\n", "") + " 【{" +
                                     (lv1Array[i].Replace("\r\n", " ") ==
                                      lv10Array[i].Replace("\r\n", " ")
@@ -4041,7 +4088,9 @@ namespace Altera
                             {
                                 SkillLvs.skill3forExcel +=
                                     xlsSvalIcon[i] +
-                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("◑") ? "·◑ " : " ") +
+                                    (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
+                                        ? "·<特殊·参考实际情况> "
+                                        : " ") +
                                     FuncArray[i].Replace("\r\n", "") + " 【{" +
                                     (lv1Array[i].Replace("\r\n", " ") ==
                                      lv10Array[i].Replace("\r\n", " ")
@@ -5897,208 +5946,54 @@ namespace Altera
             {
                 var dispList = new List<string>();
                 var tmpOutputStr = "";
+
+                for (var ii = 0; ii < hashArray.Length; ii++)
+                    if (selectionSumArray[ii] == selectionIndex)
+                        dispList.Add(hashArray[ii]);
+                if (dispList.Count == 0) break;
+                tmpOutputStr += "[";
+                foreach (var Cases in dispList.ToArray())
+                {
+                    if (Cases == "5010" || Cases == "5000") continue;
+                    foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
+                        if (((JObject)svtInditmp)["id"].ToString() == Cases)
+                        {
+                            var svtIndiObj = JObject.Parse(svtInditmp.ToString());
+                            tmpOutputStr += svtIndiObj["individualityName"] + "、";
+                            break;
+                        }
+                }
+
+                try
+                {
+                    tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+
                 switch (selectionIndex)
                 {
                     case 1:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 1)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅰ),";
                         break;
                     case 2:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 2)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅱ),";
                         break;
                     case 3:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 3)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅰ,Ⅱ),";
                         break;
                     case 4:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 4)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅲ),";
                         break;
                     case 5:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 5)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅰ,Ⅲ),";
                         break;
                     case 6:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 6)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        tmpOutputStr += "[";
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + "、";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1) + "]";
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + "(再临阶段Ⅱ,Ⅲ),";
                         break;
                     case 7:
-                        for (var ii = 0; ii < hashArray.Length; ii++)
-                            if (selectionSumArray[ii] == 7)
-                                dispList.Add(hashArray[ii]);
-                        if (dispList.Count == 0) break;
-                        foreach (var Cases in dispList.ToArray())
-                        {
-                            if (Cases == "5010" || Cases == "5000") continue;
-                            foreach (var svtInditmp in GlobalPathsAndDatas.SvtIndividualityTranslation)
-                                if (((JObject)svtInditmp)["id"].ToString() == Cases)
-                                {
-                                    var svtIndiObj = JObject.Parse(svtInditmp.ToString());
-                                    tmpOutputStr += svtIndiObj["individualityName"] + ",";
-                                    break;
-                                }
-                        }
-
-                        try
-                        {
-                            tmpOutputStr = tmpOutputStr.Substring(0, tmpOutputStr.Length - 1);
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
-
                         CheckedName += tmpOutputStr + ",";
                         break;
                 }
@@ -6256,7 +6151,7 @@ namespace Altera
             var OutputString = "";
             for (var j = 0; j < ListDisplayAfter.Length; j++)
             {
-                if (UniqueIndiStringArray[j] == "") continue;
+                if (UniqueIndiStringArray[j] == "" || UniqueIndiStringArray[j] == "]") continue;
                 OutputString += UniqueIndiStringArray[j] + "(再临阶段" +
                                 ListDisplayAfter[j].Replace("0", "Ⅰ").Replace("1,2", "Ⅱ").Replace("3,4", "Ⅲ") + "),";
             }
