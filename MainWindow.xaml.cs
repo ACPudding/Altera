@@ -2563,6 +2563,7 @@ namespace Altera
                     var tmpexcelText = "";
                     for (var k = 0; k <= SKLFuncstrArray.Length - 1; k++)
                     {
+                        if (svtClassPassiveIDListArray[i] == "2342350" && k == 3) break; //屏蔽有珠职介技能显示
                         if (lv10svalArray[k].Contains("5000,-1,-1,OnFieldCount:-1,ShowState:-1")) continue;
                         tmpexcelText += SKLFuncstrArray[k] + "[" + lv10svalArray[k].Replace("\r\n", "") + "]" + " & ";
                     }
@@ -2585,6 +2586,7 @@ namespace Altera
                     var SvalStr = "\r\n";
                     for (var q = 0; q < lv10svalArray.Length; q++)
                     {
+                        if (svtClassPassiveIDListArray[i] == "2342350" && q == 3) break; //屏蔽有珠职介技能显示
                         if (lv10svalArray[q].Contains("5000,-1,-1,OnFieldCount:-1,ShowState:-1")) continue;
                         SvalStr += SKLFuncstrArray[q] + $"[{lv10svalArray[q]}]" + "\r\n";
                     }
@@ -2642,6 +2644,10 @@ namespace Altera
                     skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
                         .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
                     skilllv10sval = skilllv10sval.Substring(0, skilllv10sval.Length - 2);
+                    skilllv10sval =
+                        skilllv10sval.Replace(
+                            "|1000,-1,-1,970496,Value2:1,ShowState:-1|1000,-1,-1,970497,Value2:1,ShowState:-1|1000,-1,-1,970505,Value2:1,ShowState:-1",
+                            ""); //屏蔽青子被动检测
                     svtSKFuncID = SKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
                         .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                     svtSKFuncIDList = new List<string>(svtSKFuncID.Split(','));
@@ -2651,6 +2657,8 @@ namespace Altera
                         var funcnametmp = "";
                         foreach (var skfuncidtmp in svtSKFuncIDArray)
                         {
+                            if (skfuncidtmp == "21663" || skfuncidtmp == "21664" || skfuncidtmp == "21697")
+                                continue; //屏蔽青子被动检测
                             foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                             {
                                 if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;

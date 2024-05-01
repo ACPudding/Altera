@@ -224,6 +224,25 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[4].Contains("TriggeredTargetHpRateRange"))
+                            try
+                            {
+                                output = Convert.ToDouble(Tempsval[3]) / 10 + "% (Hp处于" +
+                                         Convert.ToDouble(Tempsval[4].Replace("TriggeredTargetHpRateRange:<", "")) /
+                                         10 + "%生效)" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         if (Tempsval[4].Contains("ShowState"))
                             try
                             {
@@ -658,6 +677,24 @@ namespace Altera
                             break;
                         }
 
+                    if (Tempsval.Length == 4)
+                        try
+                        {
+                            output = "指令卡变更: " +
+                                     Tempsval[3].Replace("1", "Arts").Replace("2", "Buster").Replace("3", "Quick") +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+
                     output = Funcsval;
                     break;
                 case 143:
@@ -927,6 +964,23 @@ namespace Altera
                 case 28:
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
+                        try
+                        {
+                            output = Tempsval[3] + "HP" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
+
+                    if (Tempsval.Length == 8)
                         try
                         {
                             output = Tempsval[3] + "HP" +
@@ -1504,10 +1558,76 @@ namespace Altera
                         try
                         {
                             output =
+                                $"∅ (特性{Tempsval[3].Replace("TargetList:", "")} 移除{Tempsval[4].Replace("AllowRemoveBuff:", "")}个)" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
+                case 177:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 3)
+                        try
+                        {
+                            output =
                                 "∅" +
                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                     ? ""
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
+                case 179:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 6)
+                        try
+                        {
+                            output =
+                                $"∅(特性{Tempsval[4].Replace("SameBuffLimitTargetIndividuality:", "")},最大叠加{Tempsval[5].Replace("SameBuffLimitNum:", "")}个)" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
+                case 180:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 2)
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + (Tempsval[0] == "1000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
+                case 181:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 8)
+                        try
+                        {
+                            output = "∅" + (Tempsval[0] == "1000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
                         }
                         catch (Exception)
                         {
@@ -1622,6 +1742,23 @@ namespace Altera
                             }
 
                         if (Funcname.Contains("必中") && Tempsval[3].Contains("ShowQuestNoEffect"))
+                            try
+                            {
+                                output = "∅" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        if (Funcname.Contains("対粛正防御") && Tempsval[3].Contains("ShowState"))
                             try
                             {
                                 output = "∅" +
@@ -1798,6 +1935,7 @@ namespace Altera
             {
                 case "NP増加":
                 case "NP減少":
+                case "NP倍化":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                         if (Tempsval[2].Contains("Act") && Tempsval[3].Contains("Act"))
@@ -1841,6 +1979,20 @@ namespace Altera
                                 output = Funcsval;
                                 break;
                             }
+
+                    if (Tempsval.Length == 2)
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + (Tempsval[0] == "1000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                            break;
+                        }
 
                     try
                     {
@@ -2206,6 +2358,42 @@ namespace Altera
                         }
 
                         break;
+                    case 4:
+                        try
+                        {
+                            output =
+                                Tempsval[3] +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 5 when Tempsval[4].Contains("Value2") && Tempsval[3].Length == 6:
+                        try
+                        {
+                            var Lv = "1";
+                            if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
+                            var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
+                            output = "\r\n" + Clockval + " " +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
                     case 6 when Tempsval[4].Contains("ShowState"):
                         try
                         {
@@ -2216,6 +2404,31 @@ namespace Altera
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                 (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                 (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 6 when Tempsval[5].Contains("ShowState") && Tempsval[3].Length == 6: //暂时屏蔽此处显示(青子需要后续再分析)
+                        try
+                        {
+                            output = "" +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                            /*var Lv = "1";
+                            if (Tempsval[4].Contains("Value2")) Lv = Tempsval[4].Replace("Value2:", "");
+                            var Clockval = FindClockBuff(Tempsval[3], Lv, ignoreEnemyFunc);
+                            output = "\r\n" + Clockval + " " +
+                                     (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                         ? ""
+                                         : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");*/
                         }
                         catch (Exception)
                         {
@@ -2597,7 +2810,26 @@ namespace Altera
                     output = Funcsval;
             }
 
-            if (Funcname == "人格交换" || Funcname.Contains("暫無翻譯")) output = Funcsval;
+            if (Funcname == "svtID切换")
+            {
+                Tempsval = Funcsval.Split(',');
+                if (Tempsval.Length == 3)
+                    try
+                    {
+                        output = "切换从者ID为: " + Tempsval[1] +
+                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                     ? ""
+                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+                else
+                    output = Funcsval;
+            }
+
+            if (Funcname.Contains("暫無翻譯")) output = Funcsval;
             if (Funcname != "即死") return output;
             output = Convert.ToDouble(Funcsval) / 10 + "%";
             IndividualListStringTemp = null;
