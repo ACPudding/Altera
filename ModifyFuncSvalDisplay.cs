@@ -1935,7 +1935,6 @@ namespace Altera
             {
                 case "NP増加":
                 case "NP減少":
-                case "NP倍化":
                     Tempsval = Funcsval.Split(',');
                     if (Tempsval.Length == 4)
                         if (Tempsval[2].Contains("Act") && Tempsval[3].Contains("Act"))
@@ -1980,20 +1979,6 @@ namespace Altera
                                 break;
                             }
 
-                    if (Tempsval.Length == 2)
-                        try
-                        {
-                            output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + (Tempsval[0] == "1000"
-                                ? ""
-                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
-                            break;
-                        }
-                        catch (Exception)
-                        {
-                            output = Funcsval;
-                            break;
-                        }
-
                     try
                     {
                         output = Convert.ToDouble(Tempsval[1]) / 100 + "%" +
@@ -2005,7 +1990,19 @@ namespace Altera
                     {
                         output = Funcsval;
                     }
-
+                    break;
+                case "NP倍化":
+                    if (Tempsval.Length == 2)
+                        try
+                        {
+                            output = Convert.ToDouble(Tempsval[1]) / 10 + "%" + (Tempsval[0] == "1000"
+                                ? ""
+                                : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
                     break;
                 case "诅咒吸収":
                 case "原稿完成解除":
