@@ -72,6 +72,10 @@ namespace Altera.Properties
         public static string AS2D;
         public static string AS3N;
         public static string AS3D;
+        public static string AS4N;
+        public static string AS4D;
+        public static string AS5N;
+        public static string AS5D;
         public static JArray TDAttackNameTranslation;
         public static JArray SvtIndividualityTranslation;
         public static decimal lv100hp;

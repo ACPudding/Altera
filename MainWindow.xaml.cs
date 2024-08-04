@@ -716,6 +716,9 @@ namespace Altera
                 ClassName[33] = "Beast";
                 ClassName[34] = "Beast VI";
                 ClassName[35] = "Beast VI";
+                ClassName[36] = "???";
+                ClassName[37] = "???";
+                ClassName[38] = "Beast";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -750,6 +753,7 @@ namespace Altera
                 nprateclassbase[25] = 1.5M;
                 nprateclassbase[28] = 1.55M;
                 nprateclassbase[33] = 1.5M;
+                nprateclassbase[38] = 1.5M;
                 nprateclassbase[20] = 0.0M;
                 nprateclassbase[22] = 0.0M;
                 nprateclassbase[24] = 0.0M;
@@ -1115,6 +1119,7 @@ namespace Altera
                     case 17:
                     case 28:
                     case 33:
+                    case 38:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         break;
@@ -1176,6 +1181,7 @@ namespace Altera
             ClassName[31] = "？(31)";
             ClassName[32] = "？(32)";
             ClassName[33] = "Beast";
+            ClassName[38] = "Beast";
             ClassName[34] = "BeastVI";
             ClassName[35] = "BeastVI";
             var pngArr = 0;
@@ -2718,18 +2724,28 @@ namespace Altera
             var ASID1 = "";
             var ASID2 = "";
             var ASID3 = "";
+            var ASID4 = "";
+            var ASID5 = "";
             var AS1NME = "";
             var AS2NME = "";
             var AS3NME = "";
+            var AS4NME = "";
+            var AS5NME = "";
             var AS1DTL = "";
             var AS2DTL = "";
             var AS3DTL = "";
+            var AS4DTL = "";
+            var AS5DTL = "";
             GlobalPathsAndDatas.AS1D = "";
             GlobalPathsAndDatas.AS1N = "";
             GlobalPathsAndDatas.AS2D = "";
             GlobalPathsAndDatas.AS2N = "";
             GlobalPathsAndDatas.AS3D = "";
             GlobalPathsAndDatas.AS3N = "";
+            GlobalPathsAndDatas.AS4D = "";
+            GlobalPathsAndDatas.AS4N = "";
+            GlobalPathsAndDatas.AS5D = "";
+            GlobalPathsAndDatas.AS5N = "";
             foreach (var item in GlobalPathsAndDatas.mstSvtAppendPassiveSkillArray)
                 if (((JObject)item)["svtId"].ToString() == svtID &&
                     ((JObject)item)["num"].ToString() == "100" &&
@@ -2751,6 +2767,20 @@ namespace Altera
                 {
                     var mstsvtskillobjtmp = JObject.Parse(item.ToString());
                     ASID3 = mstsvtskillobjtmp["skillId"].ToString();
+                }
+                else if (((JObject)item)["svtId"].ToString() == svtID &&
+                         ((JObject)item)["num"].ToString() == "103" &&
+                         ((JObject)item)["priority"].ToString() == "1")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(item.ToString());
+                    ASID4 = mstsvtskillobjtmp["skillId"].ToString();
+                }
+                else if (((JObject)item)["svtId"].ToString() == svtID &&
+                         ((JObject)item)["num"].ToString() == "104" &&
+                         ((JObject)item)["priority"].ToString() == "1")
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(item.ToString());
+                    ASID5 = mstsvtskillobjtmp["skillId"].ToString();
                     break;
                 }
 
@@ -2774,6 +2804,18 @@ namespace Altera
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS3NME = mstsvtskillobjtmp["name"].ToString();
                     GlobalPathsAndDatas.AS3N = AS3NME;
+                }
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID4)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
+                    AS4NME = mstsvtskillobjtmp["name"].ToString();
+                    GlobalPathsAndDatas.AS4N = AS4NME;
+                }
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID5)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
+                    AS5NME = mstsvtskillobjtmp["name"].ToString();
+                    GlobalPathsAndDatas.AS5N = AS5NME;
                     break;
                 }
 
@@ -2793,19 +2835,37 @@ namespace Altera
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS3DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID4)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS4DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
+                }
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID5)
+                {
+                    var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
+                    AS5DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
+                }
 
             var AS1Fid = "";
             var AS2Fid = "";
             var AS3Fid = "";
+            var AS4Fid = "";
+            var AS5Fid = "";
             var AS1sval_1 = "";
             var AS2sval_1 = "";
             var AS3sval_1 = "";
+            var AS4sval_1 = "";
+            var AS5sval_1 = "";
             var AS1sval_10 = "";
             var AS2sval_10 = "";
             var AS3sval_10 = "";
+            var AS4sval_10 = "";
+            var AS5sval_10 = "";
             var AS1Fnme = "";
             var AS2Fnme = "";
             var AS3Fnme = "";
+            var AS4Fnme = "";
+            var AS5Fnme = "";
 
             foreach (var ASSKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
             {
@@ -2916,6 +2976,70 @@ namespace Altera
                         AS3sval_10 = AS3sval_10.Substring(0, AS3sval_10.Length - 2);
                     }
                 }
+                if (ASSKLobjtmp["skillId"].ToString() == ASID4)
+                {
+                    if (ASSKLobjtmp["lv"].ToString() == "1")
+                    {
+                        AS4sval_1 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS4sval_1 = AS4sval_1.Substring(0, AS4sval_1.Length - 2);
+                        AS4Fid = ASSKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != AS4Fid) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            AS4Fnme = mstFuncobjtmp["popupText"].ToString();
+                            if (AS4Fnme != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                AS4Fnme = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (ASSKLobjtmp["lv"].ToString() == "10")
+                    {
+                        AS4sval_10 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS4sval_10 = AS4sval_10.Substring(0, AS4sval_10.Length - 2);
+                    }
+                }
+                if (ASSKLobjtmp["skillId"].ToString() == ASID5)
+                {
+                    if (ASSKLobjtmp["lv"].ToString() == "1")
+                    {
+                        AS5sval_1 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS5sval_1 = AS5sval_1.Substring(0, AS5sval_1.Length - 2);
+                        AS5Fid = ASSKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                            .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                        foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                        {
+                            if (((JObject)functmp)["id"].ToString() != AS5Fid) continue;
+                            var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            AS5Fnme = mstFuncobjtmp["popupText"].ToString();
+                            if (AS5Fnme != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                            {
+                                if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                AS5Fnme = ((JObject)Bufftmp)["name"].ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (ASSKLobjtmp["lv"].ToString() == "10")
+                    {
+                        AS5sval_10 = ASSKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                            .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                        AS5sval_10 = AS5sval_10.Substring(0, AS5sval_10.Length - 2);
+                    }
+                }
             }
 
             /*AS1DTL = AS1DTL.Replace("を{{1:Value:m}}%アップする",
@@ -2931,6 +3055,11 @@ namespace Altera
             AS3DTL = AS3DTL.Replace("{{1:Value:m}}%",
                 $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS3Fnme, AS3sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS3Fnme, AS3sval_10, true)}]");
             GlobalPathsAndDatas.AS3D = AS3DTL;
+            AS4DTL = AS4DTL.Replace("{{1:Value:m}}%",
+                $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_10, true)}]");
+            GlobalPathsAndDatas.AS4D = AS4DTL;
+            AS5DTL = AS5DTL.Insert(31,"\r\n");
+            GlobalPathsAndDatas.AS5D = AS5DTL;
 
             Dispatcher.Invoke(() =>
             {
@@ -2941,6 +3070,10 @@ namespace Altera
                     AS2DTL));
                 AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS3NME, ASID3,
                     AS3DTL));
+                AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS4NME, ASID4,
+                    AS4DTL));
+                AppendClassPassiveFuncList.Items.Add(new AppendClassPassiveSvalList(AS5NME, ASID5,
+                    AS5DTL));
             });
         }
 

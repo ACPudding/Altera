@@ -383,6 +383,24 @@ namespace Altera
                                     output = Funcsval;
                                     break;
                                 }
+
+                            if (Tempsval[4].Contains("CheckBattlePointPhaseRange"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "% " +
+                                             $"({Tempsval[4].Replace("CheckBattlePointPhaseRange_3300200:", "")}好感度等级)" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
                         }
 
                         if (Tempsval.Length == 8)
@@ -1340,6 +1358,22 @@ namespace Altera
                                 break;
                             }
 
+                        if (Tempsval[2].Contains("CheckBattlePointPhaseRange"))
+                            try
+                            {
+                                output = Tempsval[1] + "个 " +
+                                         $"({Tempsval[2].Replace("CheckBattlePointPhaseRange_3300200:", "")}好感度等级)" +
+                                         (Tempsval[0] == "1000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         output = Funcsval;
                         break;
                     }
@@ -1434,6 +1468,25 @@ namespace Altera
                                 try
                                 {
                                     output = Tempsval[1] + "个/满足条件的对象" +
+                                             (Tempsval[0] == "1000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
+                            output = Funcsval;
+                            break;
+                        case 5:
+                            if (Tempsval[2].Contains("CheckBattlePointPhaseRange"))
+                                try
+                                {
+                                    output = Tempsval[1] + "个 " +
+                                             $"({Tempsval[2].Replace("CheckBattlePointPhaseRange_3300200:", "")}好感度等级)" +
                                              (Tempsval[0] == "1000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
@@ -1628,6 +1681,19 @@ namespace Altera
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                      (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                      (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                    break;
+                case 182:
+                    Tempsval = Funcsval.Split(',');
+                    if (Tempsval.Length == 2)
+                        try
+                        {
+                            output = "∅ (OC1 → OC5 : 0, 5, 10, 15, 20)";
                         }
                         catch (Exception)
                         {
@@ -1990,6 +2056,7 @@ namespace Altera
                     {
                         output = Funcsval;
                     }
+
                     break;
                 case "NP倍化":
                     if (Tempsval.Length == 2)
@@ -2003,6 +2070,7 @@ namespace Altera
                         {
                             output = Funcsval;
                         }
+
                     break;
                 case "诅咒吸収":
                 case "原稿完成解除":
@@ -2509,7 +2577,8 @@ namespace Altera
                 }
             }
 
-            if (Funcname.Contains("强力攻击") || Funcname.Contains("防御无视攻击") || Funcname.Contains("被伤害反射"))
+            if ((Funcname.Contains("强力攻击") && !Funcname.Contains("好感度等级")) || Funcname.Contains("防御无视攻击") ||
+                Funcname.Contains("被伤害反射"))
             {
                 Tempsval = Funcsval.Split(',');
                 try
@@ -2520,6 +2589,23 @@ namespace Altera
                 {
                     output = Funcsval;
                 }
+            }
+
+            if (Funcname.Contains("强力攻击") && Funcname.Contains("好感度等级"))
+            {
+                Tempsval = Funcsval.Split(',');
+                if (Tempsval.Length == 6)
+                    try
+                    {
+                        output =
+                            $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 附加威力: {Convert.ToDouble(Tempsval[5].Replace("DamageRateBattlePointPhase_0:", "")) / 10}% + {Convert.ToDouble(Tempsval[3]) / 10}% * N (N为好感度等级)";
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+                else
+                    output = Funcsval;
             }
 
             if (Funcname == "宝具封印" || Funcname == "魅了" || Funcname == "魅惑")
@@ -2658,7 +2744,7 @@ namespace Altera
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
                 Funcname == "诅咒解除" || Funcname == "诅咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆诅咒無効" ||
                 Funcname == "毒＆やけど無効" || Funcname == "毒＆灼伤無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
-                Funcname == "灼傷＆延焼解除" ||
+                Funcname == "灼傷＆延焼解除" || Funcname == "防御無視" || Funcname == "無敵貫通" ||
                 Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効")
 
             {
@@ -2720,6 +2806,23 @@ namespace Altera
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+
+                    case 6 when (Funcname == "防御無視" || Funcname == "無敵貫通") &&
+                                Tempsval[3].Contains("CheckBattlePointPhaseRange"):
+                        try
+                        {
+                            output =
+                                "∅ " + $"({Tempsval[3].Replace("CheckBattlePointPhaseRange_3300200:", "")}好感度等级)" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                         }
                         catch (Exception)
                         {
@@ -2933,6 +3036,32 @@ namespace Altera
                                      "特攻对象:〔" +
                                      SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
                                      "〕" + ")}】\r\n";
+                        }
+                        catch (Exception)
+                        {
+                            output = "false";
+                        }
+                    else
+                        output = "false";
+
+                    break;
+                case 21835:
+                case 21836:
+                    if (lv1spl.Length == 6)
+                        try
+                        {
+                            output = TDStrName + " 【{基础倍率: " +
+                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                     + " 附加威力: " +
+                                     (Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3]) &&
+                                      Convert.ToDouble(lv1spl[5].Replace("DamageRateBattlePointPhase_0:", "")) ==
+                                      Convert.ToDouble(lv5spl[5].Replace("DamageRateBattlePointPhase_0:", ""))
+                                         ? $"{Convert.ToDouble(lv1spl[5].Replace("DamageRateBattlePointPhase_0:", "")) / 10}% + {Convert.ToDouble(lv1spl[3]) / 10}% *N(N为好感度等级)"
+                                         : $"{Convert.ToDouble(lv1spl[5].Replace("DamageRateBattlePointPhase_0:", "")) / 10}% + {Convert.ToDouble(lv1spl[3]) / 10}% *N - {Convert.ToDouble(lv5spl[5].Replace("DamageRateBattlePointPhase_0:", "")) / 10}% + {Convert.ToDouble(lv5spl[3]) / 10}% *N") +
+                                     "}】\r\n";
                         }
                         catch (Exception)
                         {
