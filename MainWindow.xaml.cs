@@ -2583,11 +2583,12 @@ namespace Altera
                         //ignore
                     }
 
-                    SkillLvs.ClassPassiveforExcel +=
-                        i + 1 + "、" + ClassPassiveSkillFuncName.Replace("\r\n", "") + " (" +
-                        svtClassPassiveIDListArray[i] + ")" + " |【描述】: " + CPDetail +
-                        " 【效果】: " + tmpexcelText +
-                        "\r\n";
+                    SkillLvs.ClassPassiveforExcel += "「" +
+                                                     (i + 1) + "」 " + ClassPassiveSkillFuncName.Replace("\r\n", "") +
+                                                     " (" +
+                                                     svtClassPassiveIDListArray[i] + ")" + " |【描述】: " + CPDetail +
+                                                     " 【效果】: " + tmpexcelText +
+                                                     "\r\n";
                     var FuncStr = "\r\n" + string.Join("\r\n", SKLFuncstrArray) + "\r\n";
                     var SvalStr = "\r\n";
                     for (var q = 0; q < lv10svalArray.Length; q++)
@@ -2976,6 +2977,7 @@ namespace Altera
                         AS3sval_10 = AS3sval_10.Substring(0, AS3sval_10.Length - 2);
                     }
                 }
+
                 if (ASSKLobjtmp["skillId"].ToString() == ASID4)
                 {
                     if (ASSKLobjtmp["lv"].ToString() == "1")
@@ -3008,6 +3010,7 @@ namespace Altera
                         AS4sval_10 = AS4sval_10.Substring(0, AS4sval_10.Length - 2);
                     }
                 }
+
                 if (ASSKLobjtmp["skillId"].ToString() == ASID5)
                 {
                     if (ASSKLobjtmp["lv"].ToString() == "1")
@@ -3058,7 +3061,7 @@ namespace Altera
             AS4DTL = AS4DTL.Replace("{{1:Value:m}}%",
                 $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_10, true)}]");
             GlobalPathsAndDatas.AS4D = AS4DTL;
-            AS5DTL = AS5DTL.Insert(31,"\r\n");
+            AS5DTL = AS5DTL.Insert(31, "\r\n");
             GlobalPathsAndDatas.AS5D = AS5DTL;
 
             Dispatcher.Invoke(() =>
@@ -4877,84 +4880,95 @@ namespace Altera
                 if (!Directory.Exists(svtData.FullName))
                     Directory.CreateDirectory(svtData.FullName);
                 Stream streamget;
-                if (!File.Exists(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx"))
+                if (!File.Exists(mstData.FullName + @"\SvtBasicInfoBotBrandNew.xlsx"))
                 {
                     streamget = HttpRequest.GetXlsx();
-                    var fileStream = File.Create(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx");
+                    var fileStream = File.Create(mstData.FullName + @"\SvtBasicInfoBotBrandNew.xlsx");
                     streamget.CopyTo(fileStream);
                     fileStream.Close();
                     streamget.Close();
                 }
 
                 var xlsx =
-                    new ExcelPackage(new FileStream(mstData.FullName + @"\SvtBasicInfoBotNewer.xlsx", FileMode.Open));
+                    new ExcelPackage(new FileStream(mstData.FullName + @"\SvtBasicInfoBotBrandNew.xlsx",
+                        FileMode.Open));
                 var worksheet = xlsx.Workbook.Worksheets[0];
-                var Pickup = new ExcelAddress("E26");
-                worksheet.ConditionalFormatting.RemoveAll();
-                worksheet.Cells["L4"].Value = JB.svtid;
+                var Pickup = new ExcelAddress("C30");
+                //worksheet.ConditionalFormatting.RemoveAll();
+                worksheet.Cells["C4"].Value = DateTime.Now.ToString();
+                worksheet.Cells["M8"].Value = JB.svtid;
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
-                worksheet.Cells["E3"].Value = Svtname.Text;
-                worksheet.Cells["E4"].Value = IndividualalityClean.Text;
-                worksheet.Cells["E16"].Value = BeiZhu.Text;
-                worksheet.Cells["L3"].Value = svtclass.Text;
-                worksheet.Cells["H4"].Value = rarity.Text;
-                worksheet.Cells["J4"].Value = gendle.Text;
-                worksheet.Cells["L6"].Value = hiddenattri.Text;
-                worksheet.Cells["L5"].Value = collection.Text;
-                worksheet.Cells["E5"].Value = cv.Text;
-                worksheet.Cells["E6"].Value = illust.Text;
-                worksheet.Cells["E7"].Value = ssvtstarrate.Text;
-                worksheet.Cells["I7"].Value = ssvtdeathrate.Text;
-                worksheet.Cells["L7"].Value = jixing.Text;
-                worksheet.Cells["G13"].Value = notrealnprate.Text;
-                worksheet.Cells["E14"].Value = nprate.Text;
-                worksheet.Cells["E8"].Value = basichp.Text;
-                worksheet.Cells["I8"].Value = basicatk.Text;
-                worksheet.Cells["E9"].Value = maxhp.Text;
-                worksheet.Cells["I9"].Value = maxatk.Text;
-                worksheet.Cells["E10"].Value = GlobalPathsAndDatas.lv100hp;
-                worksheet.Cells["I10"].Value = GlobalPathsAndDatas.lv100atk;
-                worksheet.Cells["E11"].Value = GlobalPathsAndDatas.lv120hp;
-                worksheet.Cells["I11"].Value = GlobalPathsAndDatas.lv120atk;
-                worksheet.Cells["E18"].Value = cards.Text;
-                worksheet.Cells["G21"].Value = bustercard.Text;
-                worksheet.Cells["G22"].Value = artscard.Text;
-                worksheet.Cells["G23"].Value = quickcard.Text;
-                worksheet.Cells["G24"].Value = extracard.Text;
-                worksheet.Cells["G25"].Value = treasuredevicescard.Text;
-                worksheet.Cells["E26"].Value = npcardtype.Text;
-                worksheet.Cells["I26"].Value = nptype.Text;
-                worksheet.Cells["E27"].Value = nprank.Text;
-                worksheet.Cells["E28"].Value = npruby.Text;
-                worksheet.Cells["E29"].Value = npname.Text;
-                worksheet.Cells["E30"].Value = npdetail.Text;
-                if (npdetail.Text.Length >= 240) worksheet.Cells["E30"].Style.Font.Size = 7.5f;
-                worksheet.Cells["Q3"].Value = skill1name.Text;
-                if (skill1name.Text.Length >= 25) worksheet.Cells["Q3"].Style.Font.Size = 9;
-                worksheet.Cells["X3"].Value = skill1cdlv1.Text + " → " + skill1cdlv6.Text + " → " + skill1cdlv10.Text;
-                if (skill1cdlv1.Text == "") worksheet.Cells["X3"].Value = "";
-                worksheet.Cells["Q4"].Value = skill1details.Text;
-                if (skill1details.Text.Length >= 150) worksheet.Cells["Q4"].Style.Font.Size = 7.5f;
-                worksheet.Cells["Q14"].Value = skill2name.Text;
-                if (skill2name.Text.Length >= 15) worksheet.Cells["Q14"].Style.Font.Size = 9;
-                worksheet.Cells["X14"].Value = skill2cdlv1.Text + " → " + skill2cdlv6.Text + " → " + skill2cdlv10.Text;
-                if (skill2cdlv1.Text == "") worksheet.Cells["X14"].Value = "";
-                worksheet.Cells["Q15"].Value = skill2details.Text;
-                if (skill2details.Text.Length >= 150) worksheet.Cells["Q15"].Style.Font.Size = 7.5f;
-                worksheet.Cells["Q25"].Value = skill3name.Text;
-                if (skill3name.Text.Length >= 15) worksheet.Cells["Q25"].Style.Font.Size = 9;
-                worksheet.Cells["X25"].Value = skill3cdlv1.Text + " → " + skill3cdlv6.Text + " → " + skill3cdlv10.Text;
-                if (skill3cdlv1.Text == "") worksheet.Cells["X25"].Value = "";
-                worksheet.Cells["Q26"].Value = skill3details.Text;
-                if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
-                worksheet.Cells["P42"].Value = svtIndividuality.Text;
-                worksheet.Cells["C12"].Value = Convert.ToString(sixwei.Text);
-                worksheet.Cells["K8"].Value = SkillLvs.HpBalanceForExcel;
-                worksheet.Cells["Q8"].Value = SkillLvs.skill1forExcel;
-                worksheet.Cells["C46"].Value = SkillLvs.ClassPassiveforExcel;
-                if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
-                    worksheet.Cells["C46"].Style.Font.Size = 7f;
-                if (SkillLvs.skill1forExcel.Length >= 300) worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
+                worksheet.Cells["C6"].Value = Svtname.Text;
+                worksheet.Cells["C7"].Value = IndividualalityClean.Text;
+                worksheet.Cells["C19"].Value = BeiZhu.Text;
+                worksheet.Cells["J6"].Value = svtclass.Text;
+                worksheet.Cells["G7"].Value = rarity.Text;
+                worksheet.Cells["J7"].Value = gendle.Text;
+                worksheet.Cells["M7"].Value = hiddenattri.Text;
+                worksheet.Cells["M4"].Value = collection.Text;
+                worksheet.Cells["C9"].Value = cv.Text;
+                worksheet.Cells["J9"].Value = illust.Text;
+                worksheet.Cells["C8"].Value = ssvtstarrate.Text;
+                worksheet.Cells["G8"].Value = ssvtdeathrate.Text;
+                worksheet.Cells["J8"].Value = jixing.Text;
+                worksheet.Cells["M15"].Value = notrealnprate.Text;
+                worksheet.Cells["C17"].Value = nprate.Text;
+                worksheet.Cells["E12"].Value = basichp.Text;
+                worksheet.Cells["E13"].Value = basicatk.Text;
+                worksheet.Cells["G12"].Value = maxhp.Text;
+                worksheet.Cells["G13"].Value = maxatk.Text;
+                worksheet.Cells["I12"].Value = GlobalPathsAndDatas.lv100hp;
+                worksheet.Cells["I13"].Value = GlobalPathsAndDatas.lv100atk;
+                worksheet.Cells["K12"].Value = GlobalPathsAndDatas.lv120hp;
+                worksheet.Cells["K13"].Value = GlobalPathsAndDatas.lv120atk;
+                worksheet.Cells["C15"].Value = cards.Text;
+                worksheet.Cells["G24"].Value = bustercard.Text;
+                worksheet.Cells["G23"].Value = artscard.Text;
+                worksheet.Cells["G22"].Value = quickcard.Text;
+                worksheet.Cells["G25"].Value = extracard.Text;
+                worksheet.Cells["G26"].Value = treasuredevicescard.Text;
+                worksheet.Cells["C30"].Value = npcardtype.Text;
+                worksheet.Cells["M30"].Value = nptype.Text;
+                worksheet.Cells["G30"].Value = nprank.Text;
+                worksheet.Cells["C28"].Value = npruby.Text;
+                worksheet.Cells["C29"].Value = npname.Text;
+                worksheet.Cells["C31"].Value = npdetail.Text;
+                worksheet.Row(31).Height = npdetail.Text.Length / 25 * 24; //自适应高度 Detail
+                //if (npdetail.Text.Length >= 240) worksheet.Cells["E30"].Style.Font.Size = 7.5f;
+                worksheet.Cells["C35"].Value = skill1name.Text;
+                //if (skill1name.Text.Length >= 25) worksheet.Cells["Q3"].Style.Font.Size = 9;
+                worksheet.Cells["M35"].Value = skill1cdlv1.Text + " → " + skill1cdlv6.Text + " → " + skill1cdlv10.Text;
+                if (skill1cdlv1.Text == "") worksheet.Cells["M35"].Value = "";
+                worksheet.Cells["C37"].Value = skill1details.Text;
+                worksheet.Row(37).Height = skill1details.Text.Length / 25 * 24; //自适应高度 Detail
+                //worksheet.Row(37).Height = (Regex.Matches(skill1details.Text, "\r\n").Count + 1 ) * 24;     //自适应高度
+                // if (skill1details.Text.Length >= 150) worksheet.Cells["Q4"].Style.Font.Size = 7.5f;
+                worksheet.Cells["C40"].Value = skill2name.Text;
+                //if (skill2name.Text.Length >= 15) worksheet.Cells["Q14"].Style.Font.Size = 9;
+                worksheet.Cells["M40"].Value = skill2cdlv1.Text + " → " + skill2cdlv6.Text + " → " + skill2cdlv10.Text;
+                if (skill2cdlv1.Text == "") worksheet.Cells["M40"].Value = "";
+                worksheet.Cells["C42"].Value = skill2details.Text;
+                worksheet.Row(42).Height = skill2details.Text.Length / 25 * 24; //自适应高度 Detail
+                //worksheet.Row(42).Height = (Regex.Matches(skill2details.Text, "\r\n").Count + 1) * 24;     //自适应高度
+                //if (skill2details.Text.Length >= 150) worksheet.Cells["Q15"].Style.Font.Size = 7.5f;
+                worksheet.Cells["C45"].Value = skill3name.Text;
+                //if (skill3name.Text.Length >= 15) worksheet.Cells["Q25"].Style.Font.Size = 9;
+                worksheet.Cells["M45"].Value = skill3cdlv1.Text + " → " + skill3cdlv6.Text + " → " + skill3cdlv10.Text;
+                if (skill3cdlv1.Text == "") worksheet.Cells["M45"].Value = "";
+                worksheet.Cells["C47"].Value = skill3details.Text;
+                worksheet.Row(47).Height = skill3details.Text.Length / 25 * 24; //自适应高度 Detail
+                //worksheet.Row(47).Height = (Regex.Matches(skill3details.Text, "\r\n").Count + 1) * 24;     //自适应高度
+                //if (skill3details.Text.Length >= 150) worksheet.Cells["Q26"].Style.Font.Size = 7.5f;
+                worksheet.Cells["C14"].Value = svtIndividuality.Text;
+                worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
+                worksheet.Cells["M12"].Value = SkillLvs.HpBalanceForExcel;
+                worksheet.Cells["C38"].Value = SkillLvs.skill1forExcel;
+                worksheet.Row(38).Height = (Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + 1) * 24 >= 80
+                    ? (Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + 1) * 24
+                    : 80; //自适应高度
+                /*if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
+                    worksheet.Cells["C46"].Style.Font.Size = 7f;*/
+                /*if (SkillLvs.skill1forExcel.Length >= 300) worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
                 if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 6 &&
                     Regex.Matches(SkillLvs.skill1forExcel, "【").Count < 7)
                     worksheet.Cells["Q8"].Style.Font.Size = 7.5f;
@@ -4962,19 +4976,25 @@ namespace Altera
                          Regex.Matches(SkillLvs.skill1forExcel, "【").Count < 10)
                     worksheet.Cells["Q8"].Style.Font.Size = 6.5f;
                 else if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 10)
-                    worksheet.Cells["Q8"].Style.Font.Size = 5.5f;
-                worksheet.Cells["Q19"].Value = SkillLvs.skill2forExcel;
-                if (SkillLvs.skill2forExcel.Length >= 300) worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
-                if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 6 &&
-                    Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 7)
-                    worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
-                else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 7 &&
-                         Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 10)
-                    worksheet.Cells["Q19"].Style.Font.Size = 6.5f;
-                else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 10)
-                    worksheet.Cells["Q19"].Style.Font.Size = 5.5f;
-                worksheet.Cells["Q30"].Value = SkillLvs.skill3forExcel;
-                if (SkillLvs.skill3forExcel.Length >= 300) worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
+                    worksheet.Cells["Q8"].Style.Font.Size = 5.5f;*/
+                worksheet.Cells["C43"].Value = SkillLvs.skill2forExcel;
+                worksheet.Row(43).Height = (Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + 1) * 24 >= 80
+                    ? (Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + 1) * 24
+                    : 80; //自适应高度
+                /* if (SkillLvs.skill2forExcel.Length >= 300) worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
+                 if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 6 &&
+                     Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 7)
+                     worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
+                 else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 7 &&
+                          Regex.Matches(SkillLvs.skill2forExcel, "【").Count < 10)
+                     worksheet.Cells["Q19"].Style.Font.Size = 6.5f;
+                 else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 10)
+                     worksheet.Cells["Q19"].Style.Font.Size = 5.5f;*/
+                worksheet.Cells["C48"].Value = SkillLvs.skill3forExcel;
+                worksheet.Row(48).Height = (Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + 1) * 24 >= 80
+                    ? (Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + 1) * 24
+                    : 80; //自适应高度
+                /*if (SkillLvs.skill3forExcel.Length >= 300) worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
                 if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 6 &&
                     Regex.Matches(SkillLvs.skill3forExcel, "【").Count < 7)
                     worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
@@ -4982,22 +5002,32 @@ namespace Altera
                          Regex.Matches(SkillLvs.skill3forExcel, "【").Count < 10)
                     worksheet.Cells["Q30"].Style.Font.Size = 6.5f;
                 else if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 10)
-                    worksheet.Cells["Q30"].Style.Font.Size = 5.5f;
-                worksheet.Cells["E37"].Value = SkillLvs.TDforExcel;
-                if (Regex.Matches(SkillLvs.TDforExcel, "【").Count >= 7 || SkillLvs.TDforExcel.Length >= 400)
-                    worksheet.Cells["E37"].Style.Font.Size = 7.5f;
-                worksheet.Cells["Q36"].Value = GlobalPathsAndDatas.AS1N;
-                worksheet.Cells["Q38"].Value = GlobalPathsAndDatas.AS2N;
-                worksheet.Cells["Q40"].Value = GlobalPathsAndDatas.AS3N;
-                worksheet.Cells["T36"].Value = GlobalPathsAndDatas.AS1D;
-                worksheet.Cells["T38"].Value = GlobalPathsAndDatas.AS2D;
-                worksheet.Cells["T40"].Value = GlobalPathsAndDatas.AS3D;
-                worksheet.Cells["E21"].Value = SkillLvs.NPB;
-                worksheet.Cells["E22"].Value = SkillLvs.NPA;
-                worksheet.Cells["E23"].Value = SkillLvs.NPQ;
-                worksheet.Cells["E24"].Value = SkillLvs.NPEX;
-                worksheet.Cells["E25"].Value = SkillLvs.NPTD;
-                if (GlobalPathsAndDatas.lv150atk != 0.0M)
+                    worksheet.Cells["Q30"].Style.Font.Size = 5.5f;*/
+                worksheet.Cells["C32"].Value = SkillLvs.TDforExcel;
+                worksheet.Row(32).Height = (Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + 1) * 24 >= 80
+                    ? (Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + 1) * 24
+                    : 80; //自适应高度
+                /*if (Regex.Matches(SkillLvs.TDforExcel, "【").Count >= 7 || SkillLvs.TDforExcel.Length >= 400)
+                    worksheet.Cells["E37"].Style.Font.Size = 7.5f;*/
+                worksheet.Cells["E50"].Value = GlobalPathsAndDatas.AS1N;
+                worksheet.Cells["E52"].Value = GlobalPathsAndDatas.AS2N;
+                worksheet.Cells["E54"].Value = GlobalPathsAndDatas.AS3N;
+                worksheet.Cells["E56"].Value = GlobalPathsAndDatas.AS4N;
+                worksheet.Cells["E58"].Value = GlobalPathsAndDatas.AS5N;
+                worksheet.Cells["E51"].Value = GlobalPathsAndDatas.AS1D;
+                worksheet.Cells["E53"].Value = GlobalPathsAndDatas.AS2D;
+                worksheet.Cells["E55"].Value = GlobalPathsAndDatas.AS3D;
+                worksheet.Cells["E57"].Value = GlobalPathsAndDatas.AS4D;
+                worksheet.Cells["E59"].Value = GlobalPathsAndDatas.AS5D;
+                worksheet.Cells["E24"].Value = SkillLvs.NPB;
+                worksheet.Cells["E23"].Value = SkillLvs.NPA;
+                worksheet.Cells["E22"].Value = SkillLvs.NPQ;
+                worksheet.Cells["E25"].Value = SkillLvs.NPEX;
+                worksheet.Cells["E26"].Value = SkillLvs.NPTD;
+                worksheet.Cells["A61"].Value = SkillLvs.ClassPassiveforExcel;
+                //worksheet.Row(61).Height = (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count + Regex.Matches(SkillLvs.ClassPassiveforExcel, "＋" + 1).Count) * 24;     //自适应高度
+                worksheet.Row(61).Height = SkillLvs.ClassPassiveforExcel.Length / 48 * 24; //自适应高度 Detail
+                /*if (GlobalPathsAndDatas.lv150atk != 0.0M)
                 {
                     var txtOut = "Lv.150 HP/ATK:\r\n" + GlobalPathsAndDatas.lv150hp + "/" +
                                  GlobalPathsAndDatas.lv150atk;
@@ -5009,12 +5039,12 @@ namespace Altera
                     worksheet.Cells["K10"].Value = "";
                     worksheet.Cells["K10"].Style.WrapText = true;
                 }
-
+                */
                 try
                 {
                     var classicon = BitmapImage2Bitmap((BitmapSource)ClassPng.Source);
                     var classi = worksheet.Drawings.AddPicture("ClassIcon", classicon);
-                    classi.SetPosition(0, 0);
+                    classi.SetPosition(5, 2, 12, 40);
                     classi.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5026,8 +5056,8 @@ namespace Altera
                 {
                     var sk1icon = BitmapImage2Bitmap((BitmapSource)sk1_icon.Source);
                     var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
-                    sk1i.SetPosition(200, 850);
-                    sk1i.SetSize(40, 40);
+                    sk1i.SetPosition(35, 20, 12, 40);
+                    sk1i.SetSize(48, 48);
                 }
                 catch (Exception)
                 {
@@ -5038,8 +5068,8 @@ namespace Altera
                 {
                     var sk2icon = BitmapImage2Bitmap((BitmapSource)sk2_icon.Source);
                     var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
-                    sk2i.SetPosition(475, 850);
-                    sk2i.SetSize(40, 40);
+                    sk2i.SetPosition(40, 20, 12, 40);
+                    sk2i.SetSize(48, 48);
                 }
                 catch (Exception)
                 {
@@ -5050,45 +5080,45 @@ namespace Altera
                 {
                     var sk3icon = BitmapImage2Bitmap((BitmapSource)sk3_icon.Source);
                     var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
-                    sk3i.SetPosition(695, 850);
-                    sk3i.SetSize(40, 40);
+                    sk3i.SetPosition(45, 20, 12, 40);
+                    sk3i.SetSize(48, 48);
                 }
                 catch (Exception)
                 {
                     //ignore
                 }
 
-                switch (worksheet.Cells["E26"].Value.ToString())
+                switch (worksheet.Cells["C30"].Value.ToString())
                 {
                     case "Quick":
                         var GreenExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        GreenExp.Formula = "E26=\"Quick\"";
+                        GreenExp.Formula = "C30=\"Quick\"";
                         GreenExp.Style.Font.Bold = true;
                         GreenExp.Style.Font.Color.Color = Color.LightGreen;
-                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
-                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        worksheet.Cells["C28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        worksheet.Cells["C29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
                         break;
                     case "Arts":
                         var BlueExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        BlueExp.Formula = "E26=\"Arts\"";
+                        BlueExp.Formula = "C30=\"Arts\"";
                         BlueExp.Style.Font.Bold = true;
                         BlueExp.Style.Font.Color.Color = Color.Blue;
-                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
-                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        worksheet.Cells["C28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        worksheet.Cells["C29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
                         break;
                     case "Buster":
                         var RedExp = worksheet.ConditionalFormatting.AddExpression(Pickup);
-                        RedExp.Formula = "E26=\"Buster\"";
+                        RedExp.Formula = "C30=\"Buster\"";
                         RedExp.Style.Font.Bold = true;
                         RedExp.Style.Font.Color.Color = Color.Red;
-                        worksheet.Cells["E28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
-                        worksheet.Cells["E29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        worksheet.Cells["E29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
+                        worksheet.Cells["C28"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C28"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
+                        worksheet.Cells["C29"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells["C29"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 150, 137));
                         break;
                 }
 
