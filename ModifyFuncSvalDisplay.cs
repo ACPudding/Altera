@@ -1538,7 +1538,7 @@ namespace Altera
                     break;
                 case 166:
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length == 7)
+                    if (Tempsval.Length == 7 || Tempsval.Length == 9 || Tempsval.Length == 10)
                         try
                         {
                             output = "∅\r\n场景特性: " + Tempsval[3].Replace("FieldIndividuality:", "") +
@@ -2744,7 +2744,7 @@ namespace Altera
                 Funcname == "ガッツ解除" || Funcname == "毅力解除" || Funcname == "从者位置变更" || Funcname == "活祭" ||
                 Funcname == "诅咒解除" || Funcname == "诅咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆诅咒無効" ||
                 Funcname == "毒＆やけど無効" || Funcname == "毒＆灼伤無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
-                Funcname == "灼傷＆延焼解除" || Funcname == "防御無視" || Funcname == "無敵貫通" ||
+                Funcname == "灼伤＆延焼解除" || Funcname == "防御無視" || Funcname == "無敵貫通" ||
                 Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効")
 
             {
@@ -3134,7 +3134,13 @@ namespace Altera
             var result = "<";
             for (var i = 0; i < FuncListArray.Length; i++)
             {
-                if (FuncIDList[i] == "21039") continue;
+                switch (FuncIDList[i])
+                {
+                    case "21039":
+                    case "21448":
+                        continue;
+                }
+
                 if (FuncListArray[i] == "" &&
                     FuncSvalArray[i].Count(c => c == ',') == 1 &&
                     !FuncSvalArray[i].Contains("Hide"))

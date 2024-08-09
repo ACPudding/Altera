@@ -66,6 +66,12 @@ namespace Altera
         private static readonly string FuncListLinkB =
             "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/FuncList.json";
 
+        private static readonly string AppendSkillTranslationLinkA =
+            "https://raw.githubusercontent.com/ACPudding/ACPudding.github.io/master/fileserv/AppendSkillTranslation.json";
+
+        private static readonly string AppendSkillTranslationLinkB =
+            "https://gitee.com/ACPudding/ACPudding.github.io/raw/master/fileserv/AppendSkillTranslation.json";
+
         public MainWindow()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -2257,6 +2263,8 @@ namespace Altera
                                                              TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
                         }
 
+                        TDFuncstrArray[i] = translateOtherFunc(TDFuncstrArray[i]);
+
                         var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i]
                             ? $"固定: {TDlv5OC5strArray[i]}"
                             : $"Lv.1/OC1: {TDlv1OC1strArray[i]}\r\nLv.2/OC2: {TDlv2OC2strArray[i]}\r\nLv.3/OC3: {TDlv3OC3strArray[i]}\r\nLv.4/OC4: {TDlv4OC4strArray[i]}\r\nLv.5/OC5: {TDlv5OC5strArray[i]}";
@@ -2285,6 +2293,15 @@ namespace Altera
             {
                 // ignored
             }
+        }
+
+        private static string translateOtherFunc(string origin_str) //替换部分历史遗留原因无法准确翻译的内容（（（
+        {
+            origin_str = origin_str.Replace("防御無視", "防御无视").Replace("無敵貫通", "无敌贯通")
+                .Replace("無効", "无效").Replace("強化", "强化").Replace("無敵", "无敌").Replace("攻撃", "攻击").Replace("減少", "减少")
+                .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果")
+                .Replace("魅了", "魅惑");
+            return origin_str;
         }
 
         private static bool isTDFunc(string funcid)
@@ -2320,6 +2337,12 @@ namespace Altera
                         File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json"))
                     : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(TDAttackNameTranslationListLinkA,
                         TDAttackNameTranslationListLinkB));
+            GlobalPathsAndDatas.appendSkillTranslationArray =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json"))
+                    : (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(AppendSkillTranslationLinkA,
+                        AppendSkillTranslationLinkB));
             var tmpFuncTypeData = File.Exists(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 ? File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json")
                 : HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
@@ -2352,6 +2375,9 @@ namespace Altera
             var tmpFuncTypeData = HttpRequest.GetList(FuncListLinkA, FuncListLinkB);
             GlobalPathsAndDatas.funcListDebuggerArray =
                 (JArray)JsonConvert.DeserializeObject(tmpFuncTypeData);
+            GlobalPathsAndDatas.appendSkillTranslationArray =
+                (JArray)JsonConvert.DeserializeObject(HttpRequest.GetList(AppendSkillTranslationLinkA,
+                    AppendSkillTranslationLinkB));
             File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json",
                 HttpRequest.GetList(IndividualListLinkA, IndividualListLinkB));
             File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json",
@@ -2361,6 +2387,9 @@ namespace Altera
                 HttpRequest.GetList(BuffTranslationListLinkA, BuffTranslationListLinkB));
             File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json",
                 tmpFuncTypeData);
+            File.WriteAllText(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json",
+                HttpRequest.GetList(AppendSkillTranslationLinkA,
+                    AppendSkillTranslationLinkB));
             Dispatcher.Invoke(() => { Growl.Info("翻译列表更新完成."); });
             GC.Collect();
         }
@@ -2571,6 +2600,7 @@ namespace Altera
                     {
                         if (svtClassPassiveIDListArray[i] == "2342350" && k == 3) break; //屏蔽有珠职介技能显示
                         if (lv10svalArray[k].Contains("5000,-1,-1,OnFieldCount:-1,ShowState:-1")) continue;
+                        SKLFuncstrArray[k] = translateOtherFunc(SKLFuncstrArray[k]);
                         tmpexcelText += SKLFuncstrArray[k] + "[" + lv10svalArray[k].Replace("\r\n", "") + "]" + " & ";
                     }
 
@@ -2787,32 +2817,70 @@ namespace Altera
 
             if (ASID1 == "") return;
 
+            foreach (var asTranslationName in GlobalPathsAndDatas.appendSkillTranslationArray)
+                if (((JObject)asTranslationName)["id"].ToString() == ASID1)
+                {
+                    var asTranslationNameobjtmp = JObject.Parse(asTranslationName.ToString());
+                    AS1NME = asTranslationNameobjtmp["name"].ToString();
+                    AS1DTL = asTranslationNameobjtmp["translation"].ToString();
+                    GlobalPathsAndDatas.AS1N = AS1NME;
+                }
+                else if (((JObject)asTranslationName)["id"].ToString() == ASID2)
+                {
+                    var asTranslationNameobjtmp = JObject.Parse(asTranslationName.ToString());
+                    AS2NME = asTranslationNameobjtmp["name"].ToString();
+                    AS2DTL = asTranslationNameobjtmp["translation"].ToString();
+                    GlobalPathsAndDatas.AS2N = AS2NME;
+                }
+                else if (((JObject)asTranslationName)["id"].ToString() == ASID3)
+                {
+                    var asTranslationNameobjtmp = JObject.Parse(asTranslationName.ToString());
+                    AS3NME = asTranslationNameobjtmp["name"].ToString();
+                    AS3DTL = asTranslationNameobjtmp["translation"].ToString();
+                    GlobalPathsAndDatas.AS3N = AS3NME;
+                }
+                else if (((JObject)asTranslationName)["id"].ToString() == ASID4)
+                {
+                    var asTranslationNameobjtmp = JObject.Parse(asTranslationName.ToString());
+                    AS4NME = asTranslationNameobjtmp["name"].ToString();
+                    AS4DTL = asTranslationNameobjtmp["translation"].ToString();
+                    GlobalPathsAndDatas.AS4N = AS4NME;
+                }
+                else if (((JObject)asTranslationName)["id"].ToString() == ASID5)
+                {
+                    var asTranslationNameobjtmp = JObject.Parse(asTranslationName.ToString());
+                    AS5NME = asTranslationNameobjtmp["name"].ToString();
+                    AS5DTL = asTranslationNameobjtmp["translation"].ToString();
+                    GlobalPathsAndDatas.AS5N = AS5NME;
+                    break;
+                }
+
             foreach (var mstSkilltmp in GlobalPathsAndDatas.mstSkillArray)
-                if (((JObject)mstSkilltmp)["id"].ToString() == ASID1)
+                if (((JObject)mstSkilltmp)["id"].ToString() == ASID1 && AS1NME == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS1NME = mstsvtskillobjtmp["name"].ToString();
                     GlobalPathsAndDatas.AS1N = AS1NME;
                 }
-                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID2)
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID2 && AS2NME == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS2NME = mstsvtskillobjtmp["name"].ToString();
                     GlobalPathsAndDatas.AS2N = AS2NME;
                 }
-                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID3)
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID3 && AS3NME == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS3NME = mstsvtskillobjtmp["name"].ToString();
                     GlobalPathsAndDatas.AS3N = AS3NME;
                 }
-                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID4)
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID4 && AS4NME == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS4NME = mstsvtskillobjtmp["name"].ToString();
                     GlobalPathsAndDatas.AS4N = AS4NME;
                 }
-                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID5)
+                else if (((JObject)mstSkilltmp)["id"].ToString() == ASID5 && AS5NME == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkilltmp.ToString());
                     AS5NME = mstsvtskillobjtmp["name"].ToString();
@@ -2821,27 +2889,27 @@ namespace Altera
                 }
 
             foreach (var mstSkillDetailtmp in GlobalPathsAndDatas.mstSkillDetailArray)
-                if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID1)
+                if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID1 && AS1DTL == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS1DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID2)
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID2 && AS2DTL == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS2DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID3)
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID3 && AS3DTL == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS3DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID4)
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID4 && AS4DTL == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS4DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
                 }
-                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID5)
+                else if (((JObject)mstSkillDetailtmp)["id"].ToString() == ASID5 && AS5DTL == "")
                 {
                     var mstsvtskillobjtmp = JObject.Parse(mstSkillDetailtmp.ToString());
                     AS5DTL = mstsvtskillobjtmp["detailShort"].ToString().Replace("[{0}]", "");
@@ -3061,7 +3129,7 @@ namespace Altera
             AS4DTL = AS4DTL.Replace("{{1:Value:m}}%",
                 $"[{ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_1, true)} ~ {ModifyFuncSvalDisplay.ModifyFuncStr(AS4Fnme, AS4sval_10, true)}]");
             GlobalPathsAndDatas.AS4D = AS4DTL;
-            AS5DTL = AS5DTL.Insert(31, "\r\n");
+            AS5DTL = AS5DTL.Insert(26, "\r\n");
             GlobalPathsAndDatas.AS5D = AS5DTL;
 
             Dispatcher.Invoke(() =>
@@ -3743,6 +3811,7 @@ namespace Altera
                     foreach (var skfuncidtmp in svtSKFuncIDArray)
                     {
                         if (skfuncidtmp == "21039") continue;
+                        if (skfuncidtmp == "21448") continue;
                         foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
                         {
                             if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
@@ -4152,6 +4221,7 @@ namespace Altera
                     var DisplaySval = lv1Array[i] == lv10Array[i]
                         ? $"固定: {lv10Array[i]}"
                         : $"Lv.1: {lv1Array[i]}\r\nLv.6: {lv6Array[i]}\r\nLv.10: {lv10Array[i]}";
+                    FuncArray[i] = translateOtherFunc(FuncArray[i]);
                     switch (SkillNum)
                     {
                         case 1:
@@ -4679,17 +4749,49 @@ namespace Altera
                 string fileName;
                 if (tmp[4].Contains("Audio"))
                 {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                    string keyIdA;
+                    switch (tmp.Length)
+                    {
+                        case 5:
+                            assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                            keyIdA = "0";
+                            break;
+                        case 6:
+                            assetName = tmp[tmp.Length - 2].Replace('/', '@');
+                            keyIdA = tmp[tmp.Length - 1];
+                            break;
+                        default:
+                            assetName = tmp[4].Replace('/', '@') + ".unity3d";
+                            keyIdA = "0";
+                            break;
+                    }
+
                     fileName = CatAndMouseGame.GetMD5String(assetName);
                     AudioArray.Add(new JObject(new JProperty("audioName", assetName),
-                        new JProperty("fileName", fileName)));
+                        new JProperty("fileName", fileName), new JProperty("keyId", keyIdA)));
                 }
-                else if (tmp[4].Contains("Movie"))
+                else if (tmp[4].Contains("Movie") || tmp[4].Contains(".usm"))
                 {
-                    assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                    string keyIdM;
+                    switch (tmp.Length)
+                    {
+                        case 5:
+                            assetName = tmp[tmp.Length - 1].Replace('/', '@');
+                            keyIdM = "0";
+                            break;
+                        case 6:
+                            assetName = tmp[tmp.Length - 2].Replace('/', '@');
+                            keyIdM = tmp[tmp.Length - 1];
+                            break;
+                        default:
+                            assetName = tmp[4].Replace('/', '@') + ".unity3d";
+                            keyIdM = "0";
+                            break;
+                    }
+
                     fileName = CatAndMouseGame.GetMD5String(assetName);
                     MovieArray.Add(new JObject(new JProperty("movieName", assetName),
-                        new JProperty("fileName", fileName)));
+                        new JProperty("fileName", fileName), new JProperty("keyId", keyIdM)));
                 }
                 else if (!tmp[4].Contains("Movie"))
                 {
@@ -4857,6 +4959,11 @@ namespace Altera
                     ? (JArray)JsonConvert.DeserializeObject(
                         File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json"))
                     : null;
+            GlobalPathsAndDatas.appendSkillTranslationArray =
+                File.Exists(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json")
+                    ? (JArray)JsonConvert.DeserializeObject(
+                        File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json"))
+                    : null;
             if (File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"))
                 GlobalPathsAndDatas.TranslationList =
                     (JArray)JsonConvert.DeserializeObject(
@@ -4866,7 +4973,8 @@ namespace Altera
 
             if (!File.Exists(GlobalPathsAndDatas.gamedata.FullName + "SvtIndividualityTranslation.json") ||
                 !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "TDAttackNameTranslation.json") ||
-                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json"))
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json") ||
+                !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json"))
                 Dispatcher.Invoke(() => { Growl.Info("翻译列表缺失,建议先前往数据更新选项卡更新."); });
         }
 
@@ -4913,10 +5021,10 @@ namespace Altera
                 worksheet.Cells["J8"].Value = jixing.Text;
                 worksheet.Cells["M15"].Value = notrealnprate.Text;
                 worksheet.Cells["C17"].Value = nprate.Text;
-                worksheet.Cells["E12"].Value = basichp.Text;
-                worksheet.Cells["E13"].Value = basicatk.Text;
-                worksheet.Cells["G12"].Value = maxhp.Text;
-                worksheet.Cells["G13"].Value = maxatk.Text;
+                worksheet.Cells["E12"].Value = Convert.ToDecimal(basichp.Text);
+                worksheet.Cells["E13"].Value = Convert.ToDecimal(basicatk.Text);
+                worksheet.Cells["G12"].Value = Convert.ToDecimal(maxhp.Text);
+                worksheet.Cells["G13"].Value = Convert.ToDecimal(maxatk.Text);
                 worksheet.Cells["I12"].Value = GlobalPathsAndDatas.lv100hp;
                 worksheet.Cells["I13"].Value = GlobalPathsAndDatas.lv100atk;
                 worksheet.Cells["K12"].Value = GlobalPathsAndDatas.lv120hp;
@@ -5044,7 +5152,7 @@ namespace Altera
                 {
                     var classicon = BitmapImage2Bitmap((BitmapSource)ClassPng.Source);
                     var classi = worksheet.Drawings.AddPicture("ClassIcon", classicon);
-                    classi.SetPosition(5, 2, 12, 40);
+                    classi.SetPosition(5, 2, 12, 44);
                     classi.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5056,7 +5164,7 @@ namespace Altera
                 {
                     var sk1icon = BitmapImage2Bitmap((BitmapSource)sk1_icon.Source);
                     var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
-                    sk1i.SetPosition(35, 20, 12, 40);
+                    sk1i.SetPosition(35, 20, 12, 44);
                     sk1i.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5068,7 +5176,7 @@ namespace Altera
                 {
                     var sk2icon = BitmapImage2Bitmap((BitmapSource)sk2_icon.Source);
                     var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
-                    sk2i.SetPosition(40, 20, 12, 40);
+                    sk2i.SetPosition(40, 20, 12, 44);
                     sk2i.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5080,7 +5188,7 @@ namespace Altera
                 {
                     var sk3icon = BitmapImage2Bitmap((BitmapSource)sk3_icon.Source);
                     var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
-                    sk3i.SetPosition(45, 20, 12, 40);
+                    sk3i.SetPosition(45, 20, 12, 44);
                     sk3i.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5806,6 +5914,7 @@ namespace Altera
                 ClassBasicBase[25] = 1.00M;
                 ClassBasicBase[28] = 0.95M;
                 ClassBasicBase[33] = 0.97M;
+                ClassBasicBase[38] = 0.98M;
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -5818,7 +5927,7 @@ namespace Altera
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
                     ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28" &&
-                    ClassID != "33")
+                    ClassID != "33" && ClassID != "38")
                 {
                     hpatkbalance.Text = ShowString[7];
                     SkillLvs.HpBalanceForExcel = ShowString[7].Replace("(", "").Replace(")", "");
