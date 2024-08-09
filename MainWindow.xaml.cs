@@ -2238,6 +2238,7 @@ namespace Altera
                                 TDlv4OC4strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
                             TDlv5OC5strArray[i] = ModifyFuncSvalDisplay.ModifyFuncStr(TDFuncstrArray[i],
                                 TDlv5OC5strArray[i], ToggleDisplayEnemyFunc.IsChecked == false);
+                            TDFuncstrArray[i] = translateOtherFunc(TDFuncstrArray[i]);
                             if (npdetail.Text == "" || npdetail.Text == "unknown" || npdetail.Text == "该宝具暂时没有描述.")
                                 SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                            ? svtTDtargetIconArray[i] +
@@ -2262,8 +2263,6 @@ namespace Altera
                                                            : TDlv1OC1strArray[i].Replace("\r\n", " ") + "} - {" +
                                                              TDlv5OC5strArray[i].Replace("\r\n", " ")) + "}】\r\n";
                         }
-
-                        TDFuncstrArray[i] = translateOtherFunc(TDFuncstrArray[i]);
 
                         var DisplaySval = TDlv1OC1strArray[i] == TDlv5OC5strArray[i]
                             ? $"固定: {TDlv5OC5strArray[i]}"
