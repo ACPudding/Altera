@@ -5071,8 +5071,8 @@ namespace Altera
                 worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
                 worksheet.Cells["M12"].Value = SkillLvs.HpBalanceForExcel;
                 worksheet.Cells["C38"].Value = SkillLvs.skill1forExcel;
-                worksheet.Row(38).Height = (Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + 1) * 24 >= 80
-                    ? (Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + 1) * 24
+                worksheet.Row(38).Height = (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + SkillLvs.skill1forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + SkillLvs.skill1forExcel.Count(c => (c == '(')) / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
                     worksheet.Cells["C46"].Style.Font.Size = 7f;*/
@@ -5086,8 +5086,8 @@ namespace Altera
                 else if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 10)
                     worksheet.Cells["Q8"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C43"].Value = SkillLvs.skill2forExcel;
-                worksheet.Row(43).Height = (Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + 1) * 24 >= 80
-                    ? (Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + 1) * 24
+                worksheet.Row(43).Height = (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + SkillLvs.skill2forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + SkillLvs.skill2forExcel.Count(c => (c == '(')) / 4 + 1) * 24
                     : 80; //自适应高度
                 /* if (SkillLvs.skill2forExcel.Length >= 300) worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
                  if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 6 &&
@@ -5099,8 +5099,8 @@ namespace Altera
                  else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 10)
                      worksheet.Cells["Q19"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C48"].Value = SkillLvs.skill3forExcel;
-                worksheet.Row(48).Height = (Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + 1) * 24 >= 80
-                    ? (Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + 1) * 24
+                worksheet.Row(48).Height = (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + SkillLvs.skill3forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + SkillLvs.skill3forExcel.Count(c => (c == '(')) / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (SkillLvs.skill3forExcel.Length >= 300) worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
                 if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 6 &&
@@ -5112,8 +5112,8 @@ namespace Altera
                 else if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 10)
                     worksheet.Cells["Q30"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C32"].Value = SkillLvs.TDforExcel;
-                worksheet.Row(32).Height = (Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + 1) * 24 >= 80
-                    ? (Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + 1) * 24
+                worksheet.Row(32).Height = (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + SkillLvs.TDforExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + SkillLvs.TDforExcel.Count(c => (c == '(')) / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (Regex.Matches(SkillLvs.TDforExcel, "【").Count >= 7 || SkillLvs.TDforExcel.Length >= 400)
                     worksheet.Cells["E37"].Style.Font.Size = 7.5f;*/
@@ -5152,7 +5152,7 @@ namespace Altera
                 {
                     var classicon = BitmapImage2Bitmap((BitmapSource)ClassPng.Source);
                     var classi = worksheet.Drawings.AddPicture("ClassIcon", classicon);
-                    classi.SetPosition(5, 2, 12, 44);
+                    classi.SetPosition(5, 2, 12, 48);
                     classi.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5164,7 +5164,7 @@ namespace Altera
                 {
                     var sk1icon = BitmapImage2Bitmap((BitmapSource)sk1_icon.Source);
                     var sk1i = worksheet.Drawings.AddPicture("Skill1Icon", sk1icon);
-                    sk1i.SetPosition(35, 20, 12, 44);
+                    sk1i.SetPosition(35, 20, 12, 48);
                     sk1i.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5176,7 +5176,7 @@ namespace Altera
                 {
                     var sk2icon = BitmapImage2Bitmap((BitmapSource)sk2_icon.Source);
                     var sk2i = worksheet.Drawings.AddPicture("Skill2Icon", sk2icon);
-                    sk2i.SetPosition(40, 20, 12, 44);
+                    sk2i.SetPosition(40, 20, 12, 48);
                     sk2i.SetSize(48, 48);
                 }
                 catch (Exception)
@@ -5188,7 +5188,7 @@ namespace Altera
                 {
                     var sk3icon = BitmapImage2Bitmap((BitmapSource)sk3_icon.Source);
                     var sk3i = worksheet.Drawings.AddPicture("Skill3Icon", sk3icon);
-                    sk3i.SetPosition(45, 20, 12, 44);
+                    sk3i.SetPosition(45, 20, 12, 48);
                     sk3i.SetSize(48, 48);
                 }
                 catch (Exception)
