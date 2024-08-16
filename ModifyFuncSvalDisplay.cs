@@ -1119,7 +1119,7 @@ namespace Altera
 
                     if (Tempsval.Length == 5)
                     {
-                        if (Tempsval[4].Contains("ShowQuestNoEffect"))
+                        if (Tempsval[4].Contains("ShowQuestNoEffect") || Tempsval[4].Contains("OnField"))
                             try
                             {
                                 output = Tempsval[3] +
@@ -2752,6 +2752,21 @@ namespace Altera
                 switch (Tempsval.Length)
                 {
                     case 1:
+                        try
+                        {
+                            output =
+                                "∅" +
+                                (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                    ? ""
+                                    : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                        }
+                        catch (Exception)
+                        {
+                            output = Funcsval;
+                        }
+
+                        break;
+                    case 2 when Funcname == "毅力解除":
                         try
                         {
                             output =

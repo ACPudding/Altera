@@ -2043,8 +2043,12 @@ namespace Altera
                             tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             targetstr = FuncTargetStr(targettmp);
-                            tvalstrxls = FuncTargetDisplayIconStr(targettmp);
+                            tvalstrxls = "「" + FuncTargetDisplayIconStr(targettmp);
                             if (tvalstr != "") targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
+                            if (tvalstr != "")
+                                tvalstrxls += $"<{CheckUniqueIndividuality(tvalstr)}>」";
+                            else
+                                tvalstrxls += "」";
                             if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                             var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
@@ -2242,10 +2246,6 @@ namespace Altera
                             if (npdetail.Text == "" || npdetail.Text == "unknown" || npdetail.Text == "该宝具暂时没有描述.")
                                 SkillLvs.TDforExcel += (TDFuncstrArray[i] != ""
                                                            ? svtTDtargetIconArray[i] +
-                                                             (svtTDTargetArray[i].Contains("[") &&
-                                                              !svtTDtargetIconArray[i].Contains("<特殊·参考实际情况>")
-                                                                 ? "·<特殊·参考实际情况> "
-                                                                 : " ") +
                                                              TDFuncstrArray[i].Replace("\r\n", "")
                                                            : svtTDtargetIconArray[i] + "未知效果") +
                                                        " 【{" + (TDlv1OC1strArray[i].Replace("\r\n", " ") ==
@@ -2299,7 +2299,7 @@ namespace Altera
             origin_str = origin_str.Replace("防御無視", "防御无视").Replace("無敵貫通", "无敌贯通")
                 .Replace("無効", "无效").Replace("強化", "强化").Replace("無敵", "无敌").Replace("攻撃", "攻击").Replace("減少", "减少")
                 .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果")
-                .Replace("魅了", "魅惑");
+                .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态");
             return origin_str;
         }
 
@@ -2673,8 +2673,8 @@ namespace Altera
             Dispatcher.Invoke(() => { NeedTranslate = ToggleBuffFuncTranslate.IsChecked == true; });
             foreach (var SKLTMP in GlobalPathsAndDatas.mstSkillLvArray)
             {
-                if (((JObject)SKLTMP)["skillId"].ToString() != SkillID ||
-                    ((JObject)SKLTMP)["lv"].ToString() != "10") continue;
+                if (((JObject)SKLTMP)["skillId"].ToString() == SkillID &&
+                    ((JObject)SKLTMP)["lv"].ToString() == "1")
                 {
                     var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
                     skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
@@ -2738,6 +2738,77 @@ namespace Altera
                             svtSKFuncList.Add(funcnametmp);
                         }
                     }
+
+                    break;
+                }
+
+                if (((JObject)SKLTMP)["skillId"].ToString() == SkillID &&
+                    ((JObject)SKLTMP)["lv"].ToString() == "10")
+                {
+                    var SKLobjtmp = JObject.Parse(SKLTMP.ToString());
+                    skilllv10sval = SKLobjtmp["svals"].ToString().Replace("\n", "").Replace("\r", "")
+                        .Replace("[", "").Replace("]", "*").Replace("\"", "").Replace(" ", "").Replace("*,", "|");
+                    skilllv10sval = skilllv10sval.Substring(0, skilllv10sval.Length - 2);
+                    skilllv10sval =
+                        skilllv10sval.Replace(
+                            "|1000,-1,-1,970496,Value2:1,ShowState:-1|1000,-1,-1,970497,Value2:1,ShowState:-1|1000,-1,-1,970505,Value2:1,ShowState:-1",
+                            ""); //屏蔽青子被动检测
+                    svtSKFuncID = SKLobjtmp["funcId"].ToString().Replace("\n", "").Replace("\t", "")
+                        .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                    svtSKFuncIDList = new List<string>(svtSKFuncID.Split(','));
+                    svtSKFuncIDArray = svtSKFuncIDList.ToArray();
+                    if (NeedTranslate)
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            if (skfuncidtmp == "21663" || skfuncidtmp == "21664" || skfuncidtmp == "21697")
+                                continue; //屏蔽青子被动检测
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject)Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(TranslateBuff(funcnametmp));
+                        }
+                    }
+                    else
+                    {
+                        var funcnametmp = "";
+                        foreach (var skfuncidtmp in svtSKFuncIDArray)
+                        {
+                            foreach (var functmp in GlobalPathsAndDatas.mstFuncArray)
+                            {
+                                if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
+                                var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                                funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                                if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
+                                var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                    .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
+                                foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+                                {
+                                    if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
+                                    funcnametmp = ((JObject)Bufftmp)["name"].ToString();
+                                    break;
+                                }
+                            }
+
+                            svtSKFuncList.Add(funcnametmp);
+                        }
+                    }
+
+                    break;
                 }
             }
 
@@ -3261,12 +3332,11 @@ namespace Altera
                 }
             }
 
-            if (skillID1 == "" || skillID2 == "" || skillID3 == "")
-            {
-                skillID1 = FindSkillIDinNPCSvt(svtID, 1);
-                skillID2 = FindSkillIDinNPCSvt(svtID, 2);
-                skillID3 = FindSkillIDinNPCSvt(svtID, 3);
-            }
+            if (skillID1 == "") skillID1 = FindSkillIDinNPCSvt(svtID, 1);
+
+            if (skillID2 == "") skillID2 = FindSkillIDinNPCSvt(svtID, 2);
+
+            if (skillID3 == "") skillID3 = FindSkillIDinNPCSvt(svtID, 3);
 
             if (skillID1.Contains("*"))
                 Dispatcher.Invoke(() =>
@@ -3823,8 +3893,12 @@ namespace Altera
                             tvalstr = mstFuncobjtmp["tvals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             targetstr = FuncTargetStr(targettmp);
-                            tvalstrxls = FuncTargetDisplayIconStr(targettmp);
+                            tvalstrxls = "「" + FuncTargetDisplayIconStr(targettmp);
                             if (tvalstr != "") targetstr += $"\r\n{CheckUniqueIndividuality(tvalstr)}";
+                            if (tvalstr != "")
+                                tvalstrxls += $"<{CheckUniqueIndividuality(tvalstr)}>」";
+                            else
+                                tvalstrxls += "」";
                             if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
                             var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
                                 .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
@@ -3951,7 +4025,7 @@ namespace Altera
                     break;
             }
             */
-            switch (targetType)
+            /*switch (targetType)
             {
                 case "0":
                     targetstr = "<自身>";
@@ -3970,6 +4044,102 @@ namespace Altera
                     break;
                 default:
                     targetstr = "<特殊·参考实际情况>";
+                    break;
+            }*/
+            switch (targetType)
+            {
+                case "0":
+                    targetstr = "<自身>";
+                    break;
+                case "1":
+                    targetstr = "<己方·单体>";
+                    break;
+                case "2":
+                    targetstr = "<己方·ANOTHER>";
+                    break;
+                case "3":
+                    targetstr = "<己方·全体>";
+                    break;
+                case "4":
+                    targetstr = "<敌方·单体>";
+                    break;
+                case "5":
+                    targetstr = "<敌方·ANOTHER>";
+                    break;
+                case "6":
+                    targetstr = "<敌方·全体>";
+                    break;
+                case "7":
+                    targetstr = "<己方·FULL>";
+                    break;
+                case "8":
+                    targetstr = "<敌方·FULL>";
+                    break;
+                case "9":
+                    targetstr = "<己方·全体(自身除外)>";
+                    break;
+                case "10":
+                    targetstr = "<己方·单体反选>";
+                    break;
+                case "11":
+                    targetstr = "<己方·随机>";
+                    break;
+                case "12":
+                    targetstr = "<敌方·OTHER>";
+                    break;
+                case "13":
+                    targetstr = "<敌方·随机>";
+                    break;
+                case "14":
+                    targetstr = "<己方·OTHER_FULL>";
+                    break;
+                case "15":
+                    targetstr = "<敌方·OTHER_FULL>";
+                    break;
+                case "16":
+                    targetstr = "<己方·SELECT_ONE_SUB>";
+                    break;
+                case "17":
+                    targetstr = "<己方·SELECT_SUB>";
+                    break;
+                case "18":
+                    targetstr = "<己方·ONE_ANOTHER_RANDOM>";
+                    break;
+                case "19":
+                    targetstr = "<己方·SELF_ANOTHER_RANDOM>";
+                    break;
+                case "20":
+                    targetstr = "<敌方·ONE_ANOTHER_RANDOM>";
+                    break;
+                case "21":
+                    targetstr = "<己方·SELF_ANOTHER_FIRST>";
+                    break;
+                case "22":
+                    targetstr = "<己方·SELF_BEFORE>";
+                    break;
+                case "23":
+                    targetstr = "<己方·SELF_AFTER>";
+                    break;
+                case "24":
+                    targetstr = "<己方·SELF_ANOTHER_LAST>";
+                    break;
+                case "25":
+                    targetstr = "<COMMAND_TYPE_SELF_TREASURE_DEVICE>";
+                    break;
+                case "26":
+                    targetstr = "<FIELD_OTHER>";
+                    break;
+                case "27":
+                    targetstr = "<敌方·ONE_NO_TARGET_NO_ACTION>";
+                    break;
+                case "28":
+                    targetstr = "<己方·HP最少>";
+                    break;
+                case "29":
+                    targetstr = "<己方·HP比率最少>";
+                    break;
+                default:
+                    targetstr = $"<目标类型:{targetstr}\r\n(请参考宝具/技能描述)>";
                     break;
             }
 
@@ -4138,6 +4308,7 @@ namespace Altera
                 var funcTypeListArray = funcTypeList.Split(',');
                 var xlsSvalIcon = specialIconXls.Split(',');
                 var specialTmp = "";
+                var noticeStr = "注:该技能暂无可显示的技能描述，请参考下方技能数据效果.";
                 for (var m = 0; m <= bufficonidArray.Length - 1; m++)
                 {
                     bufficonBitmaps[m] = new BitmapImage(new Uri("bufficons\\bufficon_0.png", UriKind.Relative));
@@ -4232,13 +4403,23 @@ namespace Altera
                             else
                                 Skill1FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            if (skill1details.Text == "")
+                            if (skill1details.Text == "" || skill1details.Text == noticeStr)
                             {
-                                SkillLvs.skill1forExcel +=
+                                skill1details.Text = noticeStr;
+                                /*SkillLvs.skill1forExcel +=
                                     xlsSvalIcon[i] +
                                     (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
                                         ? "·<特殊·参考实际情况> "
                                         : " ") +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
+
+                                SkillLvs.skill1forExcel +=
+                                    xlsSvalIcon[i] +
                                     FuncArray[i].Replace("\r\n", "") + " 【{" +
                                     (lv1Array[i].Replace("\r\n", " ") ==
                                      lv10Array[i].Replace("\r\n", " ")
@@ -4265,9 +4446,19 @@ namespace Altera
                             else
                                 Skill2FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            if (skill2details.Text == "")
+                            if (skill2details.Text == "" || skill2details.Text == noticeStr)
                             {
+                                skill2details.Text = noticeStr;
                                 SkillLvs.skill2forExcel +=
+                                    xlsSvalIcon[i] +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
+
+                                /*SkillLvs.skill2forExcel +=
                                     xlsSvalIcon[i] +
                                     (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
                                         ? "·<特殊·参考实际情况> "
@@ -4277,7 +4468,7 @@ namespace Altera
                                      lv10Array[i].Replace("\r\n", " ")
                                         ? lv10Array[i].Replace("\r\n", " ")
                                         : lv1Array[i].Replace("\r\n", " ") + "} - {" +
-                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
                                 break;
                             }
 
@@ -4297,13 +4488,23 @@ namespace Altera
                             else
                                 Skill3FuncList.Items.Add(new SkillListSval(FuncArray[i], targetlistArray[i],
                                     $"{DisplaySval}", bufficonBitmaps[i]));
-                            if (skill3details.Text == "")
+                            if (skill3details.Text == "" || skill3details.Text == noticeStr)
                             {
-                                SkillLvs.skill3forExcel +=
+                                skill3details.Text = noticeStr;
+                                /*SkillLvs.skill3forExcel +=
                                     xlsSvalIcon[i] +
                                     (targetlistArray[i].Contains("[") && !xlsSvalIcon[i].Contains("<特殊·参考实际情况>")
                                         ? "·<特殊·参考实际情况> "
                                         : " ") +
+                                    FuncArray[i].Replace("\r\n", "") + " 【{" +
+                                    (lv1Array[i].Replace("\r\n", " ") ==
+                                     lv10Array[i].Replace("\r\n", " ")
+                                        ? lv10Array[i].Replace("\r\n", " ")
+                                        : lv1Array[i].Replace("\r\n", " ") + "} - {" +
+                                          lv10Array[i].Replace("\r\n", " ")) + "}】\r\n";*/
+
+                                SkillLvs.skill3forExcel +=
+                                    xlsSvalIcon[i] +
                                     FuncArray[i].Replace("\r\n", "") + " 【{" +
                                     (lv1Array[i].Replace("\r\n", " ") ==
                                      lv10Array[i].Replace("\r\n", " ")
@@ -5070,8 +5271,10 @@ namespace Altera
                 worksheet.Cells["C10"].Value = Convert.ToString(sixwei.Text);
                 worksheet.Cells["M12"].Value = SkillLvs.HpBalanceForExcel;
                 worksheet.Cells["C38"].Value = SkillLvs.skill1forExcel;
-                worksheet.Row(38).Height = (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + SkillLvs.skill1forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
-                    ? (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count + SkillLvs.skill1forExcel.Count(c => (c == '(')) / 4 + 1) * 24
+                worksheet.Row(38).Height = (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count +
+                                                    SkillLvs.skill1forExcel.Count(c => c == '(') / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill1forExcel, "\r\n").Count +
+                               SkillLvs.skill1forExcel.Count(c => c == '(') / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (Regex.Matches(SkillLvs.ClassPassiveforExcel, "效果").Count > 7)
                     worksheet.Cells["C46"].Style.Font.Size = 7f;*/
@@ -5085,8 +5288,10 @@ namespace Altera
                 else if (Regex.Matches(SkillLvs.skill1forExcel, "【").Count >= 10)
                     worksheet.Cells["Q8"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C43"].Value = SkillLvs.skill2forExcel;
-                worksheet.Row(43).Height = (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + SkillLvs.skill2forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
-                    ? (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count + SkillLvs.skill2forExcel.Count(c => (c == '(')) / 4 + 1) * 24
+                worksheet.Row(43).Height = (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count +
+                                                    SkillLvs.skill2forExcel.Count(c => c == '(') / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill2forExcel, "\r\n").Count +
+                               SkillLvs.skill2forExcel.Count(c => c == '(') / 4 + 1) * 24
                     : 80; //自适应高度
                 /* if (SkillLvs.skill2forExcel.Length >= 300) worksheet.Cells["Q19"].Style.Font.Size = 7.5f;
                  if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 6 &&
@@ -5098,8 +5303,10 @@ namespace Altera
                  else if (Regex.Matches(SkillLvs.skill2forExcel, "【").Count >= 10)
                      worksheet.Cells["Q19"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C48"].Value = SkillLvs.skill3forExcel;
-                worksheet.Row(48).Height = (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + SkillLvs.skill3forExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
-                    ? (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count + SkillLvs.skill3forExcel.Count(c => (c == '(')) / 4 + 1) * 24
+                worksheet.Row(48).Height = (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count +
+                                                    SkillLvs.skill3forExcel.Count(c => c == '(') / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.skill3forExcel, "\r\n").Count +
+                               SkillLvs.skill3forExcel.Count(c => c == '(') / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (SkillLvs.skill3forExcel.Length >= 300) worksheet.Cells["Q30"].Style.Font.Size = 7.5f;
                 if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 6 &&
@@ -5111,8 +5318,10 @@ namespace Altera
                 else if (Regex.Matches(SkillLvs.skill3forExcel, "【").Count >= 10)
                     worksheet.Cells["Q30"].Style.Font.Size = 5.5f;*/
                 worksheet.Cells["C32"].Value = SkillLvs.TDforExcel;
-                worksheet.Row(32).Height = (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + SkillLvs.TDforExcel.Count(c => (c == '(')) / 4 + 1) * 24 >= 80
-                    ? (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count + SkillLvs.TDforExcel.Count(c => (c == '(')) / 4 + 1) * 24
+                worksheet.Row(32).Height = (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count +
+                                                    SkillLvs.TDforExcel.Count(c => c == '(') / 4 + 1) * 24 >= 80
+                    ? (double)(Regex.Matches(SkillLvs.TDforExcel, "\r\n").Count +
+                               SkillLvs.TDforExcel.Count(c => c == '(') / 4 + 1) * 24
                     : 80; //自适应高度
                 /*if (Regex.Matches(SkillLvs.TDforExcel, "【").Count >= 7 || SkillLvs.TDforExcel.Length >= 400)
                     worksheet.Cells["E37"].Style.Font.Size = 7.5f;*/
