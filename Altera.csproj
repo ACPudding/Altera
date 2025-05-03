@@ -8,12 +8,16 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Altera</RootNamespace>
     <AssemblyName>Altera</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,12 +30,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -417,7 +417,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Costura.Fody">
-      <Version>5.7.0</Version>
+      <Version>6.0.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -425,7 +425,7 @@
       <Version>5.8.14</Version>
     </PackageReference>
     <PackageReference Include="Fody">
-      <Version>6.8.1</Version>
+      <Version>6.9.2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -463,7 +463,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Buffers">
-      <Version>4.5.1</Version>
+      <Version>4.6.1</Version>
     </PackageReference>
     <PackageReference Include="System.Collections">
       <Version>4.3.0</Version>
@@ -481,7 +481,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.DiagnosticSource">
-      <Version>8.0.0</Version>
+      <Version>9.0.4</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.Tools">
       <Version>4.3.0</Version>
@@ -517,7 +517,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Memory">
-      <Version>4.5.5</Version>
+      <Version>4.6.3</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
@@ -529,7 +529,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Numerics.Vectors">
-      <Version>4.5.0</Version>
+      <Version>4.6.1</Version>
     </PackageReference>
     <PackageReference Include="System.ObjectModel">
       <Version>4.3.0</Version>
@@ -550,7 +550,7 @@
       <Version>4.3.1</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
-      <Version>6.0.0</Version>
+      <Version>6.1.2</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.Extensions">
       <Version>4.3.1</Version>
@@ -874,6 +874,38 @@
     <Resource Include="skillicons\skill_00613.png" />
     <Resource Include="skillicons\skill_00816.png" />
     <Resource Include="skillicons\skill_00817.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_403.png" />
+    <Resource Include="bufficons\bufficon_404.png" />
+    <Resource Include="bufficons\bufficon_406.png" />
+    <Resource Include="bufficons\bufficon_407.png" />
+    <Resource Include="bufficons\bufficon_408.png" />
+    <Resource Include="bufficons\bufficon_409.png" />
+    <Resource Include="bufficons\bufficon_410.png" />
+    <Resource Include="bufficons\bufficon_411.png" />
+    <Resource Include="bufficons\bufficon_412.png" />
+    <Resource Include="bufficons\bufficon_413.png" />
+    <Resource Include="bufficons\bufficon_414.png" />
+    <Resource Include="bufficons\bufficon_415.png" />
+    <Resource Include="bufficons\bufficon_416.png" />
+    <Resource Include="bufficons\bufficon_417.png" />
+    <Resource Include="bufficons\bufficon_418.png" />
+    <Resource Include="bufficons\bufficon_419.png" />
+    <Resource Include="bufficons\bufficon_573.png" />
+    <Resource Include="bufficons\bufficon_574.png" />
+    <Resource Include="bufficons\bufficon_575.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00335.png" />
+    <Resource Include="skillicons\skill_00419.png" />
+    <Resource Include="skillicons\skill_00421.png" />
+    <Resource Include="skillicons\skill_00422.png" />
+    <Resource Include="skillicons\skill_00546.png" />
+    <Resource Include="skillicons\skill_00547.png" />
+    <Resource Include="skillicons\skill_00818.png" />
+    <Resource Include="skillicons\skill_00819.png" />
+    <Resource Include="skillicons\skill_00820.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

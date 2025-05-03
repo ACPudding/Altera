@@ -2104,7 +2104,9 @@ namespace Altera
                     {
                         if ((TDFuncstrArray[i] == "なし" || (TDFuncstrArray[i] == "" &&
                                                            TDlv1OC1strArray[i].Contains("Hide"))) &&
-                            TDlv1OC1strArray[i].Count(c => c == ',') > 0)
+                            TDlv1OC1strArray[i].Count(c => c == ',') > 0 
+                            || (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "21989") 
+                            || (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "21990"))
                             TDFuncstrArray[i] = TranslateTDAttackName(svtTreasureDeviceFuncIDArray[i]);
 
                         if (TDFuncstrArray[i] == "生贄" && svtTreasureDeviceFuncIDArray[i] == "3851")
@@ -4365,11 +4367,12 @@ namespace Altera
                                     case 18:
                                         continue;
                                 }
-                            else
-                                continue;
+                            /*else
+                                continue;*/
                         }
 
                         if (applyTargetArray[i] == "1")
+                        {
                             if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") ||
                                 FuncArray[i].Contains("暴击星掉落率") || FuncArray[i].Contains("NP减少") ||
                                 FuncArray[i].Contains("ハッピーハロウィン"))
@@ -4386,6 +4389,8 @@ namespace Altera
                                     case 27:
                                         continue;
                                 }
+                        }
+                            
                     }
 
                     var DisplaySval = lv1Array[i] == lv10Array[i]
