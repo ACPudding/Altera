@@ -4373,8 +4373,8 @@ namespace Altera
                                     case 25:
                                         continue;
                                 }
-                            /*else
-                                continue;*/
+                            else
+                                continue;
                         }
 
                         if (applyTargetArray[i] == "1")
