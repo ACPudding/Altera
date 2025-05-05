@@ -2130,7 +2130,8 @@ namespace Altera
                             if (svtTDapplyTargetArray[i] == "2")
                             {
                                 if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") ||
-                                    TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴击发生率"))
+                                    TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴击发生率") ||
+                                    TDFuncstrArray[i].Contains("チャージ減少") || TDFuncstrArray[i].Contains("充能减少"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
                                         case 0:
@@ -2153,7 +2154,8 @@ namespace Altera
 
                             if (svtTDapplyTargetArray[i] == "1")
                                 if (TDFuncstrArray[i].Contains("NP増加") || TDFuncstrArray[i].Contains("スター発生") ||
-                                    TDFuncstrArray[i].Contains("暴击星掉落率"))
+                                    TDFuncstrArray[i].Contains("暴击星掉落率") || TDFuncstrArray[i].Contains("NP减少") ||
+                                    TDFuncstrArray[i].Contains("NP減少"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
                                         case 4:
@@ -4375,7 +4377,7 @@ namespace Altera
                         {
                             if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") ||
                                 FuncArray[i].Contains("暴击星掉落率") || FuncArray[i].Contains("NP减少") ||
-                                FuncArray[i].Contains("ハッピーハロウィン"))
+                                FuncArray[i].Contains("ハッピーハロウィン") || FuncArray[i].Contains("NP減少"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
                                     case 4:
