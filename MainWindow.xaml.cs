@@ -2131,7 +2131,8 @@ namespace Altera
                             {
                                 if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") ||
                                     TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴击发生率") ||
-                                    TDFuncstrArray[i].Contains("チャージ減少") || TDFuncstrArray[i].Contains("充能减少"))
+                                    TDFuncstrArray[i].Contains("チャージ減少") || TDFuncstrArray[i].Contains("充能减少") || 
+                                    TDFuncstrArray[i].Contains("宝具タイプチェンジ") || TDFuncstrArray[i].Contains("宝具类型改変"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
                                         case 0:
@@ -2146,6 +2147,7 @@ namespace Altera
                                         case 16:
                                         case 17:
                                         case 18:
+                                        case 25:
                                             continue;
                                     }
                                 else
@@ -4352,7 +4354,8 @@ namespace Altera
                             if (FuncArray[i].Contains("チャージ増加") || FuncArray[i].Contains("充能增加") ||
                                 FuncArray[i].Contains("クリティカル発生") || FuncArray[i].Contains("暴击发生率") ||
                                 FuncArray[i].Contains("チャージ減少") || FuncArray[i].Contains("充能减少") ||
-                                FuncArray[i].Contains("ハッピーハロウィン"))
+                                FuncArray[i].Contains("ハッピーハロウィン") ||
+                                FuncArray[i].Contains("宝具タイプチェンジ") || FuncArray[i].Contains("宝具类型改変"))
                                 switch (Convert.ToInt32(targetrawArray[i]))
                                 {
                                     case 0:
@@ -4367,6 +4370,7 @@ namespace Altera
                                     case 16:
                                     case 17:
                                     case 18:
+                                    case 25:
                                         continue;
                                 }
                             /*else
