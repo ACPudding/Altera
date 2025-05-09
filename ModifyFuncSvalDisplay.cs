@@ -3070,7 +3070,7 @@ namespace Altera
                     if (Tempsval.Length == 5 && Tempsval[4].Contains("AndCheckIndividualityList"))
                     {
                         output =
-                            $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻倍率: {Convert.ToDouble(Tempsval[3]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/","∪")}〕";
+                            $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻倍率: {Convert.ToDouble(Tempsval[3]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/", "∩")}〕";
                     }
                     else
                     {
@@ -3326,7 +3326,7 @@ namespace Altera
                                          ? Convert.ToDouble(lv1spl[3]) / 10 + "% "
                                          : Convert.ToDouble(lv1spl[3]) / 10 + "% - " +
                                            Convert.ToDouble(lv5spl[3]) / 10 + "% ") + "特攻对象:〔" +
-                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/", "∪") + "〕}】\r\n";
+                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/", "∩") + "〕}】\r\n";
                         }
                         catch (Exception)
                         {
@@ -3429,7 +3429,10 @@ namespace Altera
                     if (applyTargetListArray[i] == "2")
                     {
                         if (FuncListArray[i].Contains("チャージ増加") || FuncListArray[i].Contains("充能增加") ||
-                            FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴击发生率"))
+                            FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴击发生率") ||
+                                FuncListArray[i].Contains("チャージ減少") || FuncListArray[i].Contains("充能减少") ||
+                                FuncListArray[i].Contains("ハッピーハロウィン") ||
+                                FuncListArray[i].Contains("宝具タイプチェンジ") || FuncListArray[i].Contains("宝具类型改変"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 0:
@@ -3444,6 +3447,7 @@ namespace Altera
                                 case 16:
                                 case 17:
                                 case 18:
+                                case 25:
                                     continue;
                             }
                         else
@@ -3452,7 +3456,8 @@ namespace Altera
 
                     if (applyTargetListArray[i] == "1")
                         if (FuncListArray[i].Contains("NP増加") || FuncListArray[i].Contains("スター発生") ||
-                            FuncListArray[i].Contains("暴击星掉落率"))
+                            FuncListArray[i].Contains("暴击星掉落率") || FuncListArray[i].Contains("NP减少") ||
+                                FuncListArray[i].Contains("ハッピーハロウィン") || FuncListArray[i].Contains("NP減少"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 4:
