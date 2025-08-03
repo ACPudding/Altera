@@ -907,5 +907,10 @@
     <Resource Include="skillicons\skill_00819.png" />
     <Resource Include="skillicons\skill_00820.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ClassUnbeast1.png" />
+    <Resource Include="images\ClassUnbeast2.png" />
+    <Resource Include="images\ClassUnbeast3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

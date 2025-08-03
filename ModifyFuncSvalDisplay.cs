@@ -500,6 +500,24 @@ namespace Altera
                                     break;
                                 }
 
+                            if (Tempsval[4].Contains("OnField") &&
+                                Tempsval[5].Contains("ExtendBuffHalfTurnInPartyTurn"))
+                                try
+                                {
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    output = Funcsval;
+                                    break;
+                                }
+
                             if (Tempsval[4].Contains("TriggeredFuncPosition") &&
                                 Tempsval[5].Contains("ExtendBuffHalfTurnInOpponentTurn"))
                                 try
@@ -2363,9 +2381,25 @@ namespace Altera
                 case "HP回復":
                 case "HP减少":
                 case "HP回复":
+                case "最大HP减少":
+                case "最大HP減少":
                     Tempsval = Funcsval.Split(',');
                     try
                     {
+                        if (Tempsval.Length == 4 || Tempsval.Length == 5)
+                            try
+                            {
+                                output = Tempsval[3] + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                ? "HP"
+                                : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
                         output = Tempsval[1] + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                             ? "HP"
                             : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
@@ -2958,7 +2992,7 @@ namespace Altera
                 Funcname == "诅咒解除" || Funcname == "诅咒無効" || Funcname == "毒＆呪い無効" || Funcname == "毒＆诅咒無効" ||
                 Funcname == "毒＆やけど無効" || Funcname == "毒＆灼伤無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
                 Funcname == "灼伤＆延焼解除" || Funcname == "防御無視" || Funcname == "無敵貫通" ||
-                Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効")
+                Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効" || Funcname == "無敵" || Funcname == "无敌")
 
             {
                 Tempsval = Funcsval.Split(',');
@@ -3010,7 +3044,7 @@ namespace Altera
 
                         break;
                     case 3:
-                    case 4 when Tempsval[3].Contains("Hide"):
+                    case 4 when Tempsval[3].Contains("Hide") || Tempsval[3].Contains("ShortenBuffHalfTurnInOpponentTurn"):
                     case 5 when Tempsval[3].Contains("CheckDead") && Tempsval[4].Contains("DisplayNoEffectCauses"):
                         try
                         {
@@ -3256,7 +3290,29 @@ namespace Altera
                     if (lv1spl.Length == 7 || lv1spl.Length == 8)
                         try
                         {
-                            output = TDStrName + " 【{基础倍率: " +
+                            var N_count = Convert.ToInt32(lv1spl[5].Replace("ParamAddMaxCount:", ""));
+                            var N_Value = Convert.ToDecimal(lv1spl[3]) / 10;
+                            if (N_count == 0 && N_Value == 0.0M)
+                            {
+                                output = TDStrName + " 【{基础倍率: " +
+                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                     + "特攻倍率: " +
+                                     (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
+                                      Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
+                                      Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                         ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "%"
+                                         : Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% - " +
+                                           Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% ") +
+                                     "特攻对象:〔" +
+                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
+                                     "〕" + ")}】\r\n";
+                            }
+                            else
+                            {
+                                output = TDStrName + " 【{基础倍率: " +
                                      (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
                                          ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
                                          : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
@@ -3276,6 +3332,7 @@ namespace Altera
                                      "特攻对象:〔" +
                                      SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
                                      "〕" + ")}】\r\n";
+                            }
                         }
                         catch (Exception)
                         {

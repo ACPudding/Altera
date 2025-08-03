@@ -737,6 +737,7 @@ namespace Altera
                 ClassName[27] = "Beast ?";
                 ClassName[28] = "Pretender";
                 ClassName[29] = "Beast IV";
+                ClassName[30] = "?";
                 ClassName[31] = "?";
                 ClassName[32] = "?";
                 ClassName[33] = "Beast";
@@ -745,6 +746,9 @@ namespace Altera
                 ClassName[36] = "???";
                 ClassName[37] = "???";
                 ClassName[38] = "Beast";
+                ClassName[39] = "UNKNOWN";
+                ClassName[40] = "UnBeast";
+                ClassName[41] = "UNKNOWN";
                 ClassName[97] = "不明";
                 ClassName[1001] = "礼装";
                 ClassName[107] = "Berserker";
@@ -780,6 +784,7 @@ namespace Altera
                 nprateclassbase[28] = 1.55M;
                 nprateclassbase[33] = 1.5M;
                 nprateclassbase[38] = 1.5M;
+                nprateclassbase[40] = 1.5M; //待定
                 nprateclassbase[20] = 0.0M;
                 nprateclassbase[22] = 0.0M;
                 nprateclassbase[24] = 0.0M;
@@ -1150,7 +1155,38 @@ namespace Altera
                     //notrealnprate.Text = Math.Round(NPrate * 100,4) + "%";
                 }
 
-                switch (classData)
+                var attackRate = 0.00M; //atk补正
+
+                foreach (var svtClasstmp in GlobalPathsAndDatas.mstClassArray)
+                {
+                    if (((JObject)svtClasstmp)["id"].ToString() == classData.ToString())
+                    {
+                        attackRate = Convert.ToDecimal(((JObject)svtClasstmp)["attackRate"].ToString()) / 1000M;
+                        break;
+                    }
+                }
+
+                var atkBalanceStr = "";
+                if (attackRate == 1.00M)
+                {
+                    atkBalanceStr = $"( x {attackRate:#0.000} -)";
+                }
+                else if (attackRate < 1.00M)
+                {
+                    atkBalanceStr = $"( x {attackRate:#0.000} ▽)";
+                }
+                else
+                {
+                    atkBalanceStr = $"( x {attackRate:#0.000} △)";
+                }
+
+                if (classData == 1001)
+                    Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
+
+                atkbalance1.Text = atkBalanceStr;
+                atkbalance2.Text = atkBalanceStr;
+
+                /*switch (classData)
                 {
                     case 1:
                     case 4:
@@ -1166,6 +1202,7 @@ namespace Altera
                     case 28:
                     case 33:
                     case 38:
+                    case 40:
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         break;
@@ -1195,7 +1232,7 @@ namespace Altera
                         atkbalance1.Text = "( x 1.0 -)";
                         atkbalance2.Text = "( x 1.0 -)";
                         break;
-                }
+                }*/
             });
         }
 
@@ -1228,6 +1265,7 @@ namespace Altera
             ClassName[32] = "？(32)";
             ClassName[33] = "Beast";
             ClassName[38] = "Beast";
+            ClassName[40] = "UnBeast";
             ClassName[34] = "BeastVI";
             ClassName[35] = "BeastVI";
             var pngArr = 0;
@@ -2344,8 +2382,8 @@ namespace Altera
         {
             origin_str = origin_str.Replace("防御無視", "防御无视").Replace("無敵貫通", "无敌贯通")
                 .Replace("無効", "无效").Replace("強化", "强化").Replace("無敵", "无敌").Replace("攻撃", "攻击").Replace("減少", "减少")
-                .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果")
-                .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态");
+                .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果").Replace("無視", "无视")
+                .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态").Replace("発動", "发动").Replace("消費", "消费");
             return origin_str;
         }
 
@@ -6193,7 +6231,8 @@ namespace Altera
                 ClassBasicBase[25] = 1.00M;
                 ClassBasicBase[28] = 0.95M;
                 ClassBasicBase[33] = 0.97M;
-                ClassBasicBase[38] = 0.98M;
+                ClassBasicBase[38] = 1.03M;
+                ClassBasicBase[40] = 0.99M; //待定
                 var ShowString = new string[8];
                 ShowString[1] = "( 攻防倾向: 全HP )";
                 ShowString[2] = "( 攻防倾向: 偏HP )";
@@ -6206,7 +6245,7 @@ namespace Altera
                 if (ClassID != "1" && ClassID != "2" && ClassID != "3" && ClassID != "4" && ClassID != "5" &&
                     ClassID != "6" && ClassID != "7" && ClassID != "8" && ClassID != "9" && ClassID != "10" &&
                     ClassID != "11" && ClassID != "17" && ClassID != "23" && ClassID != "25" && ClassID != "28" &&
-                    ClassID != "33" && ClassID != "38")
+                    ClassID != "33" && ClassID != "38" && ClassID != "40")
                 {
                     hpatkbalance.Text = ShowString[7];
                     SkillLvs.HpBalanceForExcel = ShowString[7].Replace("(", "").Replace(")", "");
@@ -6839,6 +6878,15 @@ namespace Altera
             {
                 Dispatcher.Invoke(() => { MessageBox.Error("未找到相关模块,请检查.", "错误"); });
             }
+        }
+
+        private void svtLimitSelChange(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void svtLimitSelTDChange(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void TextBox_Press_Enter(object sender, KeyEventArgs e)
