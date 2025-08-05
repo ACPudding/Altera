@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using Altera.Properties;
 using Newtonsoft.Json.Linq;
 
@@ -540,7 +539,8 @@ namespace Altera
                                 Tempsval[5].Contains("TriggeredFieldCountRange"))
                                 try
                                 {
-                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" + $" (在场敌人为{Tempsval[4].Replace("TriggeredFieldCountTarget:", "")}个时生效)" +
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + "%" +
+                                             $" (在场敌人为{Tempsval[4].Replace("TriggeredFieldCountTarget:", "")}个时生效)" +
                                              (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                                  ? ""
                                                  : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1282,25 +1282,23 @@ namespace Altera
                         }
 
                     if (Tempsval.Length == 4)
-                        {
-                            if (Tempsval[2].Contains("TriggeredFuncPosition") && Tempsval[3].Contains("DisplayLastFuncInvalidType"))
+                        if (Tempsval[2].Contains("TriggeredFuncPosition") &&
+                            Tempsval[3].Contains("DisplayLastFuncInvalidType"))
+                            try
                             {
-                                try
-                                {
-                                    output = $"减少{Tempsval[1]}回合" +
-                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
-                                                 ? ""
-                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
-                                    break;
-                                }
-                                catch (Exception)
-                                {
-                                    output = Funcsval;
-                                    break;
-                                }
+                                output = $"减少{Tempsval[1]}回合" +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
+                                break;
                             }
-                        }
-                        output = Funcsval;
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                    output = Funcsval;
                     break;
                 }
                 case 33:
@@ -1339,7 +1337,8 @@ namespace Altera
                                 break;
                             }
 
-                        if (Tempsval[2].Contains("TriggeredFuncPosition") && Tempsval[3].Contains("DisplayLastFuncInvalidType"))
+                        if (Tempsval[2].Contains("TriggeredFuncPosition") &&
+                            Tempsval[3].Contains("DisplayLastFuncInvalidType"))
                             try
                             {
                                 output = Tempsval[1] + "个" +
@@ -1577,7 +1576,8 @@ namespace Altera
                                     break;
                                 }
 
-                            if (Tempsval[2].Contains("TriggeredFuncPosition") && Tempsval[3].Contains("DisplayLastFuncInvalidType"))
+                            if (Tempsval[2].Contains("TriggeredFuncPosition") &&
+                                Tempsval[3].Contains("DisplayLastFuncInvalidType"))
                                 try
                                 {
                                     output = Tempsval[1] + "个" +
@@ -1632,6 +1632,7 @@ namespace Altera
                             output = Funcsval;
                             break;
                     }
+
                     break;
                 case 148:
                     Tempsval = Funcsval.Split(',');
@@ -1642,8 +1643,8 @@ namespace Altera
                                      (Tempsval[0] == "1000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
-                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
                             break;
                         }
                         catch (Exception)
@@ -1659,14 +1660,12 @@ namespace Altera
                                      (Tempsval[0] == "1000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
-                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
-                            break;
+                                     (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                     (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
                         }
                         catch (Exception)
                         {
                             output = Funcsval;
-                            break;
                         }
 
                     break;
@@ -1895,25 +1894,26 @@ namespace Altera
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
                                      (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
                                      (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
-                            break;
                         }
                         catch (Exception)
                         {
                             output = Funcsval;
                         }
+
                         break;
                     }
+
                     try
                     {
                         output = "∅" + (Tempsval[0] == "1000"
-                                     ? ""
-                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
-                        break;
+                            ? ""
+                            : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)");
                     }
                     catch (Exception)
                     {
                         output = Funcsval;
                     }
+
                     break;
                 default:
                     Tempsval = Funcsval.Split(',');
@@ -2390,8 +2390,8 @@ namespace Altera
                             try
                             {
                                 output = Tempsval[3] + (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
-                                ? "HP"
-                                : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
+                                    ? "HP"
+                                    : "HP(" + Convert.ToInt64(Tempsval[0]) / 10 + "%成功率)");
                                 break;
                             }
                             catch (Exception)
@@ -2464,6 +2464,7 @@ namespace Altera
                             output = Funcsval;
                             break;
                         }
+
                     output = Funcsval;
                     break;
                 case "幻惑":
@@ -3044,7 +3045,8 @@ namespace Altera
 
                         break;
                     case 3:
-                    case 4 when Tempsval[3].Contains("Hide") || Tempsval[3].Contains("ShortenBuffHalfTurnInOpponentTurn"):
+                    case 4 when Tempsval[3].Contains("Hide") ||
+                                Tempsval[3].Contains("ShortenBuffHalfTurnInOpponentTurn"):
                     case 5 when Tempsval[3].Contains("CheckDead") && Tempsval[4].Contains("DisplayNoEffectCauses"):
                         try
                         {
@@ -3102,12 +3104,9 @@ namespace Altera
                 if (Tempsval.Length == 4 || Tempsval.Length == 5)
                 {
                     if (Tempsval.Length == 5 && Tempsval[4].Contains("AndCheckIndividualityList"))
-                    {
                         output =
                             $"\r\n基础倍率: {Convert.ToDouble(Tempsval[1]) / 10}% 特攻倍率: {Convert.ToDouble(Tempsval[3]) / 10}% 特攻对象(ID):〔{SearchIndividualality(Tempsval[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/", "∩")}〕";
-                    }
                     else
-                    {
                         try
                         {
                             output =
@@ -3117,11 +3116,11 @@ namespace Altera
                         {
                             output = Funcsval;
                         }
-                    }
-                    
                 }
                 else
+                {
                     output = Funcsval;
+                }
             }
 
             if (Funcname.Contains("HP越少威力"))
@@ -3293,46 +3292,42 @@ namespace Altera
                             var N_count = Convert.ToInt32(lv1spl[5].Replace("ParamAddMaxCount:", ""));
                             var N_Value = Convert.ToDecimal(lv1spl[3]) / 10;
                             if (N_count == 0 && N_Value == 0.0M)
-                            {
                                 output = TDStrName + " 【{基础倍率: " +
-                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
-                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
-                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
-                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
-                                     + "特攻倍率: " +
-                                     (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
-                                      Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
-                                      Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
-                                         ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "%"
-                                         : Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% - " +
-                                           Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% ") +
-                                     "特攻对象:〔" +
-                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
-                                     "〕" + ")}】\r\n";
-                            }
+                                         (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                             ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                             : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                               Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                         + "特攻倍率: " +
+                                         (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
+                                          Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
+                                          Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                             ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "%"
+                                             : Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% - " +
+                                               Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% ") +
+                                         "特攻对象:〔" +
+                                         SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
+                                         "〕" + ")}】\r\n";
                             else
-                            {
                                 output = TDStrName + " 【{基础倍率: " +
-                                     (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
-                                         ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
-                                         : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
-                                           Convert.ToDouble(lv5spl[1]) / 10 + "% ")
-                                     + "特攻倍率: " +
-                                     (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
-                                      Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
-                                      Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
-                                         ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
-                                           Convert.ToDouble(lv1spl[3]) / 10 + "% * N " + "(N≤" +
-                                           lv1spl[5].Replace("ParamAddMaxCount:", "") + ") "
-                                         : "<" + Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
-                                           Convert.ToDouble(lv1spl[3]) / 10 + "% * N > - <" +
-                                           Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% + " +
-                                           Convert.ToDouble(lv5spl[3]) / 10 + "% * N >" + "(N≤" +
-                                           lv1spl[5].Replace("ParamAddMaxCount:", "") + ")") +
-                                     "特攻对象:〔" +
-                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
-                                     "〕" + ")}】\r\n";
-                            }
+                                         (Convert.ToDouble(lv1spl[1]) == Convert.ToDouble(lv5spl[1])
+                                             ? Convert.ToDouble(lv1spl[1]) / 10 + "% "
+                                             : Convert.ToDouble(lv1spl[1]) / 10 + "% - " +
+                                               Convert.ToDouble(lv5spl[1]) / 10 + "% ")
+                                         + "特攻倍率: " +
+                                         (Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) ==
+                                          Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) &&
+                                          Convert.ToDouble(lv1spl[3]) == Convert.ToDouble(lv5spl[3])
+                                             ? Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                               Convert.ToDouble(lv1spl[3]) / 10 + "% * N " + "(N≤" +
+                                               lv1spl[5].Replace("ParamAddMaxCount:", "") + ") "
+                                             : "<" + Convert.ToDouble(lv1spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                               Convert.ToDouble(lv1spl[3]) / 10 + "% * N > - <" +
+                                               Convert.ToDouble(lv5spl[6].Replace("Value2:", "")) / 10 + "% + " +
+                                               Convert.ToDouble(lv5spl[3]) / 10 + "% * N >" + "(N≤" +
+                                               lv1spl[5].Replace("ParamAddMaxCount:", "") + ")") +
+                                         "特攻对象:〔" +
+                                         SearchIndividualalityTDExcel(lv1spl[4].Replace("TargetList:", "")) +
+                                         "〕" + ")}】\r\n";
                         }
                         catch (Exception)
                         {
@@ -3383,7 +3378,8 @@ namespace Altera
                                          ? Convert.ToDouble(lv1spl[3]) / 10 + "% "
                                          : Convert.ToDouble(lv1spl[3]) / 10 + "% - " +
                                            Convert.ToDouble(lv5spl[3]) / 10 + "% ") + "特攻对象:〔" +
-                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("AndCheckIndividualityList:", "")).Replace(@"/", "∩") + "〕}】\r\n";
+                                     SearchIndividualalityTDExcel(lv1spl[4].Replace("AndCheckIndividualityList:", ""))
+                                         .Replace(@"/", "∩") + "〕}】\r\n";
                         }
                         catch (Exception)
                         {
@@ -3391,6 +3387,7 @@ namespace Altera
                         }
                     else
                         output = "false";
+
                     break;
                 default:
                     output = "false";
@@ -3487,9 +3484,9 @@ namespace Altera
                     {
                         if (FuncListArray[i].Contains("チャージ増加") || FuncListArray[i].Contains("充能增加") ||
                             FuncListArray[i].Contains("クリティカル発生") || FuncListArray[i].Contains("暴击发生率") ||
-                                FuncListArray[i].Contains("チャージ減少") || FuncListArray[i].Contains("充能减少") ||
-                                FuncListArray[i].Contains("ハッピーハロウィン") ||
-                                FuncListArray[i].Contains("宝具タイプチェンジ") || FuncListArray[i].Contains("宝具类型改変"))
+                            FuncListArray[i].Contains("チャージ減少") || FuncListArray[i].Contains("充能减少") ||
+                            FuncListArray[i].Contains("ハッピーハロウィン") ||
+                            FuncListArray[i].Contains("宝具タイプチェンジ") || FuncListArray[i].Contains("宝具类型改変"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 0:
@@ -3514,7 +3511,7 @@ namespace Altera
                     if (applyTargetListArray[i] == "1")
                         if (FuncListArray[i].Contains("NP増加") || FuncListArray[i].Contains("スター発生") ||
                             FuncListArray[i].Contains("暴击星掉落率") || FuncListArray[i].Contains("NP减少") ||
-                                FuncListArray[i].Contains("ハッピーハロウィン") || FuncListArray[i].Contains("NP減少"))
+                            FuncListArray[i].Contains("ハッピーハロウィン") || FuncListArray[i].Contains("NP減少"))
                             switch (Convert.ToInt32(targetrawArray[i]))
                             {
                                 case 4:

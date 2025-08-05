@@ -23,7 +23,8 @@
                     <TextBox x:Name="textbox1" HorizontalAlignment="Left" Height="14" Margin="260,214,0,0"
                              TextWrapping="Wrap"
                              VerticalAlignment="Top" Width="295" MaxLength="7" MaxLines="1"
-                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" KeyDown="TextBox_Press_Enter" />
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13"
+                             KeyDown="TextBox_Press_Enter" />
                     <TextBlock x:Name="SvtIDHelper" HorizontalAlignment="Left" Height="16" Margin="560,228,0,0"
                                TextWrapping="Wrap"
                                Text=""
@@ -150,14 +151,19 @@
                         </GroupBox.Background>
                         <GroupBox.Header>
                             <Grid>
-                                <ComboBox Name="svtSelectLimit" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-375,0,0,0" Width="134.8" Height="20" MinHeight="0" FontFamily="Source Han Sans SC">
+                                <ComboBox Name="svtSelectLimit" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                          Margin="-375,0,0,0" Width="134.8" Height="20" MinHeight="0"
+                                          FontFamily="Source Han Sans SC">
                                     <ComboBoxItem IsSelected="True">再临阶段I</ComboBoxItem>
                                     <ComboBoxItem>再临阶段II</ComboBoxItem>
                                     <ComboBoxItem>再临阶段III</ComboBoxItem>
                                 </ComboBox>
-                                <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="setSvtLimit"
-                                         Content="修改" HorizontalAlignment="Left" Height="25" Margin="-230,0,0,0" Width="40"
-                                             Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9" Click="svtLimitSelChange">
+                                <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
+                                        x:Name="setSvtLimit"
+                                        Content="切换" HorizontalAlignment="Left" Height="25" Margin="-230,0,0,0"
+                                        Width="40"
+                                        Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9"
+                                        Click="svtLimitSelChange">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                                             <GradientStop Color="#FF326CF3" Offset="0" />
@@ -165,7 +171,8 @@
                                         </LinearGradientBrush>
                                     </Button.Background>
                                 </Button>
-                                <TextBlock Text="基本信息" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock Text="基本信息" FontWeight="Bold" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
                             </Grid>
                         </GroupBox.Header>
                         <Grid x:Name="svtdetail" Margin="0,0,0,0">
@@ -436,10 +443,10 @@
                                     <SolidColorBrush Color="#FF484848" Opacity="0.15" />
                                 </TextBox.Background>
                             </TextBox>
-                            <TextBlock x:Name="atkbalance1" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
+                            <TextBlock x:Name="atkbalance1" Text="" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="70" FontSize="12"
                                        Foreground="#FF333333" Margin="185,341,0,0" FontWeight="Bold" />
-                            <TextBlock x:Name="atkbalance2" Text="( x 1.0 -)" HorizontalAlignment="Left" Height="27"
+                            <TextBlock x:Name="atkbalance2" Text="" HorizontalAlignment="Left" Height="27"
                                        VerticalAlignment="Top" Width="70" FontSize="12"
                                        Foreground="#FF333333" Margin="435,341,0,0" FontWeight="Bold" />
                             <TextBlock x:Name="sixwei" Text="" HorizontalAlignment="Left" Height="27"
@@ -703,22 +710,8 @@
                     <GroupBox Margin="2,0,2,350" Background="{x:Null}" x:Name="svtTreasureInfo">
                         <GroupBox.Header>
                             <Grid>
-                                <ComboBox Name="svtSelectLimitTD" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-365,0,0,0" Width="134.8" Height="20" MinHeight="0" FontFamily="Source Han Sans SC">
-                                    <ComboBoxItem IsSelected="True">再临阶段I</ComboBoxItem>
-                                    <ComboBoxItem>再临阶段II</ComboBoxItem>
-                                    <ComboBoxItem>再临阶段III</ComboBoxItem>
-                                </ComboBox>
-                                <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15" x:Name="setSvtLimitTD"
-                                Content="修改" HorizontalAlignment="Left" Height="25" Margin="-220,0,0,0" Width="40"
-                                Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9" Click="svtLimitSelTDChange">
-                                    <Button.Background>
-                                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                            <GradientStop Color="#FF326CF3" Offset="0" />
-                                            <GradientStop Color="#FF7BA2FF" Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Button.Background>
-                                </Button>
-                                <TextBlock Text="宝具基本信息" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock Text="宝具基本信息" FontWeight="Bold" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
                             </Grid>
                         </GroupBox.Header>
                         <Grid>
@@ -768,8 +761,8 @@
                                        FontSize="12" Foreground="#FF333333"
                                        Margin="157,28,0,0" />
                             <Button x:Name="TDLabelToggle" Content="↑↓" HorizontalAlignment="Left"
-                                    Margin="165,50,0,0" VerticalAlignment="Top" Width="36" Height="28" FontSize="10" Visibility="Collapsed">
-                            </Button>
+                                    Margin="165,50,0,0" VerticalAlignment="Top" Width="36" Height="28" FontSize="10"
+                                    Visibility="Collapsed" />
                             <Border BorderBrush="White" BorderThickness="2" Margin="211,0,145,95">
                                 <StackPanel>
                                     <hc:OutlineText x:Name="npruby" Margin="0,2,0,0" Width="440"

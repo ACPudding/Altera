@@ -85,5 +85,12 @@ namespace Altera.Properties
         public static decimal lv120atk;
         public static decimal lv150hp;
         public static decimal lv150atk;
+        public static string[,] svtLimitChangeableArray = new string[3,7]; //0,1,2 3个再临 0 svtNameOverwrite 1 svtBattleNameOverwrite 2 svtTDNameOverwrite 3 svtTDRubyOverwrite 4 svtTDTypeOverwrite 5 svtTDRankOverwrite 6 svtAttriOverwrite
+        public static string svtNormalName;
+        public static string svtNormalBattleName;
+        public static string svtNormalTDName;
+        public static string svtNormalTDRuby;
+        public static string svtNormalTDRank;
+        public static string svtNormalAttri;
     }
 }

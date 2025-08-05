@@ -156,6 +156,12 @@ namespace Altera
             JB.JB5tmp = "";
             JB.JB6tmp = "";
             JB.JB7tmp = "";
+            GlobalPathsAndDatas.svtNormalName = "";
+            GlobalPathsAndDatas.svtNormalBattleName = "";
+            GlobalPathsAndDatas.svtNormalTDName = "";
+            GlobalPathsAndDatas.svtNormalTDRuby = "";
+            GlobalPathsAndDatas.svtNormalTDRank = "";
+            GlobalPathsAndDatas.svtNormalAttri = "";
             ClearTexts();
             RefreshTranslationsList();
             var TDStringBar = GetSvtTDID(svtID);
@@ -164,6 +170,8 @@ namespace Altera
                 IsNPStrengthened.Dispatcher.Invoke(() => { IsNPStrengthened.Text = "▲▲"; });
             svtTDID = TDStringBar[0];
             textbox1.Dispatcher.Invoke(() => { textbox1.Text = svtID; });
+            svtSelectLimit.Dispatcher.Invoke(() => { svtSelectLimit.SelectedIndex = 0; });
+            GlobalPathsAndDatas.svtLimitChangeableArray = getSvtLimitChangeableSet(svtID);
             SCAC.Start();
             SBIC.Start();
             SCIC.Start();
@@ -194,6 +202,203 @@ namespace Altera
                     Growl.Info("此ID为小怪(或部分boss以及种火芙芙),配卡、技能、宝具信息解析并不准确,请知悉.");
             });
             GC.Collect();
+        }
+
+        private string[,] getSvtLimitChangeableSet(string svtid)
+        {
+            var result = new string[3, 7];
+            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 7; j++)
+                result[i, j] = "Unchanged";
+            result[0, 6] = "-1";
+            result[1, 6] = "-1";
+            result[2, 6] = "-1";
+            foreach (var mstSvtLimitAddtmp in GlobalPathsAndDatas.mstSvtLimitAddArray)
+            {
+                if (((JObject)mstSvtLimitAddtmp)["svtId"].ToString() != svtid) continue;
+                switch (((JObject)mstSvtLimitAddtmp)["limitCount"].ToString())
+                {
+                    case "0":
+                        result[0, 6] = ((JObject)mstSvtLimitAddtmp)["attri"].ToString();
+                        var tmpJarray1 =
+                            (JObject)JsonConvert.DeserializeObject(((JObject)mstSvtLimitAddtmp)["script"].ToString());
+                        try
+                        {
+                            result[0, 0] = tmpJarray1["overWriteServantName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 0] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[0, 1] = tmpJarray1["overWriteServantBattleName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 1] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[0, 2] = tmpJarray1["overWriteTDName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 2] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[0, 3] = tmpJarray1["overWriteTDRuby"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 3] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[0, 4] = tmpJarray1["overWriteTDTypeText"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 4] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[0, 5] = tmpJarray1["overWriteTDRank"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[0, 5] = "Unchanged";
+                        }
+
+                        break;
+                    case "1":
+                        result[1, 6] = ((JObject)mstSvtLimitAddtmp)["attri"].ToString();
+                        var tmpJarray2 =
+                            (JObject)JsonConvert.DeserializeObject(((JObject)mstSvtLimitAddtmp)["script"].ToString());
+                        try
+                        {
+                            result[1, 0] = tmpJarray2["overWriteServantName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 0] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[1, 1] = tmpJarray2["overWriteServantBattleName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 1] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[1, 2] = tmpJarray2["overWriteTDName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 2] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[1, 3] = tmpJarray2["overWriteTDRuby"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 3] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[1, 4] = tmpJarray2["overWriteTDTypeText"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 4] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[1, 5] = tmpJarray2["overWriteTDRank"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[1, 5] = "Unchanged";
+                        }
+
+                        break;
+                    case "3":
+                        result[2, 6] = ((JObject)mstSvtLimitAddtmp)["attri"].ToString();
+                        var tmpJarray3 =
+                            (JObject)JsonConvert.DeserializeObject(((JObject)mstSvtLimitAddtmp)["script"].ToString());
+                        try
+                        {
+                            result[2, 0] = tmpJarray3["overWriteServantName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 0] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[2, 1] = tmpJarray3["overWriteServantBattleName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 1] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[2, 2] = tmpJarray3["overWriteTDName"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 2] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[2, 3] = tmpJarray3["overWriteTDRuby"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 3] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[2, 4] = tmpJarray3["overWriteTDTypeText"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 4] = "Unchanged";
+                        }
+
+                        try
+                        {
+                            result[2, 5] = tmpJarray3["overWriteTDRank"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            result[2, 5] = "Unchanged";
+                        }
+
+                        break;
+                }
+            }
+
+            return result;
         }
 
         private void AskForExcelOutput()
@@ -563,9 +768,12 @@ namespace Altera
                 npname.Dispatcher.Invoke(() => { npname.Text = NPName; });
                 NPrank = mstTDobjtmp["rank"].ToString();
                 NPruby = mstTDobjtmp["ruby"].ToString();
+                GlobalPathsAndDatas.svtNormalTDRuby = NPruby;
+                GlobalPathsAndDatas.svtNormalTDName = NPName;
                 npruby.Dispatcher.Invoke(() => { npruby.Text = NPruby; });
                 NPtypeText = mstTDobjtmp["typeText"].ToString();
                 nprank.Dispatcher.Invoke(() => { nprank.Text = NPrank + " ( " + NPtypeText + " ) "; });
+                GlobalPathsAndDatas.svtNormalTDRank = NPrank + " ( " + NPtypeText + " ) ";
                 svtNPDamageType = mstTDobjtmp["effectFlag"].ToString().Replace("0", "辅助宝具")
                     .Replace("1", "全体宝具").Replace("2", "单体宝具");
                 nptype.Dispatcher.Invoke(() => { nptype.Text = svtNPDamageType; });
@@ -904,11 +1112,14 @@ namespace Altera
                     {
                         var mstSvtobjtmp = JObject.Parse(svtIDtmp.ToString());
                         svtName = mstSvtobjtmp["name"].ToString();
+                        GlobalPathsAndDatas.svtNormalName = svtName;
                         Svtname.Text = svtName;
                         JB.svtnme = svtName;
                         svtNameDisplay = mstSvtobjtmp["battleName"].ToString();
+                        GlobalPathsAndDatas.svtNormalBattleName = svtNameDisplay;
                         SvtBattlename.Text = svtNameDisplay;
-                        Title += " - " + svtName;
+                        Title += " - " + svtName +
+                                 $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
                         svtClass = mstSvtobjtmp["classId"].ToString();
                         svtgender = mstSvtobjtmp["genderType"].ToString();
                         svtstarrate = mstSvtobjtmp["starRate"].ToString();
@@ -921,6 +1132,7 @@ namespace Altera
                         collection.Text = svtcollectionid;
                         svtHideAttri = mstSvtobjtmp["attri"].ToString().Replace("1", "人").Replace("2", "天")
                             .Replace("3", "地").Replace("4", "星").Replace("5", "兽");
+                        GlobalPathsAndDatas.svtNormalAttri = svtHideAttri;
                         CardArrange = mstSvtobjtmp["cardIds"].ToString().Replace("\n", "").Replace("\t", "")
                             .Replace("\r", "").Replace(" ", "").Replace("2", "B").Replace("1", "A").Replace("3", "Q");
                         var SCI = new Task(() => { SetCardImgs(CardArrange); });
@@ -1158,27 +1370,19 @@ namespace Altera
                 var attackRate = 0.00M; //atk补正
 
                 foreach (var svtClasstmp in GlobalPathsAndDatas.mstClassArray)
-                {
                     if (((JObject)svtClasstmp)["id"].ToString() == classData.ToString())
                     {
                         attackRate = Convert.ToDecimal(((JObject)svtClasstmp)["attackRate"].ToString()) / 1000M;
                         break;
                     }
-                }
 
                 var atkBalanceStr = "";
                 if (attackRate == 1.00M)
-                {
                     atkBalanceStr = $"( x {attackRate:#0.000} -)";
-                }
                 else if (attackRate < 1.00M)
-                {
                     atkBalanceStr = $"( x {attackRate:#0.000} ▽)";
-                }
                 else
-                {
                     atkBalanceStr = $"( x {attackRate:#0.000} △)";
-                }
 
                 if (classData == 1001)
                     Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
@@ -2180,10 +2384,10 @@ namespace Altera
 
                     for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                     {
-                        if ((TDFuncstrArray[i] == "なし" || (TDFuncstrArray[i] == "" &&
-                                                           TDlv1OC1strArray[i].Contains("Hide"))) &&
-                            TDlv1OC1strArray[i].Count(c => c == ',') > 0 
-                            || (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "21989") 
+                        if (((TDFuncstrArray[i] == "なし" || (TDFuncstrArray[i] == "" &&
+                                                            TDlv1OC1strArray[i].Contains("Hide"))) &&
+                             TDlv1OC1strArray[i].Count(c => c == ',') > 0)
+                            || (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "21989")
                             || (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "21990"))
                             TDFuncstrArray[i] = TranslateTDAttackName(svtTreasureDeviceFuncIDArray[i]);
 
@@ -2209,7 +2413,7 @@ namespace Altera
                             {
                                 if (TDFuncstrArray[i].Contains("チャージ増加") || TDFuncstrArray[i].Contains("充能增加") ||
                                     TDFuncstrArray[i].Contains("クリティカル発生") || TDFuncstrArray[i].Contains("暴击发生率") ||
-                                    TDFuncstrArray[i].Contains("チャージ減少") || TDFuncstrArray[i].Contains("充能减少") || 
+                                    TDFuncstrArray[i].Contains("チャージ減少") || TDFuncstrArray[i].Contains("充能减少") ||
                                     TDFuncstrArray[i].Contains("宝具タイプチェンジ") || TDFuncstrArray[i].Contains("宝具类型改変"))
                                     switch (Convert.ToInt32(svtTDTargetRawArray[i]))
                                     {
@@ -2382,8 +2586,10 @@ namespace Altera
         {
             origin_str = origin_str.Replace("防御無視", "防御无视").Replace("無敵貫通", "无敌贯通")
                 .Replace("無効", "无效").Replace("強化", "强化").Replace("無敵", "无敌").Replace("攻撃", "攻击").Replace("減少", "减少")
-                .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果").Replace("無視", "无视")
-                .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态").Replace("発動", "发动").Replace("消費", "消费");
+                .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果")
+                .Replace("無視", "无视")
+                .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态").Replace("発動", "发动")
+                .Replace("消費", "消费");
             return origin_str;
         }
 
@@ -3719,8 +3925,8 @@ namespace Altera
                 jibantext5.Text = "";
                 jibantext6.Text = "";
                 jibantext7.Text = "";
-                atkbalance1.Text = "( x 1.0 -)";
-                atkbalance2.Text = "( x 1.0 -)";
+                atkbalance1.Text = "";
+                atkbalance2.Text = "";
                 npcardtype.Text = "";
                 nptype.Text = "";
                 nprank.Text = "";
@@ -3729,6 +3935,7 @@ namespace Altera
                 npdetail.Text = "";
                 JBOutput.IsEnabled = false;
                 sixwei.Text = "";
+                svtSelectLimit.SelectedIndex = 0;
                 Skill1FuncList.Items.Clear();
                 Skill2FuncList.Items.Clear();
                 Skill3FuncList.Items.Clear();
@@ -3755,6 +3962,13 @@ namespace Altera
                     levels[i] = i;
                 }
 
+                GlobalPathsAndDatas.svtLimitChangeableArray = new string[3, 7]; //清空数组
+                GlobalPathsAndDatas.svtNormalName = "";
+                GlobalPathsAndDatas.svtNormalBattleName = "";
+                GlobalPathsAndDatas.svtNormalTDName = "";
+                GlobalPathsAndDatas.svtNormalTDRuby = "";
+                GlobalPathsAndDatas.svtNormalTDRank = "";
+                GlobalPathsAndDatas.svtNormalAttri = "";
                 XZhou.MaxValue = 120;
                 LineHP = Zeros;
                 LineATK = Zeros;
@@ -4456,7 +4670,6 @@ namespace Altera
                         }
 
                         if (applyTargetArray[i] == "1")
-                        {
                             if (FuncArray[i].Contains("NP増加") || FuncArray[i].Contains("スター発生") ||
                                 FuncArray[i].Contains("暴击星掉落率") || FuncArray[i].Contains("NP减少") ||
                                 FuncArray[i].Contains("ハッピーハロウィン") || FuncArray[i].Contains("NP減少"))
@@ -4473,8 +4686,6 @@ namespace Altera
                                     case 27:
                                         continue;
                                 }
-                        }
-                            
                     }
 
                     var DisplaySval = lv1Array[i] == lv10Array[i]
@@ -6882,11 +7093,71 @@ namespace Altera
 
         private void svtLimitSelChange(object sender, RoutedEventArgs e)
         {
+            Dispatcher.Invoke(() =>
+            {
+                var index = svtSelectLimit.SelectedIndex;
+                var stateStr = "";
+                switch (index)
+                {
+                    case 0:
+                        stateStr = "I";
+                        break;
+                    case 1:
+                        stateStr = "II";
+                        break;
+                    case 2:
+                        stateStr = "III";
+                        break;
+                }
 
-        }
-        private void svtLimitSelTDChange(object sender, RoutedEventArgs e)
-        {
+                if (Svtname.Text != "")
+                {
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 0] != "Unchanged")
+                    {
+                        Svtname.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 0];
+                        Title = "Altera - " + GlobalPathsAndDatas.svtLimitChangeableArray[index, 0] +
+                                $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
+                    }
+                    else
+                    {
+                        Svtname.Text = GlobalPathsAndDatas.svtNormalName;
+                        Title = "Altera - " + GlobalPathsAndDatas.svtNormalName +
+                                $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
+                    }
 
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 1] != "Unchanged")
+                        SvtBattlename.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 1];
+                    else
+                        SvtBattlename.Text = GlobalPathsAndDatas.svtNormalBattleName;
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 6] != "-1")
+                    {
+                        hiddenattri.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 6].Replace("1", "人")
+                            .Replace("2", "天")
+                            .Replace("3", "地").Replace("4", "星").Replace("5", "兽");
+                        ;
+                    }
+                    else
+                    {
+                        hiddenattri.Text = GlobalPathsAndDatas.svtNormalAttri;
+                    }
+
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 3] != "Unchanged")
+                        npruby.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 3];
+                    else
+                        npruby.Text = GlobalPathsAndDatas.svtNormalTDRuby;
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 2] != "Unchanged")
+                        npname.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 2];
+                    else
+                        npname.Text = GlobalPathsAndDatas.svtNormalTDName;
+                    if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 4] != "Unchanged" &&
+                        GlobalPathsAndDatas.svtLimitChangeableArray[index, 5] != "Unchanged")
+                        nprank.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 5] + " ( " +
+                                      GlobalPathsAndDatas.svtLimitChangeableArray[index, 4] + " ) ";
+                    else
+                        nprank.Text = GlobalPathsAndDatas.svtNormalTDRank;
+                    Growl.Info($"部分信息已切换至再临阶段{stateStr},请查阅.");
+                }
+            });
         }
 
         private void TextBox_Press_Enter(object sender, KeyEventArgs e)
