@@ -3630,7 +3630,9 @@ namespace Altera
 
             if (skillID3 == "") skillID3 = FindSkillIDinNPCSvt(svtID, 3);
 
-            if (svtSkillRankUpdata != new string[3] { "empty", "empty", "empty" } && svtSkillRankUpdata.Length == 3)
+            var emptySta = new string[3] { "", "", "" };
+
+            if (!svtSkillRankUpdata.SequenceEqual(emptySta))
             {
                 var sk1Hash =
                     new HashSet<String>((skillID1.Replace("^SK", "") + "*" + svtSkillRankUpdata[0]).Split('*'))
@@ -3726,7 +3728,7 @@ namespace Altera
                        //ignore
                     }
 
-            if (svtSkillRankUp == "") return new string[3] { "empty", "empty", "empty" };
+            if (svtSkillRankUp == "") return new string[3] { "", "", "" };
             var svtSkillRankUpArray = svtSkillRankUp.Split('/');
             return svtSkillRankUpArray;
         }
