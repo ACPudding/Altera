@@ -86,6 +86,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CatAndMouseGame.cs" />
+    <Compile Include="ExtractExe.cs" />
     <Compile Include="FNV1a.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="LoadorRenewCommonDatas.cs" />
@@ -911,6 +912,10 @@
     <Resource Include="images\ClassUnbeast1.png" />
     <Resource Include="images\ClassUnbeast2.png" />
     <Resource Include="images\ClassUnbeast3.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Application\excel2img.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

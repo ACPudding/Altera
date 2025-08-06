@@ -5476,6 +5476,10 @@ namespace Altera
                 !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "BuffTranslation.json") ||
                 !File.Exists(GlobalPathsAndDatas.gamedata.FullName + "AppendSkillTranslation.json"))
                 Dispatcher.Invoke(() => { Growl.Info("翻译列表缺失,建议先前往数据更新选项卡更新."); });
+
+            if (!File.Exists(GlobalPathsAndDatas.path + @"\excel2img.exe"))
+                ExtractExe.ExtractResFile("Altera.Application.excel2img.exe",
+                    GlobalPathsAndDatas.path + @"\excel2img.exe");
         }
 
         private void ExcelFileOutput()
