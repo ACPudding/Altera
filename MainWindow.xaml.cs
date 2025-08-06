@@ -1,4 +1,11 @@
-﻿using System;
+﻿using Altera.Properties;
+using HandyControl.Controls;
+using LiveCharts.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,6 +14,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,13 +24,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Altera.Properties;
-using HandyControl.Controls;
-using LiveCharts.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using Color = System.Drawing.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 using MessageBox = HandyControl.Controls.MessageBox;
@@ -405,105 +406,10 @@ namespace Altera
         {
             Dispatcher.Invoke(() =>
             {
-                switch (GlobalPathsAndDatas.classid)
-                {
-                    case 1:
-                    case 4:
-                    case 8:
-                    case 10:
-                    case 20:
-                    case 22:
-                    case 24:
-                    case 26:
-                    case 23:
-                    case 25:
-                    case 17:
-                    case 28:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                    case 3:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                    case 5:
-                    case 6:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                    case 2:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                    case 7:
-                    case 9:
-                    case 11:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                    case 1001:
-                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
-                        break;
-                    default:
-                        if (ToggleMsgboxOutputCheck.IsChecked != true || !GlobalPathsAndDatas.askxlsx) return;
-                        if (cards.Text == "[Q,Q,Q,Q,Q]" && svtclass.Text != "礼装") return;
-                        Thread.Sleep(500);
-                        Dispatcher.Invoke(() =>
-                        {
-                            GlobalPathsAndDatas.SuperMsgBoxRes = MessageBox.Show(
-                                Application.Current.MainWindow,
-                                "是否需要以xlsx的形式导出该从者的基础数据?",
-                                "导出?", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                        });
-                        if (GlobalPathsAndDatas.SuperMsgBoxRes == MessageBoxResult.OK)
-                            ExcelFileOutput();
-                        break;
-                }
+                if (!GlobalPathsAndDatas.askxlsx) return;
+                if (cards.Text == "[Q,Q,Q,Q,Q]" && svtclass.Text != "礼装") return;
+                Thread.Sleep(500);
+                outputImg.IsEnabled = true;
             });
         }
 
@@ -4000,6 +3906,7 @@ namespace Altera
                 npname.Text = "";
                 npdetail.Text = "";
                 JBOutput.IsEnabled = false;
+                outputImg.IsEnabled = false;
                 sixwei.Text = "";
                 svtSelectLimit.SelectedIndex = 0;
                 Skill1FuncList.Items.Clear();
@@ -5642,7 +5549,7 @@ namespace Altera
 
                 worksheet.Cells["C4"].Value = DateTime.Now.ToString();
                 worksheet.Cells["M8"].Value = JB.svtid;
-                worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
+                worksheet.Cells["A1"].Value += "(" + Svtname.Text + ")";
                 worksheet.Cells["C6"].Value = Svtname.Text;
                 worksheet.Cells["C7"].Value = IndividualalityClean.Text;
                 worksheet.Cells["C19"].Value = BeiZhu.Text;
@@ -5875,16 +5782,22 @@ namespace Altera
                         break;
                 }
 
-                xlsx.SaveAs(new FileInfo(svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx"));
+                var fileNameFull = $"{svtData.FullName}{JB.svtid}_{Svtname.Text}.xlsx";
+                var fileNameFullWithoutXlsx = $"{svtData.FullName}{JB.svtid}_{Svtname.Text}";
+                xlsx.SaveAs(new FileInfo(fileNameFull));
                 Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Show(
+                    Growl.Success($"导出成功,文件名为: {fileNameFull}\r\n开始生成图片...");
+                    Thread.Sleep(500);
+                    var e2i = new Task(() => { excel2img(fileNameFull, fileNameFullWithoutXlsx); });
+                    e2i.Start();
+                    /*MessageBox.Show(
                         Application.Current.MainWindow,
-                        "导出成功,文件名为: " + svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx", "导出完成",
+                        "导出成功,文件名为: " + fileNameFull, "导出完成",
                         MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                        MessageBoxImage.Information);*/
                 });
-                Process.Start(svtData.FullName + JB.svtnme + "_" + JB.svtid + ".xlsx");
+                Process.Start("explorer.exe", $"/select,\"{fileNameFull}\"");
                 GC.Collect();
             }
             catch (Exception e)
@@ -5901,6 +5814,28 @@ namespace Altera
             }
         }
 
+        private void excel2img(string xlsfilename, string xlsimgname)
+        {
+            var cmd = $"{xlsfilename} {xlsimgname}.png";
+            var output = new Process
+            {
+                StartInfo =
+                {
+                    FileName = GlobalPathsAndDatas.path + @"\excel2img.exe",
+                    Arguments = cmd,
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                }
+            };
+            output.Start();
+            output.WaitForExit();
+            Thread.Sleep(200);
+            Dispatcher.Invoke(() =>
+            {
+                Growl.Success($"图片生成完成.即将打开...");
+            });
+            Process.Start(xlsimgname + ".png");
+        }
         private Bitmap BitmapImage2Bitmap(BitmapSource m)
         {
             var bmp = new Bitmap(m.PixelWidth, m.PixelHeight, PixelFormat.Format32bppPArgb);
@@ -7455,6 +7390,11 @@ namespace Altera
                 SvtHp = v2;
                 SvtAtk = v3;
             }
+        }
+
+        private void ExcelOutput(object sender, RoutedEventArgs e)
+        {
+            ExcelFileOutput();
         }
     }
 }

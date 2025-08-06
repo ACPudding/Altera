@@ -80,59 +80,52 @@
                     <Grid
                         Visibility="{Binding IsChecked, Converter={StaticResource Boolean2VisibilityConverter}, ElementName=ButtonVisibilitySwitch}"
                         Margin="250,345,0,0">
-                        <CheckBox x:Name="ToggleMsgboxOutputCheck" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,56,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
-                                  FontSize="9"
-                                  ToolTip="勾选此项时,每次解析从者后都会询问是否导出相应的xlsx文件." />
-                        <TextBlock Text="询问是否导出xlsx文件" HorizontalAlignment="Left" Height="25" Margin="47,58,0,0"
-                                   VerticalAlignment="Top" Width="165" Foreground="#FF333333"
-                                   FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDispIndi" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,79,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,66,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,&quot;基础信息&quot;界面的&quot;特性&quot;文本框&#xA;会显示解析过后的特性名称(有可能会有翻译错误)&#xA;不勾选则直接显示特性ID"
                                   IsChecked="True" />
                         <TextBlock Text="特性显示解析结果(Beta)" HorizontalAlignment="Left" Height="26"
-                                   Margin="47,81,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,68,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleBuffFuncTranslate" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,103,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,90,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的具体数值的效果名称会进行翻译,不勾选则直接显示原文." IsChecked="True" />
                         <TextBlock Text="翻译部分Buff名称" HorizontalAlignment="Left" Height="27"
-                                   Margin="47,104,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,91,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleFuncDiffer" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,127,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,114,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的具体数值的效果数值会进行分析显示&#xA;如1000,3,-1,200的BusterUP会写成20%(100%) - 3回合·无限次&#xA;不勾选则原样显示.&#xA;注:目前实现方式比较杂乱可能会带来误解析的可能性."
                                   IsChecked="True" />
                         <TextBlock Text="对效果进行分析显示(Beta)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,129,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,116,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleTDSpecialFont" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,151,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,138,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,宝具特效字体选用FOT-Matisse&#xA;否则宝具特效字体选用FOT-Skip"
                                   IsChecked="True" />
                         <TextBlock Text="宝具特效字体选用(勾选为&quot;FOT-Matisse&quot;)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,153,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
+                                   Margin="47,140,0,0" VerticalAlignment="Top" Width="203" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="ToggleDisplayEnemyFunc" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,175,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,162,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,技能与宝具的效果会显示敌方特定的效果如暴击发生率提升.&#xA;注: 职介技能不会筛选."
                                   IsChecked="False" />
                         <TextBlock Text="显示敌方限定效果(如:暴击发生率提升、充能增加等等)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,177,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
+                                   Margin="47,164,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                         <CheckBox x:Name="isDisplayFuncType" Content="" HorizontalAlignment="Left" Height="20"
-                                  Margin="17,198,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
+                                  Margin="17,185,0,0" VerticalAlignment="Top" Width="116" Foreground="LightGray"
                                   FontSize="9"
                                   ToolTip="勾选此项时,会显示游戏内具体FuncType&#xA;注: Debug用,平时不建议开启."
                                   IsChecked="False" />
                         <TextBlock Text="显示funcType(Beta/Debug用)" HorizontalAlignment="Left" Height="25"
-                                   Margin="47,200,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
+                                   Margin="47,187,0,0" VerticalAlignment="Top" Width="261" Foreground="#FF333333"
                                    FontSize="10" FontFamily="Source Han Sans SC" />
                     </Grid>
                 </Grid>
@@ -152,7 +145,7 @@
                         <GroupBox.Header>
                             <Grid>
                                 <ComboBox Name="svtSelectLimit" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                          Margin="-375,0,0,0" Width="134.8" Height="20" MinHeight="0"
+                                          Margin="0,0,0,0" Width="134.8" Height="20" MinHeight="0"
                                           FontFamily="Source Han Sans SC">
                                     <ComboBoxItem IsSelected="True">再临阶段Ⅰ</ComboBoxItem>
                                     <ComboBoxItem>再临阶段Ⅱ</ComboBoxItem>
@@ -160,10 +153,22 @@
                                 </ComboBox>
                                 <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
                                         x:Name="setSvtLimit"
-                                        Content="切换" HorizontalAlignment="Left" Height="25" Margin="-230,0,0,0"
+                                        Content="切换" HorizontalAlignment="Left" Height="25" Margin="140,0,0,0"
                                         Width="40"
                                         Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9"
                                         Click="svtLimitSelChange">
+                                    <Button.Background>
+                                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                            <GradientStop Color="#FF326CF3" Offset="0" />
+                                            <GradientStop Color="#FF7BA2FF" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Button.Background>
+                                </Button>
+                                <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
+                                        x:Name="outputImg"
+                                        Content="导出" HorizontalAlignment="Left" Height="25" Margin="750,0,0,0"
+                                        Width="40"
+                                        Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9" IsEnabled="False" Click="ExcelOutput">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                                             <GradientStop Color="#FF326CF3" Offset="0" />
