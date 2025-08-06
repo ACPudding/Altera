@@ -154,9 +154,9 @@
                                 <ComboBox Name="svtSelectLimit" HorizontalAlignment="Left" VerticalAlignment="Center"
                                           Margin="-375,0,0,0" Width="134.8" Height="20" MinHeight="0"
                                           FontFamily="Source Han Sans SC">
-                                    <ComboBoxItem IsSelected="True">再临阶段I</ComboBoxItem>
-                                    <ComboBoxItem>再临阶段II</ComboBoxItem>
-                                    <ComboBoxItem>再临阶段III</ComboBoxItem>
+                                    <ComboBoxItem IsSelected="True">再临阶段Ⅰ</ComboBoxItem>
+                                    <ComboBoxItem>再临阶段Ⅱ</ComboBoxItem>
+                                    <ComboBoxItem>再临阶段Ⅲ</ComboBoxItem>
                                 </ComboBox>
                                 <Button Style="{StaticResource ButtonPrimary}" hc:BorderElement.CornerRadius="15"
                                         x:Name="setSvtLimit"

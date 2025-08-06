@@ -1118,8 +1118,7 @@ namespace Altera
                         svtNameDisplay = mstSvtobjtmp["battleName"].ToString();
                         GlobalPathsAndDatas.svtNormalBattleName = svtNameDisplay;
                         SvtBattlename.Text = svtNameDisplay;
-                        Title += " - " + svtName +
-                                 $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
+                        Title += " - " + svtName;
                         svtClass = mstSvtobjtmp["classId"].ToString();
                         svtgender = mstSvtobjtmp["genderType"].ToString();
                         svtstarrate = mstSvtobjtmp["starRate"].ToString();
@@ -2755,6 +2754,8 @@ namespace Altera
                     case 23:
                     case 25:
                     case 28:
+                    case 33:
+                    case 40:
                         Growl.Info("该从者尚未实装或为敌方数据,故最终实装的数据可能会与目前的解析结果不同,请以实装之后的数据为准!望知悉.");
                         break;
                 }
@@ -3517,6 +3518,7 @@ namespace Altera
             var sk2IsStrengthened = "false";
             var sk3IsStrengthened = "false";
             var result = new string[6];
+            var svtSkillRankUpdata = FindServantSkillRankUp(svtID);
             foreach (var svtskill in GlobalPathsAndDatas.mstSvtSkillArray)
             {
                 if (((JObject)svtskill)["svtId"].ToString() == svtID &&
@@ -3628,6 +3630,45 @@ namespace Altera
 
             if (skillID3 == "") skillID3 = FindSkillIDinNPCSvt(svtID, 3);
 
+            if (svtSkillRankUpdata != new string[3] { "empty", "empty", "empty" } && svtSkillRankUpdata.Length == 3)
+            {
+                var sk1Hash =
+                    new HashSet<String>((skillID1.Replace("^SK", "") + "*" + svtSkillRankUpdata[0]).Split('*'))
+                        .ToArray();
+                var sk2Hash =
+                    new HashSet<String>((skillID2.Replace("^SK", "") + "*" + svtSkillRankUpdata[1]).Split('*'))
+                        .ToArray();
+                var sk3Hash =
+                    new HashSet<String>((skillID3.Replace("^SK", "") + "*" + svtSkillRankUpdata[2]).Split('*'))
+                        .ToArray();
+                if (sk1Hash.Length > 1)
+                {
+                    skillID1 = String.Join("*", sk1Hash) + "^SK";
+                }
+                else
+                {
+                    skillID1 = string.Join("", sk1Hash);
+
+                }
+                if (sk2Hash.Length > 1)
+                {
+                    skillID2 = String.Join("*", sk2Hash) + "^SK";
+                }
+                else
+                {
+                    skillID2 = string.Join("", sk2Hash);
+
+                }
+                if (sk3Hash.Length > 1)
+                {
+                    skillID3 = String.Join("*", sk3Hash) + "^SK";
+                }
+                else
+                {
+                    skillID3 = string.Join("", sk3Hash);
+                }
+            }
+
             if (skillID1.Contains("*"))
                 Dispatcher.Invoke(() =>
                 {
@@ -3665,6 +3706,29 @@ namespace Altera
             result[3] = sk2IsStrengthened;
             result[5] = sk3IsStrengthened;
             return result;
+        }
+
+        private string[] FindServantSkillRankUp(string svtID)
+        {
+            var svtSkillRankUp =
+                ""; // MCssy 767650/682450,964647,964648,964648,964648/768550,964649,964650,964650,964650
+            foreach (var svtTmp in GlobalPathsAndDatas.mstSvtArray)
+                if (((JObject)svtTmp)["id"].ToString() == svtID)
+                    try
+                    {
+                        var tmpJarray1 =
+                            (JObject)JsonConvert.DeserializeObject(((JObject)svtTmp)["script"].ToString());
+                        svtSkillRankUp = tmpJarray1["SkillRankUp"].ToString().Replace("[[", "").Replace("]]", "")
+                            .Replace("],[", "/").Replace(",", "*");
+                    }
+                    catch (Exception)
+                    {
+                       //ignore
+                    }
+
+            if (svtSkillRankUp == "") return new string[3] { "empty", "empty", "empty" };
+            var svtSkillRankUpArray = svtSkillRankUp.Split('/');
+            return svtSkillRankUpArray;
         }
 
         private void ServantSkillInformationCheck(string svtID)
@@ -4910,7 +4974,7 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value += 250; });
             try
             {
-                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.83.0");
+                var resulttmp = HttpRequest.Get("https://game.fate-go.jp/gamedata/top?appVer=2.100.0");
                 result = resulttmp.ToString();
                 res = resulttmp.ToJson();
                 if (res["response"][0]["fail"]["action"] != null)
@@ -5203,7 +5267,9 @@ namespace Altera
             progressring.Dispatcher.Invoke(() => { progressring.Value = progressring.Maximum; });
             Dispatcher.Invoke(() =>
             {
-                MessageBox.Success("下载/更新完成，可以开始解析.", "完成");
+                //MessageBox.Success("下载/更新完成，可以开始解析.", "完成");
+                Growl.Success(
+                    $"Masterdata数据下载完成，可以开始解析.\r\nDateVer: {Convert.ToString(TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)) + new TimeSpan(long.Parse(unixdatatime + "0000000")))}\r\nDataVer: {res["response"][0]["success"]["dataVer"]}");
                 StarterItemTab.IsSelected = true;
             });
             updatestatus.Dispatcher.Invoke(() => { updatestatus.Text = ""; });
@@ -5507,6 +5573,71 @@ namespace Altera
                 var worksheet = xlsx.Workbook.Worksheets[0];
                 var Pickup = new ExcelAddress("C30");
                 //worksheet.ConditionalFormatting.RemoveAll();
+                var hashListForAttri = new HashSet<string>();
+                hashListForAttri.Add(GlobalPathsAndDatas.svtLimitChangeableArray[0, 6] == "-1"
+                    ? GlobalPathsAndDatas.svtNormalAttri
+                    : GlobalPathsAndDatas.svtLimitChangeableArray[0, 6].Replace("1", "人")
+                        .Replace("2", "天")
+                        .Replace("3", "地").Replace("4", "星").Replace("5", "兽"));
+                hashListForAttri.Add(GlobalPathsAndDatas.svtLimitChangeableArray[1, 6] == "-1"
+                    ? GlobalPathsAndDatas.svtNormalAttri
+                    : GlobalPathsAndDatas.svtLimitChangeableArray[1, 6].Replace("1", "人")
+                        .Replace("2", "天")
+                        .Replace("3", "地").Replace("4", "星").Replace("5", "兽"));
+                hashListForAttri.Add(GlobalPathsAndDatas.svtLimitChangeableArray[2, 6] == "-1"
+                    ? GlobalPathsAndDatas.svtNormalAttri
+                    : GlobalPathsAndDatas.svtLimitChangeableArray[2, 6].Replace("1", "人")
+                        .Replace("2", "天")
+                        .Replace("3", "地").Replace("4", "星").Replace("5", "兽"));
+
+                if (hashListForAttri.Count > 1)
+                {
+                    var indexVal = new int[4] { 0, 1, 2, 4 };
+                    var hashArray = hashListForAttri.ToArray();
+                    var selectindex = new int[hashListForAttri.Count];
+                    var outputAttriStr = "";
+                    var outputAttriList = new List<string>();
+                    for (var m = 0; m < hashListForAttri.Count; m++) selectindex[m] = 0;
+                    for (var j = 0; j < hashListForAttri.Count; j++)
+                    {
+                        for (var i = 0; i < 3; i++)
+                            if ((GlobalPathsAndDatas.svtLimitChangeableArray[i, 6] == "-1"
+                                    ? GlobalPathsAndDatas.svtNormalAttri
+                                    : GlobalPathsAndDatas.svtLimitChangeableArray[i, 6].Replace("1", "人")
+                                        .Replace("2", "天")
+                                        .Replace("3", "地").Replace("4", "星").Replace("5", "兽")) == hashArray[j])
+                                selectindex[j] += indexVal[i + 1];
+                        switch (selectindex[j])
+                        {
+                            case 1:
+                                outputAttriList.Add(hashArray[j] + "(Ⅰ)");
+                                break;
+                            case 2:
+                                outputAttriList.Add(hashArray[j] + "(Ⅱ)");
+                                break;
+                            case 3:
+                                outputAttriList.Add(hashArray[j] + "(Ⅰ,Ⅱ)");
+                                break;
+                            case 4:
+                                outputAttriList.Add(hashArray[j] + "(Ⅲ)");
+                                break;
+                            case 5:
+                                outputAttriList.Add(hashArray[j] + "(Ⅰ,Ⅲ)");
+                                break;
+                            case 6:
+                                outputAttriList.Add(hashArray[j] + "(Ⅱ,Ⅲ)");
+                                break;
+                        }
+                    }
+
+                    outputAttriStr = string.Join("/", outputAttriList.ToArray());
+                    worksheet.Cells["M7"].Value = outputAttriStr;
+                }
+                else
+                {
+                    worksheet.Cells["M7"].Value = hiddenattri.Text;
+                }
+
                 worksheet.Cells["C4"].Value = DateTime.Now.ToString();
                 worksheet.Cells["M8"].Value = JB.svtid;
                 worksheet.Cells["A1"].Value += "(" + JB.svtnme + ")";
@@ -5516,7 +5647,7 @@ namespace Altera
                 worksheet.Cells["J6"].Value = svtclass.Text;
                 worksheet.Cells["G7"].Value = rarity.Text;
                 worksheet.Cells["J7"].Value = gendle.Text;
-                worksheet.Cells["M7"].Value = hiddenattri.Text;
+                //worksheet.Cells["M7"].Value = hiddenattri.Text;
                 worksheet.Cells["M4"].Value = collection.Text;
                 worksheet.Cells["C9"].Value = cv.Text;
                 worksheet.Cells["J9"].Value = illust.Text;
@@ -7104,13 +7235,13 @@ namespace Altera
                 switch (index)
                 {
                     case 0:
-                        stateStr = "I";
+                        stateStr = "Ⅰ";
                         break;
                     case 1:
-                        stateStr = "II";
+                        stateStr = "Ⅱ";
                         break;
                     case 2:
-                        stateStr = "III";
+                        stateStr = "Ⅲ";
                         break;
                 }
 
@@ -7119,14 +7250,12 @@ namespace Altera
                     if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 0] != "Unchanged")
                     {
                         Svtname.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 0];
-                        Title = "Altera - " + GlobalPathsAndDatas.svtLimitChangeableArray[index, 0] +
-                                $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
+                        Title = "Altera - " + GlobalPathsAndDatas.svtLimitChangeableArray[index, 0];
                     }
                     else
                     {
                         Svtname.Text = GlobalPathsAndDatas.svtNormalName;
-                        Title = "Altera - " + GlobalPathsAndDatas.svtNormalName +
-                                $" ( 再临阶段{svtSelectLimit.SelectedIndex.ToString().Replace("0", "I").Replace("1", "II").Replace("2", "III")} )";
+                        Title = "Altera - " + GlobalPathsAndDatas.svtNormalName;
                     }
 
                     if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 1] != "Unchanged")
