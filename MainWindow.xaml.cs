@@ -1,11 +1,4 @@
-﻿using Altera.Properties;
-using HandyControl.Controls;
-using LiveCharts.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,7 +7,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +16,13 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Altera.Properties;
+using HandyControl.Controls;
+using LiveCharts.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Color = System.Drawing.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 using MessageBox = HandyControl.Controls.MessageBox;
@@ -163,6 +162,7 @@ namespace Altera
             GlobalPathsAndDatas.svtNormalTDRuby = "";
             GlobalPathsAndDatas.svtNormalTDRank = "";
             GlobalPathsAndDatas.svtNormalAttri = "";
+            GlobalPathsAndDatas.svtNormalSixWei = "";
             ClearTexts();
             RefreshTranslationsList();
             var TDStringBar = GetSvtTDID(svtID);
@@ -207,13 +207,127 @@ namespace Altera
 
         private string[,] getSvtLimitChangeableSet(string svtid)
         {
-            var result = new string[3, 7];
+            var RankString = new string[100];
+            RankString[11] = "A";
+            RankString[12] = "A+";
+            RankString[13] = "A++";
+            RankString[14] = "A-";
+            RankString[15] = "A+++";
+            RankString[16] = "A?";
+            RankString[17] = "A(B)";
+            RankString[18] = "A(C)";
+            RankString[19] = "A(D)";
+            RankString[20] = "A(E)";
+            RankString[21] = "B";
+            RankString[22] = "B+";
+            RankString[23] = "B++";
+            RankString[24] = "B-";
+            RankString[25] = "B+++";
+            RankString[26] = "B?";
+            RankString[27] = "B(A)";
+            RankString[28] = "B(C)";
+            RankString[29] = "B(D)";
+            RankString[30] = "B(E)";
+            RankString[31] = "C";
+            RankString[32] = "C+";
+            RankString[33] = "C++";
+            RankString[34] = "C-";
+            RankString[35] = "C+++";
+            RankString[36] = "C?";
+            RankString[37] = "C(A)";
+            RankString[38] = "C(B)";
+            RankString[39] = "C(D)";
+            RankString[40] = "C(E)";
+            RankString[41] = "D";
+            RankString[42] = "D+";
+            RankString[43] = "D++";
+            RankString[44] = "D-";
+            RankString[45] = "D+++";
+            RankString[46] = "D?";
+            RankString[47] = "D(A)";
+            RankString[48] = "D(B)";
+            RankString[49] = "D(C)";
+            RankString[50] = "D(E)";
+            RankString[51] = "E";
+            RankString[52] = "E+";
+            RankString[53] = "E++";
+            RankString[54] = "E-";
+            RankString[55] = "E+++";
+            RankString[56] = "E?";
+            RankString[57] = "E(A)";
+            RankString[58] = "E(B)";
+            RankString[59] = "E(C)";
+            RankString[60] = "E(D)";
+            RankString[61] = "EX";
+            RankString[98] = "?";
+            RankString[0] = "-";
+            RankString[99] = "?";
+            var result = new string[3, 8];
             for (var i = 0; i < 3; i++)
-            for (var j = 0; j < 7; j++)
+            for (var j = 0; j < 8; j++)
                 result[i, j] = "Unchanged";
             result[0, 6] = "-1";
             result[1, 6] = "-1";
             result[2, 6] = "-1";
+            foreach (var svtLimittmp in GlobalPathsAndDatas.mstSvtLimitArray)
+            {
+                if (((JObject)svtLimittmp)["svtId"].ToString() != svtid) continue;
+                switch (((JObject)svtLimittmp)["limitCount"].ToString())
+                {
+                    case "0":
+                        var svtpower = svtLimittmp["power"].ToString();
+                        var svtdefense = svtLimittmp["defense"].ToString();
+                        var svtagility = svtLimittmp["agility"].ToString();
+                        var svtmagic = svtLimittmp["magic"].ToString();
+                        var svtluck = svtLimittmp["luck"].ToString();
+                        var svttreasureDevice = svtLimittmp["treasureDevice"].ToString();
+                        var joinStr = "筋力: " + RankString[int.Parse(svtpower)] + "    耐久: " +
+                                      RankString[int.Parse(svtdefense)] +
+                                      "    敏捷: " +
+                                      RankString[int.Parse(svtagility)] +
+                                      "    魔力: " + RankString[int.Parse(svtmagic)] + "    幸运: " +
+                                      RankString[int.Parse(svtluck)] +
+                                      "    宝具: " +
+                                      RankString[int.Parse(svttreasureDevice)];
+                        result[0, 7] = joinStr;
+                        break;
+                    case "1":
+                        var svtpower2 = svtLimittmp["power"].ToString();
+                        var svtdefense2 = svtLimittmp["defense"].ToString();
+                        var svtagility2 = svtLimittmp["agility"].ToString();
+                        var svtmagic2 = svtLimittmp["magic"].ToString();
+                        var svtluck2 = svtLimittmp["luck"].ToString();
+                        var svttreasureDevice2 = svtLimittmp["treasureDevice"].ToString();
+                        var joinStr2 = "筋力: " + RankString[int.Parse(svtpower2)] + "    耐久: " +
+                                       RankString[int.Parse(svtdefense2)] +
+                                       "    敏捷: " +
+                                       RankString[int.Parse(svtagility2)] +
+                                       "    魔力: " + RankString[int.Parse(svtmagic2)] + "    幸运: " +
+                                       RankString[int.Parse(svtluck2)] +
+                                       "    宝具: " +
+                                       RankString[int.Parse(svttreasureDevice2)];
+                        result[1, 7] = joinStr2;
+                        break;
+                    case "3":
+                        var svtpower3 = svtLimittmp["power"].ToString();
+                        var svtdefense3 = svtLimittmp["defense"].ToString();
+                        var svtagility3 = svtLimittmp["agility"].ToString();
+                        var svtmagic3 = svtLimittmp["magic"].ToString();
+                        var svtluck3 = svtLimittmp["luck"].ToString();
+                        var svttreasureDevice3 = svtLimittmp["treasureDevice"].ToString();
+                        var joinStr3 = "筋力: " + RankString[int.Parse(svtpower3)] + "    耐久: " +
+                                       RankString[int.Parse(svtdefense3)] +
+                                       "    敏捷: " +
+                                       RankString[int.Parse(svtagility3)] +
+                                       "    魔力: " + RankString[int.Parse(svtmagic3)] + "    幸运: " +
+                                       RankString[int.Parse(svtluck3)] +
+                                       "    宝具: " +
+                                       RankString[int.Parse(svttreasureDevice3)];
+                        result[2, 7] = joinStr3;
+                        break;
+                }
+            }
+
             foreach (var mstSvtLimitAddtmp in GlobalPathsAndDatas.mstSvtLimitAddArray)
             {
                 if (((JObject)mstSvtLimitAddtmp)["svtId"].ToString() != svtid) continue;
@@ -443,7 +557,7 @@ namespace Altera
                                 isNPStrengthen = "true";
                                 break;
                             }
-                            case "0":
+                            /*case "0":
                             {
                                 var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                                 svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
@@ -454,7 +568,7 @@ namespace Altera
                                 var mstsvtTDobjtmp = JObject.Parse(svtTreasureDevicestmp.ToString());
                                 svtTDID += "*" + mstsvtTDobjtmp["treasureDeviceId"] + "^TD";
                                 break;
-                            }
+                            }*/
                         }
 
                     if (((JObject)svtTreasureDevicestmp)["svtId"].ToString() == svtID &&
@@ -535,6 +649,65 @@ namespace Altera
                         break;
                     }
                 }
+
+                var tdHash =
+                    new HashSet<string>();
+                tdHash.Add(svtTDID);
+                var svtTdAdd = "";
+
+                foreach (var svtTreasureDeviceAddtmp in GlobalPathsAndDatas.mstSvtTreasureDeviceAddArray)
+                {
+                    if (((JObject)svtTreasureDeviceAddtmp)["svtId"].ToString() == svtID)
+                    {
+                        try
+                        {
+                            var mstsvtTDAddobjtmp = JObject.Parse(svtTreasureDeviceAddtmp.ToString());
+                            svtTdAdd = mstsvtTDAddobjtmp["treasureDeviceIds"].ToString().Replace("[","").Replace("]", "").Replace(",", "*").Replace("\n", "")
+                                .Replace("\t", "").Replace("\r", "").Replace(" ", "");
+                            foreach (var tdaddtmp in svtTdAdd.Split('*'))
+                            {
+                                tdHash.Add(tdaddtmp);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+                        
+                    }
+                }
+
+                var svtTpChange = "";
+
+                foreach (var TreasureDevicetmp in GlobalPathsAndDatas.mstTreasureDevicedArray)
+                {
+                    if (((JObject)TreasureDevicetmp)["seqId"].ToString() == svtID)
+                    {
+                        try
+                        {
+                            var mstTDobjtmp = 
+                                (JObject)JsonConvert.DeserializeObject(((JObject)TreasureDevicetmp)["script"].ToString());
+                            svtTpChange = mstTDobjtmp["tdTypeChangeIDs"].ToString().Replace("[", "").Replace("]", "").Replace(",", "*").Replace("\n", "")
+                                .Replace("\t", "").Replace("\r", "").Replace(" ", "");
+                            foreach (var tdaddtmp in svtTpChange.Split('*'))
+                            {
+                                tdHash.Add(tdaddtmp);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+
+                    }
+                }
+
+                
+                    if (tdHash.Count > 1)
+                        svtTDID = string.Join("*", tdHash.ToArray()) + "^TD";
+                    else
+                        svtTDID = string.Join("", tdHash.ToArray());
+                
 
                 if (svtTDID.Contains("*"))
                     Dispatcher.Invoke(() =>
@@ -1127,6 +1300,13 @@ namespace Altera
                                       "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
                                       "    宝具: " +
                                       RankString[TreasureData];
+                        GlobalPathsAndDatas.svtNormalSixWei =
+                            "筋力: " + RankString[powerData] + "    耐久: " + RankString[defenseData] +
+                            "    敏捷: " +
+                            RankString[agilityData] +
+                            "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
+                            "    宝具: " +
+                            RankString[TreasureData];
                         break;
                     }
 
@@ -1190,6 +1370,13 @@ namespace Altera
                                           "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
                                           "    宝具: " +
                                           RankString[TreasureData];
+                            GlobalPathsAndDatas.svtNormalSixWei =
+                                "筋力: " + RankString[powerData] + "    耐久: " + RankString[defenseData] +
+                                "    敏捷: " +
+                                RankString[agilityData] +
+                                "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
+                                "    宝具: " +
+                                RankString[TreasureData];
                             break;
                         }
 
@@ -1253,6 +1440,13 @@ namespace Altera
                                           "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
                                           "    宝具: " +
                                           RankString[TreasureData];
+                            GlobalPathsAndDatas.svtNormalSixWei =
+                                "筋力: " + RankString[powerData] + "    耐久: " + RankString[defenseData] +
+                                "    敏捷: " +
+                                RankString[agilityData] +
+                                "    魔力: " + RankString[magicData] + "    幸运: " + RankString[luckData] +
+                                "    宝具: " +
+                                RankString[TreasureData];
                             break;
                         }
 
@@ -1295,53 +1489,6 @@ namespace Altera
                 atkbalance1.Text = atkBalanceStr;
                 atkbalance2.Text = atkBalanceStr;
 
-                /*switch (classData)
-                {
-                    case 1:
-                    case 4:
-                    case 8:
-                    case 10:
-                    case 20:
-                    case 22:
-                    case 24:
-                    case 26:
-                    case 23:
-                    case 25:
-                    case 17:
-                    case 28:
-                    case 33:
-                    case 38:
-                    case 40:
-                        atkbalance1.Text = "( x 1.0 -)";
-                        atkbalance2.Text = "( x 1.0 -)";
-                        break;
-                    case 3:
-                        atkbalance1.Text = "( x 1.05 △)";
-                        atkbalance2.Text = "( x 1.05 △)";
-                        break;
-                    case 5:
-                    case 6:
-                        atkbalance1.Text = "( x 0.9 ▽)";
-                        atkbalance2.Text = "( x 0.9 ▽)";
-                        break;
-                    case 2:
-                        atkbalance1.Text = "( x 0.95 ▽)";
-                        atkbalance2.Text = "( x 0.95 ▽)";
-                        break;
-                    case 7:
-                    case 9:
-                    case 11:
-                        atkbalance1.Text = "( x 1.1 △)";
-                        atkbalance2.Text = "( x 1.1 △)";
-                        break;
-                    case 1001:
-                        Growl.Info("此ID为礼装ID,图鉴编号为礼装的图鉴编号.礼装描述在牵绊文本的文本1处.");
-                        break;
-                    default:
-                        atkbalance1.Text = "( x 1.0 -)";
-                        atkbalance2.Text = "( x 1.0 -)";
-                        break;
-                }*/
             });
         }
 
@@ -3541,40 +3688,26 @@ namespace Altera
             if (!svtSkillRankUpdata.SequenceEqual(emptySta))
             {
                 var sk1Hash =
-                    new HashSet<String>((skillID1.Replace("^SK", "") + "*" + svtSkillRankUpdata[0]).Split('*'))
+                    new HashSet<string>((skillID1.Replace("^SK", "") + "*" + svtSkillRankUpdata[0]).Split('*'))
                         .ToArray();
                 var sk2Hash =
-                    new HashSet<String>((skillID2.Replace("^SK", "") + "*" + svtSkillRankUpdata[1]).Split('*'))
+                    new HashSet<string>((skillID2.Replace("^SK", "") + "*" + svtSkillRankUpdata[1]).Split('*'))
                         .ToArray();
                 var sk3Hash =
-                    new HashSet<String>((skillID3.Replace("^SK", "") + "*" + svtSkillRankUpdata[2]).Split('*'))
+                    new HashSet<string>((skillID3.Replace("^SK", "") + "*" + svtSkillRankUpdata[2]).Split('*'))
                         .ToArray();
                 if (sk1Hash.Length > 1)
-                {
-                    skillID1 = String.Join("*", sk1Hash) + "^SK";
-                }
+                    skillID1 = string.Join("*", sk1Hash) + "^SK";
                 else
-                {
                     skillID1 = string.Join("", sk1Hash);
-
-                }
                 if (sk2Hash.Length > 1)
-                {
-                    skillID2 = String.Join("*", sk2Hash) + "^SK";
-                }
+                    skillID2 = string.Join("*", sk2Hash) + "^SK";
                 else
-                {
                     skillID2 = string.Join("", sk2Hash);
-
-                }
                 if (sk3Hash.Length > 1)
-                {
-                    skillID3 = String.Join("*", sk3Hash) + "^SK";
-                }
+                    skillID3 = string.Join("*", sk3Hash) + "^SK";
                 else
-                {
                     skillID3 = string.Join("", sk3Hash);
-                }
             }
 
             if (skillID1.Contains("*"))
@@ -3631,7 +3764,7 @@ namespace Altera
                     }
                     catch (Exception)
                     {
-                       //ignore
+                        //ignore
                     }
 
             if (svtSkillRankUp == "") return new string[3] { "", "", "" };
@@ -3935,13 +4068,14 @@ namespace Altera
                     levels[i] = i;
                 }
 
-                GlobalPathsAndDatas.svtLimitChangeableArray = new string[3, 7]; //清空数组
+                GlobalPathsAndDatas.svtLimitChangeableArray = new string[3, 8]; //清空数组
                 GlobalPathsAndDatas.svtNormalName = "";
                 GlobalPathsAndDatas.svtNormalBattleName = "";
                 GlobalPathsAndDatas.svtNormalTDName = "";
                 GlobalPathsAndDatas.svtNormalTDRuby = "";
                 GlobalPathsAndDatas.svtNormalTDRank = "";
                 GlobalPathsAndDatas.svtNormalAttri = "";
+                GlobalPathsAndDatas.svtNormalSixWei = "";
                 XZhou.MaxValue = 120;
                 LineHP = Zeros;
                 LineATK = Zeros;
@@ -5830,12 +5964,10 @@ namespace Altera
             output.Start();
             output.WaitForExit();
             Thread.Sleep(200);
-            Dispatcher.Invoke(() =>
-            {
-                Growl.Success($"图片生成完成.即将打开...");
-            });
+            Dispatcher.Invoke(() => { Growl.Success("图片生成完成.即将打开..."); });
             Process.Start(xlsimgname + ".png");
         }
+
         private Bitmap BitmapImage2Bitmap(BitmapSource m)
         {
             var bmp = new Bitmap(m.PixelWidth, m.PixelHeight, PixelFormat.Format32bppPArgb);
@@ -7184,6 +7316,8 @@ namespace Altera
 
                 if (Svtname.Text != "")
                 {
+                    sixwei.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 7];
+
                     if (GlobalPathsAndDatas.svtLimitChangeableArray[index, 0] != "Unchanged")
                     {
                         Svtname.Text = GlobalPathsAndDatas.svtLimitChangeableArray[index, 0];
@@ -7236,6 +7370,11 @@ namespace Altera
             {
                 if (e.Key == Key.Enter && Button1.IsEnabled) Button_Click(sender, e);
             });
+        }
+
+        private void ExcelOutput(object sender, RoutedEventArgs e)
+        {
+            ExcelFileOutput();
         }
 
 
@@ -7390,11 +7529,6 @@ namespace Altera
                 SvtHp = v2;
                 SvtAtk = v3;
             }
-        }
-
-        private void ExcelOutput(object sender, RoutedEventArgs e)
-        {
-            ExcelFileOutput();
         }
     }
 }

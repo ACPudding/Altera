@@ -110,6 +110,11 @@ namespace Altera
                                      "mstCombineAppendPassiveSkill.json");
                 var funcListDebugger =
                     File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "FuncList.json");
+                var mstSvtTreasureDeviceAdd =
+                    File.ReadAllText(GlobalPathsAndDatas.gamedata.FullName + "decrypted_masterdata/" +
+                                     "mstSvtTreasureDeviceAdd.json");
+                GlobalPathsAndDatas.mstSvtTreasureDeviceAddArray =
+                    (JArray)JsonConvert.DeserializeObject(mstSvtTreasureDeviceAdd);
                 GlobalPathsAndDatas.funcListDebuggerArray =
                     (JArray)JsonConvert.DeserializeObject(funcListDebugger);
                 GlobalPathsAndDatas.mstCombineAppendPassiveSkillArray =
