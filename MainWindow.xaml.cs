@@ -679,31 +679,34 @@ namespace Altera
 
                 var svtTpChange = "";
 
-                foreach (var TreasureDevicetmp in GlobalPathsAndDatas.mstTreasureDevicedArray)
+                if (svtTdAdd == "")
                 {
-                    if (((JObject)TreasureDevicetmp)["seqId"].ToString() == svtID)
+                    foreach (var TreasureDevicetmp in GlobalPathsAndDatas.mstTreasureDevicedArray)
                     {
-                        try
+                        if (((JObject)TreasureDevicetmp)["seqId"].ToString() == svtID)
                         {
-                            var mstTDobjtmp = 
-                                (JObject)JsonConvert.DeserializeObject(((JObject)TreasureDevicetmp)["script"].ToString());
-                            svtTpChange = mstTDobjtmp["tdTypeChangeIDs"].ToString().Replace("[", "").Replace("]", "").Replace(",", "*").Replace("\n", "")
-                                .Replace("\t", "").Replace("\r", "").Replace(" ", "");
-                            foreach (var tdaddtmp in svtTpChange.Split('*'))
+                            try
                             {
-                                tdHash.Add(tdaddtmp);
+                                var mstTDobjtmp =
+                                    (JObject)JsonConvert.DeserializeObject(((JObject)TreasureDevicetmp)["script"].ToString());
+                                svtTpChange = mstTDobjtmp["tdTypeChangeIDs"].ToString().Replace("[", "").Replace("]", "").Replace(",", "*").Replace("\n", "")
+                                    .Replace("\t", "").Replace("\r", "").Replace(" ", "");
+                                foreach (var tdaddtmp in svtTpChange.Split('*'))
+                                {
+                                    tdHash.Add(tdaddtmp);
+                                }
                             }
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
+                            catch (Exception)
+                            {
+                                //ignore
+                            }
 
+                        }
                     }
+
                 }
 
-                
-                    if (tdHash.Count > 1)
+                if (tdHash.Count > 1)
                         svtTDID = string.Join("*", tdHash.ToArray()) + "^TD";
                     else
                         svtTDID = string.Join("", tdHash.ToArray());
