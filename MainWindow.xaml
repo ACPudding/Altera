@@ -168,7 +168,8 @@
                                         x:Name="outputImg"
                                         Content="导出" HorizontalAlignment="Left" Height="25" Margin="750,0,0,0"
                                         Width="40"
-                                        Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9" IsEnabled="False" Click="ExcelOutput">
+                                        Foreground="#FFFFFFFF" FontFamily="Source Han Sans SC" FontSize="9"
+                                        IsEnabled="False" Click="ExcelOutput">
                                     <Button.Background>
                                         <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
                                             <GradientStop Color="#FF326CF3" Offset="0" />

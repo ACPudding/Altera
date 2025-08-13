@@ -656,61 +656,45 @@ namespace Altera
                 var svtTdAdd = "";
 
                 foreach (var svtTreasureDeviceAddtmp in GlobalPathsAndDatas.mstSvtTreasureDeviceAddArray)
-                {
                     if (((JObject)svtTreasureDeviceAddtmp)["svtId"].ToString() == svtID)
-                    {
                         try
                         {
                             var mstsvtTDAddobjtmp = JObject.Parse(svtTreasureDeviceAddtmp.ToString());
-                            svtTdAdd = mstsvtTDAddobjtmp["treasureDeviceIds"].ToString().Replace("[","").Replace("]", "").Replace(",", "*").Replace("\n", "")
+                            svtTdAdd = mstsvtTDAddobjtmp["treasureDeviceIds"].ToString().Replace("[", "")
+                                .Replace("]", "").Replace(",", "*").Replace("\n", "")
                                 .Replace("\t", "").Replace("\r", "").Replace(" ", "");
-                            foreach (var tdaddtmp in svtTdAdd.Split('*'))
-                            {
-                                tdHash.Add(tdaddtmp);
-                            }
+                            foreach (var tdaddtmp in svtTdAdd.Split('*')) tdHash.Add(tdaddtmp);
                         }
                         catch (Exception)
                         {
                             //ignore
                         }
-                        
-                    }
-                }
 
                 var svtTpChange = "";
 
                 if (svtTdAdd == "")
-                {
                     foreach (var TreasureDevicetmp in GlobalPathsAndDatas.mstTreasureDevicedArray)
-                    {
                         if (((JObject)TreasureDevicetmp)["seqId"].ToString() == svtID)
-                        {
                             try
                             {
                                 var mstTDobjtmp =
-                                    (JObject)JsonConvert.DeserializeObject(((JObject)TreasureDevicetmp)["script"].ToString());
-                                svtTpChange = mstTDobjtmp["tdTypeChangeIDs"].ToString().Replace("[", "").Replace("]", "").Replace(",", "*").Replace("\n", "")
+                                    (JObject)JsonConvert.DeserializeObject(((JObject)TreasureDevicetmp)["script"]
+                                        .ToString());
+                                svtTpChange = mstTDobjtmp["tdTypeChangeIDs"].ToString().Replace("[", "")
+                                    .Replace("]", "").Replace(",", "*").Replace("\n", "")
                                     .Replace("\t", "").Replace("\r", "").Replace(" ", "");
-                                foreach (var tdaddtmp in svtTpChange.Split('*'))
-                                {
-                                    tdHash.Add(tdaddtmp);
-                                }
+                                foreach (var tdaddtmp in svtTpChange.Split('*')) tdHash.Add(tdaddtmp);
                             }
                             catch (Exception)
                             {
                                 //ignore
                             }
 
-                        }
-                    }
-
-                }
-
                 if (tdHash.Count > 1)
-                        svtTDID = string.Join("*", tdHash.ToArray()) + "^TD";
-                    else
-                        svtTDID = string.Join("", tdHash.ToArray());
-                
+                    svtTDID = string.Join("*", tdHash.ToArray()) + "^TD";
+                else
+                    svtTDID = string.Join("", tdHash.ToArray());
+
 
                 if (svtTDID.Contains("*"))
                     Dispatcher.Invoke(() =>
@@ -1491,7 +1475,6 @@ namespace Altera
 
                 atkbalance1.Text = atkBalanceStr;
                 atkbalance2.Text = atkBalanceStr;
-
             });
         }
 
