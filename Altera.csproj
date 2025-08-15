@@ -913,9 +913,31 @@
     <Resource Include="images\ClassUnbeast2.png" />
     <Resource Include="images\ClassUnbeast3.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="skillicons\skill_00423.png" />
+    <Resource Include="skillicons\skill_00821.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Application\excel2img.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bufficons\bufficon_420.png" />
+    <Resource Include="bufficons\bufficon_421.png" />
+    <Resource Include="bufficons\bufficon_422.png" />
+    <Resource Include="bufficons\bufficon_423.png" />
+    <Resource Include="bufficons\bufficon_424.png" />
+    <Resource Include="bufficons\bufficon_425.png" />
+    <Resource Include="bufficons\bufficon_426.png" />
+    <Resource Include="bufficons\bufficon_427.png" />
+    <Resource Include="bufficons\bufficon_428.png" />
+    <Resource Include="bufficons\bufficon_429.png" />
+    <Resource Include="bufficons\bufficon_430.png" />
+    <Resource Include="bufficons\bufficon_576.png" />
+    <Resource Include="bufficons\bufficon_577.png" />
+    <Resource Include="bufficons\bufficon_578.png" />
+    <Resource Include="bufficons\bufficon_579.png" />
+    <Resource Include="bufficons\bufficon_580.png" />
+    <Resource Include="bufficons\bufficon_581.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
