@@ -2422,6 +2422,9 @@ namespace Altera
 
                     for (var i = 0; i <= TDFuncstrArray.Length - 1; i++)
                     {
+                        if (TDFuncstrArray[i] == "" && svtTreasureDeviceFuncIDArray[i] == "22930")
+                            TDFuncstrArray[i] = "条件判定:孩童从者/夏属性/夏日模式的从者";
+
                         if (((TDFuncstrArray[i] == "なし" || (TDFuncstrArray[i] == "" &&
                                                             TDlv1OC1strArray[i].Contains("Hide"))) &&
                              TDlv1OC1strArray[i].Count(c => c == ',') > 0)
@@ -2627,7 +2630,7 @@ namespace Altera
                 .Replace("対", "对").Replace("異常", "异常").Replace("待機", "待机").Replace("呪厄", "咒厄").Replace("効果", "效果")
                 .Replace("無視", "无视")
                 .Replace("魅了", "魅惑").Replace("延焼", "延烧").Replace("攻击時", "攻击时").Replace("状態", "状态").Replace("発動", "发动")
-                .Replace("消費", "消费");
+                .Replace("消費", "消费").Replace("日輪", "日轮");
             return origin_str;
         }
 
@@ -3828,10 +3831,15 @@ namespace Altera
             var skillName = "";
             var skillDetail = "";
             var skillIconUri = "";
-            foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
+            var fixedSkillID = SkillID;
+            var tmpSkillSelListStr = "";
+            var skillIdTmpList = new List<string>();
+            foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray) //Passionlip泳装S3技能选择
             {
                 if (((JObject)skilltmp)["id"].ToString() != SkillID) continue;
                 var skillobjtmp = JObject.Parse(skilltmp.ToString());
+                var scriptTmpStr = skillobjtmp["script"].ToString();
+                //Dispatcher.Invoke(() => { MessageBox.Success($"Debugger1:{scriptTmpStr}", "完成"); });
                 skillName = skillobjtmp["name"].ToString();
                 var iconid = skillobjtmp["iconId"].ToString();
                 switch (iconid.Length)
@@ -3854,6 +3862,38 @@ namespace Altera
                 }
 
                 if (isStrengthed) skillName += " ▲";
+                if (scriptTmpStr.Contains("condBranchSkillInfo"))
+                {
+                    var JOBJ = JObject.Parse(scriptTmpStr);
+                    var scriptJObj = (JArray)JsonConvert.DeserializeObject(JOBJ["condBranchSkillInfo"].ToString());
+
+                    foreach (var obj in scriptJObj) skillIdTmpList.Add(((JObject)obj)["skillId"].ToString());
+                }
+                else
+                {
+                    break;
+                }
+
+                if (skillIdTmpList.Count > 0)
+                {
+                    tmpSkillSelListStr = string.Join("*", skillIdTmpList.ToArray()) + "^SK";
+                    Dispatcher.Invoke(() =>
+                    {
+                        GlobalPathsAndDatas.IDListStr = tmpSkillSelListStr;
+                        var ChoiceSK = new SvtSTDIDChoice();
+                        ChoiceSK.ShowDialog();
+                        var ReturnStr = ChoiceSK.idreturn;
+                        fixedSkillID = ReturnStr;
+                    });
+                    //Dispatcher.Invoke(() => { MessageBox.Success($"Debugger2:{tmpSkillSelListStr}", "完成"); });
+                }
+            }
+
+            foreach (var skilltmp in GlobalPathsAndDatas.mstSkillArray)
+            {
+                if (((JObject)skilltmp)["id"].ToString() != fixedSkillID) continue;
+                var skillobjtmp = JObject.Parse(skilltmp.ToString());
+                skillName = skillobjtmp["name"].ToString();
             }
 
             var AddVals = SkillAddNameCheck(SkillID);
@@ -3885,7 +3925,7 @@ namespace Altera
                             sk1_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                         }
 
-                        var SSC = new Task(() => { SkillSvalsCheck(SkillID, 1); });
+                        var SSC = new Task(() => { SkillSvalsCheck(fixedSkillID, 1); });
                         SSC.Start();
                         break;
                     case 2:
@@ -3900,7 +3940,7 @@ namespace Altera
                             sk2_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                         }
 
-                        var SSC2 = new Task(() => { SkillSvalsCheck(SkillID, 2); });
+                        var SSC2 = new Task(() => { SkillSvalsCheck(fixedSkillID, 2); });
                         SSC2.Start();
                         break;
                     case 3:
@@ -3915,7 +3955,7 @@ namespace Altera
                             sk3_icon.Source = new BitmapImage(new Uri("skillicons\\skill_00000.png", UriKind.Relative));
                         }
 
-                        var SSC3 = new Task(() => { SkillSvalsCheck(SkillID, 3); });
+                        var SSC3 = new Task(() => { SkillSvalsCheck(fixedSkillID, 3); });
                         SSC3.Start();
                         break;
                 }
@@ -4302,6 +4342,7 @@ namespace Altera
                         }
 
                         if (skfuncidtmp == "21302" || skfuncidtmp == "21303") funcnametmp = "血塗れの皇子(条件满足时)";
+                        if (skfuncidtmp == "530" && funcnametmp == "なし") funcnametmp = "指令卡重分配";
 
                         svtSKTargetList.Add(targetstr);
                         svtSKbufficonList.Add(popupIcon);

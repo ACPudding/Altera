@@ -5,22 +5,22 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:hc="https://handyorg.github.io/handycontrol"
            mc:Ignorable="d"
-           Title="从者技能/宝具ID选择窗口" Height="280" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+           Title="从者技能/宝具ID选择窗口" Height="325" Width="480" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
            Icon="icon.ico" ContentRendered="Load">
     <Grid Background="White">
-        <TextBlock Text="本从者拥有多个不同类型的宝具或者是一个技能位拥有&#xA;多个不同技能，&#xA;请选择需要显示的宝具/技能ID."
-                   HorizontalAlignment="Left" Height="71" Margin="10,10,0,0"
+        <TextBlock Text="本从者拥有多个不同类型的宝具或者是一个技能位拥有多个不同技能，&#xA;请选择需要显示的宝具/技能ID."
+                   HorizontalAlignment="Center" Height="71" Margin="0,10,0,0"
                    VerticalAlignment="Top"
-                   Width="374" FontSize="15" Foreground="#FF333333" FontWeight="Bold" FontFamily="Source Han Sans SC" />
-        <ListView x:Name="IDList" HorizontalAlignment="Left" Height="160" Margin="10,86,0,0" VerticalAlignment="Top"
-                  Width="374" MouseDoubleClick="Double_Click">
+                   Width="460" FontSize="15" Foreground="#FF333333" FontWeight="Bold" FontFamily="Source Han Sans SC" />
+        <ListView x:Name="IDList" HorizontalAlignment="Center" Height="215" Margin="0,61,0,0" VerticalAlignment="Top"
+                  Width="460" MouseDoubleClick="Double_Click">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" Width="75"
                                     DisplayMemberBinding="{Binding ID}" />
                     <GridViewColumn Header="宝具/技能" Width="100"
                                     DisplayMemberBinding="{Binding TYPE}" />
-                    <GridViewColumn Header="Name" Width="175"
+                    <GridViewColumn Header="Name" Width="245"
                                     DisplayMemberBinding="{Binding NME}" />
                 </GridView>
             </ListView.View>
