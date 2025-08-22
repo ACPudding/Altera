@@ -4316,7 +4316,11 @@ namespace Altera
                         {
                             if (((JObject)functmp)["id"].ToString() != skfuncidtmp) continue;
                             var mstFuncobjtmp = JObject.Parse(functmp.ToString());
+                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
+                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             funcnametmp = mstFuncobjtmp["popupText"].ToString();
+                            if ((funcnametmp.Contains("ガッツ") || funcnametmp.Contains("毅力")) && isGutsHpRatio(BuffVal))
+                                funcnametmp += " (HP比率)";
                             targettmp = mstFuncobjtmp["targetType"].ToString();
                             popupIcon = mstFuncobjtmp["popupIconId"].ToString();
                             applyTarget = mstFuncobjtmp["applyTarget"].ToString();
@@ -4331,8 +4335,6 @@ namespace Altera
                             else
                                 tvalstrxls += "」";
                             if (funcnametmp != "" || mstFuncobjtmp["funcType"].ToString() == "2") continue;
-                            var BuffVal = mstFuncobjtmp["vals"].ToString().Replace("\n", "").Replace("\t", "")
-                                .Replace("\r", "").Replace(" ", "").Replace("[", "").Replace("]", "");
                             foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
                             {
                                 if (((JObject)Bufftmp)["id"].ToString() != BuffVal) continue;
@@ -4430,6 +4432,19 @@ namespace Altera
                     svtSKbufficon, svtSKapplyTarget, svtSKTargetRaw, svtSKfuncType, svtSKtargetIcon);
             });
             SSD.Start();
+        }
+
+        public bool isGutsHpRatio(string gutsfuncId)
+        {
+            var ret = false;
+            foreach (var Bufftmp in GlobalPathsAndDatas.mstBuffArray)
+            {
+                if (((JObject)Bufftmp)["id"].ToString() != gutsfuncId) continue;
+                if (((JObject)Bufftmp)["type"].ToString() == "104") ret = true;
+                break;
+            }
+
+            return ret;
         }
 
         public string FuncTargetDisplayIconStr(string targetType)

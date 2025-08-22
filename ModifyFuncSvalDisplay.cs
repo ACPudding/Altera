@@ -1090,10 +1090,23 @@ namespace Altera
                 case 28:
                 case 34:
                     Tempsval = Funcsval.Split(',');
+                    var T3str = "HP";
                     if (Tempsval.Length == 4)
                         try
                         {
-                            output = Tempsval[3] + "HP" +
+                            if (Funcname.Contains("HP比率"))
+                            {
+                                T3str = "%MaxHP";
+                                output = Convert.ToDouble(Tempsval[3]) / 10 + T3str +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+
+                            output = Tempsval[3] + T3str +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1110,7 +1123,19 @@ namespace Altera
                     if (Tempsval.Length == 8)
                         try
                         {
-                            output = Tempsval[3] + "HP" +
+                            if (Funcname.Contains("HP比率"))
+                            {
+                                T3str = "%MaxHP";
+                                output = Convert.ToDouble(Tempsval[3]) / 10 + T3str +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+
+                            output = Tempsval[3] + T3str +
                                      (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                          ? ""
                                          : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1126,10 +1151,52 @@ namespace Altera
 
                     if (Tempsval.Length == 5)
                     {
-                        if (Tempsval[4].Contains("ShowQuestNoEffect") || Tempsval[4].Contains("OnField"))
+                        if (Tempsval[4].Contains("ShowQuestNoEffect") || Tempsval[4].Contains("OnField") ||
+                            Tempsval[4].Contains("ShowState"))
                             try
                             {
-                                output = Tempsval[3] + "HP" +
+                                if (Funcname.Contains("HP比率"))
+                                {
+                                    T3str = "%MaxHP";
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + T3str +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+
+                                output = Tempsval[3] + T3str +
+                                         (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                             ? ""
+                                             : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                         (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                         (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                output = Funcsval;
+                                break;
+                            }
+
+                        if (Tempsval[4].Contains("ActSelectIndex"))
+                            try
+                            {
+                                if (Funcname.Contains("HP比率"))
+                                {
+                                    T3str = "%MaxHP";
+                                    output = Convert.ToDouble(Tempsval[3]) / 10 + T3str + " (可选释放)" +
+                                             (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
+                                                 ? ""
+                                                 : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
+                                             (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
+                                             (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                    break;
+                                }
+
+                                output = Tempsval[3] + T3str + " (可选释放)" +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1146,7 +1213,7 @@ namespace Altera
                         if (Tempsval[4].Contains("UseRate"))
                             try
                             {
-                                output = Tempsval[3] + "HP" +
+                                output = Tempsval[3] + T3str +
                                          (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                              ? ""
                                              : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
@@ -1964,7 +2031,7 @@ namespace Altera
                     break;
                 case 187:
                     Tempsval = Funcsval.Split(',');
-                    if (Tempsval.Length == 5 && Tempsval[4].Contains("TargetEnemyClass"))
+                    if (Tempsval.Length == 6 && Tempsval[4].Contains("TargetEnemyClass"))
                         try
                         {
                             output = "∅" + (Tempsval[0] == "1000"
@@ -2942,7 +3009,7 @@ namespace Altera
             }
 
             if ((Funcname.Contains("强力攻击") && !Funcname.Contains("好感度等级")) || Funcname.Contains("防御无视攻击") ||
-                Funcname.Contains("被伤害反射"))
+                Funcname.Contains("被伤害反射") || Funcname.Contains("强力攻击SAFE"))
             {
                 Tempsval = Funcsval.Split(',');
                 try
@@ -3323,6 +3390,24 @@ namespace Altera
                 {
                     output = Funcsval;
                 }
+            }
+
+            if (Funcname.Contains("HP越多威力"))
+            {
+                Tempsval = Funcsval.Split(',');
+                if (Tempsval.Length == 3)
+                    try
+                    {
+                        output = "\r\n" + Convert.ToDouble(Tempsval[1]) / 10 + "% + " +
+                                 Convert.ToDouble(Tempsval[2]) / 10 +
+                                 "% * (HP / MaxHP)";
+                    }
+                    catch (Exception)
+                    {
+                        output = Funcsval;
+                    }
+                else
+                    output = Funcsval;
             }
 
             if (Funcname.Contains("HP越少威力"))
