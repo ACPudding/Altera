@@ -164,6 +164,7 @@ namespace Altera
 
                         if (Tempsval[4].Contains("ShowQuestNoEffect") ||
                             Tempsval[4].Contains("IncludePassiveIndividuality") ||
+                            Tempsval[4].Contains("IncludeIgnoreIndividuality") ||
                             Tempsval[4].Contains("CheckDuplicate") ||
                             Tempsval[4].Contains("ExcludeUnSubStateIndiv") ||
                             Tempsval[4].Contains("ExtendBuffHalfTurnInOpponentTurn") ||
@@ -3177,7 +3178,8 @@ namespace Altera
                 Funcname == "毒＆やけど無効" || Funcname == "毒＆灼伤無効" || Funcname == "弱体耐性無視" || Funcname == "やけど＆延焼解除" ||
                 Funcname == "灼伤＆延焼解除" || Funcname == "防御無視" || Funcname == "無敵貫通" || Funcname == "指令卡重分配" ||
                 Funcname == "やけど＆延焼無効" || Funcname == "灼伤＆延焼無効" || Funcname == "無敵" || Funcname == "无敌" ||
-                Funcname == "月下" || Funcname == "月下解除" || Funcname == "日輪" || Funcname == "日輪解除")
+                Funcname == "月下" || Funcname == "月下解除" || Funcname == "日輪" || Funcname == "日輪解除" ||
+                Funcname == "毒・呪い・やけど解除" || Funcname == "毒・诅咒・灼伤解除")
             {
                 Tempsval = Funcsval.Split(',');
                 switch (Tempsval.Length)
@@ -3227,7 +3229,7 @@ namespace Altera
                         }
 
                         break;
-                    case 3:
+                    case 3 when Funcname.Contains("解除"):
                         try
                         {
                             output =
@@ -3235,8 +3237,8 @@ namespace Altera
                                 (Tempsval[0] == "1000" || Tempsval[0] == "-5000"
                                     ? ""
                                     : "(" + Convert.ToDouble(Tempsval[0]) / 10 + "%成功率)") +
-                                (Tempsval[1] == "-1" ? "" : " - " + Tempsval[1] + "回合") +
-                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "次");
+                                (Tempsval[2] == "-1" ? "" : " · " + Tempsval[2] + "Buff/次");
+                            ;
                         }
                         catch (Exception)
                         {
